@@ -1,6 +1,6 @@
 "use strict";
 const DAY_CSS =
-`
+	`
 header {
 	color: white;
 	background-color: rgb(0, 107, 196);
@@ -115,9 +115,34 @@ div#subclasses>span {
 tr.trait td {
 	color: black !important;
 }
+
+li.adventure-contents-item > ul > li.active,
+li.adventure-contents-item > ul > ul.active > li > a {
+	background: #f0f0f0;
+}
+
+li.adventure-contents-item > ul > ul.active > li > a:hover {
+	background: lightgrey;
+}
+
+ul.list.adventures ul a:hover,
+ul.list.contents > li a:hover,
+ul.list.contents > li > ul.adv-contents > li > a > span:hover,
+ul.list.contents > li > ul.adv-contents > li > a > span:hover {
+	background: lightgrey;
+}
+
+ul.list.contents > li > ul.adv-contents > li a:hover {
+	background: initial;
+}
+
+ul.list.adventures >  li > a > span.showhide:hover,
+ul.list.adventures >  li > a > span.name:hover {
+	background: lightgrey;
+}
 `;
 const NIGHT_CSS =
-`
+	`
 header {
 	color: white;
 	background-color: transparent;
@@ -266,24 +291,48 @@ table#stats td._class_feature table th {
 #rulescontent table tbody tr:nth-child(odd) td,
 ul.list li:nth-child(odd),
 ul.list.encounters > li > ul > li:nth-child(odd),
-#monsterfeatures tr:nth-child(odd) {
+ul.list.names > li > ul > li:nth-child(odd),
+#monsterfeatures tr:nth-child(odd),
+ul.adv-headers li:nth-child(odd) {
 	background: rgba(0, 0, 0, 0.31);
 }
 
-ul.list.encounters > li > span:first-child {
+li.adventure-contents-item > ul > li.active,
+li.adventure-contents-item > ul > ul.active > li > a {
+	background: #303030;
+}
+
+ul.list.encounters > li > span:first-child,
+ul.list.names > li > span:first-child {
 	color: #999;
 }
 
 ul.list.encounters > li > ul > li > a:hover,
+ul.list.names > li > ul > li > a:hover,
+ul.adv-headers > li > a:hover,
+li.adventure-contents-item > ul > ul.active > li > a:hover,
+ul.list.contents > li > ul.adv-contents > li > a > span:hover,
+ul.list.contents > li > ul.adv-contents > li > a > span:hover,
+ul.list.contents > li > ul.adv-headers a:hover,
+ul.list.adventures ul a:hover,
+ul.list.adventures >  li > a > span.showhide:hover,
+ul.list.adventures >  li > a > span.name:hover,
 ul.list li:nth-child(odd):hover {
 	background: black;
 }
 
-ul.list.encounters li:nth-child(odd) {
+ul.list.encounters li:nth-child(odd),
+ul.list.names li:nth-child(odd),
+ul.list.adventures > li:nth-child(odd),
+ul.adv-contents > li:nth-child(odd),
+ul.list.contents > li:nth-child(odd) {
 	background: none;
 }
 
-ul.list.encounters li:nth-child(odd):hover {
+ul.list.encounters li:nth-child(odd):hover,
+ul.list.adventures li:nth-child(odd):hover,
+ul.adv-contents li:nth-child(odd):hover,
+ul.list.names li:nth-child(odd):hover {
 	background: none;
 }
 
@@ -332,37 +381,37 @@ table#stats div.statsBlockInset {
 `;
 
 class StyleSwitcher {
-
-	constructor() {
+	constructor () {
 		this.currentStylesheet = this.STYLE_DAY;
 		this.dynamicStyleEle = document.getElementById("dynamicStyle");
 	}
 
-	setActiveStyleSheet(title) {
+	setActiveStyleSheet (title) {
 		if (title !== StyleSwitcher.STYLE_DAY && title !== StyleSwitcher.STYLE_NIGHT) title = StyleSwitcher.STYLE_DAY;
 		this.dynamicStyleEle.innerHTML = title === StyleSwitcher.STYLE_DAY ? DAY_CSS : NIGHT_CSS;
 		this.currentStylesheet = title;
 	}
 
-	getActiveStyleSheet() {
+	getActiveStyleSheet () {
 		return this.currentStylesheet;
 	}
 
-	static createCookie(value) {
-		Cookies.set("style", value, { expires: 365 });
+	static createCookie (value) {
+		Cookies.set("style", value, {expires: 365});
 	}
 
-	static readCookie() {
+	static readCookie () {
 		return Cookies.get("style");
 	}
 
-	toggleActiveStyleSheet() {
+	toggleActiveStyleSheet () {
 		if (this.currentStylesheet === StyleSwitcher.STYLE_DAY) this.setActiveStyleSheet(StyleSwitcher.STYLE_NIGHT);
 		else this.setActiveStyleSheet(StyleSwitcher.STYLE_DAY);
 
 		$(".nightModeToggle").html(this.currentStylesheet === StyleSwitcher.STYLE_DAY ? "Night Mode" : "Day Mode");
 	}
 }
+
 StyleSwitcher.STYLE_DAY = "day";
 StyleSwitcher.STYLE_NIGHT = "night";
 
@@ -373,7 +422,7 @@ styleSwitcher.cookie = StyleSwitcher.readCookie();
 styleSwitcher.cookie = styleSwitcher.cookie ? styleSwitcher.cookie : StyleSwitcher.STYLE_DAY;
 styleSwitcher.setActiveStyleSheet(styleSwitcher.cookie);
 
-window.addEventListener("unload", function() {
+window.addEventListener("unload", function () {
 	const title = styleSwitcher.getActiveStyleSheet();
 	StyleSwitcher.createCookie(title);
 });

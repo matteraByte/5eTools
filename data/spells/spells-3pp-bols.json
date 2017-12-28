@@ -12073,7 +12073,7 @@
 			},
 			"entries": [
 				"You select one creature you can see; the creature is engulfed in an aura of black flames. At the beginning of each of its turns, the creature must make a Constitution saving throw. If the saving throw fails, the creature takes 3d10 necrotic damage and is frightened; on its turn, it must move as far away from the caster as it can. The spell and the fright effect end only when the spell's duration expires.",
-				"Ebonflame can't be cast on a target that's underwater. The flames follow the affected creature when it moves, but it it is magically transported out of the flames, such as by teleportation, the spell ends."
+				"Ebonflame can't be cast on a target that's underwater. The flames follow the affected creature when it moves, but if it is magically transported out of the flames, such as by teleportation, the spell ends."
 			]
 		},
 		{
@@ -25866,49 +25866,6 @@
 			},
 			"entries": [
 				"Your voice creates a reverberating, 30-foot cone of dissonance. Every creature in the cone is incapacitated unless it makes a successful Constitution saving throw. An incapacitated creature can repeat the saving throw at the end of each of its turns; a successful save ends the effect on that creature."
-			]
-		},
-		{
-			"name": "Restore the Undead",
-			"source": "BoLS 3pp",
-			"level": 3,
-			"school": "N",
-			"time": [
-				{
-					"number": 1,
-					"unit": "action"
-				}
-			],
-			"range": {
-				"type": "sphere",
-				"distance": {
-					"type": "feet",
-					"amount": 30
-				}
-			},
-			"components": {
-				"v": true,
-				"s": true
-			},
-			"duration": [
-				{
-					"type": "instant"
-				}
-			],
-			"classes": {
-				"fromClassList": [
-					{
-						"name": "Cleric",
-						"source": "PHB"
-					},
-					{
-						"name": "Wizard",
-						"source": "PHB"
-					}
-				]
-			},
-			"entries": [
-				"Each zombie and skeleton within 30 feet of you regains all of its lost hit points. This spell does not affect creatures that have been reduced to 0 hit points or those of CR 3 or higher."
 			]
 		},
 		{

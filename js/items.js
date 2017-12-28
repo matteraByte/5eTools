@@ -9,26 +9,36 @@ const propertyList = {};
 const typeList = {};
 let variantList;
 
-window.onload = function load() {
+window.onload = function load () {
 	loadJSON(ITEMS_JSON_URL, addBasicItems);
 };
 
-function addBasicItems(itemData) {
+function addBasicItems (itemData) {
 	itemList = itemData.item;
 	loadJSON(BASIC_ITEMS_JSON_URL, addVariants);
 }
 
-function addVariants(basicItemData) {
+function addVariants (basicItemData) {
 	basicItemList = basicItemData.basicitem;
 	const itemPropertyList = basicItemData.itemProperty;
 	const itemTypeList = basicItemData.itemType;
 	// Convert the property and type list JSONs into look-ups, i.e. use the abbreviation as a JSON property name
-	for (let i = 0; i < itemPropertyList.length; i++) propertyList[itemPropertyList[i].abbreviation] = itemPropertyList[i].name ? JSON.parse(JSON.stringify(itemPropertyList[i])) : {"name": itemPropertyList[i].entries[0].name.toLowerCase(), "entries": itemPropertyList[i].entries};
-	for (let i = 0; i < itemTypeList.length; i++) typeList[itemTypeList[i].abbreviation] = itemTypeList[i].name ? JSON.parse(JSON.stringify(itemTypeList[i])): {"name": itemTypeList[i].entries[0].name.toLowerCase(), "entries": itemTypeList[i].entries};
+	for (let i = 0; i < itemPropertyList.length; i++) {
+		propertyList[itemPropertyList[i].abbreviation] = itemPropertyList[i].name ? JSON.parse(JSON.stringify(itemPropertyList[i])) : {
+			"name": itemPropertyList[i].entries[0].name.toLowerCase(),
+			"entries": itemPropertyList[i].entries
+		};
+	}
+	for (let i = 0; i < itemTypeList.length; i++) {
+		typeList[itemTypeList[i].abbreviation] = itemTypeList[i].name ? JSON.parse(JSON.stringify(itemTypeList[i])) : {
+			"name": itemTypeList[i].entries[0].name.toLowerCase(),
+			"entries": itemTypeList[i].entries
+		};
+	}
 	loadJSON(MAGIC_VARIANTS_JSON_URL, mergeBasicItems);
 }
 
-function mergeBasicItems(variantData) {
+function mergeBasicItems (variantData) {
 	variantList = variantData.variant;
 	itemList = itemList.concat(basicItemList);
 	for (let i = 0; i < variantList.length; i++) {
@@ -36,23 +46,23 @@ function mergeBasicItems(variantData) {
 		variantList[i].rarity = variantList[i].inherits.rarity;
 		variantList[i].source = variantList[i].inherits.source;
 		variantList[i].page = variantList[i].inherits.page;
-		if(!variantList[i].entries && variantList[i].inherits.entries) variantList[i].entries=JSON.parse(JSON.stringify(variantList[i].inherits.entries));
-		if(variantList[i].requires.armor) variantList[i].armor = variantList[i].requires.armor
+		if (!variantList[i].entries && variantList[i].inherits.entries) variantList[i].entries = JSON.parse(JSON.stringify(variantList[i].inherits.entries));
+		if (variantList[i].requires.armor) variantList[i].armor = variantList[i].requires.armor
 	}
 	itemList = itemList.concat(variantList);
 	for (let i = 0; i < basicItemList.length; i++) {
 		const curBasicItem = basicItemList[i];
 		basicItemList[i].category = "Basic";
-		if(curBasicItem.entries === undefined) curBasicItem.entries=[];
+		if (curBasicItem.entries === undefined) curBasicItem.entries = [];
 		const curBasicItemName = curBasicItem.name.toLowerCase();
 		for (let j = 0; j < variantList.length; j++) {
 			const curVariant = variantList[j];
 			const curRequires = curVariant.requires;
 			let hasRequired = curBasicItemName.indexOf(" (") === -1;
-			for (const requiredProperty in curRequires) if (curRequires.hasOwnProperty(requiredProperty) && curBasicItem[requiredProperty] !== curRequires[requiredProperty]) hasRequired=false;
+			for (const requiredProperty in curRequires) if (curRequires.hasOwnProperty(requiredProperty) && curBasicItem[requiredProperty] !== curRequires[requiredProperty]) hasRequired = false;
 			if (curVariant.excludes) {
 				const curExcludes = curVariant.excludes;
-				for (const excludedProperty in curExcludes) if (curExcludes.hasOwnProperty(excludedProperty) && curBasicItem[excludedProperty] === curExcludes[excludedProperty]) hasRequired=false;
+				for (const excludedProperty in curExcludes) if (curExcludes.hasOwnProperty(excludedProperty) && curBasicItem[excludedProperty] === curExcludes[excludedProperty]) hasRequired = false;
 			}
 			if (hasRequired) {
 				const curInherits = curVariant.inherits;
@@ -62,11 +72,11 @@ function mergeBasicItems(variantData) {
 				for (const inheritedProperty in curInherits) {
 					if (curInherits.hasOwnProperty(inheritedProperty)) {
 						if (inheritedProperty === "namePrefix") {
-							tmpBasicItem.name = curInherits.namePrefix+tmpBasicItem.name;
+							tmpBasicItem.name = curInherits.namePrefix + tmpBasicItem.name;
 						} else if (inheritedProperty === "nameSuffix") {
 							tmpBasicItem.name += curInherits.nameSuffix;
 						} else if (inheritedProperty === "entries") {
-							for (let k = curInherits.entries.length-1; k > -1; k--) {
+							for (let k = curInherits.entries.length - 1; k > -1; k--) {
 								let tmpText = curInherits.entries[k];
 								if (typeof tmpText === "string") {
 									if (tmpBasicItem.dmgType) tmpText = tmpText.replace(/{@dmgType}/g, Parser.dmgTypeToFull(tmpBasicItem.dmgType));
@@ -75,8 +85,7 @@ function mergeBasicItems(variantData) {
 								}
 								tmpBasicItem.entries.unshift(tmpText);
 							}
-						} else
-							tmpBasicItem[inheritedProperty] = curInherits[inheritedProperty];
+						} else tmpBasicItem[inheritedProperty] = curInherits[inheritedProperty];
 					}
 				}
 				itemList.push(tmpBasicItem);
@@ -86,46 +95,46 @@ function mergeBasicItems(variantData) {
 	enhanceItems();
 }
 
-function pushObject(targetObject, objectToBePushed) {
+function pushObject (targetObject, objectToBePushed) {
 	const copiedObject = JSON.parse(JSON.stringify(targetObject));
 	copiedObject.push(objectToBePushed);
 	return copiedObject;
 }
 
-function enhanceItems() {
+function enhanceItems () {
 	for (let i = 0; i < itemList.length; i++) {
 		const item = itemList[i];
 		if (item.noDisplay) continue;
 		if (itemList[i].type === "GV") itemList[i].category = "Generic Variant";
 		if (itemList[i].category === undefined) itemList[i].category = "Other";
-		if (item.entries === undefined) itemList[i].entries=[];
-		if (item.type && typeList[item.type]) for (let j = 0; j < typeList[item.type].entries.length; j++) itemList[i].entries = pushObject(itemList[i].entries,typeList[item.type].entries[j]);
+		if (item.entries === undefined) itemList[i].entries = [];
+		if (item.type && typeList[item.type]) for (let j = 0; j < typeList[item.type].entries.length; j++) itemList[i].entries = pushObject(itemList[i].entries, typeList[item.type].entries[j]);
 		if (item.property) {
 			const properties = item.property.split(",");
-			for (let j = 0; j < properties.length; j++) if (propertyList[properties[j]].entries) for (let k = 0; k < propertyList[properties[j]].entries.length; k++) itemList[i].entries = pushObject(itemList[i].entries,propertyList[properties[j]].entries[k]);
+			for (let j = 0; j < properties.length; j++) if (propertyList[properties[j]].entries) for (let k = 0; k < propertyList[properties[j]].entries.length; k++) itemList[i].entries = pushObject(itemList[i].entries, propertyList[properties[j]].entries[k]);
 		}
-		//The following could be encoded in JSON, but they depend on more than one JSON property; maybe fix if really bored later
+		// The following could be encoded in JSON, but they depend on more than one JSON property; maybe fix if really bored later
 		if (item.armor) {
-			if (item.resist) itemList[i].entries = pushObject(itemList[i].entries,"You have resistance to "+item.resist+" damage while you wear this armor.");
-			if (item.armor && item.stealth) itemList[i].entries = pushObject(itemList[i].entries,"The wearer has disadvantage on Stealth (Dexterity) checks.");
-			if (item.type === "HA" && item.strength) itemList[i].entries = pushObject(itemList[i].entries,"If the wearer has a Strength score lower than " + item.strength + ", their speed is reduced by 10 feet.");
+			if (item.resist) itemList[i].entries = pushObject(itemList[i].entries, "You have resistance to " + item.resist + " damage while you wear this armor.");
+			if (item.armor && item.stealth) itemList[i].entries = pushObject(itemList[i].entries, "The wearer has disadvantage on Stealth (Dexterity) checks.");
+			if (item.type === "HA" && item.strength) itemList[i].entries = pushObject(itemList[i].entries, "If the wearer has a Strength score lower than " + item.strength + ", their speed is reduced by 10 feet.");
 		} else if (item.resist) {
-			if (item.type === "P") itemList[i].entries = pushObject(itemList[i].entries,"When you drink this potion, you gain resistance to "+item.resist+" damage for 1 hour.");
-			if (item.type === "RG") itemList[i].entries = pushObject(itemList[i].entries,"You have resistance to "+item.resist+" damage while wearing this ring.");
+			if (item.type === "P") itemList[i].entries = pushObject(itemList[i].entries, "When you drink this potion, you gain resistance to " + item.resist + " damage for 1 hour.");
+			if (item.type === "RG") itemList[i].entries = pushObject(itemList[i].entries, "You have resistance to " + item.resist + " damage while wearing this ring.");
 		}
 		if (item.type === "SCF") {
-			if (item.scfType === "arcane") itemList[i].entries = pushObject(itemList[i].entries,"An arcane focus is a special item designed to channel the power of arcane spells. A sorcerer, warlock, or wizard can use such an item as a spellcasting focus, using it in place of any material component which does not list a cost.");
-			if (item.scfType === "druid") itemList[i].entries = pushObject(itemList[i].entries,"A druid can use such a druidic focus as a spellcasting focus, using it in place of any material component that does not have a cost.");
+			if (item.scfType === "arcane") itemList[i].entries = pushObject(itemList[i].entries, "An arcane focus is a special item designed to channel the power of arcane spells. A sorcerer, warlock, or wizard can use such an item as a spellcasting focus, using it in place of any material component which does not list a cost.");
+			if (item.scfType === "druid") itemList[i].entries = pushObject(itemList[i].entries, "A druid can use such a druidic focus as a spellcasting focus, using it in place of any material component that does not have a cost.");
 			if (item.scfType === "holy") {
-				itemList[i].entries = pushObject(itemList[i].entries,"A holy symbol is a representation of a god or pantheon.");
-				itemList[i].entries = pushObject(itemList[i].entries,"A cleric or paladin can use a holy symbol as a spellcasting focus, using it in place of any material components which do not list a cost. To use the symbol in this way, the caster must hold it in hand, wear it visibly, or bear it on a shield.");
+				itemList[i].entries = pushObject(itemList[i].entries, "A holy symbol is a representation of a god or pantheon.");
+				itemList[i].entries = pushObject(itemList[i].entries, "A cleric or paladin can use a holy symbol as a spellcasting focus, using it in place of any material components which do not list a cost. To use the symbol in this way, the caster must hold it in hand, wear it visibly, or bear it on a shield.");
 			}
 		}
 	}
 	populateTablesAndFilters();
 }
 
-function rarityValue(rarity) { //Ordered by most frequently occuring rarities in the JSON
+function rarityValue (rarity) { // Ordered by most frequently occuring rarities in the JSON
 	if (rarity === "Rare") return 3;
 	if (rarity === "None") return 0;
 	if (rarity === "Uncommon") return 2;
@@ -137,7 +146,7 @@ function rarityValue(rarity) { //Ordered by most frequently occuring rarities in
 	return 0;
 }
 
-function sortItems(a, b, o) {
+function sortItems (a, b, o) {
 	if (o.valueName === "name") {
 		return b._values.name.toLowerCase() > a._values.name.toLowerCase() ? 1 : -1;
 	} else if (o.valueName === "type") {
@@ -152,8 +161,8 @@ function sortItems(a, b, o) {
 	} else return 1;
 }
 
-function deselectFilter(deselectProperty, deselectValue) {
-	return function(val) {
+function deselectFilter (deselectProperty, deselectValue) {
+	return function (val) {
 		if (window.location.hash.length) {
 			const itemProperty = itemList[getSelectedListElement().attr("id")][deselectProperty];
 			if (itemProperty === deselectValue) {
@@ -165,24 +174,31 @@ function deselectFilter(deselectProperty, deselectValue) {
 			return deselNoHash();
 		}
 
-		function deselNoHash() {
+		function deselNoHash () {
 			return val === deselectValue;
 		}
 	}
 }
 
-function populateTablesAndFilters() {
+function populateTablesAndFilters () {
 	tabledefault = $("#stats").html();
 
 	const sourceFilter = getSourceFilter();
 	const typeFilter = new Filter({header: "Type", deselFn: deselectFilter("type", "$")});
 	const tierFilter = new Filter({header: "Tier", items: ["None", "Minor", "Major"]});
-	const rarityFilter = new Filter({header: "Rarity", items: ["None", "Common", "Uncommon", "Rare", "Very Rare", "Legendary", "Artifact", "Unknown"]});
+	const rarityFilter = new Filter({
+		header: "Rarity",
+		items: ["None", "Common", "Uncommon", "Rare", "Very Rare", "Legendary", "Artifact", "Unknown"]
+	});
 	const attunementFilter = new Filter({header: "Attunement", items: ["Yes", "By...", "Optional", "No"]});
-	const categoryFilter = new Filter({header: "Category", items: ["Basic", "Generic Variant", "Specific Variant", "Other"], deselFn: deselectFilter("category", "Specific Variant")});
+	const categoryFilter = new Filter({
+		header: "Category",
+		items: ["Basic", "Generic Variant", "Specific Variant", "Other"],
+		deselFn: deselectFilter("category", "Specific Variant")
+	});
 
 	const filterBox = initFilterBox(sourceFilter, typeFilter, tierFilter, rarityFilter, attunementFilter, categoryFilter);
-	const liList = {mundane:"", magic:""}; // store the <li> tag content here and change the DOM once for each property after the loop
+	const liList = {mundane: "", magic: ""}; // store the <li> tag content here and change the DOM once for each property after the loop
 
 	for (let i = 0; i < itemList.length; i++) {
 		const curitem = itemList[i];
@@ -196,7 +212,7 @@ function populateTablesAndFilters() {
 		if (curitem.wondrous) type.push("Wondrous Item");
 		if (curitem.technology) type.push(curitem.technology);
 		if (curitem.age) type.push(curitem.age);
-		if (curitem.weaponCategory) type.push(curitem.weaponCategory+" Weapon");
+		if (curitem.weaponCategory) type.push(curitem.weaponCategory + " Weapon");
 		if (curitem.type) type.push(Parser.itemTypeToAbv(curitem.type));
 		curitem.typeText = type.join(", "); // for loadhash to use
 		const tierTags = [];
@@ -211,10 +227,10 @@ function populateTablesAndFilters() {
 				curitem.reqAttune = "(Attunement Optional)"
 			} else if (curitem.reqAttune.toLowerCase().startsWith("by")) {
 				attunement = "By...";
-				curitem.reqAttune = "(Requires Attunement "+curitem.reqAttune+")";
+				curitem.reqAttune = "(Requires Attunement " + curitem.reqAttune + ")";
 			} else {
 				attunement = "Yes"; // throw any weird ones in the "Yes" category (e.g. "outdoors at night")
-				curitem.reqAttune = "(Requires Attunement "+curitem.reqAttune+")";
+				curitem.reqAttune = "(Requires Attunement " + curitem.reqAttune + ")";
 			}
 		}
 		// for filter to use
@@ -253,6 +269,11 @@ function populateTablesAndFilters() {
 	options.listClass = "magic";
 	const magiclist = search(options);
 
+	const mundaneWrapper = $(`.ele-mundane`);
+	const magicWrapper = $(`.ele-magic`);
+	mundanelist.on("searchComplete", function () { hideListIfEmpty(mundanelist, mundaneWrapper) });
+	magiclist.on("searchComplete", function () { hideListIfEmpty(magiclist, magicWrapper) });
+
 	filterBox.render();
 
 	// filtering function
@@ -261,27 +282,27 @@ function populateTablesAndFilters() {
 		handleFilterChange
 	);
 
-	function listFilter(item) {
+	function listFilter (item) {
 		const f = filterBox.getValues();
 		const i = itemList[$(item.elm).attr(FLTR_ID)];
 
 		return sourceFilter.toDisplay(f, i.source) &&
-		typeFilter.toDisplay(f, i._fTypes) &&
-		tierFilter.toDisplay(f, i._fTier) &&
-		rarityFilter.toDisplay(f, i.rarity) &&
-		attunementFilter.toDisplay(f, i._fAttunement) &&
-		categoryFilter.toDisplay(f, i.category);
+			typeFilter.toDisplay(f, i._fTypes) &&
+			tierFilter.toDisplay(f, i._fTier) &&
+			rarityFilter.toDisplay(f, i.rarity) &&
+			attunementFilter.toDisplay(f, i._fAttunement) &&
+			categoryFilter.toDisplay(f, i.category);
 	}
 
-	function handleFilterChange() {
+	function handleFilterChange () {
 		mundanelist.filter(listFilter);
 		magiclist.filter(listFilter);
 
-		hideListIfEmpty(mundanelist, $(`.ele-mundane`));
-		hideListIfEmpty(magiclist, $(`.ele-magic`));
+		hideListIfEmpty(mundanelist, mundaneWrapper);
+		hideListIfEmpty(magiclist, magicWrapper);
 	}
 
-	function hideListIfEmpty(list, $eles) {
+	function hideListIfEmpty (list, $eles) {
 		if (list.visibleItems.length === 0) {
 			$eles.hide();
 		} else {
@@ -289,13 +310,13 @@ function populateTablesAndFilters() {
 		}
 	}
 
-	$("#filtertools").find("button.sort").on("click", function() {
+	$("#filtertools").find("button.sort").on("click", function () {
 		$(this).attr("sortby", $(this).attr("sortby") === "asc" ? "desc" : "asc");
-		magiclist.sort($(this).attr("sort"), { order: $(this).attr("sortby"), sortFunction: sortItems });
-		mundanelist.sort($(this).attr("sort"), { order: $(this).attr("sortby"), sortFunction: sortItems });
+		magiclist.sort($(this).attr("sort"), {order: $(this).attr("sortby"), sortFunction: sortItems});
+		mundanelist.sort($(this).attr("sort"), {order: $(this).attr("sortby"), sortFunction: sortItems});
 	});
 
-	$("#itemcontainer").find("h3").not(":has(input)").click(function() {
+	$("#itemcontainer").find("h3").not(":has(input)").click(function () {
 		if ($(this).next("ul.list").css("max-height") === "500px") {
 			$(this).siblings("ul.list").animate({
 				maxHeight: "250px",
@@ -318,38 +339,49 @@ function populateTablesAndFilters() {
 }
 
 const renderer = new EntryRenderer();
+
 function loadhash (id) {
 	$("#currentitem").html(tabledefault);
 	const item = itemList[id];
 	const source = item.source;
 	const sourceFull = Parser.sourceJsonToFull(source);
 	$("th#name").html(`<span class="stats-name">${item.name}</span><span class="stats-source source${item.source}" title="${Parser.sourceJsonToFull(item.source)}">${Parser.sourceJsonToAbv(item.source)}</span>`);
-	$("td#source span").html(`${sourceFull}, page ${item.page}`);
 
-	$("td span#value").html(item.value ? item.value+(item.weight ? ", " : "") : "");
-	$("td span#weight").html(item.weight ? item.weight+(item.weight == 1 ? " lb." : " lbs.") : "");
-	$("td span#rarity").html((item.tier ? ", "+item.tier : "")+(item.rarity ? ", "+item.rarity : ""));
+	const type = item.type || "";
+	if (type === "INS" || type === "GS" || type === "VEH") item.additionalSources = item.additionalSources || [];
+	if (type === "INS") {
+		item.additionalSources.push({ "source": "XGE", "page": 83 })
+	} else if (type === "GS") {
+		item.additionalSources.push({ "source": "XGE", "page": 81 })
+	} else if (type === "VEH") {
+		item.additionalSources.push({ "source": "XGE", "page": 82 })
+	}
+	const addSourceText = item.additionalSources ? `. Additional information from ${item.additionalSources.map(as => `<i>${Parser.sourceJsonToFull(as.source)}</i>, page ${as.page}`).join("; ")}.` : null;
+	$("td#source span").html(`<i>${sourceFull}</i>, page ${item.page}${addSourceText || ""}`);
+
+	$("td span#value").html(item.value ? item.value + (item.weight ? ", " : "") : "");
+	$("td span#weight").html(item.weight ? item.weight + (Number(item.weight) === 1 ? " lb." : " lbs.") : "");
+	$("td span#rarity").html((item.tier ? ", " + item.tier : "") + (item.rarity ? ", " + item.rarity : ""));
 	$("td span#attunement").html(item.reqAttune ? item.reqAttune : "");
 	$("td span#type").html(item.typeText);
 
 	$("span#damage").html("");
 	$("span#damagetype").html("");
-	const type = item.type || "";
 	if (item.weaponCategory) {
-		if(item.dmg1) $("span#damage").html(utils_makeRoller(item.dmg1));
-		if(item.dmgType) $("span#damagetype").html(Parser.dmgTypeToFull(item.dmgType));
-	} else if (type === "LA" ||type === "MA"|| type === "HA") {
-		$("span#damage").html("AC "+item.ac+(type === "LA" ? " + Dex" : type === "MA" ? " + Dex (max 2)" : ""));
+		if (item.dmg1) $("span#damage").html(utils_makeRoller(item.dmg1));
+		if (item.dmgType) $("span#damagetype").html(Parser.dmgTypeToFull(item.dmgType));
+	} else if (type === "LA" || type === "MA" || type === "HA") {
+		$("span#damage").html("AC " + item.ac + (type === "LA" ? " + Dex" : type === "MA" ? " + Dex (max 2)" : ""));
 	} else if (type === "S") {
-		$("span#damage").html("AC +"+item.ac);
+		$("span#damage").html("AC +" + item.ac);
 	} else if (type === "MNT" || type === "VEH") {
-		const speed=item.speed;
-		const capacity=item.carryingcapacity;
-		if (speed) $("span#damage").append("Speed="+speed);
+		const speed = item.speed;
+		const capacity = item.carryingcapacity;
+		if (speed) $("span#damage").append("Speed=" + speed);
 		if (speed && capacity) $("span#damage").append(type === "MNT" ? ", " : "<br>");
 		if (capacity) {
-			$("span#damage").append("Carrying Capacity="+capacity);
-			if (capacity.indexOf("ton") === -1 && capacity.indexOf("passenger") === -1) $("span#damage").append(capacity == 1 ? " lb." : " lbs.");
+			$("span#damage").append("Carrying Capacity=" + capacity);
+			if (capacity.indexOf("ton") === -1 && capacity.indexOf("passenger") === -1) $("span#damage").append(Number(capacity) === 1 ? " lb." : " lbs.");
 		}
 	}
 
@@ -371,14 +403,168 @@ function loadhash (id) {
 	const entryList = {type: "entries", entries: item.entries};
 	const renderStack = [];
 	renderer.recursiveEntryRender(entryList, renderStack, 1);
-	$("tr#text").after(`<tr class='text'><td colspan='6' class='text1'>${utils_makeRoller(renderStack.join("")).split(item.name.toLowerCase()).join("<i>"+item.name.toLowerCase()+"</i>")}</td></tr>`);
+
+	// tools, artisan tools, instruments, gaming sets, vehicles
+	if (type === "T" || type === "AT" || type === "INS" || type === "GS" || type === "VEH") {
+		renderStack.push(`<p class="text-align-center"><i>See the <a href="${renderer.baseUrl}variantrules.html#${encodeForHash(["Tool Proficiencies", "XGE"])}" target="_blank">Tool Proficiencies</a> entry of the Variant and Optional rules page for more information</i></p>`);
+		if (type === "INS") {
+			const additionEntriesList = {type: "entries", entries: TOOL_INS_ADDITIONAL_ENTRIES};
+			renderer.recursiveEntryRender(additionEntriesList, renderStack, 1);
+		} else if (type === "GS") {
+			const additionEntriesList = {type: "entries", entries: TOOL_GS_ADDITIONAL_ENTRIES};
+			renderer.recursiveEntryRender(additionEntriesList, renderStack, 1);
+		} else if (type === "VEH") {
+			const additionEntriesList = {type: "entries", entries: TOOL_VEH_ADDITIONAL_ENTRIES};
+			renderer.recursiveEntryRender(additionEntriesList, renderStack, 1);
+		}
+	}
+	if (item.additionalEntries) {
+		const additionEntriesList = {type: "entries", entries: item.additionalEntries};
+		renderer.recursiveEntryRender(additionEntriesList, renderStack, 1);
+	}
+
+	$("tr#text").after(`
+		<tr class='text'>
+			<td colspan='6' class='text1'>
+				${utils_makeRoller(renderStack.join("")).split(item.name.toLowerCase()).join("<i>" + item.name.toLowerCase() + "</i>").split(item.name.toLowerCase().uppercaseFirst()).join("<i>" + item.name.toLowerCase().uppercaseFirst() + "</i>")}
+			</td>
+		</tr>`);
 
 	$(".items span.roller").contents().unwrap();
-	$("#stats span.roller").click(function() {
-		const roll =$(this).attr("data-roll").replace(/\s+/g, "");
-		const rollresult =  droll.roll(roll);
+	$("#stats span.roller").click(function () {
+		const roll = $(this).attr("data-roll").replace(/\s+/g, "");
+		const rollresult = droll.roll(roll);
 		const name = $(".stats-name").text();
 		$("div#output").prepend(`<span>${name}: <em>${roll}</em> rolled for <strong>${rollresult.total}</strong> (<em>${rollresult.rolls.join(", ")}</em>)<br></span>`).show();
 		$("div#output span:eq(5)").remove();
 	})
 }
+
+const TOOL_INS_ADDITIONAL_ENTRIES = [
+	"Proficiency with a musical instrument indicates you are familiar with the techniques used to play it. You also have knowledge of some songs commonly performed with that instrument.",
+	{
+		"type": "entries",
+		"name": "History",
+		"entries": [
+			"Your expertise aids you in recalling lore related to your instrument."
+		]
+	},
+	{
+		"type": "entries",
+		"name": "Performance",
+		"entries": [
+			"Your ability to put on a good show is improved when you incorporate an instrument into your act."
+		]
+	},
+	{
+		"type": "entries",
+		"name": "Compose a Tune",
+		"entries": [
+			"As part of a long rest, you can compose a new tune and lyrics for your instrument. You might use this ability to impress a noble or spread scandalous rumors with a catchy tune."
+		]
+	},
+	{
+		"type": "table",
+		"caption": "Musical Instrument",
+		"colLabels": [
+			"Activity", "DC"
+		],
+		"colStyles": [
+			"col-xs-10",
+			"col-xs-2 text-align-center"
+		],
+		"rows": [
+			["Identify a tune", "10"],
+			["Improvise a tune", "20"]
+		]
+	}
+];
+
+const TOOL_GS_ADDITIONAL_ENTRIES = [
+	"Proficiency with a gaming set applies to one type of game, such as Three-Dragon Ante or games of chance that use dice.",
+	{
+		"type": "entries",
+		"name": "Components",
+		"entries": [
+			"A gaming set has all the pieces needed to play a specific game or type of game, such as a complete deck of cards or a board and tokens."
+		]
+	},
+	{
+		"type": "entries",
+		"name": "History",
+		"entries": [
+			"Your mastery of a game includes knowledge of its history, as well as of important events it was connected to or prominent historical figures involved with it."
+		]
+	},
+	{
+		"type": "entries",
+		"name": "Insight",
+		"entries": [
+			"Playing games with someone is a good way to gain understanding of their personality, granting you a better ability to discern their lies from their truths and read their mood."
+		]
+	},
+	{
+		"type": "entries",
+		"name": "Sleight of Hand",
+		"entries": [
+			"Sleight of Hand is a useful skill for cheating at a game, as it allows you to swap pieces, palm cards, or alter a die roll. Alternatively, engrossing a target in a game by manipulating the components with dexterous movements is a great distraction for a pickpocketing attempt."
+		]
+	},
+	{
+		"type": "table",
+		"caption": "Gaming Set",
+		"colLabels": [
+			"Activity", "DC"
+		],
+		"colStyles": [
+			"col-xs-10",
+			"col-xs-2 text-align-center"
+		],
+		"rows": [
+			["Catch a player cheating", "15"],
+			["Gain insight into an opponent's personality", "15"]
+		]
+	}
+];
+
+const TOOL_VEH_ADDITIONAL_ENTRIES = [
+	"Proficiency with land vehicles covers a wide range of options, from chariots and howdahs to wagons and carts. Proficiency with water vehicles covers anything that navigates waterways. Proficiency with vehicles grants the knowledge needed to handle vehicles of that type, along with knowledge of how to repair and maintain them.",
+	"In addition, a character proficient with water vehicles is knowledgeable about anything a professional sailor would be familiar with, such as information about the sea and islands, tying knots, and assessing weather and sea conditions.",
+	{
+		"type": "entries",
+		"name": "Arcana",
+		"entries": [
+			"When you study a magic vehicle, this tool proficiency aids you in uncovering lore or determining how the vehicle operates."
+		]
+	},
+	{
+		"type": "entries",
+		"name": "Investigation, Perception",
+		"entries": [
+			"When you inspect a vehicle for clues or hidden information, your proficiency aids you in noticing things that others might miss."
+		]
+	},
+	{
+		"type": "entries",
+		"name": "Vehicle Handling",
+		"entries": [
+			"When piloting a vehicle, you can apply your proficiency bonus to the vehicle's AC and saving throws."
+		]
+	},
+	{
+		"type": "table",
+		"caption": "Vehicles",
+		"colLabels": [
+			"Activity", "DC"
+		],
+		"colStyles": [
+			"col-xs-10",
+			"col-xs-2 text-align-center"
+		],
+		"rows": [
+			["Navigate rough terrain or waters", "10"],
+			["Assess a vehicle's condition", "15"],
+			["Take a tight corner at high speed", "20"]
+		]
+	}
+];

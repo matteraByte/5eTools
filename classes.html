@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+	<!--5ETOOLS_VERSION-->
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,6 +29,25 @@
 	<style>
 		table#stats > tbody > tr > td {
 			padding: 0 0.8em;
+		}
+
+		#please-select-message {
+			height: 10px;
+		}
+
+		#please-select-message.showing > td {
+			height: 40px;
+			color: #922610;
+			font-family: 'Andada', serif;
+			font-variant: small-caps;
+			font-weight: 500;
+			line-height: 2.3em;
+			text-align: center;
+			font-size: 1.8em;
+		}
+
+		#please-select-message.showing > td::after {
+			content: "Toggle a button to view class and subclass information";
 		}
 	</style>
 </head>
@@ -262,7 +282,7 @@
 
 					<!-- populate with JS -->
 
-					<tr style="height: 10px;"></tr> <!-- high quality layout code-->
+					<tr id="please-select-message"><td colspan="6"></td></tr>
 					<tr><th class="border" colspan="6"></th></tr>
 				</table>
 

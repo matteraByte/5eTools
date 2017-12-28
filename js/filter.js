@@ -1,4 +1,5 @@
 "use strict";
+
 /**
  * The API is as follows:
  * - render()
@@ -10,8 +11,7 @@
  * See the docs for each function for full explanations.
  */
 class FilterBox {
-
-	static getSelectedSources() {
+	static getSelectedSources () {
 		const cookie = Cookies.get(FilterBox._COOKIE_NAME);
 		if (cookie) {
 			const parsed = JSON.parse(cookie);
@@ -48,7 +48,7 @@ class FilterBox {
 	 * @param resetButton element to bind a reset-on-click to
 	 * @param filterList a list of `Filter` objects to build the menus from
 	 */
-	constructor(inputGroup, resetButton, filterList) {
+	constructor (inputGroup, resetButton, filterList) {
 		this.inputGroup = inputGroup;
 		this.resetButton = resetButton;
 		this.filterList = filterList;
@@ -64,7 +64,7 @@ class FilterBox {
 	/**
 	 * Render the "Filters" button in the inputGroup
 	 */
-	render() {
+	render () {
 		// save the current values to re-apply if we're re-rendering
 		const curValues = this.$rendered.length > 0 ? this.getValues() : null;
 		// remove any previously rendered elements
@@ -78,8 +78,8 @@ class FilterBox {
 
 		const $outer = makeOuterList();
 		for (let i = 0; i < this.filterList.length; ++i) {
-			$outer.append(makeOuterItem(i, this, this.filterList[i], this.$miniView));
-			if (i < this.filterList.length-1) $outer.append(makeDivider());
+			$outer.append(makeOuterItem(this, this.filterList[i], this.$miniView));
+			if (i < this.filterList.length - 1) $outer.append(makeDivider());
 		}
 		$inputGroup.prepend($filterButton);
 		this.$rendered.push($filterButton);
@@ -96,53 +96,52 @@ class FilterBox {
 			$filterButton.find("button").click();
 		}
 
-		function getFilterButton() {
+		function getFilterButton () {
 			const $buttonWrapper = $(`<div id="filter-toggle-btn"/>`);
 			$buttonWrapper.addClass(FilterBox.CLS_INPUT_GROUP_BUTTON);
 
-			const filterButton = getFilterButton();
-			$buttonWrapper.append(filterButton);
+			const $filterButton = $(`<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Filter <span class="caret"></span></button>`);
+			$buttonWrapper.append($filterButton);
 			return $buttonWrapper;
-
-			function getFilterButton() {
-				const button = document.createElement(ELE_BUTTON);
-				button.classList.add("btn");
-				button.classList.add("btn-default");
-				button.classList.add("dropdown-toggle");
-				button.setAttribute("data-toggle", "dropdown");
-				button.innerHTML = "Filter <span class='caret'></span>";
-				return button;
-			}
 		}
 
-		function getMiniView() {
+		function getMiniView () {
 			return $(`<div class="mini-view btn-group"/>`);
 		}
 
-		function makeOuterList() {
+		function makeOuterList () {
 			const $outL = $("<ul/>");
 			$outL.addClass(FilterBox.CLS_DROPDOWN_MENU);
 			$outL.addClass(FilterBox.CLS_DROPDOWN_MENU_FILTER);
 			return $outL;
 		}
 
-		function makeOuterItem(i, self, filter, $miniView) {
-			const $outI = $("<li/>");
-			$outI.addClass("filter-item");
+		function makeOuterItem (self, filter, $miniView, namePrefix) {
+			if (filter instanceof MultiFilter) {
+				const $parent = $(`<div/>`);
+				for (const child of filter.filters) {
+					const $ch = makeOuterItem(self, child, $miniView, filter.categoryName);
+					$parent.append($ch);
+				}
+				return $parent;
+			} else {
+				const $outI = $("<li/>");
+				$outI.addClass("filter-item");
 
-			const $grid = makePillGrid();
-			const $innerListHeader = makeHeaderLine();
+				const $grid = makePillGrid();
+				const $innerListHeader = makeHeaderLine($grid);
 
-			$outI.append($innerListHeader);
-			$outI.append($grid);
+				$outI.append($innerListHeader);
+				$outI.append($grid);
 
-			self.headers[filter.header] = {index: i, ele: $grid,outer: $outI, filter: filter};
+				self.headers[filter.header] = {ele: $grid, outer: $outI, filter: filter};
 
-			return $outI;
+				return $outI;
+			}
 
-			function makeHeaderLine() {
+			function makeHeaderLine ($grid) {
 				const $line = $(`<div class="h-wrap"/>`);
-				const $label = `<div>${filter.header}</div>`;
+				const $label = `<div>${namePrefix ? `<span class="text-muted">${namePrefix}: </span>` : ""}${filter.header}</div>`;
 				$line.append($label);
 
 				const $quickBtns = $(`<span class="btn-group" style="margin-left: auto;"/>`);
@@ -169,7 +168,7 @@ class FilterBox {
 				const $showHide = $(`<button class="btn btn-default btn-xs show-hide-button" style="margin-left: 12px;">Hide</button>`);
 				$line.append($showHide);
 
-				$showHide.on(EVNT_CLICK, function() {
+				$showHide.on(EVNT_CLICK, function () {
 					if ($grid.is(":hidden")) {
 						$showHide.text("Hide");
 						$grid.show();
@@ -209,41 +208,41 @@ class FilterBox {
 					}
 				});
 
-				$none.on(EVNT_CLICK, function() {
-					$grid.find(".filter-pill").each(function() {
+				$none.on(EVNT_CLICK, function () {
+					$grid.find(".filter-pill").each(function () {
 						$(this).data("setter")(FilterBox._PILL_STATES[2]);
 					});
 				});
 
-				$all.on(EVNT_CLICK, function() {
-					$grid.find(".filter-pill").each(function() {
+				$all.on(EVNT_CLICK, function () {
+					$grid.find(".filter-pill").each(function () {
 						$(this).data("setter")(FilterBox._PILL_STATES[1]);
 					});
 				});
 
-				$clear.on(EVNT_CLICK, function() {
-					$grid.find(".filter-pill").each(function() {
+				$clear.on(EVNT_CLICK, function () {
+					$grid.find(".filter-pill").each(function () {
 						$(this).data("setter")(FilterBox._PILL_STATES[0]);
 					});
 				});
 
-				$default.on(EVNT_CLICK, function() {
+				$default.on(EVNT_CLICK, function () {
 					self._reset(filter.header);
 				});
 
 				return $line;
 			}
 
-			function makePillGrid() {
+			function makePillGrid () {
 				const $pills = [];
 				const $grid = $(`<div class="pill-grid"/>`);
 
-				function cycleState($pill, $miniPill, forward) {
+				function cycleState ($pill, $miniPill, forward) {
 					const curIndex = FilterBox._PILL_STATES.indexOf($pill.attr("state"));
 
-					let newIndex = forward ? curIndex+1 : curIndex-1;
+					let newIndex = forward ? curIndex + 1 : curIndex - 1;
 					if (newIndex >= FilterBox._PILL_STATES.length) newIndex = 0;
-					else if (newIndex < 0) newIndex = FilterBox._PILL_STATES.length-1;
+					else if (newIndex < 0) newIndex = FilterBox._PILL_STATES.length - 1;
 					$pill.attr("state", FilterBox._PILL_STATES[newIndex]);
 					$miniPill.attr("state", FilterBox._PILL_STATES[newIndex]);
 				}
@@ -253,7 +252,7 @@ class FilterBox {
 					const iChangeFn = item instanceof FilterItem ? item.changeFn : null;
 
 					const $pill = $(`<div class="filter-pill"/>`);
-					const $miniPill = $(`<div class="mini-pill group${i}"/>`);
+					const $miniPill = $(`<div class="mini-pill"/>`);
 
 					const display = filter.displayFn ? filter.displayFn(iText) : iText;
 
@@ -264,19 +263,19 @@ class FilterBox {
 					$pill.attr("state", FilterBox._PILL_STATES[0]);
 					$miniPill.attr("state", FilterBox._PILL_STATES[0]);
 
-					$miniPill.on(EVNT_CLICK, function() {
+					$miniPill.on(EVNT_CLICK, function () {
 						$pill.attr("state", FilterBox._PILL_STATES[0]);
 						$miniPill.attr("state", FilterBox._PILL_STATES[0]);
 						handlePillChange(iText, iChangeFn, FilterBox._PILL_STATES[0]);
 						self._fireValChangeEvent();
 					});
 
-					$pill.on(EVNT_CLICK, function() {
+					$pill.on(EVNT_CLICK, function () {
 						cycleState($pill, $miniPill, true);
 						handlePillChange(iText, iChangeFn, $pill.attr("state"));
 					});
 
-					$pill.on("contextmenu",function(e){
+					$pill.on("contextmenu", function (e) {
 						e.preventDefault();
 						cycleState($pill, $miniPill, false);
 						handlePillChange(iText, iChangeFn, $pill.attr("state"));
@@ -285,14 +284,14 @@ class FilterBox {
 					// bind getters and resetters
 					$pill.data(
 						"setter",
-						(function(toVal) {
+						function (toVal) {
 							_setter($pill, $miniPill, toVal, iText, iChangeFn, false);
-						})
+						}
 					);
 					$pill.data("resetter",
-						(function() {
+						function () {
 							_resetter($pill, $miniPill, iText, iChangeFn, false);
-						})
+						}
 					);
 
 					// If re-render, use previous values. Otherwise, if there's a cookie, cookie values. Otherwise, default the pills
@@ -308,13 +307,24 @@ class FilterBox {
 						_resetter($pill, $miniPill, iText, iChangeFn, true);
 					}
 
+					// add a class to mark any items that are default deselected (used to add visual difference)
+					tagDefaults($miniPill, iText);
+
 					$grid.append($pill);
 					$miniView.append($miniPill);
 					$pills.push($pill);
 				}
 
+				function tagDefaults ($miniPill, iText) {
+					if (filter.deselFn && filter.deselFn(iText)) {
+						$miniPill.addClass("default-desel");
+					} else if (filter.selFn && filter.selFn(iText)) {
+						$miniPill.addClass("default-sel");
+					}
+				}
+
 				// allows silent (pill change function not triggered) sets
-				function _setter($pill, $miniPill, toVal, iText, iChangeFn, silent) {
+				function _setter ($pill, $miniPill, toVal, iText, iChangeFn, silent) {
 					$pill.attr("state", toVal);
 					$miniPill.attr("state", toVal);
 					if (!silent) {
@@ -323,7 +333,7 @@ class FilterBox {
 				}
 
 				// allows silent (pill change function not triggered) resets
-				function _resetter($pill, $miniPill, iText, iChangeFn, silent) {
+				function _resetter ($pill, $miniPill, iText, iChangeFn, silent) {
 					if (filter.deselFn && filter.deselFn(iText)) {
 						$pill.attr("state", "no");
 						$miniPill.attr("state", "no");
@@ -339,7 +349,7 @@ class FilterBox {
 					}
 				}
 
-				function handlePillChange(iText, iChangeFn, val) {
+				function handlePillChange (iText, iChangeFn, val) {
 					if (iChangeFn) {
 						iChangeFn(iText, val);
 					}
@@ -347,14 +357,14 @@ class FilterBox {
 
 				$grid.data(
 					"getValues",
-					function() {
+					function () {
 						const out = {};
 						const _totals = {yes: 0, no: 0, ignored: 0};
-						$pills.forEach(function(p) {
+						$pills.forEach(function (p) {
 							const state = p.attr("state");
 							out[p.val()] = state === "yes" ? 1 : state === "no" ? -1 : 0;
 							const countName = state === "yes" ? "yes" : state === "no" ? "no" : "ignored";
-							_totals[countName] = _totals[countName]+1;
+							_totals[countName] = _totals[countName] + 1;
 						});
 						out._totals = _totals;
 						return out;
@@ -363,9 +373,9 @@ class FilterBox {
 
 				$grid.data(
 					"getCounts",
-					function() {
+					function () {
 						const out = {"yes": 0, "no": 0};
-						$pills.forEach(function(p) {
+						$pills.forEach(function (p) {
 							const state = p.attr("state");
 							if (out[state] !== undefined) out[state] = out[state] + 1;
 						});
@@ -377,15 +387,15 @@ class FilterBox {
 			}
 		}
 
-		function makeDivider() {
+		function makeDivider () {
 			return $(`<div class="pill-grid-divider"/>`);
 		}
 
-		function addShowHideHandlers(self) {
+		function addShowHideHandlers (self) {
 			// watch for the button changing to "open"
 			const $filterToggleButton = $("#filter-toggle-btn");
-			const observer = new MutationObserver(function(mutations) {
-				mutations.forEach(function(mutationRecord) {
+			const observer = new MutationObserver(function (mutations) {
+				mutations.forEach(function (mutationRecord) {
 					if (!$filterToggleButton.hasClass("open")) {
 						self.$disabledOverlay.detach();
 						self.dropdownVisible = false;
@@ -399,7 +409,7 @@ class FilterBox {
 					}
 				});
 			});
-			observer.observe($filterToggleButton[0], { attributes : true, attributeFilter : ["class"] });
+			observer.observe($filterToggleButton[0], {attributes: true, attributeFilter: ["class"]});
 
 			// squash events from the menu, otherwise the dropdown gets hidden when we click inside it
 			$outer.on(EVNT_CLICK, function (e) {
@@ -407,7 +417,7 @@ class FilterBox {
 			});
 		}
 
-		function addResetHandler(self) {
+		function addResetHandler (self) {
 			if (self.resetButton !== null && self.resetButton !== undefined) {
 				self.resetButton.addEventListener(EVNT_CLICK, function () {
 					self.reset();
@@ -415,8 +425,8 @@ class FilterBox {
 			}
 		}
 
-		function addCookieHandler(self) {
-			window.addEventListener("unload", function() {
+		function addCookieHandler (self) {
+			window.addEventListener("unload", function () {
 				const state = self.getValues();
 				Cookies.set(FilterBox._COOKIE_NAME, state, {expires: 365, path: window.location.pathname})
 			});
@@ -438,7 +448,7 @@ class FilterBox {
      * }
 	 *
 	 */
-	getValues() {
+	getValues () {
 		const outObj = {};
 		for (const header in this.headers) {
 			if (!this.headers.hasOwnProperty(header)) continue;
@@ -463,7 +473,7 @@ class FilterBox {
 	/**
 	 * Reset the selected filters to default, applying any `selFn` and `deselFn` functions from the filters
 	 */
-	reset() {
+	reset () {
 		for (const header in this.headers) {
 			if (!this.headers.hasOwnProperty(header)) continue;
 			this._reset(header);
@@ -476,9 +486,9 @@ class FilterBox {
 	 * @param header the name of the section to reset
 	 * @private
 	 */
-	_reset(header) {
+	_reset (header) {
 		const cur = this.headers[header];
-		cur.ele.find(".filter-pill").each(function() {
+		cur.ele.find(".filter-pill").each(function () {
 			$(this).data("resetter")();
 		});
 	}
@@ -487,7 +497,7 @@ class FilterBox {
 	 * Helper which dispatched the event when the filter needs to fire a "changed" event
 	 * @private
 	 */
-	_fireValChangeEvent() {
+	_fireValChangeEvent () {
 		const eventOut = new Event(FilterBox.EVNT_VALCHANGE);
 		this.inputGroup.dispatchEvent(eventOut);
 	}
@@ -496,12 +506,13 @@ class FilterBox {
 	 * Clean up any previously rendered elements
 	 * @private
 	 */
-	_wipeRendered() {
+	_wipeRendered () {
 		this.$rendered.forEach($e => $e.remove());
 		this.$rendered = [];
 		this.$disabledOverlay.detach();
 	}
 }
+
 FilterBox.CLS_INPUT_GROUP_BUTTON = "input-group-btn";
 FilterBox.CLS_DROPDOWN_MENU = "dropdown-menu";
 FilterBox.CLS_DROPDOWN_MENU_FILTER = "dropdown-menu-filter";
@@ -536,7 +547,7 @@ class Filter {
 	 *   deselFn: a function, defaults items as "do not match this" if `deselFn(item)` is true
 	 *
 	 */
-	constructor(options) {
+	constructor (options) {
 		this.header = options.header;
 		this.items = options.items ? options.items : [];
 		this.displayFn = options.displayFn;
@@ -548,7 +559,7 @@ class Filter {
 	 * Add an item if it doesn't already exist in the filter
 	 * @param item the item to add
 	 */
-	addIfAbsent(item) {
+	addIfAbsent (item) {
 		if ($.inArray(item, this.items) === -1) this.items.push(item);
 	}
 
@@ -560,11 +571,10 @@ class Filter {
 	 * @param toCheck item or array of items to match against
 	 * @returns {*} true if this item should be displayed, false otherwise
 	 */
-	toDisplay(valObj, toCheck) {
+	toDisplay (valObj, toCheck) {
 		const map = valObj[this.header];
 		const totals = map._totals;
 		if (toCheck instanceof Array) {
-
 			let display = false;
 			// default to displaying
 			if (totals.yes === 0) {
@@ -589,7 +599,7 @@ class Filter {
 			return doCheck(toCheck);
 		}
 
-		function doCheck() {
+		function doCheck () {
 			if (totals.yes > 0) {
 				return map[toCheck] === 1;
 			} else {
@@ -605,17 +615,54 @@ class FilterItem {
 	 * @param item string
 	 * @param changeFn called when this item is clicked/etc; calls `changeFn(item)`
 	 */
-	constructor(item, changeFn) {
+	constructor (item, changeFn) {
 		this.item = item;
 		this.changeFn = changeFn;
 	}
 }
 
+class MultiFilter {
+	/**
+	 * A group of multiple `Filter`s, which are OR'd together
+	 * @param categoryName a prefix to display before the filter headers
+	 * @param filters the list of filters
+	 */
+	constructor (categoryName, ...filters) {
+		this.categoryName = categoryName;
+		this.filters = filters;
+	}
+
+	/**
+	 * For each `toChecks` tc, calls `Filter.toDisplay(valObj, tc)` and OR's the result, returning it. See the
+	 * `Filter.toDisplay` docs.
+	 * @param valObj `FilterBox.getValues()` returned object
+	 * @param toChecks a list of objects to pass to the underlying filters, which must be the same length as the number
+	 * of filters
+	 * @returns {boolean} OR'd results of the underling `Filter.toDisplay` results
+	 * @throws an error if the `toChecks` list did not match the length of `this.filters`
+	 */
+	toDisplay (valObj, ...toChecks) {
+		if (this.filters.length !== toChecks.length) throw new Error("Number of filters and number of toChecks did not match");
+		const results = [];
+		for (let i = 0; i < this.filters.length; ++i) {
+			const f = this.filters[i];
+			const totals = valObj[f.header]._totals;
+
+			if (totals.yes === 0 && totals.no === 0) results.push(null);
+			else {
+				results.push(this.filters[i].toDisplay(valObj, toChecks[i]));
+			}
+		}
+		const resultsFilt = results.filter(r => r !== null);
+		if (!resultsFilt.length) return true;
+		return resultsFilt.find(r => r);
+	}
+}
 
 /**
  * An extremely simple deselect function. Simply deselects everything.
  * Useful for creating filter boxes where the default is "everything deselected"
  */
-Filter.deselAll = function(val) {
+Filter.deselAll = function (val) {
 	return true;
 };

@@ -24,6 +24,27 @@
 			]
 		},
 
+		"entrySection": {
+			"allOf" : [
+				{"$ref" : "#/definitions/entry"},
+				{
+					"properties": {
+						"type": {"const": "section"},
+						"name": {
+							"type": "string"
+						},
+						"entries": {
+							"type": "array",
+							"items": {
+								"$ref": "/Entry"
+							}
+						}
+					},
+					"required": ["entries"],
+					"additionalProperties": false
+				}
+			]
+		},
 		"entryEntries": {
 			"allOf" : [
 				{"$ref" : "#/definitions/entry"},
@@ -114,6 +135,12 @@
 								"items": {
 									"$ref": "/Entry"
 								}
+							}
+						},
+						"footnotes": {
+							"type": "array",
+							"items": {
+								"$ref": "/Entry"
 							}
 						}
 					},
@@ -367,6 +394,66 @@
 							}
 						}
 					},
+					"required": ["entries"],
+					"additionalProperties": false
+				}
+			]
+		},
+		"entryInsetReadaloud": {
+			"allOf" : [
+				{"$ref" : "#/definitions/entry"},
+				{
+					"properties": {
+						"type": {"const": "insetReadaloud"},
+						"entries": {
+							"type": "array",
+							"items": {
+								"$ref": "/Entry"
+							}
+						}
+					},
+					"required": ["entries"],
+					"additionalProperties": false
+				}
+			]
+		},
+		"entryVariant": {
+			"allOf" : [
+				{"$ref" : "#/definitions/entry"},
+				{
+					"properties": {
+						"type": {"const": "variant"},
+						"name": {
+							"type": "string"
+						},
+						"entries": {
+							"type": "array",
+							"items": {
+								"$ref": "/Entry"
+							}
+						}
+					},
+					"required": ["name", "entries"],
+					"additionalProperties": false
+				}
+			]
+		},
+		"entryVariantSub": {
+			"allOf" : [
+				{"$ref" : "#/definitions/entry"},
+				{
+					"properties": {
+						"type": {"const": "variantSub"},
+						"name": {
+							"type": "string"
+						},
+						"entries": {
+							"type": "array",
+							"items": {
+								"$ref": "/Entry"
+							}
+						}
+					},
 					"required": ["name", "entries"],
 					"additionalProperties": false
 				}
@@ -419,6 +506,9 @@
 									"additionalProperties": false
 								}
 							]
+						},
+						"title": {
+							"type": "string"
 						}
 					},
 					"required": ["href"],
@@ -429,6 +519,7 @@
 	},
 
 	"anyOf": [
+		{"$ref": "#/definitions/entrySection"},
 		{"$ref": "#/definitions/entryEntries"},
 		{"$ref": "#/definitions/entryInlineEntries"},
 		{"$ref": "#/definitions/entryOptions"},
@@ -444,6 +535,9 @@
 		{"$ref": "#/definitions/entryInvocation"},
 		{"$ref": "#/definitions/entryPatron"},
 		{"$ref": "#/definitions/entryInset"},
+		{"$ref": "#/definitions/entryInsetReadaloud"},
+		{"$ref": "#/definitions/entryVariant"},
+		{"$ref": "#/definitions/entryVariantSub"},
 		{"$ref": "#/definitions/entryItem"},
 		{"$ref": "#/definitions/entryImage"},
 		{"type": "string"},

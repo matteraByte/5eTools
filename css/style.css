@@ -24,6 +24,7 @@ body {
 /* custom scrollbars */
 ::-webkit-scrollbar {
 	width: 9px;
+	height: 9px;
 }
 
 ::-webkit-scrollbar-track {
@@ -35,12 +36,23 @@ body {
 }
 
 header {
-	margin-bottom: 3px;
-	padding: 0 15px;
+	margin-bottom: 2px;
+	padding: 2px 15px;
 }
 
 header h1 {
-	margin-top: 3px;
+	margin-right: 10px;
+	display: inline;
+}
+
+header h1::after {
+	content: ".";
+}
+
+header p {
+	display: inline;
+	font-style: italic;
+	color: #d0d0d0;
 }
 
 .viewport-wrapper {
@@ -228,8 +240,12 @@ span.sourceXGE {
 	color: #ba7c00;
 }
 
-span.sourceToD {
-	color: orangered;
+span.sourceHotDQ {
+	color: #cc5800;
+}
+
+span.sourceRoT {
+	color: #ff2900;
 }
 
 span.sourceCoS {
@@ -310,7 +326,7 @@ table#stats table caption {
 }
 
 th.border {
-	height: 10px;
+	height: 4px;
 }
 
 td.divider div {
@@ -706,6 +722,10 @@ table#stats td._class_feature p.spellabilitysubtext span {
 }
 
 /* end section: class features */
+
+#classtable {
+	overflow-x: auto;
+}
 
 #classtable table {
 	font-size: 0.8em;
@@ -1199,10 +1219,18 @@ table#stats p.subtrait {
 	display: block;
 }
 
+.mini-view .mini-pill[state=yes].default-sel {
+	background: #48637a;
+}
+
 .mini-view .mini-pill[state=no] {
 	background: #922610;
 	color: white;
 	display: block;
+}
+
+.mini-view .mini-pill[state=no].default-desel {
+	background: #7a564f;
 }
 
 .dropdown-menu-filter .pill-grid {
@@ -1291,6 +1319,7 @@ button#reset {
 	border-bottom-right-radius: 0;
 	z-index: 2;
 	margin-left: -1px;
+	margin-right: 1px;
 }
 
 button#hidesearch {
@@ -1386,6 +1415,12 @@ input[type=checkbox].readonly {
 	text-decoration: none;
 }
 
+/* Adventures */
+span.showhide {
+	font-weight: bold;
+	padding: 1px 7px;
+}
+
 /* ENTRY RENDERING CSS */
 table#stats div.statsBlockSectionHead > span.entry-title,
 table#stats div.statsBlockHead > span.entry-title,
@@ -1427,26 +1462,23 @@ table#stats tr.class-feature div.statsBlockHead .spicy-sauce div.statsBlockSubHe
 	border-bottom-color: #1d965d;
 }
 
-table#stats div.statsInlineHead > span.entry-title::before {
-	width: 0.7em;
-	height: 1px;
-	display: inline-block;
-	content: "";
-	padding: 0;
-	margin: 0;
+table#stats div.statsInlineHead > span.entry-title,
+table#stats div.statsInlineHeadSubVariant > span.entry-title {
+	font-style: italic;
 }
 
 table#stats div.statsInlineHead > span.entry-title {
-	font-style: italic;
 	font-weight: bold;
 }
 
-table#stats div.statsInlineHead > p {
+table#stats div.statsInlineHead > p,
+table#stats div.statsInlineHeadSubVariant > p {
 	text-indent: 0.7em;
 	margin-bottom: 0;
 }
 
-table#stats div.statsInlineHead > p:first-of-type {
+table#stats div.statsInlineHead > p:first-of-type,
+table#stats div.statsInlineHeadSubVariant > p:first-of-type {
 	display: inline;
 }
 
@@ -1454,16 +1486,34 @@ table#stats div.statsInlineHead {
 	margin-bottom: 5px;
 }
 
-table#stats div.statsBlockInset {
+table#stats div.statsBlockInset,
+table#stats div.statsBlockInsetReadaloud {
 	margin: 7px 15px;
+	padding: 5px 10px;
+}
+
+table#stats div.statsBlockInset p:last-of-type,
+table#stats div.statsBlockInsetReadaloud p:last-of-type {
+	margin-bottom: 0;
+}
+
+table#stats div.statsBlockInset {
 	background-color: #e9ecda;
-	padding: 2px 10px;
-	border: 1px solid #656565;
 	box-shadow: 0 0 4px 0 rgb(152, 142, 124);
+	border: 1px solid #656565;
 	border-top: 2px solid #656565;
 	border-bottom: 2px solid #656565;
 }
 
+table#stats div.statsBlockInsetReadaloud {
+	background-color: #eef0f3;
+	box-shadow: 0 0 4px 0 rgb(152, 142, 124);
+	border: 1px solid #656565;
+	border-left: 2px solid #656565;
+	border-right: 2px solid #656565;
+}
+
+table#stats div.statsBlockInsetReadaloud > span.entry-title,
 table#stats div.statsBlockInset > span.entry-title {
 	display: block;
 	font-variant: small-caps;
@@ -1495,8 +1545,17 @@ table#stats tr.text ul.list-hang p {
 	margin-left: 1.1em;
 }
 
+table#stats tr.text div.img-title {
+	width: 100%;
+	text-align: center;
+	font-style: italic;
+}
+
+table#stats tr.text div.img-wrapper {
+	margin: 5px auto 0;
+	text-align: center;
+}
+
 table#stats tr.text img {
 	max-width: 100%;
-	margin: 5px auto 0;
-	display: block;
 }
