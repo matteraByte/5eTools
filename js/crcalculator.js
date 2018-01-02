@@ -1,7 +1,20 @@
 "use strict";
-window.onload = loadpage;
+const MSBCR_JSON_URL = "data/msbcr.json";
+const MONSTERFEATURES_JSON_URL = "data/monsterfeatures.json";
+let msbcr;
+let monsterfeatures;
 
-function loadpage () {
+window.onload = function load () {
+	loadJSON(MSBCR_JSON_URL, addMSBCR);
+};
+
+function addMSBCR (crData) {
+	msbcr = crData;
+	loadJSON(MONSTERFEATURES_JSON_URL, addMonsterFeatures);
+}
+
+function addMonsterFeatures (mfData) {
+	monsterfeatures = mfData.monsterfeatures
 	for (let i = 0; i < msbcr.cr.length; i++) {
 		const curcr = msbcr.cr[i];
 		$("#msbcr").append("<tr><td>" + curcr._cr + "</td><td>" + Parser.crToXp(curcr._cr) + "</td><td>" + curcr.pb + "</td><td>" + curcr.ac + "</td><td>" + curcr.hpmin + "-" + curcr.hpmax + "</td><td>" + curcr.attackbonus + "</td><td>" + curcr.dprmin + "-" + curcr.dprmax + "</td><td>" + curcr.savedc + "</td></tr>")
@@ -140,6 +153,7 @@ function calculatecr () {
 
 	let hp = parseInt($("#crcalc #hp").val());
 
+	if ($("#vulnerabilities").prop("checked")) hp *= 0.5;
 	if ($("#resistances").val() === "res") {
 		if (expectedcr >= 0 && expectedcr <= 4) hp *= 2;
 		if (expectedcr >= 5 && expectedcr <= 10) hp *= 1.5;
@@ -165,9 +179,9 @@ function calculatecr () {
 	$("#monsterfeatures input:checked").each(function () {
 		let trait = 0;
 		if ($(this).siblings("input[type=number]").length) trait = $(this).siblings("input[type=number]").val();
-		if ($(this).attr("data-hp") !== "") hp += Number(eval($(this).attr("data-hp")));
-		if ($(this).attr("data-ac") !== "") ac += Number(eval($(this).attr("data-ac")));
-		if ($(this).attr("data-dpr") !== "") dpr += Number(eval($(this).attr("data-dpr")));
+		if ($(this).attr("data-hp") !== "") hp += Number($(this).attr("data-hp"));
+		if ($(this).attr("data-ac") !== "") ac += Number($(this).attr("data-ac"));
+		if ($(this).attr("data-dpr") !== "") dpr += Number($(this).attr("data-dpr"));
 		if (!usesavedc && $(this).attr("data-attackbonus") !== "") attackbonus += Number($(this).attr("data-attackbonus"));
 	})
 
@@ -205,7 +219,7 @@ function calculatecr () {
 		}
 	}
 
-	let cr = ((Number(offensiveCR) + Number(defensiveCR)) / 2).toString();
+	let cr = ((fractionStrToDecimal(offensiveCR) + fractionStrToDecimal(defensiveCR)) / 2).toString();
 
 	if (cr === "0.5625") cr = "1/2"
 	if (cr === "0.5") cr = "1/2"
@@ -271,4 +285,8 @@ function calculatehp () {
 	const avghp = $("#hdval").html().split("d")[1] / 2 + 0.5;
 	const conmod = Math.floor(($("#con").val() - 10) / 2);
 	return Math.round((avghp + conmod) * $("#hd").val());
+}
+
+function fractionStrToDecimal (str) {
+	return str === "0" ? 0 : parseFloat(str.split('/').reduce((numerator, denominator) => numerator / denominator));
 }

@@ -100,7 +100,7 @@ function onJsonLoad (data) {
 
 		tempString += `
 			<li class='row' ${FLTR_ID}="${i}">
-				<a id='${i}' href='#${encodeForHash([p[JSON_ITEM_NAME], p[JSON_ITEM_SOURCE]])}' title="${p[JSON_ITEM_NAME]}">
+				<a id='${i}' href='#${UrlUtil.autoEncodeHash(p)}' title="${p[JSON_ITEM_NAME]}">
 					<span class='${LIST_NAME} ${CLS_COL1}'>${p[JSON_ITEM_NAME]}</span>
 					<span class='${LIST_SOURCE} ${CLS_COL2} source${Parser.sourceJsonToAbv(p[JSON_ITEM_SOURCE])}' title="${Parser.sourceJsonToFull(p[JSON_ITEM_SOURCE])}">${Parser.sourceJsonToAbv(p[JSON_ITEM_SOURCE])}</span>
 					<span class='${LIST_PACT} ${CLS_COL3} ${p[JSON_ITEM_PREREQUISITES][JSON_ITEM_PACT] === STR_PACT_NONE ? CLS_LI_NONE : STR_EMPTY}'>${p[JSON_ITEM_PREREQUISITES][JSON_ITEM_PACT]}</span>
@@ -185,7 +185,7 @@ function loadhash (jsonIndex) {
 			selectedInvocation[JSON_ITEM_PREREQUISITES][JSON_ITEM_SPELL] === STR_SPELL_NONE ? null : parseSpell(selectedInvocation[JSON_ITEM_PREREQUISITES][JSON_ITEM_SPELL])
 		].filter(f => f);
 		STATS_PREREQUISITES.innerHTML = prereqs.length ? `Prerequisites: ${prereqs.join(", ")}` : "";
-
 		STATS_TEXT.innerHTML = utils_combineText(selectedInvocation[JSON_ITEM_TEXT], ELE_P);
+		$(`#source`).html(`<td colspan=6><b>Source: </b> <i>${Parser.sourceJsonToFull(selectedInvocation.source)}</i>, page ${selectedInvocation.page}</td>`);
 	}
 }

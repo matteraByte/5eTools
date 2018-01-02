@@ -9,16 +9,16 @@
 			"ac": "20",
 			"hp": "half the hit point maximum of its summoner",
 			"speed": "60 ft., fly 60 ft. (hover)",
-			"str": "16",
-			"dex": "16",
-			"con": "16",
-			"int": "16",
-			"wis": "16",
-			"cha": "16",
+			"str": 16,
+			"dex": 16,
+			"con": 16,
+			"int": 16,
+			"wis": 16,
+			"cha": 16,
 			"immune": "necrotic, poison",
-			"conditionImmune": "charmed, frightened, paralyzed, petrified, poisoned , unconscious",
+			"conditionImmune": "charmed, frightened, paralyzed, petrified, poisoned, unconscious",
 			"senses": "darkvision 60 ft., truesight 60 ft.",
-			"passive": "13",
+			"passive": 13,
 			"languages": "all languages known to its summoner",
 			"cr": "Unknown",
 			"trait": [
@@ -63,16 +63,44 @@
 			"ac": "11",
 			"hp": "19 (3d10+3)",
 			"speed": "30 ft., fly 60 ft.",
-			"str": "14",
-			"dex": "13",
-			"con": "13",
-			"int": "2",
-			"wis": "10",
-			"cha": "3",
+			"str": 14,
+			"dex": 13,
+			"con": 13,
+			"int": 2,
+			"wis": 10,
+			"cha": 3,
 			"senses": "darkvision 60 ft.",
-			"passive": "10",
+			"passive": 10,
 			"cr": "0",
 			"page": 169
+		},
+		{
+			"source": "DMG",
+			"name": "Larva",
+			"size": "M",
+			"type": "fiend",
+			"alignment": "neutral evil",
+			"ac": "9",
+			"hp": "9 (2d8)",
+			"speed": "20ft.",
+			"str": 9,
+			"dex": 9,
+			"con": 10,
+			"int": 6,
+			"wis": 10,
+			"cha": 2,
+			"passive": 10,
+			"languages": "understands the languages it knew in life but can't speak",
+			"cr": "0",
+			"action": [
+				{
+					"name": "Bite",
+					"text": [
+						"Melee Weapon Attack: +1 to hit, reach 5 ft., one target. Hit: 1 (1d4-1) piercing damage."
+					]
+				}
+			],
+			"page": 63
 		}
 	]
 }

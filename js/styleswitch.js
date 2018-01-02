@@ -52,8 +52,22 @@ tr.legendary td {
 	color: black !important;
 }
 
+.f-all-out,
+.omnisearch-output {
+	background: #fff;
+}
+
 #output {
 	background: lightgrey;
+}
+
+.f-all-out > p:nth-child(odd),
+.omnisearch-output p:nth-child(odd) {
+	background: #f4f4f4;
+}
+
+div.omnisearch-pagination-wrapper > .pg-control:hover {
+	color: #337ab7;
 }
 
 #crcalc label span.explanation {
@@ -198,6 +212,10 @@ input.search {
 	background-color: transparent !important;
 }
 
+input#omnisearch-input {
+	background-color: transparent !important;
+}
+
 ul.list li:hover {
 	background: black;
 }
@@ -237,6 +255,21 @@ tr.legendary td {
 
 #output {
 	background: rgba(0, 0, 0, 0.31);;
+}
+
+.f-all-wrapper > input,
+.f-all-out,
+.omnisearch-output {
+	background: #303030;
+}
+
+.f-all-out > p:nth-child(odd),
+.omnisearch-output p:nth-child(odd) {
+	background: #202020;
+}
+
+div.omnisearch-pagination-wrapper > .pg-control:hover {
+	color: #999;
 }
 
 #crcalc label span.explanation {
@@ -286,6 +319,7 @@ table#stats td._class_feature table th {
 	border-color: #ababab;
 }
 
+ul.list.adventures > li:nth-child(odd) > a,
 #stats table tbody tr:nth-child(odd),
 #classtable table tr:nth-child(odd) td,
 #rulescontent table tbody tr:nth-child(odd) td,

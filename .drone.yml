@@ -3,7 +3,7 @@ workspace:
 clone:
   git:
     image: plugins/git:1
-    depth: 50
+    depth: 1
     tags: false
 
 pipeline:
@@ -13,14 +13,28 @@ pipeline:
       commands:
           - npm install
           - npm test
+          - npm run gen-index
       when:
           event: [ push, pull_request ]
+  Version:
+    image: appleboy/drone-ssh
+    host: ianthe.rem.uz
+    port: 22
+    user: root
+    secrets: [ ssh_key ]
+    script:
+      - python /scripts/chk-version.py
+    when:
+      branch: master
+      event: push
+
   Deploy-dev:
     image: appleboy/drone-ssh
     host: ianthe.rem.uz
     port: 22
     user: root
     secrets: [ ssh_key ]
+    command_timeout: 120
     script:
       - bash /scripts/dev-deploy.sh
     when:
@@ -33,6 +47,7 @@ pipeline:
     port: 22
     user: root
     secrets: [ ssh_key ]
+    command_timeout: 120
     script:
       - bash /scripts/prod-deploy.sh
     when:
@@ -46,3 +61,16 @@ pipeline:
       message: 5eTools build {{ build.number }} to {{ build.branch }} by {{ build.author }} finished with {{ build.status }}. ({{ build.link }})
       when:
         status: [ success, failure ]
+        event: push
+
+  Shame:
+    image: appleboy/drone-ssh
+    host: ianthe.rem.uz
+    port: 22
+    user: root
+    secrets: [ ssh_key ]
+    script:
+      - python /scripts/shame.py
+    when:
+        status: failure
+        event: push

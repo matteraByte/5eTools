@@ -23,7 +23,7 @@ function onJsonLoad (data) {
 		// populate table
 		tempString +=
 			`<li ${FLTR_ID}="${i}">
-				<a id='${i}' href='#${encodeURI(bg.name).toLowerCase()}' title='${bg.name}'>
+				<a id='${i}' href='#${UrlUtil.autoEncodeHash(bg)}' title='${bg.name}'>
 					<span class='name col-xs-9'>${bg.name.replace("Variant ", "")}</span> 
 					<span class='source col-xs-3 source${bg.source}' title='${Parser.sourceJsonToFull(bg.source)}'>${Parser.sourceJsonToAbv(bg.source)}</span>
 				</a>
@@ -96,5 +96,6 @@ function loadhash (id) {
 		}
 
 		$("tr#traits").after("<tr class='trait'><td colspan='6'>" + texthtml + "</td></tr>");
+		$(`#source`).html(`<td colspan=6><b>Source: </b> <i>${sourceFull}</i>, page ${curbg.page}</td>`);
 	}
 }

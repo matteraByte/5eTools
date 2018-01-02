@@ -1,9 +1,7 @@
 "use strict";
-const HASH_SUBCLASS = "sub:";
 const HASH_FEATURE = "f:";
 const HASH_HIDE_FEATURES = "hideclassfs:";
 const HASH_ALL_SOURCES = "allsrc:";
-const HASH_SUB_LIST_SEP = "~";
 
 const CLSS_FEATURE_LINK = "feature-link";
 const CLSS_ACTIVE = "active";
@@ -37,11 +35,11 @@ window.onload = function load () {
 };
 
 function getClassHash (aClass) {
-	return `#${encodeForHash(aClass.name)}${HASH_LIST_SEP}${encodeForHash(aClass.source)}`;
+	return `#${UrlUtil.autoEncodeHash(aClass)}`;
 }
 
 function getEncodedSubclass (name, source) {
-	return `${encodeForHash(name)}${HASH_SUB_LIST_SEP}${encodeForHash(source)}`;
+	return `${UrlUtil.encodeForHash(name)}${HASH_SUB_LIST_SEP}${UrlUtil.encodeForHash(source)}`;
 }
 
 function getTableDataScData (scName, scSource) {
@@ -172,9 +170,9 @@ function loadhash (id) {
 		const lvlFeatureList = curClass.classFeatures[i];
 		for (let j = 0; j < lvlFeatureList.length; j++) {
 			const feature = lvlFeatureList[j];
-			const featureId = HASH_FEATURE + encodeForHash(feature.name) + "_" + i;
+			const featureId = `${HASH_FEATURE}${UrlUtil.encodeForHash(feature.name)}_${i}`;
 
-			const featureLinkPart = HASH_FEATURE + encodeForHash(feature.name) + i;
+			const featureLinkPart = `${HASH_FEATURE}${UrlUtil.encodeForHash(feature.name)}${i}`;
 			const featureLink = $(`<a href="${getClassHash(curClass)}${HASH_PART_SEP}${featureLinkPart}" class="${CLSS_FEATURE_LINK}" ${ATB_DATA_FEATURE_LINK}="${featureLinkPart}" ${ATB_DATA_FEATURE_ID}="${featureId}">${feature.name}</a>`);
 			featureLink.click(function () {
 				document.getElementById(featureId).scrollIntoView();
