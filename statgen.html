@@ -21,8 +21,9 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="icon" href="favicon.png">
 
-	<script type="text/javascript" src="lib/js-cookie.js"></script>
 	<style id="dynamicStyle"></style> <!-- populated with JS -->
+
+	<script type="text/javascript" src="lib/js-cookie.js"></script>
 	<script type="text/javascript" src="js/styleswitch.js"></script>
 	<script type="text/javascript" src="js/navigation.js"></script>
 </head>
@@ -50,7 +51,7 @@
 					</ul>
 				</nav>
 			</div>
-			<div class="col-sm-9 statmethod" id="rolled">
+			<div class="col-sm-9 statmethod" id="rolled" style="display: none">
 				<h3>Rolled Stats</h3>
 				<button type="button" id="rollbutton" class="btn btn-default">Roll Stats</button>
 				<h3 id="rolls">
@@ -58,12 +59,12 @@
 				<p>Click the button to roll for your stats. 4d6 are rolled with the lowest of the set discarded. This is done for each ability score. Assign these numbers to your abilities as desired. As this is based on your browser's JavaScript random number generator,
 					it cannot be considered at all "truly" random, but for most purposes can be considered "random enough."</p>
 			</div>
-			<div class="col-sm-9 statmethod" id="array">
+			<div class="col-sm-9 statmethod" id="array" style="display: none">
 				<h3>Standard Array</h3>
 				<h4>15, 14, 13, 12, 10, 8</h4>
 				<p>Assign these numbers to your abilities as desired.</p>
 			</div>
-			<div class="col-sm-9 statmethod" id="pointbuy">
+			<div class="col-sm-9 statmethod" id="pointbuy" style="display: none">
 				<h3>Point Buy</h3>
 				<label>Budget: <input id="budget" type="number" min="10" value="27"></label>
 				<label>Remaining: <input id="remaining" type="number" min="10" value="27" readonly></label>
@@ -123,12 +124,11 @@
 				<p id="choose"></p>
 			</div>
 		</div>
-	</main>
-
+	</main>	<!--5ETOOLS_SCRIPT_ANCHOR-->
 	<!--
 	All the embedded crap.
 	Would load it in but I want this for offline use too
--->
+    -->
 	<script type="text/javascript" src="js/utils.js"></script>
 	<script type="text/javascript" src="js/omnisearch.js"></script>
 	<script type="text/javascript" src="js/statgen.js"></script>
@@ -136,7 +136,6 @@
 	<script type="text/javascript" src="lib/jquery.js"></script>
 	<script type="text/javascript" src="lib/bootstrap.js"></script>
 	<script type="text/javascript" src="lib/elasticlunr.js"></script>
-
 </body>
 
 </html>

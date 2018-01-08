@@ -6,11 +6,11 @@ let tableDefault;
 let rewardList;
 
 window.onload = function load () {
-	loadJSON(JSON_URL, onJsonLoad);
+	DataUtil.loadJSON(JSON_URL, onJsonLoad);
 };
 
 function onJsonLoad (data) {
-	tableDefault = $("#stats").html();
+	tableDefault = $("#pagecontent").html();
 	rewardList = data.reward;
 
 	const sourceFilter = getSourceFilter();
@@ -61,8 +61,8 @@ function onJsonLoad (data) {
 	);
 
 	function handleFilterChange () {
+		const f = filterBox.getValues();
 		list.filter(function (item) {
-			const f = filterBox.getValues();
 			const r = rewardList[$(item.elm).attr(FLTR_ID)];
 
 			return sourceFilter.toDisplay(f, r.source) && typeFilter.toDisplay(f, r.type);
@@ -74,11 +74,11 @@ function onJsonLoad (data) {
 }
 
 function loadhash (id) {
-	$("#stats").html(tableDefault);
+	$("#pagecontent").html(tableDefault);
 	const reward = rewardList[id];
 
 	const name = reward.type === "Demonic Boon" ? "Demonic Boon: " + reward.name : reward.name;
-	$("th#name").html(`<span class="stats-name">${name}</span><span class="stats-source source${reward.source}" title="${Parser.sourceJsonToFull(reward.source)}">${Parser.sourceJsonToAbv(reward.source)}</span>`);
+	$("th.name").html(`<span class="stats-name">${name}</span><span class="stats-source source${reward.source}" title="${Parser.sourceJsonToFull(reward.source)}">${Parser.sourceJsonToAbv(reward.source)}</span>`);
 
 	$("tr.text").remove();
 

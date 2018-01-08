@@ -3,7 +3,6 @@
 let renderArea;
 
 let adventures;
-const adventureContent = {};
 
 const TABLE_START = `<tr><th class="border" colspan="6"></th></tr>`;
 const TABLE_END = `<tr><th class="border" colspan="6"></th></tr>`;
@@ -13,13 +12,13 @@ window.onload = function load () {
 		return string.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
 	};
 
-	renderArea = $(`#stats`);
+	renderArea = $(`#pagecontent`);
 
 	renderArea.append(TABLE_START);
 	renderArea.append(`<tr><td colspan="6" class="initial-message">Select an adventure to begin</td></tr>`);
 	renderArea.append(TABLE_END);
 
-	loadJSON(CONTENTS_URL, onJsonLoad);
+	DataUtil.loadJSON(CONTENTS_URL, onJsonLoad);
 };
 
 function onJsonLoad (data) {
@@ -52,8 +51,13 @@ function onJsonLoad (data) {
 	const allAdvHeaders = $(`ul.adv-headers`);
 	// add styles to all
 	allAdvHeaders.prev(`li`).find(`a`).css("display", "flex").css("justify-content", "space-between").css("padding", "0");
-	// add expand/collapse to only those with children
-	allAdvHeaders.filter((i, ele) => $(ele).children().length).prev(`li`).find(`a`).append(`<span class="showhide" onclick="sectToggle(event, this)" data-hidden="false">[\u2013]</span>`);
+	allAdvHeaders.filter((i, ele) => $(ele).children().length).each((i, ele) => {
+		const $ele = $(ele);
+		// add expand/collapse to only those with children
+		$ele.prev(`li`).find(`a`).append(`<span class="showhide" onclick="sectToggle(event, this)" data-hidden="true">[+]</span>`);
+		// collapse children
+		$ele.prev(`li`).find(`a`).closest(`li`).next(`ul.adv-headers`).hide();
+	});
 
 	const list = new List("listcontainer", {
 		valueNames: ['name'],
@@ -75,7 +79,7 @@ function hashChange () {
 		// prevent TftYP names from causing the header to wrap
 		const shortName = fromIndex[0].name.includes(Parser.SOURCE_JSON_TO_FULL[SRC_TYP]) ? fromIndex[0].name.replace(Parser.SOURCE_JSON_TO_FULL[SRC_TYP], Parser.sourceJsonToAbv(SRC_TYP)) : fromIndex[0].name;
 		$(`.adv-header`).html(shortName);
-		$(`.adv-message`).html("Select a chapter on the left, and browse the content on the right");
+		$(`.adv-message`).html("Browse adventure content. Press F to find.");
 		loadAdventure(fromIndex[0], advId, hashParts);
 	} else {
 		throw new Error("No adventure with ID: " + advId);
@@ -86,30 +90,22 @@ let allContents;
 let thisContents;
 
 function loadAdventure (fromIndex, advId, hashParts) {
-	if (adventureContent[advId] !== undefined) {
-		handle(adventureContent[advId]);
-	} else {
-		loadJSON(`data/adventure/adventure-${advId}.json`, function (data) {
-			adventureContent[advId] = data.data;
-			handle(data.data);
-		});
-	}
-
-	function handle (data) {
+	DataUtil.loadJSON(`data/adventure/adventure-${advId.toLowerCase()}.json`, function (data) {
 		allContents = $(`.adventure-contents-item`);
 		thisContents = allContents.filter(`[data-adventureid="${UrlUtil.encodeForHash(advId)}"]`);
 		thisContents.show();
 		allContents.filter(`[data-adventureid!="${UrlUtil.encodeForHash(advId)}"]`).hide();
-		onAdventureLoad(data, fromIndex, advId, hashParts);
+		onAdventureLoad(data.data, fromIndex, advId, hashParts);
 		addSearch(fromIndex, advId);
-	}
+	});
 }
 
 const renderer = new EntryRenderer();
 
 const curRender = {
 	curAdvId: "NONE",
-	chapter: -1
+	chapter: -1,
+	data: {}
 };
 
 function onAdventureLoad (data, fromIndex, advId, hashParts) {
@@ -129,9 +125,12 @@ function onAdventureLoad (data, fromIndex, advId, hashParts) {
 		}
 	}
 
+	curRender.data = data;
 	if (curRender.chapter !== chapter || curRender.curAdvId !== advId) {
 		thisContents.children(`ul`).children(`ul, li`).removeClass("active");
 		thisContents.children(`ul`).children(`li:nth-of-type(${chapter + 1}), ul:nth-of-type(${chapter + 1})`).addClass("active");
+		const $showHideBtn = thisContents.children(`ul`).children(`li:nth-of-type(${chapter + 1})`).find(`.showhide`);
+		if ($showHideBtn.data("hidden")) $showHideBtn.click();
 
 		curRender.curAdvId = advId;
 		curRender.chapter = chapter;
@@ -176,6 +175,7 @@ function sectToggle (evt, ele) {
 let $body;
 let $findAll;
 let headerCounts;
+let lastHighlight = null;
 function addSearch (indexData, advId) {
 	function getHash (found) {
 		return `${UrlUtil.encodeForHash(advId)}${HASH_PART_SEP}${found.ch}${found.header ? `${HASH_PART_SEP}${UrlUtil.encodeForHash(found.header)}${HASH_PART_SEP}${found.headerIndex}` : ""}`
@@ -191,6 +191,7 @@ function addSearch (indexData, advId) {
 	$body.on("keypress", (e) => {
 		if ((e.key === "f" && noModifierKeys(e))) {
 			$(`span.temp`).contents().unwrap();
+			lastHighlight = null;
 			if ($findAll) $findAll.remove();
 			$findAll = $(`<div class="f-all-wrapper"/>`).on("click", (e) => {
 				e.stopPropagation();
@@ -202,7 +203,7 @@ function addSearch (indexData, advId) {
 				if (e.key === "Enter" && noModifierKeys(e)) {
 					$results.html("");
 					const found = [];
-					const toSearch = adventureContent[advId];
+					const toSearch = curRender.data;
 					toSearch.forEach((section, i) => {
 						headerCounts = {};
 						searchEntriesFor(i, "", found, $srch.val(), section)
@@ -226,9 +227,14 @@ function addSearch (indexData, advId) {
 
 								$ptPreviews.on("click", () => {
 									setTimeout(() => {
-										$(`#stats`).find(`p:containsInsensitive(${f.term})`).each((i, ele) => {
-											$(ele).html($(ele).html().replace(re, "<span class='temp highlight'>$&</span>"))
-										});
+										if (lastHighlight === null || lastHighlight !== f.term.toLowerCase()) {
+											lastHighlight = f.term;
+											$(`#pagecontent`)
+												.find(`p:containsInsensitive("${f.term}"), li:containsInsensitive("${f.term}"), td:containsInsensitive("${f.term}"), a:containsInsensitive("${f.term}")`)
+												.each((i, ele) => {
+													$(ele).html($(ele).html().replace(re, "<span class='temp highlight'>$&</span>"))
+												});
+										}
 									}, 15)
 								});
 
@@ -238,6 +244,8 @@ function addSearch (indexData, advId) {
 									$ptPreviews.append(`<span>${f.previews[1]}</span>`);
 								}
 								$row.append($ptPreviews);
+
+								$link.on("click", () => $ptPreviews.click());
 							}
 
 							$results.append($row);

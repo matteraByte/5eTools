@@ -1,5 +1,8 @@
 "use strict";
-window.onload = loadparser;
+
+const JSON_URL = "data/bestiary/index.json";
+
+window.onload = loadSources;
 
 function moveon (cur) {
 	return (!cur.toUpperCase().indexOf("ACTIONS") || !cur.toUpperCase().indexOf("LEGENDARY ACTIONS") || !cur.toUpperCase().indexOf("REACTIONS"))
@@ -17,9 +20,9 @@ function tryParseType (strType) {
 	try {
 		const m = /^(.*?) (\(.*?\))\s*$/.exec(strType);
 		if (m) {
-			return {type: m[1], tags: m[2].split(",").map(s => s.replace(/\(/g, "").replace(/\)/g, "").trim())}
+			return {type: m[1].toLowerCase(), tags: m[2].split(",").map(s => s.replace(/\(/g, "").replace(/\)/g, "").trim().toLowerCase())}
 		}
-		return strType;
+		return strType.toLowerCase();
 	} catch (e) {
 		return strType;
 	}
@@ -38,13 +41,73 @@ const SKILL_SPACE_MAP = {
 	"animalhandling": "animal handling"
 };
 
-function loadparser () {
-	// parse it on click
-	$("button#parsestatblock").click(function () {
-		const statblock = $("textarea#statblock").val().split("\n");
+function loadSources () {
+	DataUtil.loadJSON(JSON_URL, loadparser)
+}
+
+function sortOptions ($select) {
+	$select.append($select.find("option").remove().sort((a, b) => {
+		const at = $(a).text();
+		const bt = $(b).text();
+		return (at > bt) ? 1 : ((at < bt) ? -1 : 0);
+	}));
+}
+
+function appendSource ($select, src) {
+	$select.append(`<option value="${src}">${src}</option>`);
+}
+
+const COOKIE_NAME = "converterSources";
+function loadparser (data) {
+	let hasAppended = false;
+
+	// custom sources
+	const $srcSel = $(`#source`);
+	Object.keys(data).forEach(src => appendSource($srcSel, src));
+	const rawCookie = Cookies.get(COOKIE_NAME);
+	const cookie = rawCookie ? JSON.parse(rawCookie) : {sources: [], selected: SRC_MM};
+	cookie.sources.forEach(src => appendSource($srcSel, src));
+	sortOptions($srcSel);
+	$srcSel.val(cookie.selected);
+
+	$srcSel.on("change", () => cookie.selected = $srcSel.val());
+
+	window.addEventListener("unload", function () {
+		Cookies.set(COOKIE_NAME, cookie, {expires: 365, path: window.location.pathname})
+	});
+
+	const $inptCustomSource = $(`#customsourcein`);
+	$(`#addsource`).on("click", () => {
+		const toAdd = $inptCustomSource.val().trim();
+		if (!cookie.sources.find(src => toAdd.toLowerCase() === src.toLowerCase())) {
+			cookie.selected = toAdd;
+			cookie.sources.push(toAdd);
+			appendSource($srcSel, toAdd);
+			sortOptions($srcSel);
+			$srcSel.val(toAdd);
+			$inptCustomSource.val("");
+		}
+	});
+
+	// init editor
+	const editor = ace.edit("statblock");
+	editor.setOptions({
+		wrap: true
+	});
+
+	$(`button#parsestatblockadd`).on("click", () => {
+		doParse(true);
+	});
+
+	$("button#parsestatblock").on("click", () => {
+		if (!hasAppended || confirm("You're about to overwrite multiple entries. Are you sure?")) doParse(false);
+	});
+
+	function doParse (append) {
+		const statblock = editor.getValue().split("\n");
 		const stats = {};
 
-		stats.source = $("input#source").val();
+		stats.source = $srcSel.val();
 
 		let prevLine = null;
 		let curline = null;
@@ -68,7 +131,7 @@ function loadparser () {
 				stats.type = curline.split(",")[0].split(" ").splice(1).join(" "); // + ", " + $("input#source").val();
 				stats.type = tryParseType(stats.type);
 
-				stats.alignment = curline.split(", ")[1];
+				stats.alignment = curline.split(", ")[1].toLowerCase();
 				continue;
 			}
 
@@ -133,7 +196,7 @@ function loadparser () {
 
 			// skills (optional)
 			if (!curline.indexOf("Skills ")) {
-				stats.skill = [curline.split("Skills ")[1]];
+				stats.skill = [curline.split("Skills ")[1].toLowerCase()];
 				if (stats.skill.length === 1) stats.skill = stats.skill[0];
 				const split = stats.skill.split(",");
 				const newSkills = {};
@@ -150,6 +213,12 @@ function loadparser () {
 					// because the linter doesn't like empty blocks...
 					continue;
 				}
+				continue;
+			}
+
+			// damage vulnerabilities (optional)
+			if (!curline.indexOf("Damage Vulnerabilities ")) {
+				stats.vulnerable = curline.split("Vulnerabilities ")[1];
 				continue;
 			}
 
@@ -225,7 +294,7 @@ function loadparser () {
 					curtrait.text = [];
 
 					if (!onlegendarydescription) {
-						// first pargraph
+						// first paragraph
 						curtrait.name = curline.split(/([.!])/g)[0];
 						curtrait.text.push(curline.split(".").splice(1).join(".").trim());
 					} else {
@@ -243,10 +312,12 @@ function loadparser () {
 						curline = statblock[i];
 					}
 
-					if (ontraits) stats.trait.push(curtrait);
-					if (onactions) stats.action.push(curtrait);
-					if (onreactions) stats.reaction.push(curtrait);
-					if (onlegendaries) stats.legendary.push(curtrait);
+					if (curtrait.name || curtrait.text) {
+						if (ontraits) stats.trait.push(curtrait);
+						if (onactions) stats.action.push(curtrait);
+						if (onreactions) stats.reaction.push(curtrait);
+						if (onlegendaries) stats.legendary.push(curtrait);
+					}
 					curtrait = {};
 				}
 			}
@@ -254,8 +325,17 @@ function loadparser () {
 		// for the user to fill out
 		stats.page = 0;
 
-		let out = JSON.stringify(stats, null, " ");
+		let out = JSON.stringify(stats, null, "\t");
 		out = out.replace(/([1-9]\d*)?d([1-9]\d*)(\s?)([+-])(\s?)(\d+)?/g, "$1d$2$4$6");
-		$("textarea#jsonoutput").text(out);
-	})
+
+		const $outArea = $("textarea#jsonoutput");
+		if (append) {
+			const oldVal = $outArea.text();
+			$outArea.text(`${out},\n${oldVal}`);
+			hasAppended = true;
+		} else {
+			$outArea.text(out);
+			hasAppended = false;
+		}
+	}
 }

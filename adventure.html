@@ -13,11 +13,11 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="icon" href="favicon.png">
 
-	<script type="text/javascript" src="lib/js-cookie.js"></script>
 	<style id="dynamicStyle"></style> <!-- populated with JS -->
+
+	<script type="text/javascript" src="lib/js-cookie.js"></script>
 	<script type="text/javascript" src="js/styleswitch.js"></script>
 	<script type="text/javascript" src="js/navigation.js"></script>
-
 	<style>
 		#listcontainer {
 			position: relative;
@@ -86,7 +86,7 @@
 
 		.f-all-wrapper {
 			position: fixed;
-			z-index: 1337;
+			z-index: 100;
 			bottom: 10px;
 			padding: 0 20px;
 			left: calc(((100vw - (1170px * (4 / 6))) / 2) + 1.5em);
@@ -173,14 +173,13 @@
 		</ul>
 	</div>
 	<div class="view-col" style="flex: 5">
-		<table id="stats" class="stats">
+		<table id="pagecontent" class="stats">
 			<!-- populate with JS -->
 		</table>
 	</div>
 </div>
 
-<footer class="container"></footer>
-
+<footer class="container"></footer>	<!--5ETOOLS_SCRIPT_ANCHOR-->
 <script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript" src="js/omnisearch.js"></script>
 <script type="text/javascript" src="js/entryrender.js"></script>
@@ -190,6 +189,6 @@
 <script type="text/javascript" src="lib/jquery.js"></script>
 <script type="text/javascript" src="lib/bootstrap.js"></script>
 <script type="text/javascript" src="lib/elasticlunr.js"></script>
-
 </body>
+
 </html>

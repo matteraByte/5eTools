@@ -31,7 +31,7 @@ const jsonURL = "data/classes.json";
 const renderer = new EntryRenderer();
 
 window.onload = function load () {
-	loadJSON(jsonURL, onJsonLoad);
+	DataUtil.loadJSON(jsonURL, onJsonLoad);
 };
 
 function getClassHash (aClass) {
@@ -57,7 +57,7 @@ function onJsonLoad (data) {
 	// for any non-standard source classes, mark subclasses from the same source as "forceStandard"
 	classes.filter(c => isNonstandardSource(c.source)).forEach(c => c.subclasses.filter(sc => sc.source === c.source).forEach(sc => sc.source = {"source": sc.source, "forceStandard": true}));
 
-	tableDefault = $("#stats").html();
+	tableDefault = $("#pagecontent").html();
 	statsProfDefault = $("#statsprof").html();
 	classTableDefault = $("#classtable").html();
 
@@ -84,7 +84,7 @@ function onJsonLoad (data) {
 }
 
 function loadhash (id) {
-	$("#stats").html(tableDefault);
+	$("#pagecontent").html(tableDefault);
 	$("#statsprof").html(statsProfDefault);
 	$("#classtable").html(classTableDefault);
 	const curClass = classes[id];
@@ -97,9 +97,10 @@ function loadhash (id) {
 
 	// SUMMARY SIDEBAR =================================================================================================
 	// hit dice and HP
-	$("td#hp div#hitdice span").html(EntryRenderer.getEntryDice(curClass.hd));
+	const hdEntry = {toRoll: [curClass.hd], rollable: true};
+	$("td#hp div#hitdice span").html(EntryRenderer.getEntryDice(hdEntry));
 	$("td#hp div#hp1stlevel span").html(curClass.hd.faces + " + your Constitution modifier");
-	$("td#hp div#hphigherlevels span").html(`${EntryRenderer.getEntryDice(curClass.hd)} (or ${(curClass.hd.faces / 2 + 1)}) + your Constitution modifier per ${curClass.name} level after 1st`);
+	$("td#hp div#hphigherlevels span").html(`${EntryRenderer.getEntryDice(hdEntry)} (or ${(curClass.hd.faces / 2 + 1)}) + your Constitution modifier per ${curClass.name} level after 1st`);
 
 	// save proficiency
 	$("td#prof div#saves span").html(curClass.proficiency.map(p => Parser.attAbvToFull(p)).join(", "));

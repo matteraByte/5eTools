@@ -4,13 +4,13 @@ let tabledefault = "";
 let bgList;
 
 window.onload = function load () {
-	loadJSON(JSON_URL, onJsonLoad);
+	DataUtil.loadJSON(JSON_URL, onJsonLoad);
 };
 
 function onJsonLoad (data) {
 	bgList = data.background;
 
-	tabledefault = $("#stats").html();
+	tabledefault = $("#pagecontent").html();
 
 	const sourceFilter = getSourceFilter();
 	const filterBox = initFilterBox(sourceFilter);
@@ -24,7 +24,7 @@ function onJsonLoad (data) {
 		tempString +=
 			`<li ${FLTR_ID}="${i}">
 				<a id='${i}' href='#${UrlUtil.autoEncodeHash(bg)}' title='${bg.name}'>
-					<span class='name col-xs-9'>${bg.name.replace("Variant ", "")}</span> 
+					<span class='name col-xs-9'>${bg.name.replace("Variant ", "")}</span>
 					<span class='source col-xs-3 source${bg.source}' title='${Parser.sourceJsonToFull(bg.source)}'>${Parser.sourceJsonToAbv(bg.source)}</span>
 				</a>
 			</li>`;
@@ -50,8 +50,8 @@ function onJsonLoad (data) {
 	);
 
 	function handleFilterChange () {
+		const f = filterBox.getValues();
 		list.filter(function (item) {
-			const f = filterBox.getValues();
 			const bg = bgList[$(item.elm).attr(FLTR_ID)];
 
 			return sourceFilter.toDisplay(f, bg.source);
@@ -63,13 +63,13 @@ function onJsonLoad (data) {
 }
 
 function loadhash (id) {
-	$("#stats").html(tabledefault);
+	$("#pagecontent").html(tabledefault);
 	const curbg = bgList[id];
 	const name = curbg.name;
 	const source = curbg.source;
 	const sourceAbv = Parser.sourceJsonToAbv(source);
 	const sourceFull = Parser.sourceJsonToFull(source);
-	$("th#name").html(`<span class="stats-name">${name}</span> <span title="${sourceFull}" class='stats-source source${sourceAbv}'>${sourceAbv}</span>`);
+	$("th.name").html(`<span class="stats-name">${name}</span> <span title="${sourceFull}" class='stats-source source${sourceAbv}'>${sourceAbv}</span>`);
 	const traitlist = curbg.trait;
 	$("tr.trait").remove();
 
