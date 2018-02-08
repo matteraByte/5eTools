@@ -124,6 +124,10 @@ class FilterBox {
 					$parent.append($ch);
 				}
 				return $parent;
+			} else if (filter instanceof RangeFilter) {
+				// TODO
+			} else if (filter instanceof AllSourcesFilter) {
+				// TODO
 			} else {
 				const $outI = $("<li/>");
 				$outI.addClass("filter-item");
@@ -372,6 +376,19 @@ class FilterBox {
 				);
 
 				$grid.data(
+					"setValues",
+					function (toVal) {
+						$pills.forEach((p) => {
+							if (toVal.includes(p.val().toLowerCase())) {
+								$(p).data("setter")(FilterBox._PILL_STATES[1])
+							} else {
+								$(p).data("setter")(FilterBox._PILL_STATES[0])
+							}
+						});
+					}
+				);
+
+				$grid.data(
 					"getCounts",
 					function () {
 						const out = {"yes": 0, "no": 0};
@@ -479,6 +496,42 @@ class FilterBox {
 			this._reset(header);
 		}
 		this._fireValChangeEvent();
+	}
+
+	setFromSubHashes (subHashes) {
+		const unpacked = {};
+		subHashes.forEach(s => Object.assign(unpacked, UrlUtil.unpackSubHash(s, true)));
+		const toMatch = {};
+		Object.keys(this.headers).forEach(hk => {
+			toMatch[hk.toLowerCase()] = this.headers[hk];
+		});
+		const toRemove = [];
+		Object.keys(unpacked)
+			.filter(k => k.startsWith("filter"))
+			.forEach(rawSubhash => {
+				const header = rawSubhash.substring(6);
+
+				if (toMatch[header]) {
+					toRemove.push(rawSubhash);
+					toMatch[header].ele.data("setValues")(unpacked[rawSubhash])
+				} else {
+					throw new Error(`Could not find filter with header ${header} for subhash ${rawSubhash}`)
+				}
+			});
+
+		if (toRemove.length) {
+			const [link, ...sub] = _getHashParts();
+
+			const outSub = [];
+			Object.keys(unpacked)
+				.filter(k => !toRemove.includes(k))
+				.forEach(k => {
+					outSub.push(`${k}${HASH_SUB_KV_SEP}${unpacked[k].join(HASH_SUB_LIST_SEP)}`)
+				});
+
+			setSuppressHistory(true);
+			window.location.hash = `#${link}${outSub.length ? `${HASH_PART_SEP}${outSub.join(HASH_PART_SEP)}` : ""}`;
+		}
 	}
 
 	/**
@@ -603,7 +656,7 @@ class Filter {
 			if (totals.yes > 0) {
 				return map[toCheck] === 1;
 			} else {
-				return map[toCheck] >= 0;
+				return map[toCheck] >= 0 || map[toCheck] === undefined;
 			}
 		}
 	}
@@ -619,6 +672,14 @@ class FilterItem {
 		this.item = item;
 		this.changeFn = changeFn;
 	}
+}
+
+class RangeFilter extends Filter {
+	// TODO implement a filter displayed as a range of items on a slider
+}
+
+class AllSourcesFilter extends Filter {
+	// TODO implement a filter with an "All Sources" button (toggled off by default)
 }
 
 class MultiFilter {

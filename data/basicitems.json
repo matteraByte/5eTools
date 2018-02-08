@@ -12,7 +12,9 @@
 			"dmg1": "1d8",
 			"dmg2": "1d10",
 			"dmgType": "S",
-			"property": "V",
+			"property": [
+				"V"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -26,7 +28,10 @@
 			"weight": "1",
 			"dmg1": "1",
 			"dmgType": "P",
-			"property": "A,LD",
+			"property": [
+				"A",
+				"LD"
+			],
 			"range": "25/100",
 			"source": "PHB",
 			"page": 149
@@ -41,7 +46,9 @@
 			"weight": "2",
 			"dmg1": "1d4",
 			"dmgType": "B",
-			"property": "L",
+			"property": [
+				"L"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -55,7 +62,11 @@
 			"weight": "1",
 			"dmg1": "1d4",
 			"dmgType": "P",
-			"property": "F,L,T",
+			"property": [
+				"F",
+				"L",
+				"T"
+			],
 			"range": "20/60",
 			"source": "PHB",
 			"page": 149
@@ -70,7 +81,10 @@
 			"weight": "0.25",
 			"dmg1": "1d4",
 			"dmgType": "P",
-			"property": "F,T",
+			"property": [
+				"F",
+				"T"
+			],
 			"range": "20/60",
 			"source": "PHB",
 			"page": 149
@@ -98,7 +112,11 @@
 			"weight": "6",
 			"dmg1": "1d10",
 			"dmgType": "S",
-			"property": "H,R,2H",
+			"property": [
+				"H",
+				"R",
+				"2H"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -113,7 +131,10 @@
 			"weight": "7",
 			"dmg1": "1d12",
 			"dmgType": "S",
-			"property": "H,2H",
+			"property": [
+				"H",
+				"2H"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -127,7 +148,9 @@
 			"weight": "10",
 			"dmg1": "1d8",
 			"dmgType": "B",
-			"property": "2H",
+			"property": [
+				"2H"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -142,7 +165,10 @@
 			"weight": "6",
 			"dmg1": "2d6",
 			"dmgType": "S",
-			"property": "H,2H",
+			"property": [
+				"H",
+				"2H"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -156,7 +182,11 @@
 			"weight": "6",
 			"dmg1": "1d10",
 			"dmgType": "S",
-			"property": "H,R,2H",
+			"property": [
+				"H",
+				"R",
+				"2H"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -171,7 +201,10 @@
 			"weight": "2",
 			"dmg1": "1d6",
 			"dmgType": "S",
-			"property": "L,T",
+			"property": [
+				"L",
+				"T"
+			],
 			"range": "20/60",
 			"source": "PHB",
 			"page": 149
@@ -186,7 +219,11 @@
 			"weight": "3",
 			"dmg1": "1d6",
 			"dmgType": "P",
-			"property": "A,L,LD",
+			"property": [
+				"A",
+				"L",
+				"LD"
+			],
 			"range": "30/120",
 			"source": "PHB",
 			"page": 149
@@ -201,7 +238,12 @@
 			"weight": "18",
 			"dmg1": "1d10",
 			"dmgType": "P",
-			"property": "A,H,LD,2H",
+			"property": [
+				"A",
+				"H",
+				"LD",
+				"2H"
+			],
 			"range": "100/400",
 			"source": "PHB",
 			"page": 149
@@ -216,7 +258,9 @@
 			"weight": "2",
 			"dmg1": "1d6",
 			"dmgType": "P",
-			"property": "T",
+			"property": [
+				"T"
+			],
 			"range": "30/120",
 			"source": "PHB",
 			"page": 149
@@ -231,7 +275,10 @@
 			"weight": "6",
 			"dmg1": "1d12",
 			"dmgType": "P",
-			"property": "R,S",
+			"property": [
+				"R",
+				"S"
+			],
 			"source": "PHB",
 			"page": 149,
 			"entries": [
@@ -254,7 +301,11 @@
 			"weight": "5",
 			"dmg1": "1d8",
 			"dmgType": "P",
-			"property": "A,LD,2H",
+			"property": [
+				"A",
+				"LD",
+				"2H"
+			],
 			"range": "80/320",
 			"source": "PHB",
 			"page": 149
@@ -269,7 +320,10 @@
 			"weight": "2",
 			"dmg1": "1d4",
 			"dmgType": "B",
-			"property": "L,T",
+			"property": [
+				"L",
+				"T"
+			],
 			"range": "20/60",
 			"source": "PHB",
 			"page": 149
@@ -284,7 +338,11 @@
 			"weight": "2",
 			"dmg1": "1d8",
 			"dmgType": "P",
-			"property": "A,H,2H",
+			"property": [
+				"A",
+				"H",
+				"2H"
+			],
 			"range": "150/600",
 			"source": "PHB",
 			"page": 149
@@ -301,7 +359,9 @@
 			"dmg1": "1d8",
 			"dmg2": "1d10",
 			"dmgType": "S",
-			"property": "V",
+			"property": [
+				"V"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -328,7 +388,10 @@
 			"weight": "10",
 			"dmg1": "2d6",
 			"dmgType": "B",
-			"property": "H,2H",
+			"property": [
+				"H",
+				"2H"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -353,7 +416,10 @@
 			"rarity": "None",
 			"value": "1gp",
 			"weight": "3",
-			"property": "S,T",
+			"property": [
+				"S",
+				"T"
+			],
 			"range": "5/15",
 			"source": "PHB",
 			"page": 149,
@@ -362,7 +428,7 @@
 					"type": "entries",
 					"name": "Special",
 					"entries": [
-						"A Large or smaller creature hit by a net is restrained until it is freed. A net has no effect on creatures that are formless, or creatures that are Huge or larger. A creature can use its action to make a DC 10 Strength check, freeing itself or another creature within its reach on a success. Dealing 5 slashing damage to the net (AC 10) also frees the creature without harming it, ending the effect and destroying the net. When you use an action, bonus action, or reaction to attack with a net, you can make only one attack regardless of the number of attacks you can normally make."
+						"A Large or smaller creature hit by a net is {@condition restrained} until it is freed. A net has no effect on creatures that are formless, or creatures that are Huge or larger. A creature can use its action to make a DC 10 Strength check, freeing itself or another creature within its reach on a success. Dealing 5 slashing damage to the net (AC 10) also frees the creature without harming it, ending the effect and destroying the net. When you use an action, bonus action, or reaction to attack with a net, you can make only one attack regardless of the number of attacks you can normally make."
 					]
 				}
 			]
@@ -377,7 +443,11 @@
 			"weight": "18",
 			"dmg1": "1d10",
 			"dmgType": "P",
-			"property": "H,R,2H",
+			"property": [
+				"H",
+				"R",
+				"2H"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -393,7 +463,9 @@
 			"dmg1": "1d6",
 			"dmg2": "1d8",
 			"dmgType": "B",
-			"property": "V",
+			"property": [
+				"V"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -408,7 +480,9 @@
 			"weight": "2",
 			"dmg1": "1d8",
 			"dmgType": "P",
-			"property": "F",
+			"property": [
+				"F"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -423,7 +497,10 @@
 			"weight": "3",
 			"dmg1": "1d6",
 			"dmgType": "S",
-			"property": "F,L",
+			"property": [
+				"F",
+				"L"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -437,7 +514,10 @@
 			"weight": "2",
 			"dmg1": "1d6",
 			"dmgType": "P",
-			"property": "A,2H",
+			"property": [
+				"A",
+				"2H"
+			],
 			"range": "80/320",
 			"source": "PHB",
 			"page": 149
@@ -453,7 +533,10 @@
 			"weight": "2",
 			"dmg1": "1d6",
 			"dmgType": "P",
-			"property": "F,L",
+			"property": [
+				"F",
+				"L"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -467,7 +550,9 @@
 			"weight": "2",
 			"dmg1": "1d4",
 			"dmgType": "S",
-			"property": "L",
+			"property": [
+				"L"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -480,7 +565,9 @@
 			"value": "1sp",
 			"dmg1": "1d4",
 			"dmgType": "B",
-			"property": "A",
+			"property": [
+				"A"
+			],
 			"range": "30/120",
 			"source": "PHB",
 			"page": 149
@@ -496,7 +583,10 @@
 			"dmg1": "1d6",
 			"dmg2": "1d8",
 			"dmgType": "P",
-			"property": "T,V",
+			"property": [
+				"T",
+				"V"
+			],
 			"range": "20/60",
 			"source": "PHB",
 			"page": 149
@@ -512,7 +602,10 @@
 			"dmg1": "1d6",
 			"dmg2": "1d8",
 			"dmgType": "P",
-			"property": "T,V",
+			"property": [
+				"T",
+				"V"
+			],
 			"range": "20/60",
 			"source": "PHB",
 			"page": 149
@@ -541,7 +634,9 @@
 			"dmg1": "1d8",
 			"dmg2": "1d10",
 			"dmgType": "B",
-			"property": "V",
+			"property": [
+				"V"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -555,7 +650,10 @@
 			"weight": "3",
 			"dmg1": "1d4",
 			"dmgType": "S",
-			"property": "F,R",
+			"property": [
+				"F",
+				"R"
+			],
 			"source": "PHB",
 			"page": 149
 		},
@@ -569,7 +667,9 @@
 			"weight": "3",
 			"dmg1": "1d8",
 			"dmgType": "P",
-			"property": "T",
+			"property": [
+				"T"
+			],
 			"range": "10/30",
 			"source": "ToA",
 			"page": 32,
@@ -589,7 +689,10 @@
 			"weight": "3",
 			"dmg1": "1d10",
 			"dmgType": "P",
-			"property": "AF,LD",
+			"property": [
+				"AF",
+				"LD"
+			],
 			"range": "30/90",
 			"source": "DMG",
 			"page": 268
@@ -606,7 +709,11 @@
 			"weight": "10",
 			"dmg1": "1d12",
 			"dmgType": "P",
-			"property": "AF,LD,2H",
+			"property": [
+				"AF",
+				"LD",
+				"2H"
+			],
 			"range": "40/120",
 			"source": "DMG",
 			"page": 268
@@ -622,7 +729,10 @@
 			"weight": "3",
 			"dmg1": "2d6",
 			"dmgType": "P",
-			"property": "AF,RLD",
+			"property": [
+				"AF",
+				"RLD"
+			],
 			"range": "50/150",
 			"reload": "15",
 			"source": "DMG",
@@ -639,7 +749,10 @@
 			"weight": "3",
 			"dmg1": "2d8",
 			"dmgType": "P",
-			"property": "AF,RLD",
+			"property": [
+				"AF",
+				"RLD"
+			],
 			"range": "40/120",
 			"reload": "6",
 			"source": "DMG",
@@ -656,7 +769,11 @@
 			"weight": "8",
 			"dmg1": "2d10",
 			"dmgType": "P",
-			"property": "AF,RLD,2H",
+			"property": [
+				"AF",
+				"RLD",
+				"2H"
+			],
 			"range": "80/240",
 			"reload": "5",
 			"source": "DMG",
@@ -673,7 +790,12 @@
 			"weight": "8",
 			"dmg1": "2d8",
 			"dmgType": "P",
-			"property": "AF,BF,RLD,2H",
+			"property": [
+				"AF",
+				"BF",
+				"RLD",
+				"2H"
+			],
 			"range": "80/240",
 			"reload": "30",
 			"source": "DMG",
@@ -690,7 +812,11 @@
 			"weight": "7",
 			"dmg1": "2d8",
 			"dmgType": "P",
-			"property": "AF,RLD,2H",
+			"property": [
+				"AF",
+				"RLD",
+				"2H"
+			],
 			"range": "30/90",
 			"reload": "2",
 			"source": "DMG",
@@ -707,7 +833,10 @@
 			"weight": "2",
 			"dmg1": "3d6",
 			"dmgType": "R",
-			"property": "AF,RLD",
+			"property": [
+				"AF",
+				"RLD"
+			],
 			"range": "30/120",
 			"reload": "50",
 			"source": "DMG",
@@ -724,7 +853,11 @@
 			"weight": "10",
 			"dmg1": "6d8",
 			"dmgType": "N",
-			"property": "AF,RLD,2H",
+			"property": [
+				"AF",
+				"RLD",
+				"2H"
+			],
 			"range": "120/360",
 			"reload": "2",
 			"source": "DMG",
@@ -741,7 +874,11 @@
 			"weight": "7",
 			"dmg1": "3d8",
 			"dmgType": "R",
-			"property": "AF,RLD,2H",
+			"property": [
+				"AF",
+				"RLD",
+				"2H"
+			],
 			"range": "100/300",
 			"reload": "30",
 			"source": "DMG",
@@ -1326,6 +1463,52 @@
 			"entries": [
 				"Most wealth is not in coins. It is measured in livestock, grain, land, rights to collect taxes, or rights to resources (such as a mine or a forest).",
 				"Guilds, nobles, and royalty regulate trade. Chartered companies are granted rights to conduct trade along certain routes, to send merchant ships to various ports, or to buy or sell specific goods. Guilds set prices for the goods or services that they control, and determine who may or may not offer those goods and services. Merchants commonly exchange trade goods without using currency."
+			]
+		},
+		{
+			"abbreviation": "SHP",
+			"source": "DMG",
+			"page": 119,
+			"name": "Vehicle",
+			"entries": [
+				{
+					"type": "entries",
+					"name": "Crew",
+					"entries": [
+						"A ship needs a crew of skilled hirelings to function. As per the Player's Handbook, one skilled hireling costs at least 2 gp per day. The minimum number of skilled hirelings needed to crew a ship depends on the type of vessel.",
+						"You can track the loyalty of individual crew members or the crew as a whole using the optional loyalty rules in chapter 4 of the Dungeon Master's Guide. If at least half the crew becomes disloyal during a voyage, the crew turns hostile and stages a mutiny. If the ship is berthed, disloyal crew members leave the ship and never return."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Passengers",
+					"entries": [
+						"The table indicates the number of Small and Medium passengers the ship can accommodate.",
+						"Accommodations consist of shared hammocks in tight quarters. A ship outfitted with private accommodations can carry one-fifth as many passengers.",
+						"A passenger is usually expected to pay 5 sp per day for a hammock, but prices can vary from ship to ship. A small private cabin usually costs 2 gp per day."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Cargo",
+					"entries": [
+						"The maximum tonnage the ship can carry."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Damage Threshold",
+					"entries": [
+						"If a ship has a Damage Threshold, it has immunity to all damage unless it takes an amount of damage equal to or greater than its damage threshold, in which case it takes damage as normal. Any damage that fails to meet or exceed the damage threshold is considered superficial and doesn't reduce the ship's hit points"
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Ship Repair",
+					"entries": [
+						"Repairs to a damaged ship can be made while the vessel is berthed. Repairing 1 hit point of damage requires 1 day and costs 20 gp for materials and labor."
+					]
+				}
 			]
 		}
 	]

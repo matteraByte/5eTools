@@ -75,6 +75,9 @@
 						"When you cast this spell using a spell slot of 3rd level or higher, you can attempt to counteract a spell set to secure the foreign system if the spell's level is equal to or less than the level of the spell slot you used."
 					]
 				}
+			],
+			"opposedCheck": [
+				"intelligence"
 			]
 		},
 		{
@@ -143,7 +146,7 @@
 					"items": [
 						"Terrain and bodies of water",
 						"Prevalent buildings, plants, animals, or intelligent creatures",
-						"Powerful (CR 1 or higher celestials, fey, fiends, elementals, or undead",
+						"Powerful (CR 1 or higher) celestials, fey, fiends, elementals, or undead",
 						"Influences from other planes of existence",
 						"Electrical currents, wireless signals, and active transit lines and tracks"
 					]
@@ -357,7 +360,7 @@
 				]
 			},
 			"entries": [
-				"You summon a spirit that assumes the form of a nonmilitary land vehicle of your choice, appearing in an unoccupied space within range. The vehicle has the statistics of a normal vehicle of its sort, though it is celestial, fey, or fiendish (your choice in origin. The physical characteristics of the vehicle reflect its origin to some degree. For example, a fiendish SUV might be jet black in color, with tinted windows and a sinister-looking front grille.",
+				"You summon a spirit that assumes the form of a nonmilitary land vehicle of your choice, appearing in an unoccupied space within range. The vehicle has the statistics of a normal vehicle of its sort, though it is celestial, fey, or fiendish (your choice in origin). The physical characteristics of the vehicle reflect its origin to some degree. For example, a fiendish SUV might be jet black in color, with tinted windows and a sinister-looking front grille.",
 				"You have a supernatural bond with the conjured vehicle that allows you to drive beyond your normal ability. While driving the conjured vehicle, you are considered proficient with vehicles of its type, and you add double your proficiency bonus to ability checks related to driving the vehicle. While driving the vehicle, you can make any spell you cast that targets only you also target the vehicle.",
 				"If the vehicle drops to 0 hit points, it disappears, leaving behind no physical form. You can also dismiss the vehicle at any time as an action, causing it to disappear.",
 				"You can't have more than one vehicle bonded by this spell at a time. As an action, you can release the vehicle from its bond at any time, causing it to disappear."
@@ -477,6 +480,13 @@
 						"When you cast this spell using a spell slot of 4th level or higher, the radius of the sphere affected by the spell increases by 5 feet for each slot level above 3rd."
 					]
 				}
+			],
+			"damageInflict": [
+				"lightning"
+			],
+			"savingThrow": [
+				"wisdom",
+				"dexterity"
 			]
 		},
 		{
@@ -546,6 +556,9 @@
 			"entries": [
 				"With this spell, you can target any creature with whom you have spoken previously, as long as the two of you are on the same plane of existence. When you cast the spell, the nearest functioning telephone or similar communications device within 100 feet of the target begins to ring. If there is no suitable device close enough to the target, the spell fails.",
 				"The target must make a successful Charisma saving throw or be compelled to answer your call. Once the connection is established, the call is crystal clear and cannot be dropped until the conversation has ended or the spell's duration ends. You can end the conversation at any time, but a target must succeed on a Charisma saving throw to end the conversation."
+			],
+			"savingThrow": [
+				"charisma"
 			]
 		},
 		{
@@ -665,7 +678,7 @@
 				"technomagic": true
 			},
 			"entries": [
-				"This cantrip allows you to activate or deactivate any electronic device within range, as long as the device has a clearly defined on or off function that can be easily accessed from the outside of the device. Any device that requires a software- based shutdown sequence to activate or deactivate cannot be affected by on/off."
+				"This cantrip allows you to activate or deactivate any electronic device within range, as long as the device has a clearly defined on or off function that can be easily accessed from the outside of the device. Any device that requires a software-based shutdown sequence to activate or deactivate cannot be affected by on/off."
 			]
 		},
 		{
@@ -886,6 +899,9 @@
 			},
 			"entries": [
 				"This spell shuts down all electronic devices within range that are not wielded by or under the direct control of a creature. If an electronic device within range is used by a creature, that creature must succeed on a Constitution saving throw to prevent the device from being shut down. While the spell remains active, no electronic device within range can be started or restarted."
+			],
+			"savingThrow": [
+				"constitution"
 			]
 		},
 		{

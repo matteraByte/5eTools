@@ -9,10 +9,12 @@ var results = [];
 const expected = [];
 const existing = [];
 
+require("./check-links");
+
 // TODO modular argument system?
 if (process.argv[2] !== "noschema") {
 	console.log(`##### Validating the JSON schemata #####`);
-// Loop through each non-helper schema and push all validation results.
+	// Loop through each non-helper schema and push all validation results.
 	fs.readdirSync("./test/schema")
 		.filter(file => file.endsWith(".json")) // ignore directories
 		.forEach(file => {
@@ -42,8 +44,6 @@ if (process.argv[2] !== "noschema") {
 	console.log(`All schema tests passed.`);
 }
 
-require("./check-links");
-
 console.log(`##### Reconciling the PNG tokens against the bestiary JSON #####`);
 
 // Loop through each bestiary JSON file push the list of expected PNG files.
@@ -58,7 +58,7 @@ fs.readdirSync("./data/bestiary")
 fs.readdirSync("./img")
 	.filter(file => !file.endsWith(".png"))
 	.forEach(dir => {
-		if (dir !== "adventure" && dir !== "variantrules") {
+		if (dir !== "adventure" && dir !== "deities" && dir !== "variantrules" && dir !== "rules" && dir !== "objects") {
 			fs.readdirSync(`./img/${dir}`).forEach(file => {
 				existing.push(`${dir.replace("(", "").replace(")", "")}/${file}`);
 			})

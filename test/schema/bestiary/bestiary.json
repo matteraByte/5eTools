@@ -1,6 +1,97 @@
 {
 	"$schema": "http://json-schema.org/draft-06/schema#",
 	"type": "object",
+	"definitions": {
+		"level1to9": {
+			"type": "object",
+			"properties": {
+				"lower": {
+					"type": "number"
+				},
+				"slots": {
+					"type": "number"
+				},
+				"spells": {
+					"type": "array",
+					"uniqueItems": true,
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"required": [
+				"spells"
+			],
+			"additionalProperties": false
+		},
+		"arrayOfString": {
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"type": "string"
+			}
+		},
+		"frequency": {
+			"type": "object",
+			"properties": {
+				"9e": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"9": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"8e": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"8": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"7e": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"7": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"6e": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"6": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"5e": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"5": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"4e": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"4": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"3e": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"3": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"2e": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"2": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"1e": {
+					"$ref": "#/definitions/arrayOfString"
+				},
+				"1": {
+					"$ref": "#/definitions/arrayOfString"
+				}
+			},
+			"additionalProperties": false
+		}
+	},
 	"properties": {
 		"monster": {
 			"type": "array",
@@ -230,6 +321,100 @@
 					"immune": {
 						"type": "string"
 					},
+					"spellcasting": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"name": {
+									"type": "string"
+								},
+								"headerEntries": {
+									"type": "array",
+									"items": {
+										"$ref": "/Entry"
+									}
+								},
+								"constant": {
+									"$ref": "#/definitions/arrayOfString"
+								},
+								"headerWill": {
+									"$ref": "#/definitions/arrayOfString"
+								},
+								"will": {
+									"$ref": "#/definitions/arrayOfString"
+								},
+								"rest": {
+									"$ref": "#/definitions/frequency"
+								},
+								"daily": {
+									"$ref": "#/definitions/frequency"
+								},
+								"weekly": {
+									"$ref": "#/definitions/frequency"
+								},
+								"spells": {
+									"type": "object",
+									"properties": {
+										"0": {
+											"type": "object",
+											"properties": {
+												"spells": {
+													"type": "array",
+													"uniqueItems": true,
+													"items": {
+														"type": "string"
+													}
+												}
+											},
+											"required": [
+												"spells"
+											],
+											"additionalProperties": false
+										},
+										"1": {
+											"$ref": "#/definitions/level1to9"
+										},
+										"2": {
+											"$ref": "#/definitions/level1to9"
+										},
+										"3": {
+											"$ref": "#/definitions/level1to9"
+										},
+										"4": {
+											"$ref": "#/definitions/level1to9"
+										},
+										"5": {
+											"$ref": "#/definitions/level1to9"
+										},
+										"6": {
+											"$ref": "#/definitions/level1to9"
+										},
+										"7": {
+											"$ref": "#/definitions/level1to9"
+										},
+										"8": {
+											"$ref": "#/definitions/level1to9"
+										},
+										"9": {
+											"$ref": "#/definitions/level1to9"
+										}
+									},
+									"additionalProperties": false
+								},
+								"footerEntries": {
+									"type": "array",
+									"items": {
+										"$ref": "/Entry"
+									}
+								}
+							},
+							"required": [
+								"name"
+							],
+							"additionalProperties": false
+						}
+					},
 					"trait": {
 						"type": "array",
 						"items": {
@@ -238,24 +423,16 @@
 								"name": {
 									"type": "string"
 								},
-								"text": {
+								"entries": {
 									"type": "array",
-									"uniqueItems": true,
 									"items": {
-										"type": "string"
-									}
-								},
-								"attack": {
-									"type": "array",
-									"uniqueItems": true,
-									"items": {
-										"type": "string"
+										"$ref": "/Entry"
 									}
 								}
 							},
 							"required": [
 								"name",
-								"text"
+								"entries"
 							],
 							"additionalProperties": false
 						}
@@ -268,27 +445,16 @@
 								"name": {
 									"type": "string"
 								},
-								"text": {
+								"entries": {
 									"type": "array",
-									"uniqueItems": true,
 									"items": {
-										"type": "string"
-									}
-								},
-								"attack": {
-									"type": "array",
-									"uniqueItems": true,
-									"items": {
-										"type": [
-											"string",
-											"null"
-										]
+										"$ref": "/Entry"
 									}
 								}
 							},
 							"required": [
 								"name",
-								"text"
+								"entries"
 							],
 							"additionalProperties": false
 						}
@@ -301,27 +467,16 @@
 								"name": {
 									"type": "string"
 								},
-								"text": {
+								"entries": {
 									"type": "array",
-									"uniqueItems": true,
 									"items": {
-										"type": "string"
-									}
-								},
-								"attack": {
-									"type": "array",
-									"uniqueItems": true,
-									"items": {
-										"type": [
-											"string",
-											"null"
-										]
+										"$ref": "/Entry"
 									}
 								}
 							},
 							"required": [
 								"name",
-								"text"
+								"entries"
 							],
 							"additionalProperties": false
 						}
@@ -340,11 +495,10 @@
 								"name": {
 									"type": "string"
 								},
-								"text": {
+								"entries": {
 									"type": "array",
-									"uniqueItems": true,
 									"items": {
-										"type": "string"
+										"$ref": "/Entry"
 									}
 								},
 								"attack": {
@@ -356,14 +510,10 @@
 								}
 							},
 							"required": [
-								"name",
-								"text"
+								"entries"
 							],
 							"additionalProperties": false
 						}
-					},
-					"spells": {
-						"type": "string"
 					},
 					"variant": {
 						"type": "array",
@@ -373,6 +523,9 @@
 					},
 					"page": {
 						"type": "int"
+					},
+					"familiar": {
+						"type": "boolean"
 					}
 				},
 				"required": [

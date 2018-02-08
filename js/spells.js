@@ -213,7 +213,15 @@ function ascSortSpellLevel (a, b) {
 	if (a === b) return 0;
 	if (a === STR_CANTRIP) return -1;
 	if (b === STR_CANTRIP) return 1;
-	return ascSort(a, b);
+	return SortUtil.ascSort(a, b);
+}
+
+function getFilterAbilitySave (ability) {
+	return `${ability.uppercaseFirst().substring(0, 3)}. Save`;
+}
+
+function getFilterAbilityCheck (ability) {
+	return `${ability.uppercaseFirst().substring(0, 3)}. Check`;
 }
 
 window.onload = function load () {
@@ -250,6 +258,23 @@ const schoolFilter = new Filter({
 	],
 	displayFn: Parser.spSchoolAbvToFull}
 );
+const damageFilter = new Filter({
+	header: "Damage Type",
+	items: [
+		"acid", "bludgeoning", "cold", "fire", "force", "lightning", "necrotic", "piercing", "poison", "psychic", "radiant", "slashing", "thunder"
+	],
+	displayFn: StrUtil.uppercaseFirst
+});
+const saveFilter = new Filter({
+	header: "Saving Throw",
+	items: ["strength", "constitution", "dexterity", "intelligence", "wisdom", "charisma"],
+	displayFn: getFilterAbilitySave
+});
+const checkFilter = new Filter({
+	header: "Opposed Ability Check",
+	items: ["strength", "constitution", "dexterity", "intelligence", "wisdom", "charisma"],
+	displayFn: getFilterAbilityCheck
+});
 const timeFilter = new Filter({
 	header: "Cast Time",
 	items: [
@@ -278,6 +303,9 @@ const filterBox = initFilterBox(
 	classAndSubclassFilter,
 	metaFilter,
 	schoolFilter,
+	damageFilter,
+	saveFilter,
+	checkFilter,
 	timeFilter,
 	rangeFilter
 );
@@ -286,9 +314,9 @@ function pageInit (loadedSources) {
 	tableDefault = $("#pagecontent").html();
 
 	sourceFilter.items = Object.keys(loadedSources).map(src => new FilterItem(src, loadSource(JSON_LIST_NAME, addSpells)));
-	sourceFilter.items.sort(ascSort);
+	sourceFilter.items.sort(SortUtil.ascSort);
 
-	list = search({
+	list = ListUtil.search({
 		valueNames: ["name", "source", "level", "time", "school", "range", "classes"],
 		listClass: "spells"
 	});
@@ -313,7 +341,7 @@ function handleFilterChange () {
 	list.filter(function (item) {
 		const s = spellList[$(item.elm).attr(FLTR_ID)];
 
-		return sourceFilter.toDisplay(f, s.source) && levelFilter.toDisplay(f, s.level) && metaFilter.toDisplay(f, s._fMeta) && schoolFilter.toDisplay(f, s.school) && timeFilter.toDisplay(f, s._fTimeType) && rangeFilter.toDisplay(f, s._fRangeType) && classAndSubclassFilter.toDisplay(f, s._fClasses, s._fSubclasses);
+		return sourceFilter.toDisplay(f, s.source) && levelFilter.toDisplay(f, s.level) && metaFilter.toDisplay(f, s._fMeta) && schoolFilter.toDisplay(f, s.school) && damageFilter.toDisplay(f, s.damageInflict) && saveFilter.toDisplay(f, s.savingThrow) && checkFilter.toDisplay(f, s.opposedCheck) && timeFilter.toDisplay(f, s._fTimeType) && rangeFilter.toDisplay(f, s._fRangeType) && classAndSubclassFilter.toDisplay(f, s._fClasses, s._fSubclasses);
 	});
 }
 
@@ -370,6 +398,7 @@ function addSpells (data) {
 		spell[P_NORMALISED_RANGE] = getNormalisedRange(spell.range);
 
 		// used for filtering
+		if (!spell.damageInflict) spell.damageInflict = [];
 		spell._fMeta = getMetaFilterObj(spell);
 		spell._fClasses = spell.classes.fromClassList.map(c => getClassFilterStr(c));
 		spell._fSubclasses = spell.classes.fromSubclass ? spell.classes.fromSubclass.map(c => getClassFilterStr(c.subclass)) : [];
@@ -378,16 +407,16 @@ function addSpells (data) {
 
 		// populate table
 		tempString += `
-			<li class='row' ${FLTR_ID}="${spI}">
-				<a id='${spI}' href='#${UrlUtil.autoEncodeHash(spell)}' title="${spell.name}">
-					<span class='name col-xs-3 col-xs-3-5'>${spell.name}</span>
-					<span class='source col-xs-1 col-xs-1-7 source${Parser.stringToCasedSlug(spell.source)}' title="${Parser.sourceJsonToFull(spell.source)}">${Parser.sourceJsonToAbv(spell.source)}</span>
-					<span class='level col-xs-1 col-xs-1-5'>${levelText}</span>
-					<span class='time col-xs-1 col-xs-1-7' title="${Parser.spTimeListToFull(spell.time)}">${getTblTimeStr(spell.time[0])}</span>
-					<span class='school col-xs-1 col-xs-1-2 school_${spell.school}' title="${Parser.spSchoolAbvToFull(spell.school)}">${Parser.spSchoolAbvToShort(spell.school)}</span>
-					<span class='range col-xs-2 col-xs-2-4'>${Parser.spRangeToFull(spell.range)}</span>
+			<li class="row" ${FLTR_ID}="${spI}">
+				<a id="${spI}" href="#${UrlUtil.autoEncodeHash(spell)}" title="${spell.name}">
+					<span class="name col-xs-3 col-xs-3-5">${spell.name}</span>
+					<span class="source col-xs-1 col-xs-1-7 source${Parser.stringToCasedSlug(spell.source)}" title="${Parser.sourceJsonToFull(spell.source)}">${Parser.sourceJsonToAbv(spell.source)}</span>
+					<span class="level col-xs-1 col-xs-1-5">${levelText}</span>
+					<span class="time col-xs-1 col-xs-1-7" title="${Parser.spTimeListToFull(spell.time)}">${getTblTimeStr(spell.time[0])}</span>
+					<span class="school col-xs-1 col-xs-1-2 school_${spell.school}" title="${Parser.spSchoolAbvToFull(spell.school)}">${Parser.spSchoolAbvToShort(spell.school)}</span>
+					<span class="range col-xs-2 col-xs-2-4">${Parser.spRangeToFull(spell.range)}</span>
 
-					<span class='classes' style='display: none'>${Parser.spClassesToFull(spell.classes)}</span>
+					<span class="classes" style="display: none">${Parser.spClassesToFull(spell.classes)}</span>
 				</a>
 			</li>`;
 
@@ -405,8 +434,8 @@ function addSpells (data) {
 	spellTable.append(tempString);
 
 	// sort filters
-	classFilter.items.sort(ascSort);
-	subclassFilter.items.sort(ascSort);
+	classFilter.items.sort(SortUtil.ascSort);
+	subclassFilter.items.sort(SortUtil.ascSort);
 
 	list.reIndex();
 	if (lastSearch) list.search(lastSearch);
@@ -424,34 +453,34 @@ function sortSpells (a, b, o) {
 	}
 
 	if (o.valueName === "source") {
-		const bySrc = ascSort(a.source, b.source);
-		return bySrc !== 0 ? bySrc : ascSort(a.name, b.name);
+		const bySrc = SortUtil.ascSort(a.source, b.source);
+		return bySrc !== 0 ? bySrc : SortUtil.ascSort(a.name, b.name);
 	}
 
 	if (o.valueName === "level") {
-		return orFallback(ascSort, P_LEVEL);
+		return orFallback(SortUtil.ascSort, P_LEVEL);
 	}
 
 	if (o.valueName === "time") {
-		return orFallback(ascSort, P_NORMALISED_TIME);
+		return orFallback(SortUtil.ascSort, P_NORMALISED_TIME);
 	}
 
 	if (o.valueName === "school") {
-		return orFallback(ascSort, P_SCHOOL);
+		return orFallback(SortUtil.ascSort, P_SCHOOL);
 	}
 
 	if (o.valueName === "range") {
-		return orFallback(ascSort, P_NORMALISED_RANGE);
+		return orFallback(SortUtil.ascSort, P_NORMALISED_RANGE);
 	}
 
 	return 0;
 
 	function byName () {
-		return ascSort(a.name, b.name);
+		return SortUtil.ascSort(a.name, b.name);
 	}
 
 	function bySource () {
-		return ascSort(a.source, b.source);
+		return SortUtil.ascSort(a.source, b.source);
 	}
 
 	function fallback () {
@@ -470,4 +499,18 @@ function loadhash (id) {
 	const $pageContent = $("#pagecontent");
 	const spell = spellList[id];
 	$pageContent.html(EntryRenderer.spell.getRenderedString(spell, renderer));
+}
+
+function handleUnknownHash (link, sub) {
+	const src = Object.keys(loadedSources).find(src => src.toLowerCase() === decodeURIComponent(link.split(HASH_LIST_SEP)[1]).toLowerCase());
+	if (src) {
+		loadSource(JSON_LIST_NAME, (spells) => {
+			addSpells(spells);
+			hashchange();
+		})(src, "yes");
+	}
+}
+
+function loadsub (sub) {
+	filterBox.setFromSubHashes(sub);
 }

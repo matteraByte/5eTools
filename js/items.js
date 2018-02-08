@@ -26,13 +26,13 @@ function sortItems (a, b, o) {
 	if (o.valueName === "name") {
 		return b._values.name.toLowerCase() > a._values.name.toLowerCase() ? 1 : -1;
 	} else if (o.valueName === "type") {
-		if (b._values.type === a._values.type) return compareNames(a, b);
+		if (b._values.type === a._values.type) return SortUtil.compareNames(a, b);
 		return b._values.type.toLowerCase() > a._values.type.toLowerCase() ? 1 : -1;
 	} else if (o.valueName === "source") {
-		if (b._values.source === a._values.source) return compareNames(a, b);
+		if (b._values.source === a._values.source) return SortUtil.compareNames(a, b);
 		return b._values.source.toLowerCase() > a._values.source.toLowerCase() ? 1 : -1;
 	} else if (o.valueName === "rarity") {
-		if (b._values.rarity === a._values.rarity) return compareNames(a, b);
+		if (b._values.rarity === a._values.rarity) return SortUtil.compareNames(a, b);
 		return rarityValue(b._values.rarity) > rarityValue(a._values.rarity) ? 1 : -1;
 	} else return 1;
 }
@@ -56,6 +56,8 @@ function deselectFilter (deselectProperty, deselectValue) {
 	}
 }
 
+let mundanelist
+let magiclist
 function populateTablesAndFilters () {
 	tabledefault = $("#pagecontent").html();
 
@@ -66,14 +68,16 @@ function populateTablesAndFilters () {
 		header: "Rarity",
 		items: ["None", "Common", "Uncommon", "Rare", "Very Rare", "Legendary", "Artifact", "Unknown"]
 	});
+	const propertyFilter = new Filter({header: "Property", displayFn: StrUtil.uppercaseFirst});
 	const attunementFilter = new Filter({header: "Attunement", items: ["Yes", "By...", "Optional", "No"]});
 	const categoryFilter = new Filter({
 		header: "Category",
 		items: ["Basic", "Generic Variant", "Specific Variant", "Other"],
 		deselFn: deselectFilter("category", "Specific Variant")
 	});
+	const miscFilter = new Filter({header: "Miscellaneous", items: ["Sentient"]});
 
-	const filterBox = initFilterBox(sourceFilter, typeFilter, tierFilter, rarityFilter, attunementFilter, categoryFilter);
+	const filterBox = initFilterBox(sourceFilter, typeFilter, tierFilter, rarityFilter, propertyFilter, attunementFilter, categoryFilter, miscFilter);
 	const liList = {mundane: "", magic: ""}; // store the <li> tag content here and change the DOM once for each property after the loop
 
 	for (let i = 0; i < itemList.length; i++) {
@@ -90,14 +94,16 @@ function populateTablesAndFilters () {
 
 		// for filter to use
 		curitem._fTier = tierTags;
+		curitem._fProperties = curitem.property ? curitem.property.map(p => curitem._allPropertiesPtr[p].name).filter(n => n) : [];
+		curitem._fMisc = curitem.sentient ? ["Sentient"] : [];
 
 		liList[rarity === "None" || rarity === "Unknown" || category === "Basic" ? "mundane" : "magic"] += `
 			<li ${FLTR_ID}=${i}>
-				<a id='${i}' href="#${UrlUtil.autoEncodeHash(curitem)}" title="${name}">
-					<span class='name col-xs-4'>${name}</span>
-					<span class='type col-xs-4 col-xs-4-3'>${curitem.typeText}</span>
-					<span class='source col-xs-1 col-xs-1-7 source${sourceAbv}' title="${sourceFull}">${sourceAbv}</span>
-					<span class='rarity col-xs-2'>${rarity}</span>
+				<a id="${i}" href="#${UrlUtil.autoEncodeHash(curitem)}" title="${name}">
+					<span class="name col-xs-4">${name}</span>
+					<span class="type col-xs-4 col-xs-4-3">${curitem.typeText}</span>
+					<span class="source col-xs-1 col-xs-1-7 source${sourceAbv}" title="${sourceFull}">${sourceAbv}</span>
+					<span class="rarity col-xs-2">${rarity}</span>
 				</a>
 			</li>`;
 
@@ -105,22 +111,23 @@ function populateTablesAndFilters () {
 		sourceFilter.addIfAbsent(source);
 		curitem.procType.forEach(t => typeFilter.addIfAbsent(t));
 		tierTags.forEach(tt => tierFilter.addIfAbsent(tt));
+		curitem._fProperties.forEach(p => propertyFilter.addIfAbsent(p));
 	}
 	// populate table
 	$("ul.list.mundane").append(liList.mundane);
 	$("ul.list.magic").append(liList.magic);
 	// sort filters
-	sourceFilter.items.sort(ascSort);
-	typeFilter.items.sort(ascSort);
+	sourceFilter.items.sort(SortUtil.ascSort);
+	typeFilter.items.sort(SortUtil.ascSort);
 
 	const options = {
 		valueNames: ["name", "source", "type", "rarity"],
 		listClass: "mundane"
 	};
 
-	const mundanelist = search(options);
+	mundanelist = ListUtil.search(options);
 	options.listClass = "magic";
-	const magiclist = search(options);
+	magiclist = ListUtil.search(options);
 
 	const mundaneWrapper = $(`.ele-mundane`);
 	const magicWrapper = $(`.ele-magic`);
@@ -144,8 +151,10 @@ function populateTablesAndFilters () {
 				typeFilter.toDisplay(f, i.procType) &&
 				tierFilter.toDisplay(f, i._fTier) &&
 				rarityFilter.toDisplay(f, i.rarity) &&
+				propertyFilter.toDisplay(f, i._fProperties) &&
 				attunementFilter.toDisplay(f, i.attunementCategory) &&
-				categoryFilter.toDisplay(f, i.category);
+				categoryFilter.toDisplay(f, i.category) &&
+				miscFilter.toDisplay(f, i._fMisc);
 		}
 		mundanelist.filter(listFilter);
 		magiclist.filter(listFilter);
@@ -163,9 +172,9 @@ function populateTablesAndFilters () {
 	}
 
 	$("#filtertools").find("button.sort").on("click", function () {
-		$(this).attr("sortby", $(this).attr("sortby") === "asc" ? "desc" : "asc");
-		magiclist.sort($(this).attr("sort"), {order: $(this).attr("sortby"), sortFunction: sortItems});
-		mundanelist.sort($(this).attr("sort"), {order: $(this).attr("sortby"), sortFunction: sortItems});
+		$(this).data("sortby", $(this).data("sortby") === "asc" ? "desc" : "asc");
+		magiclist.sort($(this).data("sort"), {order: $(this).data("sortby"), sortFunction: sortItems});
+		mundanelist.sort($(this).data("sort"), {order: $(this).data("sortby"), sortFunction: sortItems});
 	});
 
 	$("#itemcontainer").find("h3").not(":has(input)").click(function () {
@@ -185,6 +194,7 @@ function populateTablesAndFilters () {
 		})
 	});
 
+	RollerUtil.addListRollButton();
 	addListShowHide();
 	initHistory();
 	handleFilterChange();
@@ -242,8 +252,8 @@ function loadhash (id) {
 	}
 
 	$("tr#text").after(`
-		<tr class='text'>
-			<td colspan='6' class='text1'>
+		<tr class="text">
+			<td colspan="6" class="text1">
 				${utils_makeRoller(renderStack.join("")).split(item.name.toLowerCase()).join("<i>" + item.name.toLowerCase() + "</i>").split(item.name.toLowerCase().uppercaseFirst()).join("<i>" + item.name.toLowerCase().uppercaseFirst() + "</i>")}
 			</td>
 		</tr>`);

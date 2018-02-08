@@ -23,6 +23,7 @@ function EntryRenderer () {
 	this.baseUrl = "";
 
 	this._subVariant = false;
+	this._firstSection = true;
 
 	/**
 	 * Set the tag used to group rendered elements
@@ -42,6 +43,18 @@ function EntryRenderer () {
 	};
 
 	/**
+	 * Other sections should be prefixed with a vertical divider
+	 * @param bool
+	 */
+	this.setFirstSection = function (bool) {
+		this._firstSection = bool;
+	};
+
+	// TODO convert params to options object
+	// TODO provide a Roll20 mode (expose list of found monsters/etc to be imported; add links to these)
+	// TODO general conditional rendering function -- make use of "data" property (see backgrounds JSON + backgrounds hover render)
+	//      - can be used to clean up R20 script Subclass rendering when implemented
+	/**
 	 * Recursively walk down a tree of "entry" JSON items, adding to a stack of strings to be finally rendered to the
 	 * page. Note that this function does _not_ actually do the rendering, see the example code above for how to display
 	 * the result.
@@ -54,7 +67,8 @@ function EntryRenderer () {
 	 * @param forcePrefixSuffix force the prefix and suffix to be added (useful for the first call from external code)
 	 */
 	this.recursiveEntryRender = function (entry, textStack, depth, prefix, suffix, forcePrefixSuffix) {
-		depth = depth === undefined || depth === null ? entry.type === "section" ? -1 : 0 : depth;
+		depth = depth === undefined || depth === null ? 0 : depth;
+		if (entry.type === "section") depth = -1;
 		prefix = prefix === undefined || prefix === null ? null : prefix;
 		suffix = suffix === undefined || suffix === null ? null : suffix;
 		forcePrefixSuffix = forcePrefixSuffix === undefined || forcePrefixSuffix === null ? false : forcePrefixSuffix;
@@ -78,7 +92,8 @@ function EntryRenderer () {
 						if (entry.name) textStack.push(`<p class="list-name">${entry.name}</p>`);
 						textStack.push(`<ul ${entry.style ? `class="${entry.style}"` : ""}>`);
 						for (let i = 0; i < entry.items.length; i++) {
-							this.recursiveEntryRender(entry.items[i], textStack, depth + 1, `<li ${isNonstandardSource(entry.items[i].source) ? `class="${CLSS_NON_STANDARD_SOURCE}"` : ""}>`, "</li>");
+							const style = _getStyleClass(entry.items[i].source);
+							this.recursiveEntryRender(entry.items[i], textStack, depth + 1, `<li ${style ? `class="${style}"` : ""}>`, "</li>");
 						}
 						textStack.push("</ul>");
 					}
@@ -140,7 +155,7 @@ function EntryRenderer () {
 					break;
 				case "abilityGeneric":
 					renderPrefix();
-					textStack.push(`<span class='ability-block'><span>${entry.name}</span> = ${entry.text} ${utils_makeAttChoose(entry.attributes)}</span>`);
+					textStack.push(`<span class='ability-block'>${entry.name ? `<span>${entry.name}</span>  = ` : ""}${entry.text}${entry.attributes ? ` ${utils_makeAttChoose(entry.attributes)}` : ""}</span>`);
 					renderSuffix();
 					break;
 
@@ -152,6 +167,15 @@ function EntryRenderer () {
 						}
 					}
 					break;
+				case "inlineBlock":
+					renderPrefix();
+					if (entry.entries) {
+						for (let i = 0; i < entry.entries.length; i++) {
+							this.recursiveEntryRender(entry.entries[i], textStack, depth);
+						}
+					}
+					renderSuffix();
+					break;
 				case "bonus":
 					textStack.push((entry.value < 0 ? "" : "+") + entry.value);
 					break;
@@ -162,7 +186,28 @@ function EntryRenderer () {
 					textStack.push(EntryRenderer.getEntryDice(entry));
 					break;
 				case "link":
-					renderLink(this, entry);
+					textStack.push(this.renderLink(entry));
+					break;
+
+				case "actions":
+					textStack.push(`<${this.wrapperTag} class="${EntryRenderer.HEAD_2}"><span class="entry-title">${entry.name}.</span> `);
+					for (let i = 0; i < entry.entries.length; i++) {
+						this.recursiveEntryRender(entry.entries[i], textStack, depth, "<p>", "</p>");
+					}
+					textStack.push(`</${this.wrapperTag}>`);
+					break;
+
+				case "attack":
+					renderPrefix();
+					textStack.push(`<i>${Parser.attackTypeToFull(entry.attackType)}:</i> `);
+					for (let i = 0; i < entry.attackEntries.length; i++) {
+						this.recursiveEntryRender(entry.attackEntries[i], textStack, depth);
+					}
+					textStack.push(` <i>Hit:</i> `);
+					for (let i = 0; i < entry.hitEntries.length; i++) {
+						this.recursiveEntryRender(entry.hitEntries[i], textStack, depth);
+					}
+					renderSuffix();
 					break;
 
 				// list items
@@ -179,7 +224,7 @@ function EntryRenderer () {
 					let href;
 					if (entry.href.type === "internal") {
 						const imgPart = `img/${entry.href.path}`;
-						href = this.baseUrl === "" ? `${this.baseUrl}${imgPart}` : UrlUtil.link(imgPart);
+						href = this.baseUrl !== "" ? `${this.baseUrl}${imgPart}` : UrlUtil.link(imgPart);
 					}
 					textStack.push(`
 						<div class="img-wrapper">
@@ -239,9 +284,13 @@ function EntryRenderer () {
 
 			for (let i = 0; i < entry.rows.length; ++i) {
 				textStack.push("<tr>");
-				for (let j = 0; j < entry.rows[i].length; ++j) {
-					textStack.push(`<td ${makeTableTdClassText(j)}>`);
-					self.recursiveEntryRender(entry.rows[i][j], textStack, depth + 1);
+				const r = entry.rows[i];
+				const roRender = r.type === "row" ? r.row : r;
+				for (let j = 0; j < roRender.length; ++j) {
+					const toRenderCell = roRender[j].type === "cell" ? roRender[j].entry : roRender[j];
+					textStack.push(`<td ${makeTableTdClassText(j)} ${roRender[j].width ? `colspan="${roRender[j].width}"` : ""}>`);
+					if (r.style === "row-indent-first" && j === 0) textStack.push(`<span class="tbl-tab-intent"/>`);
+					self.recursiveEntryRender(toRenderCell, textStack, depth + 1);
 					textStack.push("</td>");
 				}
 				textStack.push("</tr>");
@@ -278,7 +327,7 @@ function EntryRenderer () {
 
 		function handleOptions (self) {
 			if (entry.entries) {
-				entry.entries = entry.entries.sort((a, b) => a.name && b.name ? ascSort(a.name, b.name) : a.name ? -1 : b.name ? 1 : 0);
+				entry.entries = entry.entries.sort((a, b) => a.name && b.name ? SortUtil.ascSort(a.name, b.name) : a.name ? -1 : b.name ? 1 : 0);
 				handleEntriesOptionsInvocationPatron(self, false);
 			}
 		}
@@ -296,8 +345,15 @@ function EntryRenderer () {
 			const nextDepth = incDepth ? depth + 1 : depth;
 			const styleString = getStyleString();
 			const dataString = getDataString();
-			const preReqText = getPreReqText();
-			const headerSpan = entry.name !== undefined ? `<span class="entry-title">${entry.name}${inlineTitle ? "." : ""}</span> ` : "";
+			const preReqText = getPreReqText(self);
+			const headerSpan = entry.name !== undefined ? `<span class="entry-title">${self.renderEntry({type: "inline", entries: [entry.name]})}${inlineTitle ? "." : ""}</span> ` : "";
+
+			if (depth === -1) {
+				if (!self._firstSection) {
+					textStack.push(`<hr class="section-break">`);
+				}
+				self._firstSection = false;
+			}
 
 			if (entry.entries || entry.name) {
 				textStack.push(`<${self.wrapperTag} ${dataString} ${styleString}>${headerSpan}${preReqText}`);
@@ -311,8 +367,8 @@ function EntryRenderer () {
 
 			function getStyleString () {
 				const styleClasses = [];
-				if (isNonstandardSource(entry.source)) styleClasses.push(CLSS_NON_STANDARD_SOURCE);
-				if (inlineTitle && entry.name !== undefined) {
+				styleClasses.push(_getStyleClass(entry.source));
+				if (inlineTitle) {
 					if (self._subVariant) styleClasses.push(EntryRenderer.HEAD_2_SUB_VARIANT);
 					else styleClasses.push(EntryRenderer.HEAD_2);
 				} else styleClasses.push(depth === -1 ? EntryRenderer.HEAD_NEG_1 : depth === 0 ? EntryRenderer.HEAD_0 : EntryRenderer.HEAD_1);
@@ -330,44 +386,30 @@ function EntryRenderer () {
 				return dataString;
 			}
 
-			function getPreReqText () {
-				if (entry.prerequisite) return `<span class="prerequisite">Prerequisite: ${entry.prerequisite}</span>`;
+			function getPreReqText (self) {
+				if (entry.prerequisite) {
+					const tempStack = [];
+					self.recursiveEntryRender({type: "inline", entries: [entry.prerequisite]}, tempStack);
+					return `<span class="prerequisite">Prerequisite: ${tempStack.join("")}</span>`;
+				}
 				return "";
 			}
 		}
 
-		function renderLink (self, entry) {
-			function getHoverString () {
-				if (!entry.href.hover) return "";
-				return `onmouseover="EntryRenderer.hover.show(this, '${entry.href.hover.page}', '${entry.href.hover.source}', '${UrlUtil.encodeForHash(entry.href.hash)}')"`
-			}
-
-			let href;
-			if (entry.href.type === "internal") {
-				// baseURL is blank by default
-				href = `${self.baseUrl}${entry.href.path}#`;
-				if (entry.href.hash !== undefined) {
-					href += UrlUtil.encodeForHash(entry.href.hash);
-					if (entry.href.subhashes !== undefined) {
-						for (let i = 0; i < entry.href.subhashes.length; i++) {
-							const subHash = entry.href.subhashes[i];
-							href += `,${UrlUtil.encodeForHash(subHash.key)}:${UrlUtil.encodeForHash(subHash.value)}`
-						}
-					}
-				}
-			} else if (entry.href.type === "external") {
-				href = entry.href.url;
-			}
-			textStack.push(`<a href="${href}" target="_blank" ${getHoverString()}>${entry.text}</a>`);
+		function _getStyleClass (source) {
+			const outList = [];
+			if (isNonstandardSource(source)) outList.push(CLSS_NON_STANDARD_SOURCE);
+			if (source === SRC_HOMEBREW) outList.push(CLSS_HOMEBREW_SOURCE);
+			return outList.join(" ");
 		}
 
 		function renderString (self) {
-			const tagSplit = splitByTags();
+			const tagSplit = EntryRenderer.splitByTags(entry);
 			for (let i = 0; i < tagSplit.length; i++) {
 				const s = tagSplit[i];
 				if (s === undefined || s === null || s === "") continue;
 				if (s.charAt(0) === "@") {
-					const [tag, text] = splitFirstSpace(s);
+					const [tag, text] = EntryRenderer.splitFirstSpace(s);
 
 					if (tag === "@bold" || tag === "@b" || tag === "@italic" || tag === "@i" || tag === "@skill" || tag === "@action" || tag === "@link") { // FIXME remove "@link"
 						switch (tag) {
@@ -402,11 +444,13 @@ function EntryRenderer () {
 							type: "dice",
 							rollable: true
 						};
+						const [rollText, displayText] = text.split("|");
+						if (displayText) fauxEntry.displayText = displayText;
 
 						switch (tag) {
 							case "@dice": {
 								// format: {@dice 1d2+3+4d5-6} // TODO do we need to handle e.g. 4d6+1-1d4+2 (negative dice exp)?
-								const spl = text.toLowerCase().replace(/\s/g, "").split(/[+-]/g).map(s => s.trim());
+								const spl = rollText.toLowerCase().replace(/\s/g, "").split(/[+-]/g).map(s => s.trim());
 								// recombine modifiers
 								const toRoll = [];
 								for (let i = 0; i < spl.length; ++i) {
@@ -435,7 +479,7 @@ function EntryRenderer () {
 									{
 										number: 1,
 										faces: 20,
-										modifier: Number(text),
+										modifier: Number(rollText),
 										hideDice: true
 									}
 								];
@@ -443,6 +487,27 @@ function EntryRenderer () {
 								break;
 							}
 						}
+					} else if (tag === "@filter") {
+						// format: {@filter Warlock Spells|spells|level=1;2|class=Warlock}
+						const [displayText, page, ...filters] = text.split("|");
+
+						const fauxEntry = {
+							type: "link",
+							text: displayText,
+							href: {
+								type: "internal",
+								path: `${page}.html`,
+								hash: HASH_BLANK,
+								subhashes: filters.map(f => {
+									const [fname, fvals] = f.split("=").map(s => s.trim()).filter(s => s);
+									return {
+										key: `filter${fname}`,
+										value: fvals.split(";").map(s => s.trim()).filter(s => s).join(HASH_SUB_LIST_SEP)
+									}
+								})
+							}
+						};
+						self.recursiveEntryRender(fauxEntry, textStack, depth);
 					} else {
 						const [name, source, displayText, ...others] = text.split("|");
 						const hash = `${name}${source ? `${HASH_LIST_SEP}${source}` : ""}`;
@@ -486,14 +551,28 @@ function EntryRenderer () {
 							case "@creature":
 								fauxEntry.href.path = "bestiary.html";
 								if (!source) fauxEntry.href.hash += HASH_LIST_SEP + SRC_MM;
+								fauxEntry.href.hover = {
+									page: UrlUtil.PG_BESTIARY,
+									source: source || SRC_MM
+								};
 								self.recursiveEntryRender(fauxEntry, textStack, depth);
 								break;
 							case "@condition":
 								fauxEntry.href.path = "conditions.html";
+								if (!source) fauxEntry.href.hash += HASH_LIST_SEP + SRC_PHB;
+								fauxEntry.href.hover = {
+									page: UrlUtil.PG_CONDITIONS,
+									source: source || SRC_PHB
+								};
 								self.recursiveEntryRender(fauxEntry, textStack, depth);
 								break;
 							case "@background":
 								fauxEntry.href.path = "backgrounds.html";
+								if (!source) fauxEntry.href.hash += HASH_LIST_SEP + SRC_PHB;
+								fauxEntry.href.hover = {
+									page: UrlUtil.PG_BACKGROUNDS,
+									source: source || SRC_PHB
+								};
 								self.recursiveEntryRender(fauxEntry, textStack, depth);
 								break;
 						}
@@ -502,57 +581,102 @@ function EntryRenderer () {
 					textStack.push(s);
 				}
 			}
-
-			function splitFirstSpace (string) {
-				return [
-					string.substr(0, string.indexOf(' ')),
-					string.substr(string.indexOf(' ') + 1)
-				]
-			}
-
-			function splitByTags () {
-				let tagDepth = 0;
-				let inTag = false;
-				let char, char2;
-				const out = [];
-				let curStr = "";
-				for (let i = 0; i < entry.length; ++i) {
-					char = entry.charAt(i);
-					char2 = i < entry.length - 1 ? entry.charAt(i + 1) : null;
-
-					switch (char) {
-						case "{":
-							if (char2 === "@") {
-								if (tagDepth++ > 0) {
-									curStr += char;
-								} else {
-									out.push(curStr);
-									inTag = false;
-									curStr = "";
-								}
-							} else {
-								curStr += char;
-							}
-							break;
-						case "}":
-							if (--tagDepth === 0) {
-								out.push(curStr);
-								curStr = "";
-							} else {
-								curStr += char;
-							}
-							break;
-						default:
-							curStr += char;
-					}
-				}
-				if (curStr.length > 0) out.push(curStr);
-
-				return out;
-			}
 		}
 	};
+
+	this.renderLink = function (entry) {
+		function getHoverString () {
+			if (!entry.href.hover) return "";
+			return `onmouseover="EntryRenderer.hover.show(event, this, '${entry.href.hover.page}', '${entry.href.hover.source}', '${UrlUtil.encodeForHash(entry.href.hash).replace(/'/g, "\\'")}')"`
+		}
+
+		let href;
+		if (entry.href.type === "internal") {
+			// baseURL is blank by default
+			href = `${this.baseUrl}${entry.href.path}#`;
+			if (entry.href.hash !== undefined) {
+				href += entry.href.hashPreEncoded ? entry.href.hash : UrlUtil.encodeForHash(entry.href.hash);
+			}
+			if (entry.href.subhashes !== undefined) {
+				for (let i = 0; i < entry.href.subhashes.length; i++) {
+					const subHash = entry.href.subhashes[i];
+					href += `${HASH_PART_SEP}${UrlUtil.encodeForHash(subHash.key)}${HASH_SUB_KV_SEP}`;
+					if (subHash.value !== undefined) {
+						href += UrlUtil.encodeForHash(subHash.value);
+					} else {
+						// TODO allow list of values
+						href += subHash.values.map(v => UrlUtil.encodeForHash(v)).join(HASH_SUB_LIST_SEP);
+					}
+				}
+			}
+		} else if (entry.href.type === "external") {
+			href = entry.href.url;
+		}
+		return `<a href="${href}" target="_blank" ${getHoverString()}>${entry.text}</a>`;
+	};
+
+	// TODO convert params to options
+	/**
+	 * Helper function to render an entity using this renderer
+	 * @param entry
+	 * @param depth
+	 * @returns {string}
+	 */
+	this.renderEntry = function (entry, depth) {
+		depth = depth === undefined || depth === null ? 0 : depth;
+		const tempStack = [];
+		this.recursiveEntryRender(entry, tempStack, depth);
+		return tempStack.join("");
+	};
 }
+
+EntryRenderer.splitFirstSpace = function (string) {
+	return [
+		string.substr(0, string.indexOf(' ')),
+		string.substr(string.indexOf(' ') + 1)
+	];
+};
+
+EntryRenderer.splitByTags = function (string) {
+	let tagDepth = 0;
+	let inTag = false;
+	let char, char2;
+	const out = [];
+	let curStr = "";
+	for (let i = 0; i < string.length; ++i) {
+		char = string.charAt(i);
+		char2 = i < string.length - 1 ? string.charAt(i + 1) : null;
+
+		switch (char) {
+			case "{":
+				if (char2 === "@") {
+					if (tagDepth++ > 0) {
+						curStr += char;
+					} else {
+						out.push(curStr);
+						inTag = false;
+						curStr = "";
+					}
+				} else {
+					curStr += char;
+				}
+				break;
+			case "}":
+				if (--tagDepth === 0) {
+					out.push(curStr);
+					curStr = "";
+				} else {
+					curStr += char;
+				}
+				break;
+			default:
+				curStr += char;
+		}
+	}
+	if (curStr.length > 0) out.push(curStr);
+
+	return out;
+};
 
 EntryRenderer._rollerClick = function (ele, toRoll) {
 	const $ele = $(ele);
@@ -576,15 +700,39 @@ EntryRenderer.getEntryDice = function (entry) {
 		return stack.join("+");
 	}
 
+	const toDisplay = entry.displayText ? entry.displayText : getDiceAsStr();
+
 	// TODO make droll integration optional
 	if (typeof droll !== "undefined" && entry.rollable === true) {
 		// TODO output this somewhere nice
 		// TODO make this less revolting
 
 		// TODO output to small tooltip-stype bubble? Close on mouseout
-		return `<span class='roller unselectable' onclick='EntryRenderer._rollerClick(this, ${JSON.stringify(entry.toRoll)})'>${getDiceAsStr()}</span>`;
+		return `<span class='roller unselectable' onclick='EntryRenderer._rollerClick(this, ${JSON.stringify(entry.toRoll)})'>${toDisplay}</span>`;
 	} else {
-		return getDiceAsStr();
+		return toDisplay;
+	}
+};
+
+EntryRenderer.utils = {
+	getBorderTr: () => {
+		return `<tr><th class="border" colspan="6"></th></tr>`;
+	},
+
+	getNameTr: (it, addPageNum, prefix, suffix) => {
+		return `<tr>
+					<th class="name" colspan="6">
+						<span class="stats-name">${prefix || ""}${it.name}${suffix || ""}</span>
+						<span class="stats-source source${it.source}" title="${Parser.sourceJsonToAbv(it.source)}">
+							${Parser.sourceJsonToAbv(it.source)}${addPageNum && it.page ? ` p${it.page}` : ""}
+						</span>
+					</th>
+				</tr>`;
+	},
+
+	getPageTr: (it) => {
+		const addSourceText = it.additionalSources ? `. Additional information from ${it.additionalSources.map(as => `<i title="${Parser.sourceJsonToFull(as.source)}">${Parser.sourceJsonToAbv(as.source)}</i>, page ${as.page}`).join("; ")}.` : "";
+		return `${it.page ? `<td colspan=6><b>Source: </b> <i title="${Parser.sourceJsonToFull(it.source)}">${Parser.sourceJsonToAbv(it.source)}</i>, page ${it.page}${addSourceText}</td>` : ""}`;
 	}
 };
 
@@ -694,25 +842,39 @@ EntryRenderer.feat = {
 			}
 			return abbArr.join(" ");
 		}
+	},
+
+	getCompactRenderedString: (feat) => {
+		const renderer = EntryRenderer.getDefaultRenderer();
+		const renderStack = [];
+
+		const prerequisite = EntryRenderer.feat.getPrerequisiteText(feat.prerequisite);
+		renderStack.push(`
+			${EntryRenderer.utils.getNameTr(feat, true)}
+			<tr class='text'><td colspan='6' class='text'>
+			${prerequisite ? `<p><i>Prerequisite: ${prerequisite}</i></p>` : ""}
+		`);
+		renderer.recursiveEntryRender({entries: feat.entries}, renderStack, 2);
+		renderStack.push(`</td></tr>`);
+
+		return renderStack.join("");
 	}
 };
 
-EntryRenderer.spell = {
-	getCompactRenderedString: function (spell) {
-		if (!this.renderer) {
-			this.renderer = new EntryRenderer();
-		}
-		let renderer = this.renderer;
+EntryRenderer.getDefaultRenderer = () => {
+	if (!EntryRenderer.defaultRenderer) {
+		EntryRenderer.defaultRenderer = new EntryRenderer();
+	}
+	return EntryRenderer.defaultRenderer;
+};
 
+EntryRenderer.spell = {
+	getCompactRenderedString: (spell) => {
+		const renderer = EntryRenderer.getDefaultRenderer();
 		const renderStack = [];
 
 		renderStack.push(`
-			<tr><th class="name" colspan="6">
-				<span class="stats-name">${spell.name}</span>
-				<span class="stats-source source${spell.source}" title="${Parser.sourceJsonToFull(spell.source)}">
-					${Parser.sourceJsonToAbv(spell.source)}${spell.page ? ` p${spell.page}` : ""}
-				</span>
-			</th></tr>
+			${EntryRenderer.utils.getNameTr(spell, true)}
 			<tr><td colspan="6">
 				<table class="summary">
 					<tr>
@@ -751,13 +913,12 @@ EntryRenderer.spell = {
 		return renderStack.join("");
 	},
 
-	getRenderedString: function (spell, renderer) {
+	getRenderedString: (spell, renderer) => {
 		const renderStack = [];
-		const sourceFull = Parser.sourceJsonToFull(spell.source);
 
 		renderStack.push(`
-			<tr><th class="border" colspan="6"></th></tr>
-			<tr><th class="name" colspan="6"><span class="stats-name">${spell.name}</span><span class="stats-source source${spell.source}" title="${sourceFull}">${Parser.sourceJsonToAbv(spell.source)}</span></th></tr>
+			${EntryRenderer.utils.getBorderTr()}
+			${EntryRenderer.utils.getNameTr(spell)}
 			<tr><td class="levelschoolritual" colspan="6"><span>${Parser.spLevelSchoolMetaToFull(spell.level, spell.school, spell.meta)}</span></td></tr>
 			<tr><td class="castingtime" colspan="6"><span class="bold">Casting Time: </span>${Parser.spTimeListToFull(spell.time)}</td></tr>
 			<tr><td class="range" colspan="6"><span class="bold">Range: </span>${Parser.spRangeToFull(spell.range)}</td></tr>
@@ -794,10 +955,389 @@ EntryRenderer.spell = {
 		}
 
 		renderStack.push(`
-			<td colspan=6><b>Source: </b> <i>${sourceFull}</i>, page ${spell.page}</td>
-			<tr><th class="border" colspan="6"></th></tr>
+			${EntryRenderer.utils.getPageTr(spell)}
+			${EntryRenderer.utils.getBorderTr()}
 		`);
 
+		return renderStack.join("");
+	}
+};
+
+EntryRenderer.condition = {
+	getCompactRenderedString: (cond) => {
+		const renderer = EntryRenderer.getDefaultRenderer();
+		const renderStack = [];
+
+		renderStack.push(`
+			${EntryRenderer.utils.getNameTr(cond, true)}
+			<tr class="text"><td colspan="6">
+		`);
+		renderer.recursiveEntryRender({entries: cond.entries}, renderStack);
+		renderStack.push(`</td></tr>`);
+
+		return renderStack.join("");
+	}
+};
+
+EntryRenderer.background = {
+	getCompactRenderedString: (bg) => {
+		const renderer = EntryRenderer.getDefaultRenderer();
+		const renderStack = [];
+
+		renderStack.push(`
+			${EntryRenderer.utils.getNameTr(bg, true)}
+			<tr class="text"><td colspan="6">
+		`);
+		if (bg.skillProficiencies) {
+			renderer.recursiveEntryRender({name: "Skill Proficiencies", entries: [bg.skillProficiencies]}, renderStack, 2);
+		}
+		renderer.recursiveEntryRender({entries: bg.entries.filter(it => it.data && it.data.isFeature)}, renderStack, 1);
+		renderStack.push(`</td></tr>`);
+
+		return renderStack.join("");
+	}
+};
+
+EntryRenderer.invocation = {
+	getPrerequisiteText: (invo) => {
+		const prereqs = [
+			(!invo.prerequisites.patron || invo.prerequisites.patron === STR_ANY) ? null : `${invo.prerequisites.patron} patron`,
+			(!invo.prerequisites.pact || invo.prerequisites.pact === STR_ANY) ? null : Parser.invoPactToFull(invo.prerequisites.pact),
+			(!invo.prerequisites.level || invo.prerequisites.level === STR_ANY) ? null : `${Parser.levelToFull(invo.prerequisites.level)} level`,
+			(!invo.prerequisites.spell || invo.prerequisites.spell === STR_NONE) ? null : Parser.invoSpellToFull(invo.prerequisites.spell)
+		].filter(f => f);
+		return prereqs.length ? `Prerequisites: ${prereqs.join(", ")}` : "";
+	},
+
+	getCompactRenderedString: (invo) => {
+		const renderer = EntryRenderer.getDefaultRenderer();
+		const renderStack = [];
+
+		const prereqs = EntryRenderer.invocation.getPrerequisiteText(invo);
+		renderStack.push(`
+			${EntryRenderer.utils.getNameTr(invo, true)}
+			<tr class="text"><td colspan="6">
+			${prereqs ? `<p><i>${prereqs}</i></p>` : ""}
+		`);
+		renderer.recursiveEntryRender({entries: invo.entries}, renderStack, 1);
+		renderStack.push(`</td></tr>`);
+
+		return renderStack.join("");
+	}
+};
+
+EntryRenderer.reward = {
+	getRenderedString: (reward) => {
+		const renderer = EntryRenderer.getDefaultRenderer();
+		const renderStack = [];
+
+		if (reward.type === "Demonic Boon") {
+			const benefits = {type: "list", style: "list-hang-notitle", items: []};
+			benefits.items.push({
+				type: "item",
+				name: "Ability Score Adjustment:",
+				entry: reward.ability ? reward.ability.entry : "None"
+			});
+			benefits.items.push({
+				type: "item",
+				name: "Signature Spells:",
+				entry: reward.signaturespells ? reward.signaturespells.entry : "None"
+			});
+			renderer.recursiveEntryRender(benefits, renderStack, 1);
+		}
+
+		renderer.recursiveEntryRender({entries: reward.entries}, renderStack, 1);
+
+		return `<tr class='text'><td colspan='6'>${renderStack.join("")}</td></tr>`;
+	},
+
+	getCompactRenderedString: (reward) => {
+		return `
+			${EntryRenderer.utils.getNameTr(reward, true)}
+			${EntryRenderer.reward.getRenderedString(reward)}
+		`;
+	}
+};
+
+EntryRenderer.race = {
+	getCompactRenderedString: (race) => {
+		const renderer = EntryRenderer.getDefaultRenderer();
+		const renderStack = [];
+
+		const ability = utils_getAbilityData(race.ability);
+		renderStack.push(`
+			${EntryRenderer.utils.getNameTr(race, true)}
+			<tr><td colspan="6">
+				<table class="summary">
+					<tr>
+						<th class="col-xs-4 text-align-center">Ability Sores</th>
+						<th class="col-xs-4 text-align-center">Size</th>
+						<th class="col-xs-4 text-align-center">Speed</th>
+					</tr>
+					<tr>
+						<td class="text-align-center">${ability.asText}</td>
+						<td class="text-align-center">${Parser.sizeAbvToFull(race.size)}</td>
+						<td class="text-align-center">${EntryRenderer.race.getSpeedString(race)}</td>
+					</tr>
+				</table>
+			</td></tr>
+			<tr class='text'><td colspan='6'>
+		`);
+		renderer.recursiveEntryRender({type: "entries", entries: race.entries}, renderStack, 1);
+		renderStack.push("</td></tr>");
+
+		return renderStack.join("");
+	},
+
+	getSpeedString: (race) => {
+		let speed;
+		if (race.speed.walk) {
+			speed = race.speed.walk + "ft.";
+			if (race.speed.climb) speed += `, climb ${race.speed.climb}ft.`;
+			if (race.speed.fly) speed += `, fly ${race.speed.fly}ft.`;
+			if (race.speed.swim) speed += `, swim ${race.speed.swim}ft.`;
+		} else {
+			speed = race.speed + (race.speed === "Varies" ? "" : "ft. ");
+		}
+		return speed;
+	},
+
+	mergeSubraces: (races) => {
+		const out = [];
+		races.forEach(r => {
+			Array.prototype.push.apply(out, EntryRenderer.race._mergeSubrace(r));
+		});
+		return out;
+	},
+
+	_mergeSubrace: (race) => {
+		if (race.subraces) {
+			const srCopy = JSON.parse(JSON.stringify(race.subraces));
+			const out = [];
+
+			srCopy.forEach(s => {
+				const cpy = JSON.parse(JSON.stringify(race));
+				delete cpy.subraces;
+
+				// merge names, abilities, entries
+				if (s.name) {
+					cpy.name = `${cpy.name} (${s.name})`;
+					delete s.name;
+				}
+				if (s.ability) {
+					if (!cpy.ability) cpy.ability = {};
+					cpy.ability = Object.assign(cpy.ability, s.ability);
+					delete s.ability;
+				}
+				if (s.entries) {
+					s.entries.forEach(e => {
+						if (e.data && e.data.overwrite) {
+							const toOverwrite = cpy.entries.findIndex(it => it.name.toLowerCase().trim() === e.data.overwrite.toLowerCase().trim());
+							cpy.entries[toOverwrite] = e;
+						} else {
+							cpy.entries.push(e);
+						}
+					});
+					delete s.entries;
+				}
+
+				// overwrite everything else
+				Object.assign(cpy, s);
+
+				out.push(cpy);
+			});
+			return out;
+		} else {
+			return [race];
+		}
+	}
+};
+
+EntryRenderer.deity = {
+	getCompactRenderedString: (deity) => {
+		const renderer = EntryRenderer.getDefaultRenderer();
+		return `
+			${EntryRenderer.utils.getNameTr(deity, true, "", `, ${deity.title.toTitleCase()}`)}
+			<tr><td colspan="6">
+				<div class="summary-flexer">
+					<p><b>Pantheon:</b> ${deity.pantheon}</p>
+					${deity.category ? `<p><b>Category:</b> ${deity.category}</p>` : ""}
+					<p><b>Alignment:</b> ${deity.alignment.map(a => Parser.dtAlignmentToFull(a)).join(" ")}</p>
+					<p><b>Domains:</b> ${deity.domains.join(", ")}</p>
+					${deity.altNames ? `<p><b>Alternate Names:</b> ${deity.altNames.join(", ")}</p>` : ""}
+					<p><b>Symbol:</b> ${deity.symbol}</p>
+				</div>
+			</td>
+			${deity.entries ? `<tr><td colspan="6"><div class="border"></div></td></tr><tr><td colspan="6">${renderer.renderEntry({entries: deity.entries}, 1)}</td></tr>` : ""}
+		`;
+	}
+};
+
+EntryRenderer.object = {
+	getCompactRenderedString: (obj) => {
+		const renderer = EntryRenderer.getDefaultRenderer();
+		return `
+			${EntryRenderer.utils.getNameTr(obj, true)}
+			<tr><td colspan="6">
+				<table class="summary">
+					<tr>
+						<th class="col-xs-3 text-align-center">Type</th>
+						<th class="col-xs-3 text-align-center">AC</th>
+						<th class="col-xs-3 text-align-center">HP</th>
+						<th class="col-xs-3 text-align-center">Damage Imm.</th>
+					</tr>
+					<tr>
+						<td class="text-align-center">${Parser.sizeAbvToFull(obj.size)} object</td>					
+						<td class="text-align-center">${obj.ac}</td>					
+						<td class="text-align-center">${obj.hp}</td>					
+						<td class="text-align-center">${obj.immune}</td>					
+					</tr>
+				</table>			
+			</td></tr>
+			<tr class="text"><td colspan="6">
+			${obj.entries ? renderer.renderEntry({entries: obj.entries}, 2) : ""}
+			${obj.actionEntries ? renderer.renderEntry({entries: obj.actionEntries}, 2) : ""}
+			</td></tr>
+		`;
+	}
+};
+
+EntryRenderer.traphazard = {
+	getCompactRenderedString: (it) => {
+		const renderer = EntryRenderer.getDefaultRenderer();
+		return `
+			${EntryRenderer.utils.getNameTr(it, true)}
+			<tr class="text"><td colspan="6"><i>${Parser.trapTypeToFull(it.trapType || "HAZ")}</i></td>
+			<tr class="text"><td colspan="6">${renderer.renderEntry({entries: it.entries}, 2)}</td></tr>
+		`;
+	}
+};
+
+EntryRenderer.monster = {
+	getCompactRenderedString: (mon) => {
+		const renderer = EntryRenderer.getDefaultRenderer();
+
+		function makeAbilityRoller (ability) {
+			const mod = Parser.getAbilityModifier(mon[ability]);
+			return renderer.renderEntry(`{@dice 1d20${mod}|${mon[ability]} (${mod})`);
+		}
+
+		const renderStack = [];
+
+		renderStack.push(`
+			${EntryRenderer.utils.getNameTr(mon, true)}
+			<tr><td colspan="6"><i>${Parser.sizeAbvToFull(mon.size)}, ${Parser.monTypeToFullObj(mon.type).asText}, ${mon.alignment}</i></td></tr>
+			<tr><td colspan="6"><div class="border"></div></td></tr>
+			<tr><td colspan="6">
+				<table class="summary-noback">
+					<tr>
+						<th>Armor Class</th>
+						<th>Hit Points</th>
+						<th>Speed</th>
+						<th>Challenge Rating</th>
+					</tr>
+					<tr>
+						<td>${mon.ac}</td>					
+						<td>${mon.hp}</td>					
+						<td>${mon.speed}</td>					
+						<td>${mon.cr} (${Parser.crToXp(mon.cr)} XP)</td>					
+					</tr>
+				</table>			
+			</td></tr>
+			<tr><td colspan="6"><div class="border"></div></td></tr>
+			<tr><td colspan="6">
+				<table class="summary">
+					<tr>
+						<th class="col-xs-2 text-align-center">STR</th>
+						<th class="col-xs-2 text-align-center">DEX</th>
+						<th class="col-xs-2 text-align-center">CON</th>
+						<th class="col-xs-2 text-align-center">INT</th>
+						<th class="col-xs-2 text-align-center">WIS</th>
+						<th class="col-xs-2 text-align-center">CHA</th>
+					</tr>	
+					<tr>
+						<td class="text-align-center">${makeAbilityRoller("str")}</td>
+						<td class="text-align-center">${makeAbilityRoller("dex")}</td>
+						<td class="text-align-center">${makeAbilityRoller("con")}</td>
+						<td class="text-align-center">${makeAbilityRoller("int")}</td>
+						<td class="text-align-center">${makeAbilityRoller("wis")}</td>
+						<td class="text-align-center">${makeAbilityRoller("cha")}</td>
+					</tr>
+				</table>
+			</td></tr>
+			<tr><td colspan="6"><div class="border"></div></td></tr>
+			<tr><td colspan="6">
+				<div class="summary-flexer">
+					${mon.save ? `<p><b>Saving Throws:</b> ${mon.save}</p>` : ""}
+					${mon.skill ? `<p><b>Skills:</b> ${Object.keys(mon.skill).sort().map(s => `${s.uppercaseFirst()} ${mon.skill[s]}`)}</p>` : ""}
+					<p><b>Senses:</b> ${mon.senses ? `${mon.senses}, ` : ""}passive Perception ${mon.passive}</p>
+					<p><b>Languages:</b> ${mon.languages ? mon.languages : `\u2014`}</p>
+					${mon.vulnerable ? `<p><b>Damage Vuln.:</b> ${mon.vulnerable}</p>` : ""}
+					${mon.resist ? `<p><b>Damage Res.:</b> ${mon.resist}</p>` : ""}
+					${mon.immune ? `<p><b>Damage Imm.:</b> ${mon.immune}</p>` : ""}
+					${mon.conditionImmune ? `<p><b>Condition Imm.:</b> ${mon.conditionImmune}</p>` : ""}
+				</div>
+			</td></tr>
+		`);
+
+		return renderStack.join("");
+	},
+
+	getSpellcastingRenderedString: (mon, renderer) => {
+		const spellcasting = mon.spellcasting;
+		const renderStack = [];
+		for (let i = 0; i < spellcasting.length; i++) {
+			let spellList = spellcasting[i];
+			renderer.recursiveEntryRender({type: "entries", name: spellList.name, entries: spellList.headerEntries ? spellList.headerEntries : []}, renderStack, 2);
+			if (spellList.constant || spellList.will || spellList.rest || spellList.daily || spellList.weekly) {
+				let spellArray = [];
+				if (spellList.constant) spellArray.push(`Constant: ${spellList.constant.join(", ")}`);
+				if (spellList.will) spellArray.push(`At will: ${spellList.will.join(", ")}`);
+				if (spellList.rest) {
+					for (let j = 9; j > 0; j--) {
+						let rest = spellList.rest;
+						if (rest[j]) spellArray.push(`${j}/rest: ${rest[j].join(", ")}`);
+						const jEach = `${j}e`;
+						if (rest[jEach]) spellArray.push(`${j}/rest each: ${rest[jEach].join(", ")}`);
+					}
+				}
+				if (spellList.daily) {
+					for (let j = 9; j > 0; j--) {
+						let daily = spellList.daily;
+						if (daily[j]) spellArray.push(`${j}/day: ${daily[j].join(", ")}`);
+						const jEach = `${j}e`;
+						if (daily[jEach]) spellArray.push(`${j}/day each: ${daily[jEach].join(", ")}`);
+					}
+				}
+				if (spellList.weekly) {
+					for (let j = 9; j > 0; j--) {
+						let weekly = spellList.weekly;
+						if (weekly[j]) spellArray.push(`${j}/week: ${weekly[j].join(", ")}`);
+						const jEach = `${j}e`;
+						if (weekly[jEach]) spellArray.push(`${j}/week each: ${weekly[jEach].join(", ")}`);
+					}
+				}
+				renderer.recursiveEntryRender({type: "entries", entries: spellArray}, renderStack, 1);
+			}
+			if (spellList.spells) {
+				for (let j = 0; j < 10; j++) {
+					let spells = spellList.spells[j];
+					if (spells) {
+						let lower = spells.lower;
+						let levelCantrip = `${Parser.spLevelToFull(j)}${(j === 0 ? "s" : " level")}`;
+						let slotsAtWill = ` (at will)`;
+						let slots = spells.slots;
+						if (slots >= 0) slotsAtWill = slots > 0 ? ` (${slots} slot${slots > 1 ? "s" : ""})` : ``;
+						if (lower) {
+							levelCantrip = `${Parser.spLevelToFull(lower)}-${levelCantrip}`;
+							if (slots >= 0) slotsAtWill = slots > 0 ? ` (${slots} ${Parser.spLevelToFull(j)}-level slot${slots > 1 ? "s" : ""})` : ``;
+						}
+						renderer.recursiveEntryRender({type: "entries", entries: [`${levelCantrip} ${slotsAtWill}: ${spells.spells.join(", ")}`]}, renderStack, 1);
+					}
+				}
+			}
+			if (spellList.footerEntries) renderer.recursiveEntryRender({type: "entries", entries: spellList.footerEntries}, renderStack, 1);
+		}
 		return renderStack.join("");
 	}
 };
@@ -814,23 +1354,30 @@ EntryRenderer.item = {
 			damage = "AC " + item.ac + (type === "LA" ? " + Dex" : type === "MA" ? " + Dex (max 2)" : "");
 		} else if (type === "S") {
 			damage = "AC +" + item.ac;
-		} else if (type === "MNT" || type === "VEH") {
+		} else if (type === "MNT" || type === "VEH" || type === "SHP") {
 			const speed = item.speed;
 			const capacity = item.carryingcapacity;
-			if (speed) damage += "Speed=" + speed;
+			if (speed) damage += "Speed: " + speed;
 			if (speed && capacity) damage += type === "MNT" ? ", " : "<br>";
 			if (capacity) {
-				damage += "Carrying Capacity=" + capacity;
+				damage += "Carrying Capacity: " + capacity;
 				if (capacity.indexOf("ton") === -1 && capacity.indexOf("passenger") === -1) damage += Number(capacity) === 1 ? " lb." : " lbs.";
 			}
+			if (type === "SHP") {
+				damage += `<br>Crew ${item.crew}, AC ${item.vehAc}, HP ${item.vehHp}${item.vehDmgThresh ? `, Damage Threshold ${item.vehDmgThresh}` : ""}`;
+			}
+		}
+
+		function sortProperties (a, b) {
+			return SortUtil.ascSort(item._allPropertiesPtr[a].name, item._allPropertiesPtr[b].name)
 		}
 
 		let propertiesTxt = "";
 		if (item.property) {
-			const properties = item.property.split(",");
+			const properties = item.property.sort(sortProperties);
 			for (let i = 0; i < properties.length; i++) {
 				const prop = properties[i];
-				let a = item._propertyList[prop].name;
+				let a = item._allPropertiesPtr[prop].name;
 				if (prop === "V") a = `${a} (${utils_makeRoller(item.dmg2)})`;
 				if (prop === "T" || prop === "A" || prop === "AF") a = `${a} (${item.range}ft.)`;
 				if (prop === "RLD") a = `${a} (${item.reload} shots)`;
@@ -842,14 +1389,11 @@ EntryRenderer.item = {
 	},
 
 	getCompactRenderedString: function (item) {
-		if (!this.renderer) {
-			this.renderer = new EntryRenderer();
-		}
-		let renderer = this.renderer;
+		const renderer = EntryRenderer.getDefaultRenderer();
 
 		const renderStack = [];
 
-		renderStack.push(`<tr><th class="name" colspan="6"><span class="stats-name">${item.name}</span><span class="stats-source source${item.source}" title="${Parser.sourceJsonToFull(item.source)}">${Parser.sourceJsonToAbv(item.source)}${item.page ? ` p${item.page}` : ""}</span></th></tr>`);
+		renderStack.push(EntryRenderer.utils.getNameTr(item, true));
 
 		renderStack.push(`<tr><td class="typerarityattunement" colspan="6">${item.typeText}${`${item.tier ? `, ${item.tier}` : ""}${item.rarity ? `, ${item.rarity}` : ""}`} ${item.reqAttune || ""}</td>`);
 
@@ -872,19 +1416,26 @@ EntryRenderer.item = {
 	/**
 	 * Runs callback with itemList as argument
 	 * @param callback
+	 * @param urls optional overrides for default URLs
 	 */
-	buildList: function (callback) {
+	buildList: function (callback, urls) {
+		if (!urls) urls = {};
 		let itemList;
 		let basicItemList;
 		let variantList;
 		const propertyList = {};
 		const typeList = {};
 
-		DataUtil.loadJSON("data/items.json", addBasicItems);
+		// allows URLs to be overriden (used by roll20 script)
+		const itemUrl = urls.items || "data/items.json";
+		const basicItemUrl = urls.basicitems || "data/basicitems.json";
+		const magicVariantUrl = urls.magicvariants || "data/magicvariants.json";
+
+		DataUtil.loadJSON(itemUrl, addBasicItems);
 
 		function addBasicItems (itemData) {
 			itemList = itemData.item;
-			DataUtil.loadJSON("data/basicitems.json", addVariants);
+			DataUtil.loadJSON(basicItemUrl, addVariants);
 		}
 
 		function addVariants (basicItemData) {
@@ -904,7 +1455,7 @@ EntryRenderer.item = {
 					"entries": itemTypeList[i].entries
 				};
 			}
-			DataUtil.loadJSON("data/magicvariants.json", mergeBasicItems);
+			DataUtil.loadJSON(magicVariantUrl, mergeBasicItems);
 		}
 
 		function mergeBasicItems (variantData) {
@@ -931,7 +1482,6 @@ EntryRenderer.item = {
 					const curRequires = curVariant.requires;
 					let hasRequired = curBasicItemName.indexOf(" (") === -1;
 					for (const requiredProperty in curRequires) if (curRequires.hasOwnProperty(requiredProperty) && curBasicItem[requiredProperty] !== curRequires[requiredProperty]) hasRequired = false;
-					// hasRequired = hasRequired && Object.keys(curRequires).every(req => curBasicItem[req] === curRequires.requires[req]);
 					if (curVariant.excludes) {
 						const curExcludes = curVariant.excludes;
 						for (const excludedProperty in curExcludes) if (curExcludes.hasOwnProperty(excludedProperty) && curBasicItem[excludedProperty] === curExcludes[excludedProperty]) hasRequired = false;
@@ -968,6 +1518,7 @@ EntryRenderer.item = {
 		}
 
 		function enhanceItems () {
+			const priceRe = /^(\d+)(\w+)$/;
 			for (let i = 0; i < itemList.length; i++) {
 				const item = itemList[i];
 				if (item.noDisplay) continue;
@@ -976,8 +1527,7 @@ EntryRenderer.item = {
 				if (item.entries === undefined) itemList[i].entries = [];
 				if (item.type && typeList[item.type]) for (let j = 0; j < typeList[item.type].entries.length; j++) itemList[i].entries = pushObject(itemList[i].entries, typeList[item.type].entries[j]);
 				if (item.property) {
-					const properties = item.property.split(",");
-					for (let j = 0; j < properties.length; j++) if (propertyList[properties[j]].entries) for (let k = 0; k < propertyList[properties[j]].entries.length; k++) itemList[i].entries = pushObject(itemList[i].entries, propertyList[properties[j]].entries[k]);
+					for (let j = 0; j < item.property.length; j++) if (propertyList[item.property[j]].entries) for (let k = 0; k < propertyList[item.property[j]].entries.length; k++) itemList[i].entries = pushObject(itemList[i].entries, propertyList[item.property[j]].entries[k]);
 				}
 				// The following could be encoded in JSON, but they depend on more than one JSON property; maybe fix if really bored later
 				if (item.armor) {
@@ -999,7 +1549,7 @@ EntryRenderer.item = {
 
 				// bind pointer to propertyList
 				if (item.property) {
-					item._propertyList = propertyList;
+					item._allPropertiesPtr = propertyList;
 				}
 
 				// bake in types
@@ -1031,6 +1581,15 @@ EntryRenderer.item = {
 					}
 				}
 				item.attunementCategory = attunement;
+
+				// format price nicely
+				// 5 characters because e.g. XXXgp is fine
+				if (item.value && item.value.length > 5) {
+					const m = priceRe.exec(item.value);
+					if (m) {
+						item.value = `${Number(m[1]).toLocaleString()}${m[2]}`;
+					}
+				}
 			}
 			callback(itemList);
 		}
@@ -1043,102 +1602,337 @@ EntryRenderer.item = {
 	}
 };
 
+EntryRenderer.psionic = {
+	enhanceMode: (mode) => {
+		if (!mode.enhanced) {
+			mode.name = `${mode.name} ${getModeSuffix(mode, false)}`;
+
+			if (mode.submodes) {
+				mode.submodes.forEach(sm => {
+					sm.name = `${sm.name} ${getModeSuffix(sm, true)}`;
+				});
+			}
+
+			mode.enhanced = true;
+		}
+
+		function getModeSuffix (mode, subMode) {
+			subMode = subMode === undefined || subMode === null ? false : subMode;
+			const modeTitleArray = [];
+			const bracketPart = getModeTitleBracketPart();
+			if (bracketPart !== null) modeTitleArray.push(bracketPart);
+			if (subMode) return `${modeTitleArray.join(" ")}`;
+			else return `${modeTitleArray.join(" ")}</span>`;
+
+			function getModeTitleBracketPart () {
+				const modeTitleBracketArray = [];
+
+				if (mode.cost) modeTitleBracketArray.push(getModeTitleCost());
+				if (mode.concentration) modeTitleBracketArray.push(getModeTitleConcentration());
+
+				if (modeTitleBracketArray.length === 0) return null;
+				return `(${modeTitleBracketArray.join("; ")})`;
+
+				function getModeTitleCost () {
+					const costMin = mode.cost.min;
+					const costMax = mode.cost.max;
+					const costString = costMin === costMax ? costMin : `${costMin}-${costMax}`;
+					return `${costString} psi`;
+				}
+
+				function getModeTitleConcentration () {
+					return `conc., ${mode.concentration.duration} ${mode.concentration.unit}.`
+				}
+			}
+		}
+	},
+
+	getTalentText: (psionic, renderer) => {
+		const renderStack = [];
+		renderer.recursiveEntryRender(({entries: psionic.entries, type: "entries"}), renderStack);
+		return renderStack.join("");
+	},
+
+	getDisciplineText: (psionic, renderer) => {
+		const modeStringArray = [];
+		for (let i = 0; i < psionic.modes.length; ++i) {
+			modeStringArray.push(EntryRenderer.psionic.getModeString(psionic, renderer, i));
+		}
+
+		return `${EntryRenderer.psionic.getDescriptionString(psionic, renderer)}${EntryRenderer.psionic.getFocusString(psionic, renderer)}${modeStringArray.join(STR_EMPTY)}`;
+	},
+
+	getDescriptionString: (psionic, renderer) => {
+		return `<p>${renderer.renderEntry({type: "inline", entries: [psionic.description]})}</p>`;
+	},
+
+	getFocusString: (psionic, renderer) => {
+		return `<p><span class='psi-focus-title'>Psychic Focus.</span> ${renderer.renderEntry({type: "inline", entries: [psionic.focus]})}</p>`;
+	},
+
+	getModeString: (psionic, renderer, modeIndex) => {
+		const mode = psionic.modes[modeIndex];
+		EntryRenderer.psionic.enhanceMode(mode, false);
+
+		const renderStack = [];
+		renderer.recursiveEntryRender(mode, renderStack, 3);
+		const modeString = renderStack.join("");
+		if (psionic.modes[modeIndex].submodes === undefined) return modeString;
+		const subModeString = getSubModeString();
+		return `${modeString}${subModeString}`;
+
+		function getSubModeString () {
+			const subModes = psionic.modes[modeIndex].submodes;
+
+			const fauxEntry = {
+				type: "list",
+				style: "list-hang-notitle",
+				items: []
+			};
+
+			for (let i = 0; i < subModes.length; ++i) {
+				fauxEntry.items.push({
+					type: "item",
+					name: subModes[i].name,
+					entry: subModes[i].entries.join("<br>")
+				});
+			}
+			const renderStack = [];
+			renderer.recursiveEntryRender(fauxEntry, renderStack, 4);
+			return renderStack.join("");
+		}
+	},
+
+	getCompactRenderedString: (psionic) => {
+		const renderer = EntryRenderer.getDefaultRenderer();
+
+		const typeOrderStr = psionic.type === "T" ? Parser.psiTypeToFull(psionic.type) : `${psionic.order} ${Parser.psiTypeToFull(psionic.type)}`;
+		const bodyStr = psionic.type === "T" ? EntryRenderer.psionic.getTalentText(psionic, renderer) : EntryRenderer.psionic.getDisciplineText(psionic, renderer);
+
+		return `
+			${EntryRenderer.utils.getNameTr(psionic, true)}
+			<tr class="text"><td colspan="6">
+			<p><i>${typeOrderStr}</i></p>
+			${bodyStr}
+			</td></tr>
+		`;
+	}
+};
+
 EntryRenderer.hover = {
 	linkCache: {},
+	_isInit: false,
 
-	_addToCache: function (page, source, hash, item) {
+	_addToCache: (page, source, hash, item) => {
 		page = page.toLowerCase();
 		source = source.toLowerCase();
 		hash = hash.toLowerCase();
 
-		if (!this.linkCache[page]) this.linkCache[page] = [];
-		const pageLvl = this.linkCache[page];
+		if (!EntryRenderer.hover.linkCache[page]) EntryRenderer.hover.linkCache[page] = [];
+		const pageLvl = EntryRenderer.hover.linkCache[page];
 		if (!pageLvl[source]) pageLvl[source] = [];
 		const srcLvl = pageLvl[source];
 		srcLvl[hash] = item;
 	},
 
-	_getFromCache: function (page, source, hash) {
+	_getFromCache: (page, source, hash) => {
 		page = page.toLowerCase();
 		source = source.toLowerCase();
 		hash = hash.toLowerCase();
 
-		return this.linkCache[page][source][hash];
+		return EntryRenderer.hover.linkCache[page][source][hash];
 	},
 
-	_isCached: function (page, source, hash) {
+	_isCached: (page, source, hash) => {
 		page = page.toLowerCase();
 		source = source.toLowerCase();
 		hash = hash.toLowerCase();
 
-		return this.linkCache[page] && this.linkCache[page][source] && this.linkCache[page][source][hash];
+		return EntryRenderer.hover.linkCache[page] && EntryRenderer.hover.linkCache[page][source] && EntryRenderer.hover.linkCache[page][source][hash];
 	},
 
-	_makeWindow: function () {
-		const winW = EntryRenderer.hover._curHovering.winW;
-		const winH = EntryRenderer.hover._curHovering.winH;
+	_makeWindow: () => {
+		if (!EntryRenderer.hover._curHovering) {
+			reset();
+			return;
+		}
+		const hoverId = EntryRenderer.hover._curHovering.hoverId;
 		const ele = EntryRenderer.hover._curHovering.ele;
 		const page = EntryRenderer.hover._curHovering.cPage;
 		const source = EntryRenderer.hover._curHovering.cSource;
 		const hash = EntryRenderer.hover._curHovering.cHash;
-		const content = EntryRenderer.hover._curHovering.renderFunction(EntryRenderer.hover._getFromCache(page, source, hash));
+		const permanent = EntryRenderer.hover._curHovering.permanent;
+
+		// if we've outrun the loading, restart
+		if (!EntryRenderer.hover._isCached(page, source, hash)) {
+			EntryRenderer.hover._showInProgress = false;
+			// pass a fake "event"
+			EntryRenderer.hover.show({shiftKey: permanent}, ele, page, source, hash);
+			return;
+		}
+
+		const toRender = EntryRenderer.hover._getFromCache(page, source, hash);
+		const content = EntryRenderer.hover._curHovering.renderFunction(toRender);
+
+		$(ele).data("hover-active", true);
 
 		const offset = $(ele).offset();
 		const vpOffsetT = offset.top - $(document).scrollTop();
 		const vpOffsetL = offset.left - $(document).scrollLeft();
 
-		const fromBottom = vpOffsetT > winH / 2;
-		const fromRight = vpOffsetL > winW / 2;
+		const fromBottom = vpOffsetT > $(window).height() / 2;
+		const fromRight = vpOffsetL > $(window).width() / 2;
 
-		const $hov = $(`<div class="hoverbox"/>`);
+		const $hov = $(`<div class="hoverbox" style="right: -600px"/>`);
+
+		const $body = $(`body`);
+		const $ele = $(ele);
+		// make a fake invisible copy of the link in outer space, which our mouse now hovers over
+		const $fakeHov = $(`<a class="hoverlink" data-hover-id="${$ele.data("hover-id")}" href="${$ele.prop("href")}"/>`)
+			.width($ele.width())
+			.height($ele.height())
+			.css("top", $ele.offset().top - $(window).scrollTop())
+			.css("left", $ele.offset().left - $(window).scrollLeft());
+		$body.append($fakeHov);
+
+		$fakeHov.on("mouseleave", (evt) => {
+			$fakeHov.remove();
+			EntryRenderer.hover._cleanWindows();
+			if (!$brdrTop.data("perm") && !evt.shiftKey) {
+				teardown();
+			} else {
+				$(ele).data("hover-active", true);
+				// use attr to let the CSS see it
+				$brdrTop.attr("data-perm", true);
+			}
+		});
+
 		const $stats = $(`<table class="stats"></table>`);
 		$stats.append(content);
-		$hov.append(`<div class="hoverborder"></div>`)
+		let drag = {};
+		const $brdrTop = $(`<div class="hoverborder top" ${permanent ? `data-perm="true"` : ""}></div>`)
+			.on("mousedown", (evt) => {
+				$hov.css("z-index", 201); // temporarily display it on top
+				drag.on = true;
+				drag.startX = evt.clientX;
+				drag.startY = evt.clientY;
+				drag.baseTop = parseFloat($hov.css("top"));
+				drag.baseLeft = parseFloat($hov.css("left"));
+			}).on("click", () => {
+				$hov.css("z-index", ""); // remove the temporary z-boost...
+				$hov.parent().append($hov); // ...and properly bring it to the front
+			});
+		const mouseUpId = `mouseup.${hoverId}`;
+		const mouseMoveId = `mousemove.${hoverId}`;
+		const resizeId = `resize.${hoverId}`;
+		$(document)
+			.on(mouseUpId, () => {
+				if (drag.on) {
+					drag.on = false;
+					adjustPosition();
+				}
+			})
+			.on(mouseMoveId, (evt) => {
+				if (drag.on) {
+					const diffX = drag.startX - evt.clientX;
+					const diffY = drag.startY - evt.clientY;
+					$hov.css("left", drag.baseLeft - diffX);
+					$hov.css("top", drag.baseTop - diffY);
+					drag.startX = evt.clientX;
+					drag.startY = evt.clientY;
+					drag.baseTop = parseFloat($hov.css("top"));
+					drag.baseLeft = parseFloat($hov.css("left"));
+				}
+			});
+		$(window).on(resizeId, () => {
+			adjustPosition(true);
+		});
+
+		const $hovTitle = $(`<span class="window-title">${toRender.name}</span>`);
+		$brdrTop.attr("data-display-title", false);
+		$brdrTop.on("dblclick", () => {
+			const curState = $brdrTop.attr("data-display-title");
+			$brdrTop.attr("data-display-title", curState === "false");
+			$brdrTop.attr("data-perm", true);
+		});
+		$brdrTop.append($hovTitle);
+		const $btnClose = $(`<span class="delete-icon glyphicon glyphicon-remove"></span>`)
+			.on("click", (evt) => {
+				evt.stopPropagation();
+				teardown();
+			});
+		$brdrTop.append($btnClose);
+		$hov.append($brdrTop)
 			.append($stats)
 			.append(`<div class="hoverborder"></div>`);
 
-		if (fromBottom) $hov.css("bottom", winH - vpOffsetT);
+		$body.append($hov);
+
+		if (fromBottom) $hov.css("top", vpOffsetT - $hov.height());
 		else $hov.css("top", vpOffsetT + $(ele).height() + 1);
 
-		if (fromRight) $hov.css("right", winW - vpOffsetL);
+		if (fromRight) $hov.css("left", vpOffsetL - $hov.width());
 		else $hov.css("left", vpOffsetL + $(ele).width() + 1);
 
-		$(ele).bind("mouseleave", () => {
-			$hov.remove();
-		});
+		adjustPosition(true);
 
-		// backup deletion, just in case
-		$hov.on("click", () => {
-			$hov.remove()
-		});
+		$(ele).css("cursor", "");
+		reset();
 
-		$(`body`).append($hov);
-
-		// readjust position if vertically clipping off screen
-		const hvVertOffset = $hov.offset().top - $(document).scrollTop();
-		if (hvVertOffset < 0) {
-			$hov.css("top", 0).css("bottom", "");
-		} else {
-			const calcHeight = $hov.height();
-			if (hvVertOffset + calcHeight > winH) {
-				$hov.css("top", 0).css("bottom", "");
+		function adjustPosition (first) {
+			// readjust position...
+			// ...if vertically clipping off screen
+			const hvTop = parseFloat($hov.css("top"));
+			if (hvTop < 0) {
+				$hov.css("top", 0);
+			} else if (hvTop >= $(window).height() - EntryRenderer.hover._BAR_HEIGHT) {
+				$hov.css("top", $(window).height() - EntryRenderer.hover._BAR_HEIGHT);
+			} else if (first) {
+				const calcHeight = $hov.height();
+				if (hvTop + calcHeight > $(window).height()) {
+					$hov.css("top", 0);
+				}
+			}
+			// ...if horizontally clipping off screen
+			const hvLeft = parseFloat($hov.css("left"));
+			if (hvLeft < 0) {
+				$hov.css("left", 0)
+			} else if (hvLeft + $hov.width() > $(window).width()) {
+				$hov.css("left", Math.max($(window).width() - $hov.width(), 0));
 			}
 		}
 
-		$(ele).css("cursor", "");
-		EntryRenderer.hover._showInProgress = false;
-		EntryRenderer.hover._curHovering = null;
+		function teardown () {
+			$(ele).data("hover-active", false);
+			$hov.remove();
+			$(document).off(mouseUpId);
+			$(document).off(mouseMoveId);
+			$(window).off(resizeId);
+		}
+
+		function reset () {
+			EntryRenderer.hover._showInProgress = false;
+			EntryRenderer.hover._curHovering = null;
+		}
 	},
 
+	_BAR_HEIGHT: 16,
 	_showInProgress: false,
 	_hoverId: 1,
 	_curHovering: null,
-	show: function (ele, page, source, hash) {
-		const winW = $(window).width();
-		const winH = $(window).height();
+	show: (evt, ele, page, source, hash) => {
+		if (!EntryRenderer.hover._isInit) {
+			EntryRenderer.hover._isInit = true;
+			$(`body`).on("click", () => {
+				EntryRenderer.hover._cleanWindows();
+			});
+		}
 
 		// don't show on mobile
-		if (winW <= 768) return;
+		if ($(window).width() <= 768) return;
+
+		const alreadyHovering = $(ele).data("hover-active");
+		if (alreadyHovering) return;
 
 		let hoverId;
 		const curHoverId = $(ele).data("hover-id");
@@ -1156,18 +1950,50 @@ EntryRenderer.hover = {
 			case UrlUtil.PG_ITEMS:
 				renderFunction = EntryRenderer.item.getCompactRenderedString;
 				break;
+			case UrlUtil.PG_BESTIARY:
+				renderFunction = EntryRenderer.monster.getCompactRenderedString;
+				break;
+			case UrlUtil.PG_CONDITIONS:
+				renderFunction = EntryRenderer.condition.getCompactRenderedString;
+				break;
+			case UrlUtil.PG_BACKGROUNDS:
+				renderFunction = EntryRenderer.background.getCompactRenderedString;
+				break;
+			case UrlUtil.PG_FEATS:
+				renderFunction = EntryRenderer.feat.getCompactRenderedString;
+				break;
+			case UrlUtil.PG_INVOCATIONS:
+				renderFunction = EntryRenderer.invocation.getCompactRenderedString;
+				break;
+			case UrlUtil.PG_PSIONICS:
+				renderFunction = EntryRenderer.psionic.getCompactRenderedString;
+				break;
+			case UrlUtil.PG_REWARDS:
+				renderFunction = EntryRenderer.reward.getCompactRenderedString;
+				break;
+			case UrlUtil.PG_RACES:
+				renderFunction = EntryRenderer.race.getCompactRenderedString;
+				break;
+			case UrlUtil.PG_DEITIES:
+				renderFunction = EntryRenderer.deity.getCompactRenderedString;
+				break;
+			case UrlUtil.PG_OBJECTS:
+				renderFunction = EntryRenderer.object.getCompactRenderedString;
+				break;
+			case UrlUtil.PG_TRAPS_HAZARDS:
+				renderFunction = EntryRenderer.traphazard.getCompactRenderedString;
+				break;
 			default:
 				throw new Error(`No hover render function specified for page ${page}`)
 		}
 		EntryRenderer.hover._curHovering = {
 			hoverId: hoverId,
-			winW: winW,
-			winH: winH,
 			ele: ele,
 			renderFunction: renderFunction,
 			cPage: page,
 			cSource: source,
-			cHash: hash
+			cHash: hash,
+			permanent: evt.shiftKey
 		};
 
 		// return if another event chain is handling the event
@@ -1179,32 +2005,63 @@ EntryRenderer.hover = {
 		$(ele).css("cursor", "wait");
 
 		// clean up any old event listeners
-		$(ele).unbind("mouseleave");
+		$(ele).off("mouseleave");
 
 		// cancel hover if the mouse leaves
-		$(ele).bind("mouseleave", () => {
-			EntryRenderer.hover._curHovering = null;
+		$(ele).on("mouseleave", () => {
+			if (!EntryRenderer.hover._curHovering || !EntryRenderer.hover._curHovering.permanent) {
+				EntryRenderer.hover._curHovering = null;
+			}
 		});
+
+		// clean up any abandoned windows
+		EntryRenderer.hover._cleanWindows();
+
+		function loadMultiSource (page, baseUrl, listProp) {
+			if (!EntryRenderer.hover._isCached(page, source, hash)) {
+				DataUtil.loadJSON(`${baseUrl}index.json`, (data) => {
+					const procData = {};
+					Object.keys(data).forEach(k => procData[k.toLowerCase()] = data[k]);
+					DataUtil.loadJSON(`${baseUrl}${procData[source.toLowerCase()]}`, (data) => {
+						data[listProp].forEach(it => {
+							const itHash = UrlUtil.URL_TO_HASH_BUILDER[page](it);
+							EntryRenderer.hover._addToCache(page, it.source, itHash, it)
+						});
+						EntryRenderer.hover._makeWindow();
+					});
+				});
+			} else {
+				EntryRenderer.hover._makeWindow();
+			}
+		}
+
+		function loadSimple (page, jsonFile, listProp) {
+			function populate (data, listProp) {
+				data[listProp].forEach(it => {
+					const itHash = UrlUtil.URL_TO_HASH_BUILDER[page](it);
+					EntryRenderer.hover._addToCache(page, it.source, itHash, it)
+				});
+			}
+
+			if (!EntryRenderer.hover._isCached(page, source, hash)) {
+				DataUtil.loadJSON(`data/${jsonFile}`, (data) => {
+					if (listProp instanceof Array) listProp.forEach(p => populate(data, p));
+					else populate(data, listProp);
+					EntryRenderer.hover._makeWindow();
+				});
+			} else {
+				EntryRenderer.hover._makeWindow();
+			}
+		}
 
 		switch (page) {
 			case UrlUtil.PG_SPELLS: {
-				const BASE_URL = `data/spells/`;
+				loadMultiSource(page, `data/spells/`, "spell");
+				break;
+			}
 
-				if (!EntryRenderer.hover._isCached(page, source, hash)) {
-					DataUtil.loadJSON(`${BASE_URL}index.json`, (data) => {
-						const procData = {};
-						Object.keys(data).forEach(k => procData[k.toLowerCase()] = data[k]);
-						DataUtil.loadJSON(`${BASE_URL}${procData[source.toLowerCase()]}`, (data) => {
-							data.spell.forEach(spell => {
-								const spellHash = UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_SPELLS](spell);
-								EntryRenderer.hover._addToCache(page, spell.source, spellHash, spell)
-							});
-							EntryRenderer.hover._makeWindow();
-						});
-					});
-				} else {
-					EntryRenderer.hover._makeWindow();
-				}
+			case UrlUtil.PG_BESTIARY: {
+				loadMultiSource(page, `data/bestiary/`, "monster");
 				break;
 			}
 
@@ -1222,8 +2079,68 @@ EntryRenderer.hover = {
 				}
 				break;
 			}
+
+			case UrlUtil.PG_CONDITIONS: {
+				loadSimple(page, "conditions.json", "condition");
+				break;
+			}
+			case UrlUtil.PG_BACKGROUNDS: {
+				loadSimple(page, "backgrounds.json", "background");
+				break;
+			}
+			case UrlUtil.PG_FEATS: {
+				loadSimple(page, "feats.json", "feat");
+				break;
+			}
+			case UrlUtil.PG_INVOCATIONS: {
+				loadSimple(page, "invocations.json", "invocation");
+				break;
+			}
+			case UrlUtil.PG_PSIONICS: {
+				loadSimple(page, "psionics.json", "psionic");
+				break;
+			}
+			case UrlUtil.PG_REWARDS: {
+				loadSimple(page, "rewards.json", "reward");
+				break;
+			}
+			case UrlUtil.PG_RACES: {
+				if (!EntryRenderer.hover._isCached(page, source, hash)) {
+					DataUtil.loadJSON(`data/races.json`, (data) => {
+						const merged = EntryRenderer.race.mergeSubraces(data.race);
+						merged.forEach(race => {
+							const raceHash = UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_RACES](race);
+							EntryRenderer.hover._addToCache(page, race.source, raceHash, race)
+						});
+						EntryRenderer.hover._makeWindow();
+					});
+				} else {
+					EntryRenderer.hover._makeWindow();
+				}
+				break;
+			}
+			case UrlUtil.PG_DEITIES: {
+				loadSimple(page, "deities.json", "deity");
+				break;
+			}
+			case UrlUtil.PG_OBJECTS: {
+				loadSimple(page, "objects.json", "object");
+				break;
+			}
+			case UrlUtil.PG_TRAPS_HAZARDS: {
+				loadSimple(page, "trapshazards.json", ["trap", "hazard"]);
+				break;
+			}
 		}
+	},
+
+	_cleanWindows: () => {
+		$(`a.hoverlink`).trigger(`mouseleave`);
 	}
+};
+
+EntryRenderer.dice = {
+	// TODO
 };
 
 /**

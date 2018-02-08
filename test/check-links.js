@@ -3,6 +3,7 @@ const ut = require('../js/utils.js');
 const utS = require("../node/util-search-index");
 
 const re = /{@(spell|item|class|creature|condition|background) (.*?)(\|(.*?))?(\|.*?)?}/g;
+let msg = ``;
 
 const TAG_TO_PAGE = {
 	"spell": UrlUtil.PG_SPELLS,
@@ -34,6 +35,7 @@ function recursiveCheck (file) {
 function checkFile (file) {
 	const contents = fs.readFileSync(file, 'utf8');
 	let match;
+	// eslint-disable-next-line no-cond-assign
 	while (match = re.exec(contents)) {
 		const tag = match[1];
 		const name = match[2];
@@ -46,18 +48,20 @@ function checkFile (file) {
 			Array.from(ALL_URLS).forEach(it => {
 				if (similar && it.startsWith(similar[0])) similarUrls.push(it)
 			});
-			console.log(`Similar URLs were:\n${JSON.stringify(similarUrls, null, 2)}`);
-			const msg = `Missing link: ${match[0]} in file ${file} (evaluates to "${url}")`;
-			throw new Error(msg);
+			msg += `Missing link: ${match[0]} in file ${file} (evaluates to "${url}")
+Similar URLs were:
+${JSON.stringify(similarUrls, null, 2)}
+`;
 		}
 	}
 }
 
 const ALL_URLS = new Set();
 utS.UtilSearchIndex.getIndex(false, true).forEach(it => {
-	ALL_URLS.add(it.url.toLowerCase().trim());
+	ALL_URLS.add(`${UrlUtil.categoryToPage(it.c)}#${it.u.toLowerCase().trim()}`);
 });
 
 console.log("##### Checking links in JSON #####");
 recursiveCheck("./data");
+if (msg) throw new Error(msg);
 console.log("##### Link check complete #####");

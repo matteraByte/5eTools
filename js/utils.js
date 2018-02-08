@@ -2,15 +2,20 @@
 // Strict mode should not be used, as the roll20 script depends on this file //
 // ************************************************************************* //
 
-// in deployment, `_IS_DEPLOYED = true;` should be prepended to this file
+// in deployment, `_IS_DEPLOYED = "<version number>";` should be prepended here
 IS_DEPLOYED = typeof _IS_DEPLOYED !== "undefined" && _IS_DEPLOYED;
+VERSION_NUMBER = IS_DEPLOYED ? _IS_DEPLOYED : "-1";
 DEPLOYED_STATIC_ROOT = "https://static.5etools.com/";
+// for the roll20 script to set
+IS_ROLL20 = false;
 
 HASH_PART_SEP = ",";
 HASH_LIST_SEP = "_";
 HASH_SUB_LIST_SEP = "~";
+HASH_SUB_KV_SEP = ":";
 HASH_START = "#";
 HASH_SUBCLASS = "sub:";
+HASH_BLANK = "blankhash";
 
 STR_EMPTY = "";
 STR_VOID_LINK = "javascript:void(0)";
@@ -51,6 +56,7 @@ STL_DISPLAY_NONE = "display: none";
 FLTR_ID = "filterId";
 
 CLSS_NON_STANDARD_SOURCE = "spicy-sauce";
+CLSS_HOMEBREW_SOURCE = "refreshing-brew";
 CLSS_SUBCLASS_FEATURE = "subclass-feature";
 
 ATB_DATA_LIST_SEP = "||";
@@ -60,6 +66,7 @@ ATB_DATA_SRC = "data-source";
 
 STR_CANTRIP = "Cantrip";
 STR_NONE = "None";
+STR_ANY = "Any";
 
 RNG_SPECIAL = "special";
 RNG_POINT = "point";
@@ -114,6 +121,50 @@ String.prototype.uppercaseFirst = String.prototype.uppercaseFirst ||
 		return str.charAt(0).toUpperCase() + str.slice(1);
 	};
 
+String.prototype.toTitleCase = String.prototype.toTitleCase ||
+	function () {
+		let str;
+		str = this.replace(/([^\W_]+[^\s-]*) */g, function (txt) {
+			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+		});
+
+		if (!StrUtil._TITLE_LOWER_WORDS_RE) {
+			StrUtil._TITLE_LOWER_WORDS_RE = StrUtil.TITLE_LOWER_WORDS.map(it => new RegExp(`\\s${it}\\s`, 'g'));
+		}
+
+		for (let i = 0; i < StrUtil.TITLE_LOWER_WORDS.length; i++) {
+			str = str.replace(
+				StrUtil._TITLE_LOWER_WORDS_RE[i],
+				(txt) => {
+					return txt.toLowerCase();
+				});
+		}
+
+		if (!StrUtil._TITLE_UPPER_WORDS_RE) {
+			StrUtil._TITLE_UPPER_WORDS_RE = StrUtil.TITLE_UPPER_WORDS.map(it => new RegExp(`\\b${it}\\b`, 'g'));
+		}
+
+		for (let i = 0; i < StrUtil.TITLE_UPPER_WORDS.length; i++) {
+			str = str.replace(
+				StrUtil._TITLE_UPPER_WORDS_RE[i],
+				StrUtil.TITLE_UPPER_WORDS[i].toUpperCase()
+			);
+		}
+
+		return str;
+	};
+
+// as we're targeting ES6
+String.prototype.ltrim = String.prototype.ltrim ||
+	function () {
+		return this.replace(/^\s+/, "");
+	};
+
+String.prototype.rtrim = String.prototype.rtrim ||
+	function () {
+		return this.replace(/\s+$/, "");
+	};
+
 StrUtil = {
 	joinPhraseArray: function (array, joiner, lastJoiner) {
 		if (array.length === 0) return "";
@@ -132,7 +183,15 @@ StrUtil = {
 
 	uppercaseFirst: function (string) {
 		return string.uppercaseFirst();
-	}
+	},
+	// Certain minor words should be left lowercase unless they are the first or last words in the string
+	TITLE_LOWER_WORDS: ["A", "An", "The", "And", "But", "Or", "For", "Nor", "As", "At", "By", "For", "From", "In", "Into", "Near", "Of", "On", "Onto", "To", "With"],
+	// Certain words such as initialisms or acronyms should be left uppercase
+	TITLE_UPPER_WORDS: ["Id", "Tv"]
+};
+
+RegExp.escape = function (string) {
+	return string.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
 };
 
 // TEXT COMBINING ======================================================================================================
@@ -645,7 +704,14 @@ Parser.spRangeToFull = function (range) {
 		return `Self (${size.amount}-${Parser.getSingletonUnit(size.type)}${getAreaStyleStr()})`;
 
 		function getAreaStyleStr () {
-			return range.type === RNG_SPHERE || range.type === RNG_HEMISPHERE ? "-radius" : " " + range.type;
+			switch (range.type) {
+				case RNG_SPHERE:
+					return "-radius";
+				case RNG_HEMISPHERE:
+					return `-radius ${range.type}`;
+				default:
+					return ` ${range.type}`
+			}
 		}
 	}
 };
@@ -690,7 +756,7 @@ Parser.spClassesToFull = function (classes) {
 
 Parser.spMainClassesToFull = function (classes) {
 	return classes.fromClassList
-		.sort((a, b) => ascSort(a.name, b.name))
+		.sort((a, b) => SortUtil.ascSort(a.name, b.name))
 		.map(c => `<span title="Source: ${Parser.sourceJsonToFull(c.source)}">${c.name}</span>`)
 		.join(", ");
 };
@@ -699,8 +765,8 @@ Parser.spSubclassesToFull = function (classes) {
 	if (!classes.fromSubclass) return "";
 	return classes.fromSubclass
 		.sort((a, b) => {
-			const byName = ascSort(a.class.name, b.class.name);
-			return byName || ascSort(a.subclass.name, b.subclass.name);
+			const byName = SortUtil.ascSort(a.class.name, b.class.name);
+			return byName || SortUtil.ascSort(a.subclass.name, b.subclass.name);
 		})
 		.map(c => Parser._spSubclassItem(c))
 		.join(", ");
@@ -710,6 +776,7 @@ Parser._spSubclassItem = function (fromSubclass) {
 	return `<span class="italic" title="Source: ${Parser.sourceJsonToFull(fromSubclass.subclass.source)}">${fromSubclass.subclass.name}${fromSubclass.subclass.subSubclass ? ` (${fromSubclass.subclass.subSubclass})` : ""}</span> <span title="Source: ${Parser.sourceJsonToFull(fromSubclass.class.source)}">${fromSubclass.class.name}</span>`;
 };
 
+// mon-prefix functions are for parsing monster data, and shared with the roll20 script
 Parser.monTypeToFullObj = function (type) {
 	const out = {type: "", tags: [], asText: ""};
 
@@ -741,12 +808,69 @@ Parser.monTypeToFullObj = function (type) {
 	} else {
 		out.asText = `${type.type}`;
 	}
-	if (tempTags.length) out.asText += ` (${tempTags.join(", ")})`
+	if (tempTags.length) out.asText += ` (${tempTags.join(", ")})`;
 	return out;
 };
 
 Parser.monTypeToPlural = function (type) {
 	return Parser._parse_aToB(Parser.MON_TYPE_TO_PLURAL, type);
+};
+
+// psi-prefix functions are for parsing psionic data, and shared with the roll20 script
+Parser.PSI_ABV_TYPE_TALENT = "T";
+Parser.PSI_ABV_TYPE_DISCIPLINE = "D";
+Parser.PSI_ORDER_NONE = "None";
+Parser.psiTypeToFull = (type) => {
+	if (type === Parser.PSI_ABV_TYPE_TALENT) return "Talent";
+	else if (type === Parser.PSI_ABV_TYPE_DISCIPLINE) return "Discipline";
+	else return type;
+};
+
+Parser.psiOrderToFull = (order) => {
+	return order === undefined ? Parser.PSI_ORDER_NONE : order;
+};
+
+Parser.levelToFull = function (level) {
+	if (isNaN(level)) return "";
+	if (level === "2") return level + "nd";
+	if (level === "3") return level + "rd";
+	if (level === "1") return level + "st";
+	return level + "th";
+};
+
+Parser.invoSpellToFull = function (spell) {
+	if (spell === "Eldritch Blast") return spell + " cantrip";
+	if (spell === "Hex/Curse") return "Hex spell or a warlock feature that curses";
+	return STR_NONE
+};
+
+Parser.invoPactToFull = function (pact) {
+	if (pact === "Chain") return "Pact of the Chain";
+	if (pact === "Tome") return "Pact of the Tome";
+	if (pact === "Blade") return "Pact of the Blade";
+	return STR_ANY;
+};
+
+Parser.invoPatronToShort = function (patron) {
+	if (patron === STR_ANY) return STR_ANY;
+	return /^The (.*?)$/.exec(patron)[1];
+};
+
+Parser.dtAlignmentToFull = function (alignment) {
+	alignment = alignment.toUpperCase();
+	switch (alignment) {
+		case "L":
+			return "Lawful";
+		case "N":
+			return "Neutral";
+		case "C":
+			return "Chaotic";
+		case "G":
+			return "Good";
+		case "E":
+			return "Evil";
+	}
+	return alignment;
 };
 
 Parser.CAT_ID_CREATURE = 1;
@@ -762,6 +886,10 @@ Parser.CAT_ID_RACE = 10;
 Parser.CAT_ID_OTHER_REWARD = 11;
 Parser.CAT_ID_VARIANT_OPTIONAL_RULE = 12;
 Parser.CAT_ID_ADVENTURE = 13;
+Parser.CAT_ID_DEITY = 14;
+Parser.CAT_ID_OBJECT = 15;
+Parser.CAT_ID_TRAP = 16;
+Parser.CAT_ID_HAZARD = 17;
 
 Parser.CAT_ID_TO_FULL = {};
 Parser.CAT_ID_TO_FULL[Parser.CAT_ID_CREATURE] = "Bestiary";
@@ -777,6 +905,10 @@ Parser.CAT_ID_TO_FULL[Parser.CAT_ID_RACE] = "Race";
 Parser.CAT_ID_TO_FULL[Parser.CAT_ID_OTHER_REWARD] = "Other Reward";
 Parser.CAT_ID_TO_FULL[Parser.CAT_ID_VARIANT_OPTIONAL_RULE] = "Variant/Optional Rule";
 Parser.CAT_ID_TO_FULL[Parser.CAT_ID_ADVENTURE] = "Adventure";
+Parser.CAT_ID_TO_FULL[Parser.CAT_ID_DEITY] = "Deity";
+Parser.CAT_ID_TO_FULL[Parser.CAT_ID_OBJECT] = "Object";
+Parser.CAT_ID_TO_FULL[Parser.CAT_ID_TRAP] = "Trap";
+Parser.CAT_ID_TO_FULL[Parser.CAT_ID_HAZARD] = "Hazard";
 
 Parser.pageCategoryToFull = function (catId) {
 	return Parser._parse_aToB(Parser.CAT_ID_TO_FULL, catId);
@@ -796,8 +928,8 @@ Parser.spSubclassesToCurrentAndLegacyFull = function (classes) {
 	const toCheck = [];
 	classes.fromSubclass
 		.sort((a, b) => {
-			const byName = ascSort(a.class.name, b.class.name);
-			return byName || ascSort(a.subclass.name, b.subclass.name);
+			const byName = SortUtil.ascSort(a.class.name, b.class.name);
+			return byName || SortUtil.ascSort(a.subclass.name, b.subclass.name);
 		})
 		.forEach(c => {
 			const nm = c.subclass.name;
@@ -837,6 +969,23 @@ Parser.spSubclassesToCurrentAndLegacyFull = function (classes) {
 		return shortName;
 	}
 };
+
+Parser.attackTypeToFull = function (attackType) {
+	return Parser._parse_aToB(Parser.ATK_TYPE_TO_FULL, attackType);
+};
+
+Parser.trapTypeToFull = function (type) {
+	return Parser._parse_aToB(Parser.TRAP_TYPE_TO_FULL, type);
+};
+
+Parser.TRAP_TYPE_TO_FULL = {};
+Parser.TRAP_TYPE_TO_FULL["MECH"] = "Mechanical trap";
+Parser.TRAP_TYPE_TO_FULL["MAG"] = "Magical trap";
+Parser.TRAP_TYPE_TO_FULL["HAZ"] = "Hazard";
+
+Parser.ATK_TYPE_TO_FULL = {};
+Parser.ATK_TYPE_TO_FULL["MW"] = "Melee Weapon Attack";
+Parser.ATK_TYPE_TO_FULL["RW"] = "Ranged Weapon Attack";
 
 SKL_ABV_ABJ = "A";
 SKL_ABV_EVO = "V";
@@ -1034,6 +1183,8 @@ SRC_FEF_3PP = "FEF" + SRC_3PP_SUFFIX;
 SRC_GDoF_3PP = "GDoF" + SRC_3PP_SUFFIX;
 SRC_ToB_3PP = "ToB" + SRC_3PP_SUFFIX;
 
+SRC_HOMEBREW = "Homebrew";
+
 AL_PREFIX = "Adventurers League: ";
 AL_PREFIX_SHORT = "AL: ";
 PS_PREFIX = "Plane Shift: ";
@@ -1123,6 +1274,7 @@ Parser.SOURCE_JSON_TO_FULL[SRC_CC_3PP] = "Critter Compendium" + PP3_SUFFIX;
 Parser.SOURCE_JSON_TO_FULL[SRC_FEF_3PP] = "Fifth Edition Foes" + PP3_SUFFIX;
 Parser.SOURCE_JSON_TO_FULL[SRC_GDoF_3PP] = "Gem Dragons of Faerûn" + PP3_SUFFIX;
 Parser.SOURCE_JSON_TO_FULL[SRC_ToB_3PP] = "Tome of Beasts" + PP3_SUFFIX;
+Parser.SOURCE_JSON_TO_FULL[SRC_HOMEBREW] = "Homebrew";
 
 Parser.SOURCE_JSON_TO_ABV = {};
 Parser.SOURCE_JSON_TO_ABV[SRC_CoS] = "CoS";
@@ -1204,6 +1356,7 @@ Parser.SOURCE_JSON_TO_ABV[SRC_CC_3PP] = "CC (3pp)";
 Parser.SOURCE_JSON_TO_ABV[SRC_FEF_3PP] = "FEF (3pp)";
 Parser.SOURCE_JSON_TO_ABV[SRC_GDoF_3PP] = "GDoF (3pp)";
 Parser.SOURCE_JSON_TO_ABV[SRC_ToB_3PP] = "ToB (3pp)";
+Parser.SOURCE_JSON_TO_ABV[SRC_HOMEBREW] = "Brew";
 
 Parser.ITEM_TYPE_JSON_TO_ABV = {
 	"A": "Ammunition",
@@ -1230,6 +1383,7 @@ Parser.ITEM_TYPE_JSON_TO_ABV = {
 	"TAH": "Tack and Harness",
 	"TG": "Trade Good",
 	"VEH": "Vehicle",
+	"SHP": "Vehicle",
 	"WD": "Wand"
 };
 
@@ -1277,12 +1431,20 @@ Parser.NUMBERS_TEENS = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fift
 
 // SOURCES =============================================================================================================
 function hasBeenReprinted (shortName, source) {
+	/* can accept sources of the form:
+	{
+		"source": "UAExample",
+		"forceStandard": true
+	}
+	 */
+	if (source && source.source) source = source.source;
 	return (shortName !== undefined && shortName !== null && source !== undefined && source !== null) &&
 		(
 			(shortName === "Sun Soul" && source === SRC_SCAG) ||
 			(shortName === "Mastermind" && source === SRC_SCAG) ||
 			(shortName === "Swashbuckler" && source === SRC_SCAG) ||
-			(shortName === "Storm" && source === SRC_SCAG)
+			(shortName === "Storm" && source === SRC_SCAG) ||
+			(shortName === "Deep Stalker Conclave" && source === SRC_UATRR)
 		);
 }
 
@@ -1296,7 +1458,16 @@ function isNonstandardSource (source) {
 	if (source && source.forceStandard !== undefined) {
 		return !source.forceStandard;
 	}
-	return (source !== undefined && source !== null) && (source.startsWith(SRC_UA_PREFIX) || source.startsWith(SRC_PS_PREFIX) || source.endsWith(SRC_3PP_SUFFIX) || source === SRC_OGA);
+	if (source && source.source) source = source.source;
+	return (source !== undefined && source !== null) && (_isNonStandardSourceWiz(source) || _isNonStandardSource3pp(source));
+}
+
+function _isNonStandardSourceWiz (source) {
+	return source.startsWith(SRC_UA_PREFIX) || source.startsWith(SRC_PS_PREFIX) || source === SRC_OGA;
+}
+
+function _isNonStandardSource3pp (source) {
+	return source.endsWith(SRC_3PP_SUFFIX);
 }
 
 // CONVENIENCE/ELEMENTS ================================================================================================
@@ -1311,25 +1482,113 @@ function implies (a, b) {
 	return (!a) || b;
 }
 
-// SEARCH AND FILTER ===================================================================================================
-function search (options) {
-	const list = new List("listcontainer", options);
-	list.sort("name");
-	$("#reset").click(function () {
-		$("#filtertools").find("select").val("All");
-		$("#search").val("");
-		list.search();
-		list.sort("name");
-		list.filter();
-	});
-	const listWrapper = $("#listcontainer");
-	if (listWrapper.data("lists")) {
-		listWrapper.data("lists").push(list);
-	} else {
-		listWrapper.data("lists", [list]);
-	}
-	return list
+function noModifierKeys (e) {
+	return !e.ctrlKey && !e.altKey && !e.metaKey;
 }
+
+if (typeof window !== "undefined") {
+	window.addEventListener("load", () => {
+		// Add a selector to match exact text (case insensitive) to jQuery's arsenal
+		$.expr[':'].textEquals = (el, i, m) => {
+			const searchText = m[3];
+			const match = $(el).text().toLowerCase().trim().match(`^${RegExp.escape(searchText.toLowerCase())}$`);
+			return match && match.length > 0;
+		};
+
+		// Add a selector to match contained text (case insensitive)
+		$.expr[':'].containsInsensitive = (el, i, m) => {
+			const searchText = m[3];
+			const textNode = $(el).contents().filter((i, e) => {
+				return e.nodeType === 3;
+			})[0];
+			if (!textNode) return false;
+			const match = textNode.nodeValue.toLowerCase().trim().match(`${RegExp.escape(searchText.toLowerCase())}`);
+			return match && match.length > 0;
+		};
+	});
+}
+
+// LIST AND SEARCH =====================================================================================================
+ListUtil = {
+	_first: true,
+
+	search: (options) => {
+		const list = new List("listcontainer", options);
+		list.sort("name");
+		$("#reset").click(function () {
+			$("#filtertools").find("select").val("All");
+			$("#search").val("");
+			list.search();
+			list.sort("name");
+			list.filter();
+		});
+		const listWrapper = $("#listcontainer");
+		if (listWrapper.data("lists")) {
+			listWrapper.data("lists").push(list);
+		} else {
+			listWrapper.data("lists", [list]);
+		}
+		if (ListUtil._first) {
+			ListUtil._first = false;
+			const $headDesc = $(`header div p`);
+			$headDesc.html(`${$headDesc.html()} Press J/K to navigate rows.`);
+
+			$(window).on("keypress", (e) => {
+				// K up; J down
+				if (noModifierKeys(e)) {
+					if (e.key === "k" || e.key === "j") {
+						const it = getSelectedListElementWithIndex();
+
+						if (it) {
+							if (e.key === "k") {
+								const prevLink = it.$el.parent().prev().find("a").attr("href");
+								if (prevLink !== undefined) {
+									window.location.hash = prevLink;
+								} else {
+									const lists = listWrapper.data("lists");
+									let x = it.x;
+									while (--x >= 0) {
+										const l = lists[x];
+										if (l.visibleItems.length) {
+											const goTo = $(l.visibleItems[l.visibleItems.length - 1].elm).find("a").attr("href");
+											if (goTo) window.location.hash = goTo;
+											return;
+										}
+									}
+								}
+								const fromPrevSibling = it.$el.closest(`ul`).parent().prev(`li`).find(`ul li`).last().find("a").attr("href");
+								if (fromPrevSibling) {
+									window.location.hash = fromPrevSibling;
+								}
+							} else if (e.key === "j") {
+								const nextLink = it.$el.parent().next().find("a").attr("href");
+								if (nextLink !== undefined) {
+									window.location.hash = nextLink;
+								} else {
+									const lists = listWrapper.data("lists");
+									let x = it.x;
+									while (++x < lists.length) {
+										const l = lists[x];
+										if (l.visibleItems.length) {
+											const goTo = $(l.visibleItems[0].elm).find("a").attr("href");
+											if (goTo) window.location.hash = goTo;
+											return;
+										}
+									}
+								}
+								const fromNxtSibling = it.$el.closest(`ul`).parent().next(`li`).find(`ul li`).first().find("a").attr("href");
+								if (fromNxtSibling) {
+									window.location.hash = fromNxtSibling;
+								}
+							}
+						}
+					}
+				}
+			});
+		}
+		return list
+	}
+};
 
 /**
  * Generic source filter
@@ -1380,8 +1639,7 @@ function initFilterBox (...filterList) {
 }
 
 // ENCODING/DECODING ===================================================================================================
-UrlUtil = function () {
-};
+UrlUtil = {};
 UrlUtil.encodeForHash = function (toEncode) {
 	if (toEncode instanceof Array) {
 		return toEncode.map(i => encodeForHashHelper(i)).join(HASH_LIST_SEP);
@@ -1390,7 +1648,7 @@ UrlUtil.encodeForHash = function (toEncode) {
 	}
 
 	function encodeForHashHelper (part) {
-		return encodeURIComponent(part).toLowerCase().replace(/'/g, "%27");
+		return encodeURIComponent(part).toLowerCase();
 	}
 };
 
@@ -1412,8 +1670,29 @@ UrlUtil.getCurrentPage = function () {
  * @param href the link
  */
 UrlUtil.link = function (href) {
-	if (IS_DEPLOYED) return `${DEPLOYED_STATIC_ROOT}${href}`;
+	if (!IS_ROLL20 && IS_DEPLOYED) return `${DEPLOYED_STATIC_ROOT}${href}?ver=${VERSION_NUMBER}`;
+	else if (IS_DEPLOYED) return `${href}?ver=${VERSION_NUMBER}`;
 	return href;
+};
+
+UrlUtil.unpackSubHash = function (subHash, unencode) {
+	// format is "key:value~list~sep~with~tilde"
+	if (subHash.includes(HASH_SUB_KV_SEP)) {
+		const keyValArr = subHash.split(HASH_SUB_KV_SEP).map(s => s.trim());
+		const out = {};
+		let k = keyValArr[0].toLowerCase();
+		if (unencode) k = decodeURIComponent(k);
+		let v = keyValArr[1].toLowerCase();
+		if (unencode) v = decodeURIComponent(v);
+		out[k] = v.split(HASH_SUB_LIST_SEP).map(s => s.trim());
+		return out;
+	} else {
+		throw new Error(`Baldy formatted subhash ${subHash}`)
+	}
+};
+
+UrlUtil.categoryToPage = function (category) {
+	return UrlUtil.CAT_TO_PAGE[category];
 };
 
 UrlUtil.PG_BESTIARY = "bestiary.html";
@@ -1429,6 +1708,10 @@ UrlUtil.PG_RACES = "races.html";
 UrlUtil.PG_REWARDS = "rewards.html";
 UrlUtil.PG_VARIATNRULES = "variantrules.html";
 UrlUtil.PG_ADVENTURE = "adventure.html";
+UrlUtil.PG_DEITIES = "deities.html";
+UrlUtil.PG_CULTS = "cults.html";
+UrlUtil.PG_OBJECTS = "objects.html";
+UrlUtil.PG_TRAPS_HAZARDS = "trapshazards.html";
 
 UrlUtil.URL_TO_HASH_BUILDER = {};
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_BESTIARY] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
@@ -1444,32 +1727,80 @@ UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_RACES] = (it) => UrlUtil.encodeForHash([i
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_REWARDS] = (it) => UrlUtil.encodeForHash(it.name);
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_VARIATNRULES] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_ADVENTURE] = (it) => UrlUtil.encodeForHash(it.id);
+UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_DEITIES] = (it) => UrlUtil.encodeForHash([it.name, it.pantheon, it.source]);
+UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_CULTS] = (it) => UrlUtil.encodeForHash(it.name);
+UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_OBJECTS] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
+UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_TRAPS_HAZARDS] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
+
+UrlUtil.CAT_TO_PAGE = {};
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_CREATURE] = UrlUtil.PG_BESTIARY;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_SPELL] = UrlUtil.PG_SPELLS;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_BACKGROUND] = UrlUtil.PG_BACKGROUNDS;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_ITEM] = UrlUtil.PG_ITEMS;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_CLASS] = UrlUtil.PG_CLASSES;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_CONDITION] = UrlUtil.PG_CONDITIONS;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_FEAT] = UrlUtil.PG_FEATS;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_ELDRITCH_INVOCATION] = UrlUtil.PG_INVOCATIONS;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_PSIONIC] = UrlUtil.PG_PSIONICS;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_RACE] = UrlUtil.PG_RACES;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_OTHER_REWARD] = UrlUtil.PG_REWARDS;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_VARIANT_OPTIONAL_RULE] = UrlUtil.PG_VARIATNRULES;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_ADVENTURE] = UrlUtil.PG_ADVENTURE;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_DEITY] = UrlUtil.PG_DEITIES;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_OBJECT] = UrlUtil.PG_OBJECTS;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_TRAP] = UrlUtil.PG_TRAPS_HAZARDS;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_HAZARD] = UrlUtil.PG_TRAPS_HAZARDS;
+
+if (!IS_DEPLOYED && !IS_ROLL20 && typeof window !== "undefined") {
+	// for local testing, hotkey to get a link to the current page on the main site
+	window.addEventListener("keypress", (e) => {
+		if (noModifierKeys(e)) {
+			if (e.key === "#") {
+				const spl = window.location.href.split("/");
+				window.prompt("Copy to clipboard: Ctrl+C, Enter", `https://5e.tools/${spl[spl.length - 1]}`);
+			}
+		}
+	});
+}
 
 // SORTING =============================================================================================================
-// TODO refactor into a class
-function ascSort (a, b) {
-	// to handle `FilterItem`s
-	if (a.hasOwnProperty("item") && b.hasOwnProperty("item")) {
-		return _ascSort(a.item, b.item);
+SortUtil = {
+	ascSort: (a, b) => {
+		// to handle `FilterItem`s
+		if (a.hasOwnProperty("item") && b.hasOwnProperty("item")) {
+			return SortUtil._ascSort(a.item, b.item);
+		}
+		return SortUtil._ascSort(a, b);
+	},
+
+	_ascSort: (a, b) => {
+		if (b === a) return 0;
+		return b < a ? 1 : -1;
+	},
+
+	compareNames: (a, b) => {
+		if (b._values.name.toLowerCase() === a._values.name.toLowerCase()) return 0;
+		else if (b._values.name.toLowerCase() > a._values.name.toLowerCase()) return 1;
+		else if (b._values.name.toLowerCase() < a._values.name.toLowerCase()) return -1;
+	},
+
+	listSort: (itemA, itemB, options) => {
+		if (options.valueName === "name") return compareBy("name");
+		else return compareByOrDefault(options.valueName, "name");
+
+		function compareBy (valueName) {
+			const aValue = itemA.values()[valueName].toLowerCase();
+			const bValue = itemB.values()[valueName].toLowerCase();
+			if (aValue === bValue) return 0;
+			return (aValue > bValue) ? 1 : -1;
+		}
+
+		function compareByOrDefault (valueName, defaultValueName) {
+			const initialCompare = compareBy(valueName);
+			return initialCompare === 0 ? compareBy(defaultValueName) : initialCompare;
+		}
 	}
-	return _ascSort(a, b);
-}
-
-function _ascSort (a, b) {
-	if (b === a) return 0;
-	return b < a ? 1 : -1;
-}
-
-function compareNames (a, b) {
-	if (b._values.name.toLowerCase() === a._values.name.toLowerCase()) return 0;
-	else if (b._values.name.toLowerCase() > a._values.name.toLowerCase()) return 1;
-	else if (b._values.name.toLowerCase() < a._values.name.toLowerCase()) return -1;
-}
-
-// ARRAYS ==============================================================================================================
-function joinConjunct (arr, joinWith, conjunctWith) {
-	return arr.length === 1 ? String(arr[0]) : arr.length === 2 ? arr.join(conjunctWith) : arr.slice(0, -1).join(joinWith) + conjunctWith + arr.slice(-1);
-}
+};
 
 // JSON LOADING ========================================================================================================
 DataUtil = {
@@ -1487,7 +1818,7 @@ DataUtil = {
 
 		const procUrl = UrlUtil.link(url);
 		if (this._loaded[procUrl]) {
-			handleAlreadyLoaded(url);
+			handleAlreadyLoaded(procUrl);
 			return;
 		}
 
@@ -1532,6 +1863,13 @@ DataUtil = {
 				}
 			)
 		});
+	},
+
+	userDownload: function (filename, data) {
+		const $a = $(`<a href="data:text/json;charset=utf-8,${encodeURIComponent(data)}" download="${filename}.json" style="display: none;" target="_blank">DL</a>`);
+		$(`body`).append($a);
+		$a[0].click();
+		$a.remove();
 	}
 };
 
@@ -1566,3 +1904,214 @@ function addListShowHide () {
 		hideSearchBtn.show();
 	});
 }
+
+// ROLLING =============================================================================================================
+RollerUtil = {
+	/**
+	 * Result in range: 0 to (max-1); inclusive
+	 * e.g. roll(20) gives results ranging from 0 to 19
+	 * @param max range max (exclusive)
+	 * @returns {number} rolled
+	 */
+	roll: (max) => {
+		return Math.floor(Math.random() * max);
+	},
+
+	addListRollButton: () => {
+		const listWrapper = $("#listcontainer");
+
+		const $btnRoll = $(`<button class="btn btn-default" id="feelinglucky" title="Feeling Lucky?"><span class="glyphicon glyphicon-random"></span></button>`);
+		$btnRoll.on("click", () => {
+			if (listWrapper.data("lists")) {
+				const allLists = listWrapper.data("lists");
+				const rollX = RollerUtil.roll(allLists.length);
+				const list = listWrapper.data("lists")[rollX];
+				const rollY = RollerUtil.roll(list.visibleItems.length);
+				window.location.hash = $(list.visibleItems[rollY].elm).find(`a`).prop("hash");
+			}
+		});
+
+		$(`#filter-search-input-group`).find(`#reset`).before($btnRoll);
+	}
+};
+
+// ID GENERATION =======================================================================================================
+CryptUtil = {
+	// stolen from http://www.myersdaily.org/joseph/javascript/md5.js
+	_md5cycle: (x, k) => {
+		let a = x[0];
+		let b = x[1];
+		let c = x[2];
+		let d = x[3];
+
+		a = CryptUtil._ff(a, b, c, d, k[0], 7, -680876936);
+		d = CryptUtil._ff(d, a, b, c, k[1], 12, -389564586);
+		c = CryptUtil._ff(c, d, a, b, k[2], 17, 606105819);
+		b = CryptUtil._ff(b, c, d, a, k[3], 22, -1044525330);
+		a = CryptUtil._ff(a, b, c, d, k[4], 7, -176418897);
+		d = CryptUtil._ff(d, a, b, c, k[5], 12, 1200080426);
+		c = CryptUtil._ff(c, d, a, b, k[6], 17, -1473231341);
+		b = CryptUtil._ff(b, c, d, a, k[7], 22, -45705983);
+		a = CryptUtil._ff(a, b, c, d, k[8], 7, 1770035416);
+		d = CryptUtil._ff(d, a, b, c, k[9], 12, -1958414417);
+		c = CryptUtil._ff(c, d, a, b, k[10], 17, -42063);
+		b = CryptUtil._ff(b, c, d, a, k[11], 22, -1990404162);
+		a = CryptUtil._ff(a, b, c, d, k[12], 7, 1804603682);
+		d = CryptUtil._ff(d, a, b, c, k[13], 12, -40341101);
+		c = CryptUtil._ff(c, d, a, b, k[14], 17, -1502002290);
+		b = CryptUtil._ff(b, c, d, a, k[15], 22, 1236535329);
+
+		a = CryptUtil._gg(a, b, c, d, k[1], 5, -165796510);
+		d = CryptUtil._gg(d, a, b, c, k[6], 9, -1069501632);
+		c = CryptUtil._gg(c, d, a, b, k[11], 14, 643717713);
+		b = CryptUtil._gg(b, c, d, a, k[0], 20, -373897302);
+		a = CryptUtil._gg(a, b, c, d, k[5], 5, -701558691);
+		d = CryptUtil._gg(d, a, b, c, k[10], 9, 38016083);
+		c = CryptUtil._gg(c, d, a, b, k[15], 14, -660478335);
+		b = CryptUtil._gg(b, c, d, a, k[4], 20, -405537848);
+		a = CryptUtil._gg(a, b, c, d, k[9], 5, 568446438);
+		d = CryptUtil._gg(d, a, b, c, k[14], 9, -1019803690);
+		c = CryptUtil._gg(c, d, a, b, k[3], 14, -187363961);
+		b = CryptUtil._gg(b, c, d, a, k[8], 20, 1163531501);
+		a = CryptUtil._gg(a, b, c, d, k[13], 5, -1444681467);
+		d = CryptUtil._gg(d, a, b, c, k[2], 9, -51403784);
+		c = CryptUtil._gg(c, d, a, b, k[7], 14, 1735328473);
+		b = CryptUtil._gg(b, c, d, a, k[12], 20, -1926607734);
+
+		a = CryptUtil._hh(a, b, c, d, k[5], 4, -378558);
+		d = CryptUtil._hh(d, a, b, c, k[8], 11, -2022574463);
+		c = CryptUtil._hh(c, d, a, b, k[11], 16, 1839030562);
+		b = CryptUtil._hh(b, c, d, a, k[14], 23, -35309556);
+		a = CryptUtil._hh(a, b, c, d, k[1], 4, -1530992060);
+		d = CryptUtil._hh(d, a, b, c, k[4], 11, 1272893353);
+		c = CryptUtil._hh(c, d, a, b, k[7], 16, -155497632);
+		b = CryptUtil._hh(b, c, d, a, k[10], 23, -1094730640);
+		a = CryptUtil._hh(a, b, c, d, k[13], 4, 681279174);
+		d = CryptUtil._hh(d, a, b, c, k[0], 11, -358537222);
+		c = CryptUtil._hh(c, d, a, b, k[3], 16, -722521979);
+		b = CryptUtil._hh(b, c, d, a, k[6], 23, 76029189);
+		a = CryptUtil._hh(a, b, c, d, k[9], 4, -640364487);
+		d = CryptUtil._hh(d, a, b, c, k[12], 11, -421815835);
+		c = CryptUtil._hh(c, d, a, b, k[15], 16, 530742520);
+		b = CryptUtil._hh(b, c, d, a, k[2], 23, -995338651);
+
+		a = CryptUtil._ii(a, b, c, d, k[0], 6, -198630844);
+		d = CryptUtil._ii(d, a, b, c, k[7], 10, 1126891415);
+		c = CryptUtil._ii(c, d, a, b, k[14], 15, -1416354905);
+		b = CryptUtil._ii(b, c, d, a, k[5], 21, -57434055);
+		a = CryptUtil._ii(a, b, c, d, k[12], 6, 1700485571);
+		d = CryptUtil._ii(d, a, b, c, k[3], 10, -1894986606);
+		c = CryptUtil._ii(c, d, a, b, k[10], 15, -1051523);
+		b = CryptUtil._ii(b, c, d, a, k[1], 21, -2054922799);
+		a = CryptUtil._ii(a, b, c, d, k[8], 6, 1873313359);
+		d = CryptUtil._ii(d, a, b, c, k[15], 10, -30611744);
+		c = CryptUtil._ii(c, d, a, b, k[6], 15, -1560198380);
+		b = CryptUtil._ii(b, c, d, a, k[13], 21, 1309151649);
+		a = CryptUtil._ii(a, b, c, d, k[4], 6, -145523070);
+		d = CryptUtil._ii(d, a, b, c, k[11], 10, -1120210379);
+		c = CryptUtil._ii(c, d, a, b, k[2], 15, 718787259);
+		b = CryptUtil._ii(b, c, d, a, k[9], 21, -343485551);
+
+		x[0] = CryptUtil._add32(a, x[0]);
+		x[1] = CryptUtil._add32(b, x[1]);
+		x[2] = CryptUtil._add32(c, x[2]);
+		x[3] = CryptUtil._add32(d, x[3]);
+	},
+
+	_cmn: (q, a, b, x, s, t) => {
+		a = CryptUtil._add32(CryptUtil._add32(a, q), CryptUtil._add32(x, t));
+		return CryptUtil._add32((a << s) | (a >>> (32 - s)), b);
+	},
+
+	_ff: (a, b, c, d, x, s, t) => {
+		return CryptUtil._cmn((b & c) | ((~b) & d), a, b, x, s, t);
+	},
+
+	_gg: (a, b, c, d, x, s, t) => {
+		return CryptUtil._cmn((b & d) | (c & (~d)), a, b, x, s, t);
+	},
+
+	_hh: (a, b, c, d, x, s, t) => {
+		return CryptUtil._cmn(b ^ c ^ d, a, b, x, s, t);
+	},
+
+	_ii: (a, b, c, d, x, s, t) => {
+		return CryptUtil._cmn(c ^ (b | (~d)), a, b, x, s, t);
+	},
+
+	_md51: (s) => {
+		let n = s.length;
+		let state = [1732584193, -271733879, -1732584194, 271733878];
+		let i;
+		for (i = 64; i <= s.length; i += 64) {
+			CryptUtil._md5cycle(state, CryptUtil._md5blk(s.substring(i - 64, i)));
+		}
+		s = s.substring(i - 64);
+		let tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+		for (i = 0; i < s.length; i++) tail[i >> 2] |= s.charCodeAt(i) << ((i % 4) << 3);
+		tail[i >> 2] |= 0x80 << ((i % 4) << 3);
+		if (i > 55) {
+			CryptUtil._md5cycle(state, tail);
+			for (i = 0; i < 16; i++) tail[i] = 0;
+		}
+		tail[14] = n * 8;
+		CryptUtil._md5cycle(state, tail);
+		return state;
+	},
+
+	_md5blk: (s) => {
+		let md5blks = [];
+		for (let i = 0; i < 64; i += 4) {
+			md5blks[i >> 2] = s.charCodeAt(i) + (s.charCodeAt(i + 1) << 8) + (s.charCodeAt(i + 2) << 16) + (s.charCodeAt(i + 3) << 24);
+		}
+		return md5blks;
+	},
+
+	_hex_chr: '0123456789abcdef'.split(''),
+
+	_rhex: (n) => {
+		let s = '';
+		for (let j = 0; j < 4; j++) {
+			s += CryptUtil._hex_chr[(n >> (j * 8 + 4)) & 0x0F] + CryptUtil._hex_chr[(n >> (j * 8)) & 0x0F];
+		}
+		return s;
+	},
+
+	hex: (x) => {
+		for (let i = 0; i < x.length; i++) {
+			x[i] = CryptUtil._rhex(x[i]);
+		}
+		return x.join('');
+	},
+
+	md5: (s) => {
+		return CryptUtil.hex(CryptUtil._md51(s));
+	},
+
+	_add32: (a, b) => {
+		return (a + b) & 0xFFFFFFFF;
+	}
+};
+
+// COLLECTIONS =========================================================================================================
+CollectionUtil = {
+	ObjectSet: class ObjectSet {
+		constructor () {
+			this.map = new Map();
+			this[Symbol.iterator] = this.values;
+		}
+		// Each inserted element has to implement _toIdString() method that returns a string ID.
+		// Two objects are considered equal if their string IDs are equal.
+		add (item) {
+			this.map.set(item._toIdString(), item);
+		}
+
+		values () {
+			return this.map.values();
+		}
+	},
+
+	joinConjunct: (arr, joinWith, conjunctWith) => {
+		return arr.length === 1 ? String(arr[0]) : arr.length === 2 ? arr.join(conjunctWith) : arr.slice(0, -1).join(joinWith) + conjunctWith + arr.slice(-1);
+	}
+};
