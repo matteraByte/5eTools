@@ -7846,7 +7846,7 @@
 			"source": "MM",
 			"alignment": "neutral",
 			"ac": "20 (natural armor)",
-			"hp": "341 (22d20+10)",
+			"hp": "341 (22d20+110)",
 			"speed": "20 ft., swim 40 ft.",
 			"str": 25,
 			"dex": 10,
@@ -15112,7 +15112,7 @@
 				{
 					"name": "Greatsword",
 					"entries": [
-						"Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 9 (2d6+2) piercing damage."
+						"Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 9 (2d6+2) slashing damage."
 					]
 				},
 				{
@@ -16568,7 +16568,7 @@
 			"alignment": "neutral evil",
 			"ac": "13 (natural armor)",
 			"hp": "97 (13d8+39)",
-			"speed": "31 ft., swim 30 ft.",
+			"speed": "30 ft., swim 30 ft.",
 			"str": 16,
 			"dex": 14,
 			"con": 16,
@@ -16697,7 +16697,7 @@
 			"alignment": "neutral evil",
 			"ac": "13 (natural armor, unarmored defense)",
 			"hp": "65 (10d8+20)",
-			"speed": "33 ft., swim 30 ft.",
+			"speed": "30 ft., swim 30 ft.",
 			"str": 14,
 			"dex": 10,
 			"con": 14,
@@ -16779,7 +16779,7 @@
 			"alignment": "neutral evil",
 			"ac": "11 (natural armor)",
 			"hp": "65 (10d8+20)",
-			"speed": "32 ft., swim 30 ft.",
+			"speed": "30 ft., swim 30 ft.",
 			"str": 14,
 			"dex": 10,
 			"con": 14,
@@ -19234,7 +19234,7 @@
 					]
 				},
 				{
-					"name": "Animating Spores",
+					"name": "Animating Spores (3/Day)",
 					"entries": [
 						"The myconid targets one corpse of a humanoid or a Large or smaller beast within 5 feet of it and releases spores at the corpse. In 24 hours, the corpse rises as a spore servant. The corpse stays animated for 1d4+1 weeks or until destroyed, and it can't be animated again in this way."
 					]
@@ -25219,7 +25219,7 @@
 			"wis": 7,
 			"cha": 1,
 			"resist": "bludgeoning, piercing, slashing",
-			"conditionImmune": "charmed, frightened, paralyzed, petrified, prone, restrained, stunned",
+			"conditionImmune": "charmed, frightened, grappled, paralyzed, petrified, prone, restrained, stunned",
 			"senses": "blindsight 10 ft.",
 			"passive": 8,
 			"cr": "1/2",
@@ -26490,10 +26490,10 @@
 					"name": "Vampire Weaknesses",
 					"entries": [
 						"The vampire has the following flaws:",
-						"Forbiddance. The vampire can't enter a residence without an invitation from one of the occupants.",
-						"Harmed by Running Water. The vampire takes 20 acid damage if it ends its turn in running water.",
-						"Stake to the Heart. If a piercing weapon made of wood is driven into the vampire's heart while the vampire is incapacitated in its resting place, the vampire is paralyzed until the stake is removed.",
-						"Sunlight Hypersensitivity. The vampire takes 20 radiant damage when it starts its turn in sunlight. While in sunlight, it has disadvantage on attack rolls and ability checks."
+						"{@i Forbiddance.} The vampire can't enter a residence without an invitation from one of the occupants.",
+						"{@i Harmed by Running Water.} The vampire takes 20 acid damage if it ends its turn in running water.",
+						"{@i Stake to the Heart.} If a piercing weapon made of wood is driven into the vampire's heart while the vampire is incapacitated in its resting place, the vampire is paralyzed until the stake is removed.",
+						"{@i Sunlight Hypersensitivity.} The vampire takes 20 radiant damage when it starts its turn in sunlight. While in sunlight, it has disadvantage on attack rolls and ability checks."
 					]
 				}
 			],

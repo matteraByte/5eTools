@@ -146,15 +146,17 @@ function populateTablesAndFilters () {
 		const f = filterBox.getValues();
 		function listFilter (item) {
 			const i = itemList[$(item.elm).attr(FLTR_ID)];
-
-			return sourceFilter.toDisplay(f, i.source) &&
-				typeFilter.toDisplay(f, i.procType) &&
-				tierFilter.toDisplay(f, i._fTier) &&
-				rarityFilter.toDisplay(f, i.rarity) &&
-				propertyFilter.toDisplay(f, i._fProperties) &&
-				attunementFilter.toDisplay(f, i.attunementCategory) &&
-				categoryFilter.toDisplay(f, i.category) &&
-				miscFilter.toDisplay(f, i._fMisc);
+			return filterBox.toDisplay(
+				f,
+				i.source,
+				i.procType,
+				i._fTier,
+				i.rarity,
+				i._fProperties,
+				i.attunementCategory,
+				i.category,
+				i._fMisc
+			);
 		}
 		mundanelist.filter(listFilter);
 		magiclist.filter(listFilter);
@@ -261,10 +263,10 @@ function loadhash (id) {
 	$(".items span.roller").contents().unwrap();
 	$("#pagecontent span.roller").click(function () {
 		const roll = $(this).attr("data-roll").replace(/\s+/g, "");
-		const rollresult = droll.roll(roll);
-		const name = $(".stats-name").text();
-		$("div#output").prepend(`<span>${name}: <em>${roll}</em> rolled for <strong>${rollresult.total}</strong> (<em>${rollresult.rolls.join(", ")}</em>)<br></span>`).show();
-		$("div#output span:eq(5)").remove();
+		EntryRenderer.dice.roll(roll, {
+			name: item.name,
+			label: $(".stats-name").text()
+		});
 	})
 }
 
