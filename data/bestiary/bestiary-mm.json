@@ -50,7 +50,7 @@
 				{
 					"name": "Summon Air Elemental",
 					"entries": [
-						"Five aarakocra within 30 feet of each other can magically summon an air elemental. Each of the five must use its action and movement on three consecutive turns to perform an aerial dance and must maintain concentration while doing so (as if concentrating on a spell). When all five have finished their third turn of the dance, the elemental appears in an unoccupied space within 60 feet of them. It is friendly toward them and obeys their spoken commands. It remains for 1 hour, until it or all its summoners die, or until any of its summoners dismisses it as a bonus action. A summoner can't perform the dance again until it finishes a short rest. When the elemental returns to the Elemental Plane of Air, any aarakocra within 5 feet of it can return with it."
+						"Five aarakocra within 30 feet of each other can magically summon an {@creature air elemental}. Each of the five must use its action and movement on three consecutive turns to perform an aerial dance and must maintain concentration while doing so (as if concentrating on a spell). When all five have finished their third turn of the dance, the elemental appears in an unoccupied space within 60 feet of them. It is friendly toward them and obeys their spoken commands. It remains for 1 hour, until it or all its summoners die, or until any of its summoners dismisses it as a bonus action. A summoner can't perform the dance again until it finishes a short rest. When the elemental returns to the Elemental Plane of Air, any aarakocra within 5 feet of it can return with it."
 					]
 				}
 			],
@@ -3008,7 +3008,7 @@
 					"name": "Variant: Summon Yugoloth (1/Day)",
 					"entries": [
 						"The yugoloth attempts a magical summoning.",
-						"An arcanaloth has a 40 percent chance of summoning one arcanaloth.",
+						"An arcanaloth has a {@chance 40|40 percent|40% summoning chance} chance of summoning one arcanaloth.",
 						"A summoned yugoloth appears in an unoccupied space within 60 feet of its summoner, does as it pleases, and can't summon other yugoloths. The summoned yugoloth remains for 1 minute, until it or its summoner dies, or until its summoner takes a bonus action to dismiss it."
 					]
 				}
@@ -3619,7 +3619,7 @@
 					"name": "Variant: Summon Demon (1/Day)",
 					"entries": [
 						"The demon chooses what to summon and attempts a magical summoning.",
-						"A balor has a 50 percent chance of summoning 1d8 vrocks, 1d6 hezrous, 1d4 glabrezus, 1d3 nalfeshnees, 1d2 mariliths, or one goristro.",
+						"A balor has a {@chance 50|50 percent|50% summoning chance} chance of summoning 1d8 {@creature vrock}s, 1d6 {@creature hezrou}s, 1d4 {@creature glabrezu}s, 1d3 {@creature nalfeshnee}s, 1d2 {@creature marilith}s, or one {@creature goristro}.",
 						"A summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}
@@ -3932,7 +3932,7 @@
 					"name": "Variant: Summon Demon (1/Day)",
 					"entries": [
 						"The demon chooses what to summon and attempts a magical summoning.",
-						"A barlgura has a 30 percent chance of summoning one barlgura.",
+						"A barlgura has a {@chance 30|30 percent|30% summoning chance} chance of summoning one barlgura.",
 						"A summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}
@@ -4190,7 +4190,10 @@
 			"senses": "darkvision 120 ft.",
 			"passive": 22,
 			"languages": "Deep Speech, Undercommon",
-			"cr": "13",
+			"cr": {
+				"cr": "13",
+				"lair": "14"
+			},
 			"trait": [
 				{
 					"name": "Antimagic Cone",
@@ -5874,7 +5877,7 @@
 					"name": "Variant: Summon Demon (1/Day)",
 					"entries": [
 						"The demon chooses what to summon and attempts a magical summoning.",
-						"A chasme has a 30 percent chance of summoning one chasme.",
+						"A chasme has a {@chance 30|30 percent|30% summoning chance} chance of summoning one chasme.",
 						"A summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}
@@ -6183,18 +6186,6 @@
 			],
 			"action": [
 				{
-					"name": "Fling",
-					"entries": [
-						"The giant tries to throw a Small or Medium creature within 10 feet of it. The target must succeed on a DC 20 Dexterity saving throw or be hurled up to 60 feet horizontally in a direction of the giant's choice and land prone, taking 1d8 bludgeoning damage for every 10 feet it was thrown."
-					]
-				},
-				{
-					"name": "Wind Aura",
-					"entries": [
-						"A magical aura of wind surrounds the giant. The aura is a 10-foot-radius sphere that lasts as long as the giant maintains concentration on it (as if concentrating on a spell). While the aura is in effect, the giant gains a +2 bonus to its AC against ranged weapon attacks, and all open flames within the aura are extinguished unless they are magical."
-					]
-				},
-				{
 					"name": "Multiattack",
 					"entries": [
 						"The giant makes two morningstar attacks."
@@ -6211,6 +6202,33 @@
 					"entries": [
 						"Ranged Weapon Attack: +12 to hit, range 60/240 ft., one target. Hit: 30 (4d10+8) bludgeoning damage."
 					]
+				}
+			],
+			"variant": [
+				{
+					"type": "variant",
+					"name": "New Giant Options",
+					"entries": [
+						"Some adult cloud giants have the magical ability to cre­ate barriers of gale-force wind around themselves that can deflect incoming missiles. Others like to fling ene­mies through the air. These abilities are represented by the following action options.",
+						{
+							"name": "Fling",
+							"type": "entries",
+							"entries": [
+								"The giant tries to throw a Small or Medium creature within 10 feet of it. The target must succeed on a DC 20 Dexterity saving throw or be hurled up to 60 feet horizontally in a direction of the giant's choice and land prone, taking 1d8 bludgeoning damage for every 10 feet it was thrown."
+							]
+						},
+						{
+							"name": "Wind Aura",
+							"type": "entries",
+							"entries": [
+								"A magical aura of wind surrounds the giant. The aura is a 10-foot-radius sphere that lasts as long as the giant maintains concentration on it (as if concentrating on a spell). While the aura is in effect, the giant gains a +2 bonus to its AC against ranged weapon attacks, and all open flames within the aura are extinguished unless they are magical."
+							]
+						}
+					],
+					"variantSource": {
+						"source": "SKT",
+						"page": 245
+					}
 				}
 			],
 			"page": 154,
@@ -7235,7 +7253,10 @@
 			"senses": "darkvision 120 ft.",
 			"passive": 22,
 			"languages": "Deep Speech, Undercommon",
-			"cr": "14",
+			"cr": {
+				"cr": "14",
+				"lair": "15"
+			},
 			"trait": [
 				{
 					"name": "Negative Energy Cone",
@@ -7407,7 +7428,10 @@
 			"conditionImmune": "charmed, deafened, exhaustion, frightened, paralyzed, petrified, poisoned, prone, stunned",
 			"senses": "truesight 120 ft.",
 			"passive": 13,
-			"cr": "18",
+			"cr": {
+				"cr": "18",
+				"lair": "20"
+			},
 			"trait": [
 				{
 					"name": "Avoidance",
@@ -7470,6 +7494,101 @@
 				}
 			],
 			"page": 48
+		},
+		{
+			"name": "Acererak Demilich",
+			"size": "T",
+			"type": "undead",
+			"source": "MM",
+			"alignment": "neutral evil",
+			"ac": "20 (natural armor)",
+			"hp": "80 (20d4)",
+			"speed": "0 ft., fly 30 ft. (hover)",
+			"str": 1,
+			"dex": 20,
+			"con": 10,
+			"int": 20,
+			"wis": 17,
+			"cha": 20,
+			"save": "Con +6, Int +11, Wis +9, Cha +11",
+			"resist": "bludgeoning, piercing, and slashing from magic weapons",
+			"immune": "necrotic, poison, psychic, bludgeoning, piercing, and slashing from nonmagical attacks",
+			"conditionImmune": "charmed, deafened, exhaustion, frightened, paralyzed, petrified, poisoned, prone, stunned",
+			"senses": "truesight 120 ft.",
+			"passive": 13,
+			"cr": {
+				"cr": "21",
+				"lair": "23"
+			},
+			"trait": [
+				{
+					"name": "Avoidance",
+					"entries": [
+						"If the demilich is subjected to an effect that allows it to make a saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it fails."
+					]
+				},
+				{
+					"name": "Legendary Resistance (3/Day)",
+					"entries": [
+						"If the demilich fails a saving throw, it can choose to succeed instead."
+					]
+				},
+				{
+					"name": "Turn Immunity",
+					"entries": [
+						"The demilich is immune to effects that turn undead."
+					]
+				}
+			],
+			"action": [
+				{
+					"name": "Howl (Recharge 5\u20146)",
+					"entries": [
+						"The demilich emits a bloodcurdling howl. Each creature within 30 feet of the demilich that can hear the howl must succeed on a DC 15 Constitution saving throw or drop to 0 hit points. On a successful save, the creature is frightened until the end of its next turn."
+					]
+				},
+				{
+					"name": "Life Drain",
+					"entries": [
+						"The demilich targets up to three creatures that it can see within 10 feet of it. Each target must succeed on a DC 19 Constitution saving throw or take 21 (6d6) necrotic damage, and the demilich regains hit points equal to the total damage dealt to all targets."
+					]
+				},
+				{
+					"name": "Trap Soul",
+					"entries": [
+						"The demilich targets one creature that it can see within 30 feet of it. The target must make a DC 19 Charisma saving throw. On a failed save, the target's soul is magically trapped inside one of the demilich's gems. While the soul is trapped, the target's body and all the equipment it is carrying cease to exist. On a successful save, the target takes 24 (7d6) necrotic damage, and if this damage reduces the target to 0 hit points, its soul is trapped as if it failed the saving throw. A soul trapped in a gem for 24 hours is devoured and ceases to exist.",
+						"If the demilich drops to 0 hit points, it is destroyed and turns to powder, leaving behind its gems. Crushing a gem releases any soul trapped within, at which point the target's body re-forms in an unoccupied space nearest to the gem and in the same state as when it was trapped."
+					]
+				}
+			],
+			"legendaryGroup": "Demilich",
+			"legendary": [
+				{
+					"name": "Flight",
+					"entries": [
+						"The demilich flies up to half its flying speed."
+					]
+				},
+				{
+					"name": "Cloud of Dust",
+					"entries": [
+						"The demilich magically swirls its dusty remains. Each creature within 10 feet of the demilich, including around a corner, must succeed on a DC 15 Constitution saving throw or be blinded until the end of the demilich's next turn. A creature that succeeds on the saving throw is immune to this effect until the end of the demilich's next turn."
+					]
+				},
+				{
+					"name": "Energy Drain (Costs 2 Actions)",
+					"entries": [
+						"Each creature with in 30 feet of the demilich must make a DC 15 Constitution saving throw. On a failed save, the creature's hit point maximum is magically reduced by 10 (3d6). If a creature's hit point maximum is reduced to 0 by this effect, the creature dies. A creature's hit point maximum can be restored with the greater restoration spell or similar magic."
+					]
+				},
+				{
+					"name": "Vile Curse (Costs 3 Actions)",
+					"entries": [
+						"The demilich targets one creature it can see within 30 feet of it. The target must succeed on a DC 15 Wisdom saving throw or be magically cursed. Until the curse ends, the target has disadvantage on attack rolls and saving throws. The target can repeat the saving throw at the end of each of its turns, ending the curse on a success."
+					]
+				}
+			],
+			"page": 49
 		},
 		{
 			"name": "Deva",
@@ -8438,7 +8557,7 @@
 				{
 					"name": "Summon Demon (1/Day)",
 					"entries": [
-						"The drow magically summons a quasit, or attempts to summon a shadow demon with a 50 percent chance of success. The summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 10 minutes, until it or its summoner dies, or until its summoner dismisses it as an action."
+						"The drow magically summons a {@creature quasit}, or attempts to summon a {@creature shadow demon} with a {@chance 50|50 percent|50% summoning chance} chance of success. The summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 10 minutes, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}
 			],
@@ -8576,7 +8695,7 @@
 				{
 					"name": "Summon Demon (1/Day)",
 					"entries": [
-						"The drow attempts to magically summon a yochlol with a 30 percent chance of success. If the attempt fails, the drow takes 5 (1d10) psychic damage. Otherwise, the summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 10 minutes, until it or its summoner dies, or until its summoner dismisses it as an action."
+						"The drow attempts to magically summon a {@creature yochlol} with a {@chance 30|30 percent|30% summoning chance} chance of success. If the attempt fails, the drow takes 5 (1d10) psychic damage. Otherwise, the summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 10 minutes, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}
 			],
@@ -8996,7 +9115,7 @@
 				{
 					"name": "Variant: Summon Mephits (1/Day)",
 					"entries": [
-						"The mephit has a 25 percent chance of summoning 1d4 mephits of its kind. A summoned mephit appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other mephits. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
+						"The mephit has a {@chance 25|25 percent|25% summoning chance} chance of summoning 1d4 mephits of its kind. A summoned mephit appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other mephits. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}
 			],
@@ -10355,6 +10474,33 @@
 					]
 				}
 			],
+			"variant": [
+				{
+					"type": "variant",
+					"name": "New Giant Options",
+					"entries": [
+						"Some adult fire giants are trained to lay siege to strong­holds and break through enemy lines. These abilities are represented by the following traits.",
+						{
+						    "type": "entries",
+							"name": "Siege Monster",
+							"entries": [
+								"The giant deals double damage to objects and structures."
+							]
+						},
+						{
+						    "type": "entries",
+							"name": "Tackle",
+							"entries": [
+								"When the giant enters any enemy's space for the first time on a turn, the enemy must succeed on a DC 19 Strength saving throw or be knocked prone."
+							]
+						}
+					],
+					"variantSource": {
+						"source": "SKT",
+						"page": 245
+					}
+				}
+			],
 			"page": 154
 		},
 		{
@@ -10841,12 +10987,6 @@
 			"cr": "8",
 			"action": [
 				{
-					"name": "Weighted Net",
-					"entries": [
-						"Ranged Weapon Attack: +5 to hit, ranged 20/60 ft., one Small, Medium, or Large creature. Hit: The target is restrained until it escapes the net. Any creature can use its action to make a DC 17 Strength check to free itself or another creature in the net, ending the effect on a success. Dealing 15 slashing damage to the net (AC 12) destroys the net and frees the target."
-					]
-				},
-				{
 					"name": "Multiattack",
 					"entries": [
 						"The giant makes two greataxe attacks."
@@ -10863,6 +11003,26 @@
 					"entries": [
 						"Ranged Weapon Attack: +9 to hit, range 60/240 ft., one target. Hit: 28 (4d10+6) bludgeoning damage."
 					]
+				}
+			],
+			"variant": [
+				{
+					"type": "variant",
+					"name": "New Giant Options",
+					"entries": [
+						"Some adult frost giants are skilled hunters who con­struct and hurl nets weighted down with fragments of metal or bone. This ability is represented by the follow­ing action option.",
+						{
+							"name": "Weighted Net",
+							"type": "entries",
+							"entries": [
+								"Ranged Weapon Attack: +5 to hit, ranged 20/60 ft., one Small, Medium, or Large creature. Hit: The target is restrained until it escapes the net. Any creature can use its action to make a DC 17 Strength check to free itself or another creature in the net, ending the effect on a success. Dealing 15 slashing damage to the net (AC 12) destroys the net and frees the target."
+							]
+						}
+					],
+					"variantSource": {
+						"source": "SKT",
+						"page": 246
+					}
 				}
 			],
 			"page": 155
@@ -12848,7 +13008,7 @@
 					"name": "Variant: Summon Demon (1/Day)",
 					"entries": [
 						"The demon chooses what to summon and attempts a magical summoning.",
-						"A glabrezu has a 30 percent chance of summoning 1d3 vrocks, 1d2 hezrous, or one glabrezu.",
+						"A glabrezu has a {@chance 30|30 percent|30% summoning chance} chance of summoning 1d3 {@creature vrock}s, 1d2 {@creature hezrou}s, or one glabrezu.",
 						"A summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}
@@ -13789,7 +13949,10 @@
 			"senses": "darkvision 60 ft.",
 			"passive": 14,
 			"languages": "Common, Draconic, Sylvan",
-			"cr": "3",
+			"cr": {
+				"cr": "3",
+				"coven": "5"
+			},
 			"spellcasting": [
 				{
 					"name": "Innate Spellcasting",
@@ -14916,7 +15079,7 @@
 					"name": "Variant: Summon Demon (1/Day)",
 					"entries": [
 						"The demon chooses what to summon and attempts a magical summoning.",
-						"A hezrou has a 30 percent chance of summoning 2d6 dretches or one hezrou.",
+						"A hezrou has a {@chance 30|30 percent|30% summoning chance} chance of summoning 2d6 {@creature dretch}es or one hezrou.",
 						"A summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}
@@ -14946,12 +15109,6 @@
 			"cr": "5",
 			"action": [
 				{
-					"name": "Squash",
-					"entries": [
-						"Melee Weapon Attack: +8 to hit, reach 5 ft., one Medium or Smaller creature. Hit: 26 (6d6+5) bludgeoning damage, the giant lands prone in the target's space, and the target is grappled (escape DC 15). Until this grapple ends, the target is prone. The grapple ends early if the giant stands up."
-					]
-				},
-				{
 					"name": "Multiattack",
 					"entries": [
 						"The giant makes two greatclub attacks."
@@ -14968,6 +15125,26 @@
 					"entries": [
 						"Ranged Weapon Attack: +8 to hit, range 60/240 ft., one target. Hit: 21 (3d10+5) bludgeoning damage."
 					]
+				}
+			],
+			"variant": [
+				{
+					"type": "variant",
+					"name": "New Giant Options",
+					"entries": [
+						"Some adult hill giants like to hurl themselves bodily at smaller foes and crush them beneath their bulk. This ability is represented by the following action option.",
+						{
+							"name": "Squash",
+							"type": "entries",
+							"entries": [
+								"Melee Weapon Attack: +8 to hit, reach 5 ft., one Medium or Smaller creature. Hit: 26 (6d6+5) bludgeoning damage, the giant lands prone in the target's space, and the target is grappled (escape DC 15). Until this grapple ends, the target is prone. The grapple ends early if the giant stands up."
+							]
+						}
+					],
+					"variantSource": {
+						"source": "SKT",
+						"page": 246
+					}
 				}
 			],
 			"page": 155
@@ -15732,7 +15909,7 @@
 				{
 					"name": "Variant: Summon Mephits (1/Day)",
 					"entries": [
-						"The mephit has a 25 percent chance of summoning 1d4 mephits of its kind. A summoned mephit appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other mephits. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
+						"The mephit has a {@chance 30|30 percent|30% summoning chance} chance of summoning 1d4 mephits of its kind. A summoned mephit appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other mephits. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}
 			],
@@ -17019,7 +17196,10 @@
 			"senses": "truesight 120 ft.",
 			"passive": 19,
 			"languages": "Common plus up to five other languages",
-			"cr": "21",
+			"cr": {
+				"cr": "21",
+				"lair": "22"
+			},
 			"trait": [
 				{
 					"name": "Legendary Resistance (3/Day)",
@@ -17723,7 +17903,7 @@
 				{
 					"name": "Variant: Summon Mephits (1/Day)",
 					"entries": [
-						"The mephit has a 25 percent chance of summoning 1d4 mephits of its kind. A summoned mephit appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other mephits. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
+						"The mephit has a {@chance 25|25 percent|25% summoning chance} chance of summoning 1d4 mephits of its kind. A summoned mephit appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other mephits. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}
 			],
@@ -18091,7 +18271,7 @@
 					"name": "Variant: Summon Demon (1/Day)",
 					"entries": [
 						"The demon chooses what to summon and attempts a magical summoning.",
-						"A marilith has a 50 percent chance of summoning 1d6 vrocks, 1d4 hezrous, 1d3 glabrezus, 1d2 nalfeshnees, or one marilith.",
+						"A marilith has a {@chance 50|50 percent|50% summoning chance} chance of summoning 1d6 {@creature vrock}s, 1d4 {@creature hezrou}s, 1d3 {@creature glabrezu}s, 1d2 {@creature nalfeshnee}s, or one marilith.",
 						"A summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}
@@ -18379,7 +18559,7 @@
 					"name": "Variant: Summon Yugoloth (1/Day)",
 					"entries": [
 						"The yugoloth attempts a magical summoning.",
-						"A mezzoloth has a 30 percent chance of summoning one mezzoloth.",
+						"A mezzoloth has a {@chance 30|30 percent|30% summoning chance} chance of summoning one mezzoloth.",
 						"A summoned yugoloth appears in an unoccupied space within 60 feet of its summoner, does as it pleases, and can't summon other yugoloths. The summoned yugoloth remains for 1 minute, until it or its summoner dies, or until its summoner takes a bonus action to dismiss it."
 					]
 				}
@@ -18887,7 +19067,7 @@
 				{
 					"name": "Variant: Summon Mephits (1/Day)",
 					"entries": [
-						"The mephit has a 25 percent chance of summoning 1d4 mephits of its kind. A summoned mephit appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other mephits. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
+						"The mephit has a {@chance 25|25 percent|25% summoning chance} chance of summoning 1d4 mephits of its kind. A summoned mephit appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other mephits. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}
 			],
@@ -19005,7 +19185,10 @@
 			"senses": "darkvision 60 ft.",
 			"passive": 14,
 			"languages": "the languages it knew in life",
-			"cr": "15",
+			"cr": {
+				"cr": "15",
+				"lair": "16"
+			},
 			"trait": [
 				{
 					"name": "Magic Resistance",
@@ -19176,7 +19359,7 @@
 				{
 					"name": "Pacifying Spores (3/Day)",
 					"entries": [
-						"The myconid ejects spores at one creature it can see within 5 feet of it. The target must succeed on a DC 11 Constitution saving throw or be stunned for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+						"The myconid ejects spores at one creature it can see within 5 feet of it. The target must succeed on a DC 11 Constitution saving throw or be {@condition stunned} for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
 					]
 				},
 				{
@@ -19184,6 +19367,45 @@
 					"entries": [
 						"A 20-foot radius of spores extends from the myconid. These spores can go around corners and affect only creatures with an Intelligence of 2 or higher that aren't undead, constructs, or elementals. Affected creatures can communicate telepathically with one another while they are within 30 feet of each other. The effect lasts for 1 hour."
 					]
+				}
+			],
+			"variant": [
+				{
+					"type": "variant",
+					"name": "Zuggtomoy's Empowerment",
+					"entries": [
+						{
+							"type": "entries",
+							"entries": [
+								"Myconids that embrace {@creature Zuggtmoy|OotA} can develop new, more destructive kinds of spores. Myconid adults can have two of the following spore effects.",
+								{
+									"type": "entries",
+									"name": "Caustic Spores (1/ Day)",
+									"entries": [
+										"The myconid releases spores in a 30-foot cone. Each creature inside the cone must succeed on a DC 11 Dexterity saving throw or take 1d6 acid damage at the start of each of the myconid's turns. A creature can repeat the saving throw at the end of its turn, ending the effect on itself on a success. The save DC is 8 + the myconid's Constitution modifier + the myconid's proficiency bonus."
+									]
+								},
+								{
+									"type": "entries",
+									"name": "Infestation Spores (1/Day)",
+									"entries": [
+										"The myconid releases spores that burst out in a cloud that fills a 10-foot-radius sphere centered on it, and the cloud lingers for 1 minute. Any flesh-and-blood creature in the cloud when it appears, or that enters it later, must make a DC 11 Constitution saving throw. The save DC is 8 + the myconid's Constitution modifier + the myconid's proficiency bonus. On a successful save, the creature can't be infected by these spores for 24 hours. On a failed save, the creature is infected with a disease called the spores of Zuggtmoy) and also gains a random form of indefinite madness (determined by rolling on the Madness of {@creature Zuggtmoy|OotA} table) that lasts until the creature is cured of the disease or dies. While infected in this way, the creature can't be reinfected, and it must repeat the saving throw at the end of every 24 hours, ending the infection on a success. On a failure, the infected creature's body is slowly taken over by fungal growth, and after three such failed saves, the creature dies and is reanimated as a spore servant if it's a humanoid or a Large or smaller beast."
+									]
+								},
+								{
+									"type": "entries",
+									"name": "Euphoria Spores (1/ Day)",
+									"entries": [
+										"The myconid releases a cloud of spores in a 20-foot-radius sphere centered on itself. Other creatures in that area must each succeed on a DC 11 Constitution saving throw or become poisoned for 1 minute. The save DC is 8 + the myconid's Constitution modifier + the myconid's proficiency bonus. A creature can repeat the saving throw at the end of each of its turns, ending the effect early on itself on a success. When the effect ends on it, the creature gains one level of {@condition exhaustion}."
+									]
+								}
+							]
+						}
+					],
+					"variantSource": {
+						"source": "OotA",
+						"page": 228
+					}
 				}
 			],
 			"page": 232
@@ -19242,13 +19464,13 @@
 				{
 					"name": "Hallucination Spores",
 					"entries": [
-						"The myconid ejects spores at one creature it can see within 5 feet of it. The target must succeed on a DC 12 Constitution saving throw or be poisoned for 1 minute. The poisoned target is incapacitated while it hallucinates. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+						"The myconid ejects spores at one creature it can see within 5 feet of it. The target must succeed on a DC 12 Constitution saving throw or be {@condition poisoned} for 1 minute. The poisoned target is {@condition incapacitated} while it hallucinates. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
 					]
 				},
 				{
 					"name": "Pacifying Spores",
 					"entries": [
-						"The myconid ejects spores at one creature it can see within 5 feet of it. The target must succeed on a DC 12 Constitution saving throw or be stunned for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+						"The myconid ejects spores at one creature it can see within 5 feet of it. The target must succeed on a DC 12 Constitution saving throw or be {@condition stunned} for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
 					]
 				},
 				{
@@ -19256,6 +19478,45 @@
 					"entries": [
 						"A 30-foot radius of spores extends from the myconid. These spores can go around corners and affect only creatures with an Intelligence of 2 or higher that aren't undead, constructs, or elementals. Affected creatures can communicate telepathically with one another while they are within 30 feet of each other. The effect lasts for 1 hour."
 					]
+				}
+			],
+			"variant": [
+				{
+					"type": "variant",
+					"name": "Zuggtomoy's Empowerment",
+					"entries": [
+						{
+							"type": "entries",
+							"entries": [
+								"Myconids that embrace {@creature Zuggtmoy|OotA} can develop new, more destructive kinds of spores. Myconid sovereigns have all these spore effects.",
+								{
+									"type": "entries",
+									"name": "Caustic Spores (1/ Day)",
+									"entries": [
+										"The myconid releases spores in a 30-foot cone. Each creature inside the cone must succeed on a DC 12 Dexterity saving throw or take 1d6 acid damage at the start of each of the myconid's turns. A creature can repeat the saving throw at the end of its turn, ending the effect on itself on a success. The save DC is 8 + the myconid's Constitution modifier + the myconid's proficiency bonus."
+									]
+								},
+								{
+									"type": "entries",
+									"name": "Infestation Spores (1/Day)",
+									"entries": [
+										"The myconid releases spores that burst out in a cloud that fills a 10-foot-radius sphere centered on it, and the cloud lingers for 1 minute. Any flesh-and-blood creature in the cloud when it appears, or that enters it later, must make a DC 12 Constitution saving throw. The save DC is 8 + the myconid's Constitution modifier + the myconid's proficiency bonus. On a successful save, the creature can't be infected by these spores for 24 hours. On a failed save, the creature is infected with a disease called the spores of Zuggtmoy) and also gains a random form of indefinite madness (determined by rolling on the Madness of {@creature Zuggtmoy|OotA} table) that lasts until the creature is cured of the disease or dies. While infected in this way, the creature can't be reinfected, and it must repeat the saving throw at the end of every 24 hours, ending the infection on a success. On a failure, the infected creature's body is slowly taken over by fungal growth, and after three such failed saves, the creature dies and is reanimated as a spore servant if it's a humanoid or a Large or smaller beast."
+									]
+								},
+								{
+									"type": "entries",
+									"name": "Euphoria Spores (1/ Day)",
+									"entries": [
+										"The myconid releases a cloud of spores in a 20-foot-radius sphere centered on itself. Other creatures in that area must each succeed on a DC 12 Constitution saving throw or become poisoned for 1 minute. The save DC is 8 + the myconid's Constitution modifier + the myconid's proficiency bonus. A creature can repeat the saving throw at the end of each of its turns, ending the effect early on itself on a success. When the effect ends on it, the creature gains one level of {@condition exhaustion}."
+									]
+								}
+							]
+						}
+					],
+					"variantSource": {
+						"source": "OotA",
+						"page": 228
+					}
 				}
 			],
 			"page": 232
@@ -19379,7 +19640,7 @@
 					"name": "Variant: Summon Demon (1/Day)",
 					"entries": [
 						"The demon chooses what to summon and attempts a magical summoning.",
-						"A nalfeshnee has a 50 percent chance of summoning 1d4 vrocks, 1d3 hezrous, 1d2 glabrezus, or one nalfeshnee.",
+						"A nalfeshnee has a {@chance 50|50 percent|50% summoning chance} chance of summoning 1d4 {@creature vrock}s, 1d3 {@creature hezrou}s, 1d2 {@creature glabrezu}s, or one nalfeshnee.",
 						"A summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}
@@ -19448,7 +19709,10 @@
 			"senses": "darkvision 120 ft.",
 			"passive": 16,
 			"languages": "Abyssal, Common, Infernal, Primordial",
-			"cr": "5",
+			"cr": {
+				"cr": "5",
+				"coven": "7"
+			},
 			"trait": [
 				{
 					"name": "Magic Resistance",
@@ -19810,7 +20074,7 @@
 					"name": "Variant: Summon Yugoloth (1/Day)",
 					"entries": [
 						"The yugoloth chooses what to summon and attempts a magical summoning.",
-						"A nycaloth has a 50 percent chance of summoning 1d4 mezzoloths or one nycaloth.",
+						"A nycaloth has a {@chance 50|50 percent|50% summoning chance} chance of summoning 1d4 {@creature mezzoloth}s or one nycaloth.",
 						"A summoned yugoloth appears in an unoccupied space within 60 feet of its summoner, does as it pleases, and can't summon other yugoloths. The summoned yugoloth remains for 1 minute, until it or its summoner dies, or until its summoner takes a bonus action to dismiss it."
 					]
 				}
@@ -23198,7 +23462,10 @@
 			"senses": "darkvision 60 ft.",
 			"passive": 11,
 			"languages": "Aquan, Common, Giant",
-			"cr": "2",
+			"cr": {
+				"cr": "2",
+				"coven": "4"
+			},
 			"trait": [
 				{
 					"name": "Amphibious",
@@ -23794,7 +24061,7 @@
 				{
 					"name": "Variant: Summon Mephits (1/Day)",
 					"entries": [
-						"The mephit has a 25 percent chance of summoning 1d4 mephits of its kind. A summoned mephit appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other mephits. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
+						"The mephit has a {@chance 25|25 percent|25% summoning chance} chance of summoning 1d4 mephits of its kind. A summoned mephit appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other mephits. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}
 			],
@@ -24426,7 +24693,7 @@
 				{
 					"name": "Variant: Summon Mephits (1/Day)",
 					"entries": [
-						"The mephit has a 25 percent chance of summoning 1d4 mephits of its kind. A summoned mephit appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other mephits. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
+						"The mephit has a {@chance 25|25 percent|25% summoning chance} chance of summoning 1d4 mephits of its kind. A summoned mephit appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other mephits. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}
 			],
@@ -24506,18 +24773,6 @@
 			],
 			"action": [
 				{
-					"name": "Fling",
-					"entries": [
-						"The giant tries to throw a Small or Medium creature within 10 feet of it. The target must succeed on a DC 17 Dexterity saving throw or be hurled up to 60 feet horizontally in a direction of the giant's choice. and land prone, taking 1d6 bludgeoning damage for every 10 feet it was thrown."
-					]
-				},
-				{
-					"name": "Rolling Rock",
-					"entries": [
-						"The giant sends a rock tumbling along the ground in a 30-foot line that is 5 feet wide. Each creature in that line must make a DC 17 Dexterity saving throw, taking 22 (3d10+6) bludgeoning damage and falling prone on a failed save"
-					]
-				},
-				{
 					"name": "Multiattack",
 					"entries": [
 						"The giant makes two greatclub attacks."
@@ -24542,6 +24797,33 @@
 					"entries": [
 						"If a rock or similar object is hurled at the giant, the giant can, with a successful DC 10 Dexterity saving throw, catch the missile and take no bludgeoning damage from it."
 					]
+				}
+			],
+			"variant": [
+				{
+					"type": "variant",
+					"name": "New Giant Options",
+					"entries": [
+						"Some adult stone giants like to grab enemies and fling them through the air. They can also roll boulders across the ground, striking multiple enemies in a line. These abilities are represented by the following action options.",
+						{
+							"name": "Fling",
+							"type": "entries",
+							"entries": [
+								"The giant tries to throw a Small or Medium creature within 10 feet of it. The target must succeed on a DC 17 Dexterity saving throw or be hurled up to 60 feet horizontally in a direction of the giant's choice. and land prone, taking 1d6 bludgeoning damage for every 10 feet it was thrown."
+							]
+						},
+						{
+							"name": "Rolling Rock",
+							"type": "entries",
+							"entries": [
+								"The giant sends a rock tumbling along the ground in a 30-foot line that is 5 feet wide. Each creature in that line must make a DC 17 Dexterity saving throw, taking 22 (3d10+6) bludgeoning damage and falling prone on a failed save"
+							]
+						}
+					],
+					"variantSource": {
+						"source": "SKT",
+						"page": 246
+					}
 				}
 			],
 			"page": 156
@@ -24668,6 +24950,26 @@
 					"entries": [
 						"The giant hurls a magical lightning bolt at a point it can see within 500 feet of it. Each creature within 10 feet of that point must make a DC 17 Dexterity saving throw, taking 54 (12d8) lightning damage on a failed save, or half as much damage on a successful one."
 					]
+				}
+			],
+			"variant": [
+				{
+					"type": "variant",
+					"name": "New Giant Options",
+					"entries": [
+						"Some adult storm giants can channel thunderous power through their bodies and release it with a deafening stomp. This ability is represented by the following ac­ tion option.",
+						{
+						    "type": "entries",
+							"name": "Thunderous Stomp (Recharge 6)",
+							"entries": [
+								"The storm giant stomps the ground, triggering a thunderclap. All other creatures within 15 feet of the giant must succeed on a DC 17 Constitution saving throw or take 33 (6d10) thunder damage and be deafened until the start of the giant's next turn. On a successful save, a crea­ture takes half as much damage and isn't deafened. The thun­derclap can be heard out to a range of 1,200 feet."
+							]
+						}
+					],
+					"variantSource": {
+						"source": "SKT",
+						"page": 246
+					}
 				}
 			],
 			"page": 156,
@@ -26213,7 +26515,7 @@
 					"name": "Variant: Summon Yugoloth (1/Day)",
 					"entries": [
 						"The yugoloth chooses what to summon and attempts a magical summoning.",
-						"An ultroloth has a 50 percent chance of summoning 1d6 mezzoloths, 1d4 nycaloths, or one ultroloth.",
+						"An ultroloth has a {@chance 50|50 percent|50% summoning chance} chance of summoning 1d6 {@creature mezzoloth}s, 1d4 {@creature nycaloth}s, or one ultroloth.",
 						"A summoned yugoloth appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other yugoloths. The summoned yugoloth remains for 1 minute, until it or its summoner dies, or until its summoner takes a bonus action to dismiss it."
 					]
 				}
@@ -26526,7 +26828,7 @@
 				{
 					"name": "Children of the Night (1/Day)",
 					"entries": [
-						"The vampire magically calls 2d4 swarms of bats or rats, provided that the sun isn't up. While outdoors, the vampire can call 3d6 wolves instead. The called creatures arrive in 1d4 rounds, acting as allies of the vampire and obeying its spoken commands. The beasts remain for 1 hour, until the vampire dies, or until the vampire dismisses them as a bonus action."
+						"The vampire magically calls 2d4 swarms of {@creature swarm of bats|mm|bats} or {@creature swarm of rats|mm|rats}, provided that the sun isn't up. While outdoors, the vampire can call 3d6 {@creature wolf|mm|wolves} instead. The called creatures arrive in 1d4 rounds, acting as allies of the vampire and obeying its spoken commands. The beasts remain for 1 hour, until the vampire dies, or until the vampire dismisses them as a bonus action."
 					]
 				}
 			],
@@ -26595,10 +26897,10 @@
 					"name": "Vampire Weaknesses",
 					"entries": [
 						"The vampire has the following flaws:",
-						"Forbiddance. The vampire can't enter a residence without an invitation from one of the occupants.",
-						"Harmed by Running Water. The vampire takes 20 acid damage when it ends its turn in running water.",
-						"Stake to the Heart. The vampire is destroyed if a piercing weapon made of wood is driven into its heart while it is incapacitated in its resting place.",
-						"Sunlight Hypersensitivity. The vampire takes 20 radiant damage when it starts its turn in sunlight. While in sunlight, it has disadvantage on attack rolls and ability checks."
+						"{@i Forbiddance.} The vampire can't enter a residence without an invitation from one of the occupants.",
+						"{@i Harmed by Running Water.} The vampire takes 20 acid damage when it ends its turn in running water.",
+						"{@i Stake to the Heart.} The vampire is destroyed if a piercing weapon made of wood is driven into its heart while it is incapacitated in its resting place.",
+						"{@i Sunlight Hypersensitivity.} The vampire takes 20 radiant damage when it starts its turn in sunlight. While in sunlight, it has disadvantage on attack rolls and ability checks."
 					]
 				}
 			],
@@ -26692,10 +26994,10 @@
 					"name": "Vampire Weaknesses",
 					"entries": [
 						"The vampire has the following flaws:",
-						"Forbiddance. The vampire can't enter a residence without an invitation from one of the occupants.",
-						"Harmed by Running Water. The vampire takes 20 acid damage if it ends its turn in running water.",
-						"Stake to the Heart. If a piercing weapon made of wood is driven into the vampire's heart while the vampire is incapacitated in its resting place, the vampire is paralyzed until the stake is removed.",
-						"Sunlight Hypersensitivity. The vampire takes 20 radiant damage when it starts its turn in sunlight. While in sunlight, it has disadvantage on attack rolls and ability checks."
+						"{@i Forbiddance.} The vampire can't enter a residence without an invitation from one of the occupants.",
+						"{@i Harmed by Running Water.} The vampire takes 20 acid damage if it ends its turn in running water.",
+						"{@i Stake to the Heart.} If a piercing weapon made of wood is driven into the vampire's heart while the vampire is incapacitated in its resting place, the vampire is paralyzed until the stake is removed.",
+						"{@i Sunlight Hypersensitivity.} The vampire takes 20 radiant damage when it starts its turn in sunlight. While in sunlight, it has disadvantage on attack rolls and ability checks."
 					]
 				}
 			],
@@ -26728,7 +27030,7 @@
 				{
 					"name": "Children of the Night (1/Day)",
 					"entries": [
-						"The vampire magically calls 2d4 swarms of bats or rats, provided that the sun isn't up. While outdoors, the vampire can call 3d6 wolves instead. The called creatures arrive in 1d4 rounds, acting as allies of the vampire and obeying its spoken commands. The beasts remain for 1 hour, until the vampire dies, or until the vampire dismisses them as a bonus action."
+						"The vampire magically calls 2d4 swarms of {@creature swarm of bats|mm|bats} or {@creature swarm of rats|mm|rats}, provided that the sun isn't up. While outdoors, the vampire can call 3d6 {@creature wolf|mm|wolves} instead. The called creatures arrive in 1d4 rounds, acting as allies of the vampire and obeying its spoken commands. The beasts remain for 1 hour, until the vampire dies, or until the vampire dismisses them as a bonus action."
 					]
 				}
 			],
@@ -26877,10 +27179,10 @@
 					"name": "Vampire Weaknesses",
 					"entries": [
 						"The vampire has the following flaws:",
-						"Forbiddance. The vampire can't enter a residence without an invitation from one of the occupants.",
-						"Harmed by Running Water. The vampire takes 20 acid damage if it ends its turn in running water.",
-						"Stake to the Heart. If a piercing weapon made of wood is driven into the vampire's heart while the vampire is incapacitated in its resting place, the vampire is paralyzed until the stake is removed.",
-						"Sunlight Hypersensitivity. The vampire takes 20 radiant damage when it starts its turn in sunlight. While in sunlight, it has disadvantage on attack rolls and ability checks."
+						"{@i Forbiddance.} The vampire can't enter a residence without an invitation from one of the occupants.",
+						"{@i Harmed by Running Water.} The vampire takes 20 acid damage if it ends its turn in running water.",
+						"{@i Stake to the Heart.} If a piercing weapon made of wood is driven into the vampire's heart while the vampire is incapacitated in its resting place, the vampire is paralyzed until the stake is removed.",
+						"{@i Sunlight Hypersensitivity.} The vampire takes 20 radiant damage when it starts its turn in sunlight. While in sunlight, it has disadvantage on attack rolls and ability checks."
 					]
 				}
 			],
@@ -26904,6 +27206,12 @@
 					]
 				},
 				{
+					"name": "Greatsword",
+					"entries": [
+						"Melee Weapon Attack: +9 to hit, reach 5 ft., one creature. Hit: 11 (2d6+4) slashing damage."
+					]
+				},
+				{
 					"name": "Bite (Bat or Vampire Form Only)",
 					"entries": [
 						"Melee Weapon Attack: +9 to hit, reach 5 ft., one willing creature, or a creature that is grappled by the vampire, incapacitated, or restrained. Hit: 7 (1d6+4) piercing damage plus 10 (3d6) necrotic damage. The target's hit point maximum is reduced by an amount equal to the necrotic damage taken, and the vampire regains hit points equal to that amount. The reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0. A humanoid slain in this way and then buried in the ground rises the following night as a vampire spawn under the vampire's control."
@@ -26919,13 +27227,7 @@
 				{
 					"name": "Children of the Night (1/Day)",
 					"entries": [
-						"The vampire magically calls 2d4 swarms of bats or rats, provided that the sun isn't up. While outdoors, the vampire can call 3d6 wolves instead. The called creatures arrive in 1d4 rounds, acting as allies of the vampire and obeying its spoken commands. The beasts remain for 1 hour, until the vampire dies, or until the vampire dismisses them as a bonus action."
-					]
-				},
-				{
-					"name": "Greatsword",
-					"entries": [
-						"Melee Weapon Attack: +9 to hit, reach 5 ft., one creature. Hit: 11 (2d6+4) slashing damage."
+						"The vampire magically calls 2d4 swarms of {@creature swarm of bats|mm|bats} or {@creature swarm of rats|mm|rats}, provided that the sun isn't up. While outdoors, the vampire can call 3d6 {@creature wolf|mm|wolves} instead. The called creatures arrive in 1d4 rounds, acting as allies of the vampire and obeying its spoken commands. The beasts remain for 1 hour, until the vampire dies, or until the vampire dismisses them as a bonus action."
 					]
 				}
 			],
@@ -27168,7 +27470,7 @@
 					"name": "Variant: Summon Demon (1/Day)",
 					"entries": [
 						"The demon chooses what to summon and attempts a magical summoning.",
-						"A vrock has a 30 percent chance of summoning 2d4 dretches or one vrock.",
+						"A vrock has a {@chance 30|30 percent|30% summoning chance} chance of summoning 2d4 {@creature dretch}es or one vrock.",
 						"A summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}
@@ -28479,7 +28781,7 @@
 					"name": "Variant: Summon Demon (1/Day)",
 					"entries": [
 						"The demon chooses what to summon and attempts a magical summoning.",
-						"A yochlol has a 50 percent chance of summoning one yochlol.",
+						"A yochlol has a {@chance 50|50 percent|50% summoning chance} chance of summoning one yochlol.",
 						"A summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
 					]
 				}

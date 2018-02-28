@@ -142,7 +142,7 @@ function handleFilterChange () {
 		return filterBox.toDisplay(
 			f,
 			m.source,
-			m.cr,
+			m._pCr,
 			m.size,
 			m._pTypes.type,
 			m._pTypes.tags,
@@ -163,7 +163,7 @@ function addMonsters (data) {
 	for (; mI < monsters.length; mI++) {
 		const mon = monsters[mI];
 		mon._pTypes = Parser.monTypeToFullObj(mon.type); // store the parsed type
-		mon.cr = mon.cr === undefined ? "Unknown" : mon.cr;
+		mon._pCr = mon.cr === undefined ? "Unknown" : (mon.cr.cr || mon.cr);
 
 		const abvSource = Parser.sourceJsonToAbv(mon.source);
 
@@ -173,12 +173,12 @@ function addMonsters (data) {
 					<span class="name col-xs-4 col-xs-4-2">${mon.name}</span>
 					<span title="${Parser.sourceJsonToFull(mon.source)}" class="col-xs-2 source source${abvSource}">${abvSource}</span>
 					<span class="type col-xs-4 col-xs-4-1">${mon._pTypes.asText.uppercaseFirst()}</span>
-					<span class="col-xs-1 col-xs-1-7 text-align-center cr">${mon.cr}</span>
+					<span class="col-xs-1 col-xs-1-7 text-align-center cr">${mon._pCr}</span>
 				</a>
 			</li>`;
 
 		// populate filters
-		crFilter.addIfAbsent(mon.cr);
+		crFilter.addIfAbsent(mon._pCr);
 		mon._pTypes.tags.forEach(t => tagFilter.addIfAbsent(t));
 		mon._fMisc = mon.legendary || mon.legendaryGroup ? ["Legendary"] : [];
 		if (mon.familiar) mon._fMisc.push("Familiar");
@@ -210,7 +210,7 @@ function sortMonsters (a, b, o) {
 	if (o.valueName === "name") return SortUtil.ascSort(a.name, b.name);
 	if (o.valueName === "type") return SortUtil.ascSort(a._pTypes.asText, b._pTypes.asText);
 	if (o.valueName === "source") return SortUtil.ascSort(a.source, b.source);
-	if (o.valueName === "cr") return ascSortCr(a.cr, b.cr);
+	if (o.valueName === "cr") return ascSortCr(a._pCr, b._pCr);
 	return 0;
 }
 
@@ -332,7 +332,7 @@ function loadhash (id) {
 		$("td span#senses").html("");
 	}
 
-	$("td span#pp").html(mon.passive)
+	$("td span#pp").html(mon.passive);
 
 	var languages = mon.languages;
 	if (languages) {
@@ -341,19 +341,12 @@ function loadhash (id) {
 		$("td span#languages").html("\u2014");
 	}
 
-	var cr = mon.cr;
-	$("td span#cr").html(cr);
-	$("td span#xp").html(Parser.crToXp(cr));
+	$("td span#cr").html(Parser.monCrToFull(mon.cr));
 
-	var trait = mon.trait;
 	$("tr.trait").remove();
 
+	let trait = EntryRenderer.monster.getOrderedTraits(mon, renderer);
 	if (trait) renderSection("trait", "trait", trait, 1);
-
-	if (mon.spellcasting) {
-		const spellcastingString = EntryRenderer.monster.getSpellcastingRenderedString(mon, renderer);
-		$(`tr#traits`).after(`<tr class='trait'><td colspan='6'>${utils_makeRoller(spellcastingString)}</td></tr>`);
-	}
 
 	const action = mon.action;
 	$("tr#actions").hide();
@@ -377,7 +370,23 @@ function loadhash (id) {
 		variantSect.show();
 	}
 
-	$(`#source`).append(EntryRenderer.utils.getPageTr(mon));
+	const srcCpy = {
+		source: mon.source,
+		page: mon.page
+	};
+	const additional = mon.additionalSources ? JSON.parse(JSON.stringify(mon.additionalSources)) : [];
+	if (mon.variant && mon.variant.length > 1) {
+		mon.variant.forEach(v => {
+			if (v.variantSource) {
+				additional.push({
+					source: v.variantSource.source,
+					page: v.variantSource.page
+				})
+			}
+		})
+	}
+	srcCpy.additionalSources = additional;
+	$(`#source`).append(EntryRenderer.utils.getPageTr(srcCpy));
 
 	const legendary = mon.legendary;
 	$("tr#legendaries").hide();
@@ -405,7 +414,10 @@ function loadhash (id) {
 		$(`tr#${pluralSectionTrClass}`).show();
 		entryList = {type: "entries", entries: sectionEntries};
 		renderStack = [];
-		renderer.recursiveEntryRender(entryList, renderStack, sectionLevel);
+		sectionEntries.forEach(e => {
+			if (e.rendered) renderStack.push(e.rendered);
+			else renderer.recursiveEntryRender(e, renderStack, sectionLevel + 1);
+		})
 		$(`tr#${pluralSectionTrClass}`).after(`<tr class='${sectionTrClass}'><td colspan='6' class='${sectionTdClass}'>${renderStack.join("")}</td></tr>`);
 	}
 
@@ -550,7 +562,10 @@ function loadhash (id) {
 	}
 
 	$(".spells span.roller").contents().unwrap();
-	$("#pagecontent").find("span.roller").click(function () {
+	$("#pagecontent").find("span.roller").filter((i, e) => {
+		const $e = $(e);
+		return !$e.prop("onclick");
+	}).click(function () {
 		const $this = $(this);
 		outputRollResult($this, $this.attr("data-roll").replace(/\s+/g, ""));
 	});

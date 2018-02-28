@@ -589,6 +589,19 @@
 							"items": {
 								"$ref": "/Entry"
 							}
+						},
+						"variantSource": {
+							"type": "object",
+							"properties": {
+								"source": {
+									"type": "string"
+								},
+								"page": {
+									"type": "integer"
+								}
+							},
+							"required": ["source", "page"],
+							"additionalProperties": false
 						}
 					},
 					"required": ["name", "entries"]
@@ -622,6 +635,24 @@
 				{
 					"properties": {
 						"type": {"const": "item"},
+						"name": {
+							"type": "string"
+						},
+						"entry": {
+							"$ref": "/Entry"
+						}
+					},
+					"required": ["name", "entry"],
+					"additionalProperties": false
+				}
+			]
+		},
+		"entryItemSpell": {
+			"allOf" : [
+				{"$ref" : "#/definitions/entry"},
+				{
+					"properties": {
+						"type": {"const": "itemSpell"},
 						"name": {
 							"type": "string"
 						},
