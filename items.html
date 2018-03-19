@@ -13,8 +13,6 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="icon" href="favicon.png">
 
-	<style id="dynamicStyle"></style> <!-- populated with JS -->
-
 	<script type="text/javascript" src="lib/js-cookie.js"></script>
 	<script type="text/javascript" src="js/styleswitch.js"></script>
 	<script type="text/javascript" src="js/navigation.js"></script>
@@ -85,16 +83,10 @@
 					</span>
 			</div>
 			<div id="filtertools" class="sortlabel btn-group">
-				<button class="col-xs-4 sort btn btn-default btn-xs" type="button" data-sort="name" data-sortby="asc">Name
-				</button>
-				<button class="col-xs-4 col-xs-4-3 sort btn btn-default btn-xs" type="button" data-sort="type" data-sortby="asc">
-					Type
-				</button>
-				<button class="col-xs-1 col-xs-1-7 sort btn btn-default btn-xs" type="button" data-sort="source"
-						data-sortby="asc">Source
-				</button>
-				<button class="col-xs-2 sort btn btn-default btn-xs" type="button" data-sort="rarity" data-sortby="asc">Rarity
-				</button>
+				<button class="col-xs-4 sort btn btn-default btn-xs" type="button" data-sort="name" data-sortby="asc">Name</button>
+				<button class="col-xs-4 col-xs-4-3 sort btn btn-default btn-xs" type="button" data-sort="type" data-sortby="asc">Type</button>
+				<button class="col-xs-1 col-xs-1-7 sort btn btn-default btn-xs" type="button" data-sort="source" data-sortby="asc">Source</button>
+				<button class="col-xs-2 sort btn btn-default btn-xs" type="button" data-sort="rarity" data-sortby="asc">Rarity</button>
 			</div>
 
 
@@ -106,12 +98,33 @@
 		</div>
 
 		<div id="contentwrapper" class="view-col">
+			<div id="sublistcontainer">
+				<div id="sublistsort" class="sortlabel btn-group">
+					<button class="col-xs-6 sort btn btn-default btn-xs" data-sort="name">Name</button>
+					<button class="col-xs-2 sort btn btn-default btn-xs" data-sort="weight">Weight</button>
+					<button class="col-xs-2 sort btn btn-default btn-xs" data-sort="cost">Cost</button>
+					<button class="col-xs-2 sort btn btn-default btn-xs" data-sort="count">Number</button>
+				</div>
+				<ul class="list subitems">
+					<!-- populate with JS -->
+				</ul>
+				<div class="row">
+					<span class="col-xs-6 text-align-right">Total:</span>
+					<span class="col-xs-2 text-align-center no-wrap" id="totalweight"></span>
+					<span class="col-xs-2 text-align-center no-wrap" id="totalvalue"></span>
+				</div>
+			</div>
+
+			<div class="wrp-stat-tab">
+				<div id="tabs-right"></div>
+			</div>
+
 			<table id="pagecontent" class="stats">
 				<tr>
 					<th class="border" colspan="6"></th>
 				</tr>
 				<tr>
-					<th class="name" colspan="6">Name</th>
+					<th id="name" class="name" colspan="6">Name</th>
 				</tr>
 				<tr>
 					<td id="typerarityattunement" class="typerarityattunement" colspan="6"><span

@@ -962,14 +962,15 @@
 					"type": "entries",
 					"name": "Sympathy",
 					"entries": [
-						"The enchantment causes the specified creatures to feel an intense urge to approach the target while within 60 feet of it or able to see it. When such a creature can see the target or comes within 60 feet of it, the creature must succeed on a Wisdom saving throw or use its movement on each of its turns to enter the area or move within reach of the target. When the creature has done so, it can't willingly move away from the target. If the target damages or otherwise harms an affected creature, the affected creature can make a Wisdom saving throw to end the effect, as described below."
+						"The enchantment causes the specified creatures to feel an intense urge to approach the target while within 60 feet of it or able to see it. When such a creature can see the target or comes within 60 feet of it, the creature must succeed on a Wisdom saving throw or use its movement on each of its turns to enter the area or move within reach of the target. When the creature has done so, it can't willingly move away from the target.",
+						"If the target damages or otherwise harms an affected creature, the affected creature can make a Wisdom saving throw to end the effect, as described below."
 					]
 				},
 				{
 					"type": "entries",
 					"name": "Ending the Effect",
 					"entries": [
-						"If an affected creature ends its turn while not within 60 feet of the target or able to see it, the creature makes a Wisdom saving throw. ON a successful save, the creature is no longer affected by the target and recognizes the feeling of repugnance or attraction as magical. In addition, a creature affected by the spells is allowed another Wisdom saving throw every 24 hours while the spell persists."
+						"If an affected creature ends its turn while not within 60 feet of the target or able to see it, the creature makes a Wisdom saving throw. On a successful save, the creature is no longer affected by the target and recognizes the feeling of repugnance or attraction as magical. In addition, a creature affected by the spells is allowed another Wisdom saving throw every 24 hours while the spell persists."
 					]
 				},
 				"A creature that successfully saves against this effect is immune to it for 1 minute, after which time it can be affected again."
@@ -2605,6 +2606,16 @@
 						"subclass": {
 							"name": "Divine Soul",
 							"source": "XGE"
+						}
+					},
+					{
+						"class": {
+							"name": "Cleric",
+							"source": "PHB"
+						},
+						"subclass": {
+							"name": "Order (Stream)",
+							"source": "Stream"
 						}
 					}
 				]
@@ -4311,6 +4322,16 @@
 							"name": "Conquest",
 							"source": "XGE"
 						}
+					},
+					{
+						"class": {
+							"name": "Cleric",
+							"source": "PHB"
+						},
+						"subclass": {
+							"name": "Order (Stream)",
+							"source": "Stream"
+						}
 					}
 				]
 			},
@@ -4424,6 +4445,16 @@
 						"subclass": {
 							"name": "Raven Queen (UA)",
 							"source": "UAWarlockAndWizard"
+						}
+					},
+					{
+						"class": {
+							"name": "Cleric",
+							"source": "PHB"
+						},
+						"subclass": {
+							"name": "Order (Stream)",
+							"source": "Stream"
 						}
 					}
 				]
@@ -8435,6 +8466,16 @@
 							"name": "Strength (PSA)",
 							"source": "PSA"
 						}
+					},
+					{
+						"class": {
+							"name": "Cleric",
+							"source": "PHB"
+						},
+						"subclass": {
+							"name": "Order (Stream)",
+							"source": "Stream"
+						}
 					}
 				]
 			},
@@ -8666,6 +8707,16 @@
 						"subclass": {
 							"name": "Ambition (PSA)",
 							"source": "PSA"
+						}
+					},
+					{
+						"class": {
+							"name": "Cleric",
+							"source": "PHB"
+						},
+						"subclass": {
+							"name": "Order (Stream)",
+							"source": "Stream"
 						}
 					}
 				]
@@ -10414,7 +10465,7 @@
 				"ritual": true
 			},
 			"entries": [
-				"You gain the service of a familiar, a spirit that takes an animal form you choose: bat, cat, crab, frog (toad), hawk, lizard, octopus, owl, poisonous snake, fish (quipper), rat, raven, sea horse, spider, or weasel. Appearing in an unoccupied space within range, the familiar has the statistics of the chosen form, though it is a celestial, fey or fiend (your choice) instead of a beast.",
+				"You gain the service of a familiar, a spirit that takes an animal form you choose: {@creature bat}, {@creature cat}, {@creature crab}, {@creature frog} (toad), {@creature hawk}, {@creature lizard}, {@creature octopus}, {@creature owl}, {@creature poisonous snake}, fish ({@creature quipper}), {@creature rat}, {@creature raven}, {@creature sea horse}, {@creature spider}, or {@creature weasel}. Appearing in an unoccupied space within range, the familiar has the statistics of the chosen form, though it is a celestial, fey or fiend (your choice) instead of a beast.",
 				"Your familiar acts independently of you, but it always obeys your commands. In combat, it rolls its own initiative and acts on its own turn. A familiar can't attack, but it can take other actions as normal.",
 				"When the familiar drops to 0 hit points, it disappears, leaving behind no physical form. It reappears after you cast this spell again. While your familiar is within 100 feet of you, you can communicate with it telepathically. Additionally, as an action, you can see through your familiar's eyes and hear what it hears until the start of your next turn, gaining the benefits of any special senses that the familiar has. During this time, you are deaf and blind with regard to your own senses.",
 				"As an action, you can temporarily dismiss your familiar. It disappears into a pocket dimension where it awaits you summons. Alternatively, you can dismiss it forever. As an action while it is temporarily dismissed, you can cause it to reappear in any unoccupied space within 30 feet of you.",
@@ -12868,6 +12919,16 @@
 							"name": "Celestial",
 							"source": "XGE"
 						}
+					},
+					{
+						"class": {
+							"name": "Cleric",
+							"source": "PHB"
+						},
+						"subclass": {
+							"name": "Order (Stream)",
+							"source": "Stream"
+						}
 					}
 				]
 			},
@@ -14241,6 +14302,10 @@
 						"source": "PHB"
 					},
 					{
+						"name": "Warlock",
+						"source": "PHB"
+					},
+					{
 						"name": "Wizard",
 						"source": "PHB"
 					}
@@ -14315,6 +14380,16 @@
 						"subclass": {
 							"name": "Redemption",
 							"source": "XGE"
+						}
+					},
+					{
+						"class": {
+							"name": "Cleric",
+							"source": "PHB"
+						},
+						"subclass": {
+							"name": "Order (Stream)",
+							"source": "Stream"
 						}
 					}
 				]
@@ -17109,6 +17184,18 @@
 					{
 						"name": "Cleric",
 						"source": "PHB"
+					}
+				],
+				"fromSubclass": [
+					{
+						"class": {
+							"name": "Cleric",
+							"source": "PHB"
+						},
+						"subclass": {
+							"name": "Order (Stream)",
+							"source": "Stream"
+						}
 					}
 				]
 			},
@@ -20657,7 +20744,7 @@
 			},
 			"source": "PHB",
 			"entries": [
-				"You touch a creature. If it is {@condition poisoned}, you neutralize the poison. If more than one poison afflicts the target, you neutralize on poison that you know is present, or you neutralize one at random.",
+				"You touch a creature. If it is {@condition poisoned}, you neutralize the poison. If more than one poison afflicts the target, you neutralize one poison that you know is present, or you neutralize one at random.",
 				"For the duration, the target has advantage on saving throws against being {@condition poisoned}, and it has resistance to poison damage."
 			],
 			"page": 270,
@@ -23356,6 +23443,16 @@
 							"name": "Protection (UA)",
 							"source": "UAClericDivineDomains"
 						}
+					},
+					{
+						"class": {
+							"name": "Cleric",
+							"source": "PHB"
+						},
+						"subclass": {
+							"name": "Order (Stream)",
+							"source": "Stream"
+						}
 					}
 				]
 			},
@@ -23808,7 +23905,7 @@
 			"source": "PHB",
 			"entries": [
 				"The ground in a 20-foot radius centered on a point within range twists and sprouts hard spikes and thorns. The area becomes difficult terrain for the duration. When a creature moves into or within the area, it takes {@dice 2d4} piercing damage for every 5 feet it travels.",
-				"The transformation of the ground is camouflaged to look natural. Any creature that can't see the area at the time the spell is case must make a Wisdom (Perception) check against your spell save DC to recognize the terrain as hazardous before entering it."
+				"The transformation of the ground is camouflaged to look natural. Any creature that can't see the area at the time the spell is cast must make a Wisdom (Perception) check against your spell save DC to recognize the terrain as hazardous before entering it."
 			],
 			"page": 277,
 			"damageInflict": [
@@ -23999,6 +24096,16 @@
 						"subclass": {
 							"name": "Conquest",
 							"source": "XGE"
+						}
+					},
+					{
+						"class": {
+							"name": "Cleric",
+							"source": "PHB"
+						},
+						"subclass": {
+							"name": "Order (Stream)",
+							"source": "Stream"
 						}
 					}
 				]

@@ -137,6 +137,16 @@ function EntryRenderer () {
 					this._subVariant = false;
 					break;
 				}
+				case "quote":
+					textStack.push(`<p><i>`);
+					for (let i = 0; i < entry.entries.length; i++) {
+						this.recursiveEntryRender(entry.entries[i], textStack);
+						if (i !== entry.entries.length - 1) textStack.push(`<br>`);
+						else textStack.push(`</i>`);
+					}
+					textStack.push(`<span class="quote-by">\u2014 ${entry.by}${entry.from ? `, <i>${entry.from}</i>` : ""}</span>`);
+					textStack.push(`</p>`);
+					break;
 
 				case "invocation":
 					handleInvocation(this);
@@ -605,7 +615,11 @@ function EntryRenderer () {
 								break;
 							case "@class": {
 								if (others.length) {
-									fauxEntry.href.subhashes = [{"key": "sub", "value": others[0].trim() + "~phb"}] // TODO pass this in
+									const scSource = others.length > 1 ? `~${others[1].trim()}` : "~phb";
+									fauxEntry.href.subhashes = [{"key": "sub", "value": others[0].trim() + scSource}];
+									if (others.length > 2) {
+										fauxEntry.href.subhashes.push({key: "f", value: others[2].trim()})
+									}
 								}
 								fauxEntry.href.path = "classes.html";
 								if (!source) fauxEntry.href.hash += HASH_LIST_SEP + SRC_PHB;
@@ -779,13 +793,19 @@ EntryRenderer.utils = {
 		return `<tr><th class="border" colspan="6"></th></tr>`;
 	},
 
+	getDividerTr: () => {
+		return `<tr><td class="divider" colspan="6"><div></div></td></tr>`;
+	},
+
 	getNameTr: (it, addPageNum, prefix, suffix) => {
 		return `<tr>
 					<th class="name" colspan="6">
-						<span class="stats-name">${prefix || ""}${it.name}${suffix || ""}</span>
-						<span class="stats-source source${it.source}" title="${Parser.sourceJsonToAbv(it.source)}">
-							${Parser.sourceJsonToAbv(it.source)}${addPageNum && it.page ? ` p${it.page}` : ""}
-						</span>
+						<div class="name-inner">
+							<span class="stats-name">${prefix || ""}${it.name}${suffix || ""}</span>
+							<span class="stats-source source${it.source}" title="${Parser.sourceJsonToAbv(it.source)}">
+								${Parser.sourceJsonToAbv(it.source)}${addPageNum && it.page ? ` p${it.page}` : ""}
+							</span>
+						</div>
 					</th>
 				</tr>`;
 	},
@@ -797,6 +817,55 @@ EntryRenderer.utils = {
 	_getPageTrText: (it) => {
 		const addSourceText = it.additionalSources && it.additionalSources.length ? `. Additional information from ${it.additionalSources.map(as => `<i title="${Parser.sourceJsonToFull(as.source)}">${Parser.sourceJsonToAbv(as.source)}</i>, page ${as.page}`).join("; ")}.` : "";
 		return it.page ? `<b>Source: </b> <i title="${Parser.sourceJsonToFull(it.source)}">${Parser.sourceJsonToAbv(it.source)}</i>, page ${it.page}${addSourceText}` : ""
+	},
+
+	tabButton: (label, funcChange, funcPopulate) => {
+		return {
+			label: label,
+			funcChange: funcChange,
+			funcPopulate: funcPopulate
+		};
+	},
+
+	_tabs: {},
+	_curTab: null,
+	bindTabButtons: (...tabButtons) => {
+		EntryRenderer._tabs = {};
+		EntryRenderer._curTab = null;
+
+		const $content = $("#pagecontent");
+		const $wrpTab = $(`#stat-tabs`);
+
+		$wrpTab.find(`.stat-tab-gen`).remove();
+		EntryRenderer.utils._tabs[tabButtons[0].label] = tabButtons[0];
+		EntryRenderer.utils._curTab = tabButtons[0];
+
+		const toAdd = tabButtons.map((tb, i) => {
+			const $t = $(`<span class="stat-tab ${i === 0 ? `stat-tab-sel` : ""} btn btn-default stat-tab-gen">${tb.label}</span>`);
+			tb.$t = $t;
+			$t.click(() => {
+				const curTab = EntryRenderer.utils._curTab;
+				const tabs = EntryRenderer.utils._tabs;
+
+				if (curTab.label !== tb.label) {
+					EntryRenderer.utils._curTab.$t.removeClass(`stat-tab-sel`);
+					EntryRenderer.utils._curTab = tb;
+					$t.addClass(`stat-tab-sel`);
+					tabs[curTab.label].content = $content.children().detach();
+
+					tabs[tb.label] = tb;
+					if (!tabs[tb.label].content && tb.funcPopulate) {
+						tb.funcPopulate();
+					} else {
+						$content.append(tabs[tb.label].content);
+					}
+					if (tb.funcChange) tb.funcChange();
+				}
+			});
+			return $t;
+		});
+
+		toAdd.reverse().forEach($t => $wrpTab.prepend($t));
 	}
 };
 
@@ -988,7 +1057,7 @@ EntryRenderer.spell = {
 			<tr><td class="range" colspan="6"><span class="bold">Range: </span>${Parser.spRangeToFull(spell.range)}</td></tr>
 			<tr><td class="components" colspan="6"><span class="bold">Components: </span>${Parser.spComponentsToFull(spell.components)}</td></tr>
 			<tr><td class="range" colspan="6"><span class="bold">Duration: </span>${Parser.spDurationToFull(spell.duration)}</td></tr>
-			<tr><td class="divider" colspan="6"><div></div></td></tr>
+			${EntryRenderer.utils.getDividerTr()}
 		`);
 
 		const entryList = {type: "entries", entries: spell.entries};
@@ -1094,24 +1163,7 @@ EntryRenderer.reward = {
 	getRenderedString: (reward) => {
 		const renderer = EntryRenderer.getDefaultRenderer();
 		const renderStack = [];
-
-		if (reward.type === "Demonic Boon") {
-			const benefits = {type: "list", style: "list-hang-notitle", items: []};
-			benefits.items.push({
-				type: "item",
-				name: "Ability Score Adjustment:",
-				entry: reward.ability ? reward.ability.entry : "None"
-			});
-			benefits.items.push({
-				type: "item",
-				name: "Signature Spells:",
-				entry: reward.signaturespells ? reward.signaturespells.entry : "None"
-			});
-			renderer.recursiveEntryRender(benefits, renderStack, 1);
-		}
-
 		renderer.recursiveEntryRender({entries: reward.entries}, renderStack, 1);
-
 		return `<tr class='text'><td colspan='6'>${renderStack.join("")}</td></tr>`;
 	},
 
@@ -1141,7 +1193,7 @@ EntryRenderer.race = {
 					<tr>
 						<td class="text-align-center">${ability.asText}</td>
 						<td class="text-align-center">${Parser.sizeAbvToFull(race.size)}</td>
-						<td class="text-align-center">${EntryRenderer.race.getSpeedString(race)}</td>
+						<td class="text-align-center">${Parser.getSpeedString(race)}</td>
 					</tr>
 				</table>
 			</td></tr>
@@ -1151,19 +1203,6 @@ EntryRenderer.race = {
 		renderStack.push("</td></tr>");
 
 		return renderStack.join("");
-	},
-
-	getSpeedString: (race) => {
-		let speed;
-		if (race.speed.walk) {
-			speed = race.speed.walk + "ft.";
-			if (race.speed.climb) speed += `, climb ${race.speed.climb}ft.`;
-			if (race.speed.fly) speed += `, fly ${race.speed.fly}ft.`;
-			if (race.speed.swim) speed += `, swim ${race.speed.swim}ft.`;
-		} else {
-			speed = race.speed + (race.speed === "Varies" ? "" : "ft. ");
-		}
-		return speed;
 	},
 
 	mergeSubraces: (races) => {
@@ -1181,6 +1220,8 @@ EntryRenderer.race = {
 
 			srCopy.forEach(s => {
 				const cpy = JSON.parse(JSON.stringify(race));
+				cpy._baseName = cpy.name;
+				cpy._baseSource = cpy.source;
 				delete cpy.subraces;
 
 				// merge names, abilities, entries
@@ -1252,9 +1293,9 @@ EntryRenderer.object = {
 					</tr>
 					<tr>
 						<td class="text-align-center">${Parser.sizeAbvToFull(obj.size)} object</td>					
-						<td class="text-align-center">${obj.ac}</td>					
-						<td class="text-align-center">${obj.hp}</td>					
-						<td class="text-align-center">${obj.immune}</td>					
+						<td class="text-align-center">${obj.ac}</td>
+						<td class="text-align-center">${obj.hp}</td>
+						<td class="text-align-center">${obj.immune}</td>
 					</tr>
 				</table>			
 			</td></tr>
@@ -1303,7 +1344,7 @@ EntryRenderer.monster = {
 					<tr>
 						<td>${mon.ac}</td>					
 						<td>${mon.hp}</td>					
-						<td>${mon.speed}</td>					
+						<td>${Parser.getSpeedString(mon)}</td>					
 						<td>${Parser.monCrToFull(mon.cr)}</td>					
 					</tr>
 				</table>			
@@ -1477,16 +1518,15 @@ EntryRenderer.item = {
 		renderStack.push(`<tr><td class="typerarityattunement" colspan="6">${item.typeText}${`${item.tier ? `, ${item.tier}` : ""}${item.rarity ? `, ${item.rarity}` : ""}`} ${item.reqAttune || ""}</td>`);
 
 		const [damage, damageType, propertiesTxt] = EntryRenderer.item.getDamageAndPropertiesText(item);
-		renderStack.push(`<tr><td colspan="2">${item.value ? item.value + (item.weight ? ", " : "") : ""}${item.weight ? item.weight + (Number(item.weight) === 1 ? " lb." : " lbs.") : ""}</td><td class="damageproperties" colspan="4">${damage} ${damageType} ${propertiesTxt}</tr>`);
+		renderStack.push(`<tr><td colspan="2">${item.value ? item.value + (item.weight ? ", " : "") : ""}${item.weight ? item.weight + (Number(item.weight) === 1 ? " lb." : " lbs.") + (item.weightNote ? ` ${item.weightNote}` : "") : ""}</td><td class="damageproperties" colspan="4">${damage} ${damageType} ${propertiesTxt}</tr>`);
 
-		renderStack.push(`<tr><td class="divider" colspan="6"><div></div></td></tr>`);
-
-		renderStack.push(`<tr class='text'><td colspan='6' class='text'>`);
-
-		const entryList = {type: "entries", entries: item.entries};
-		renderer.recursiveEntryRender(entryList, renderStack, 1);
-
-		renderStack.push(`</td></tr>`);
+		if (item.entries && item.entries.length) {
+			renderStack.push(EntryRenderer.utils.getDividerTr());
+			renderStack.push(`<tr class='text'><td colspan='6' class='text'>`);
+			const entryList = {type: "entries", entries: item.entries};
+			renderer.recursiveEntryRender(entryList, renderStack, 1);
+			renderStack.push(`</td></tr>`);
+		}
 
 		return renderStack.join("");
 	},
@@ -1857,6 +1897,7 @@ EntryRenderer.hover = {
 		const source = EntryRenderer.hover._curHovering.cSource;
 		const hash = EntryRenderer.hover._curHovering.cHash;
 		const permanent = EntryRenderer.hover._curHovering.permanent;
+		const clientX = EntryRenderer.hover._curHovering.clientX;
 
 		// if we've outrun the loading, restart
 		if (!EntryRenderer.hover._isCached(page, source, hash)) {
@@ -1974,8 +2015,8 @@ EntryRenderer.hover = {
 		if (fromBottom) $hov.css("top", vpOffsetT - $hov.height());
 		else $hov.css("top", vpOffsetT + $(ele).height() + 1);
 
-		if (fromRight) $hov.css("left", vpOffsetL - $hov.width());
-		else $hov.css("left", vpOffsetL + $(ele).width() + 1);
+		if (fromRight) $hov.css("left", (clientX || vpOffsetL) - $hov.width());
+		else $hov.css("left", clientX || (vpOffsetL + $(ele).width() + 1));
 
 		adjustPosition(true);
 
@@ -2023,7 +2064,7 @@ EntryRenderer.hover = {
 		}
 
 		// don't show on mobile
-		if ($(window).width() <= 1024) return;
+		if ($(window).width() <= 1024 && !evt.shiftKey) return;
 
 		const alreadyHovering = $(ele).data("hover-active");
 		if (alreadyHovering) return;
@@ -2087,7 +2128,8 @@ EntryRenderer.hover = {
 			cPage: page,
 			cSource: source,
 			cHash: hash,
-			permanent: evt.shiftKey
+			permanent: evt.shiftKey,
+			clientX: evt.clientX
 		};
 
 		// return if another event chain is handling the event
@@ -2231,6 +2273,23 @@ EntryRenderer.hover = {
 	_cleanWindows: () => {
 		const ks = Object.keys(EntryRenderer.hover._active);
 		ks.forEach(hovId => EntryRenderer.hover._teardownWindow(hovId));
+	},
+
+	bindPopoutButton: (toList) => {
+		const $btnPop = ListUtil.getOrTabRightButton(`btn-popout`, `new-window`)
+			.off("click")
+			.attr("title", "Popout Window");
+		$btnPop.on("click", (evt) => {
+			if (History.lastLoadedId !== null) {
+				EntryRenderer.hover.doPopout($btnPop, toList, History.lastLoadedId, evt.clientX);
+			}
+		});
+	},
+
+	doPopout: ($btnPop, list, index, clientX) => {
+		$btnPop.attr("data-hover-active", false);
+		const it = list[index];
+		EntryRenderer.hover.show({shiftKey: true, clientX: clientX}, $btnPop.get(), UrlUtil.getCurrentPage(), it.source, UrlUtil.autoEncodeHash(it));
 	}
 };
 
@@ -2244,8 +2303,12 @@ EntryRenderer.dice = {
 	_histIndex: null,
 	_$lastRolledBy: null,
 
+	isCrypto: () => {
+		return typeof window !== "undefined" && typeof window.crypto !== "undefined";
+	},
+
 	randomise: (max) => {
-		if (typeof window !== "undefined" && typeof window.crypto !== "undefined") {
+		if (EntryRenderer.dice.isCrypto()) {
 			return EntryRenderer.dice._randomise(1, max + 1);
 		} else {
 			return RollerUtil.roll(max) + 1;
@@ -2278,7 +2341,7 @@ EntryRenderer.dice = {
 	},
 
 	parseRandomise: (str) => {
-		if (!str.trim()) return "";
+		if (!str.trim()) return null;
 		const toRoll = EntryRenderer.dice._parse(str);
 		if (toRoll) {
 			return EntryRenderer.dice._rollParsed(toRoll);
@@ -2460,21 +2523,26 @@ EntryRenderer.dice = {
 			const v = EntryRenderer.dice._rollParsed(toRoll);
 			const lbl = rolledBy.label && (!rolledBy.name || rolledBy.label.trim().toLowerCase() !== rolledBy.name.trim().toLowerCase()) ? rolledBy.label : null;
 
-			// debugger
 			const totalPart = toRoll.successThresh
 				? `<span class="roll">${v.total > 100 - toRoll.successThresh ? "success" : "failure"}</span>`
 				: `<span class="roll ${v.allMax ? "roll-max" : v.allMin ? "roll-min" : ""}">${v.total}</span>`;
 			$out.append(`
-				<div class="out-roll-item" title="${rolledBy.name ? `${rolledBy.name} \u2014 ` : ""}${lbl ? `${lbl}: ` : ""}${v.rolls.map((r, i) => `${r.neg ? "-" : i === 0 ? "" : "+"}(${r.num}d${r.faces})`).join("")}${v.modStr}">
+				<div class="out-roll-item" title="${rolledBy.name ? `${rolledBy.name} \u2014 ` : ""}${lbl ? `${lbl}: ` : ""}${v.rolls.map((r, i) => `${r.neg ? "-" : i === 0 ? "" : "+"}(${r.num}d${r.faces}${r.drops ? `d${r.drops}${r.drop}` : ""})`).join("")}${v.modStr}">
 					${lbl ? `<span class="roll-label">${lbl}: </span>` : ""}
 					${totalPart}
-					<span class="all-rolls text-muted">${v.rolls.map((r, i) => `${r.neg ? "-" : i === 0 ? "" : "+"}(${r.rolls.join("+")})`).join("")}${v.modStr}</span>
+					<span class="all-rolls text-muted">
+						${EntryRenderer.dice.getDiceSummary(v)}
+					</span>
 					${cbMessage ? `<span class="message">${cbMessage(v.total)}</span>` : ""}
 				</div>`);
 		} else {
 			$out.append(`<div class="out-roll-item">Invalid roll!</div>`);
 		}
 		EntryRenderer.dice._scrollBottom();
+	},
+
+	getDiceSummary: (v, textOnly) => {
+		return `${v.rolls.map((r, i) => `${r.neg ? "-" : i === 0 ? "" : "+"}(${r.rolls.join("+")}${r.dropped ? `${textOnly ? "" : `<span style="text-decoration: red line-through;">`}+${r.dropped.join("+")}${textOnly ? "" : `</span>`}` : ""})`).join("")}${v.modStr}`;
 	},
 
 	addRoll: (rolledBy, msgText) => {
@@ -2507,18 +2575,46 @@ EntryRenderer.dice = {
 		let rolls = [];
 		if (parsed.dice) {
 			rolls = parsed.dice.map(d => {
-				let r = EntryRenderer.dice.rollDice(d.num, d.faces);
-				const total = r.reduce((a, b) => a + b, 0);
-				const max = d.num * d.faces;
+				function dropRolls (r) {
+					if (!d.drops) return [r, []];
+					let toSlice;
+					if (d.drops === "h") {
+						toSlice = [...r].sort().reverse();
+					} else if (d.drops === "l") {
+						toSlice = [...r].sort();
+					}
+					const toDrop = toSlice.slice(0, d.drop);
+					const keepStack = [];
+					const dropStack = [];
+					r.forEach(it => {
+						const di = toDrop.indexOf(it);
+						if (~di) {
+							toDrop.splice(di, 1);
+							dropStack.push(it);
+						} else {
+							keepStack.push(it);
+						}
+					});
+					return [keepStack, dropStack];
+				}
+
+				const r = EntryRenderer.dice.rollDice(d.num, d.faces);
+				const [keepR, dropR] = dropRolls(r);
+
+				const total = keepR.reduce((a, b) => a + b, 0);
+				const max = (d.num - d.drop) * d.faces;
 				return {
-					rolls: r,
+					rolls: keepR,
+					dropped: dropR.length ? dropR : null,
 					total: (-(d.neg || -1)) * total,
 					isMax: total === max,
-					isMin: total === d.num, // i.e. all 1's
+					isMin: total === (d.num - d.drop), // i.e. all 1's
 					neg: d.neg,
 					num: d.num,
 					faces: d.faces,
-					mod: d.mod
+					mod: d.mod,
+					drop: d.drop,
+					drops: d.drops
 				}
 			});
 		}
@@ -2538,7 +2634,18 @@ EntryRenderer.dice = {
 			mods.push(m0);
 			return "";
 		});
-		const totalMods = mods.map(m => Number(m.replace(/--/g, "+"))).reduce((a, b) => a + b, 0);
+		function cleanOperators (str) {
+			let len;
+			let nextLen;
+			do {
+				len = str.length;
+				str = str.replace(/--/g, "+").replace(/\+\++/g, "+").replace(/-\+/g, "-").replace(/\+-/g, "-");
+				nextLen = str.length;
+			} while (len !== nextLen);
+			return str;
+		}
+
+		const totalMods = mods.map(m => Number(cleanOperators(m))).reduce((a, b) => a + b, 0);
 
 		function isNumber (char) {
 			return char >= "0" && char <= "9";
@@ -2563,6 +2670,7 @@ EntryRenderer.dice = {
 		let cur = getNew();
 		let temp = "";
 		let c;
+		let drop = false;
 		for (let i = 0; i < str.length; ++i) {
 			c = str.charAt(i);
 
@@ -2595,10 +2703,31 @@ EntryRenderer.dice = {
 				case S_FACES:
 					if (isNumber(c)) {
 						temp += c;
+					} else if (c === "d") {
+						if (!drop) {
+							if (temp) {
+								drop = true;
+								cur.faces = Number(temp);
+								if (!cur.num || !cur.faces) return null;
+								temp = "";
+							} else {
+								return null;
+							}
+						} else return null;
+					} else if (c === "l") {
+						if (drop) {
+							cur.drops = "l";
+						} else return null;
+					} else if (c === "h") {
+						if (drop) {
+							cur.drops = "h";
+						} else return null;
 					} else if (c === "+") {
 						if (temp) {
-							cur.faces = Number(temp);
-							if (!cur.num || !cur.faces) return null;
+							if (drop) cur.drop = Number(temp);
+							else cur.faces = Number(temp);
+
+							if (!cur.num || !cur.faces || (cur.drop && (cur.drop >= cur.num))) return null;
 							stack.push(cur);
 							cur = getNew();
 							temp = "";
@@ -2608,8 +2737,10 @@ EntryRenderer.dice = {
 						}
 					} else if (c === "-") {
 						if (temp) {
-							cur.faces = Number(temp);
-							if (!cur.num || !cur.faces) return null;
+							if (drop) cur.drop = Number(temp);
+							else cur.faces = Number(temp);
+
+							if (!cur.num || !cur.faces || (cur.drop && (cur.drop >= cur.num))) return null;
 							stack.push(cur);
 							cur = getNew();
 							cur.neg = true;
@@ -2631,7 +2762,9 @@ EntryRenderer.dice = {
 				return null;
 			case S_FACES:
 				if (temp) {
-					cur.faces = Number(temp);
+					if (drop) cur.drop = Number(temp);
+					else cur.faces = Number(temp);
+					if (cur.drop && (cur.drop >= cur.num)) return null;
 				} else {
 					return null;
 				}

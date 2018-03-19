@@ -50,6 +50,7 @@ function listSortInvocations (a, b, o) {
 
 let INVOCATION_LIST;
 
+let filterBox;
 function onJsonLoad (data) {
 	INVOCATION_LIST = data.invocation;
 
@@ -70,7 +71,7 @@ function onJsonLoad (data) {
 	});
 	const levelFilter = new Filter({header: "Warlock Level", items: ["5", "7", "9", "12", "15", "18", STR_ANY]});
 
-	const filterBox = initFilterBox(sourceFilter, pactFilter, patronFilter, spellFilter, levelFilter);
+	filterBox = initFilterBox(sourceFilter, pactFilter, patronFilter, spellFilter, levelFilter);
 
 	let tempString = "";
 	INVOCATION_LIST.forEach(function (p, i) {
@@ -81,7 +82,7 @@ function onJsonLoad (data) {
 		if (!p.prerequisites.level) p.prerequisites.level = STR_ANY;
 
 		tempString += `
-			<li class="row" ${FLTR_ID}="${i}">
+			<li class="row" ${FLTR_ID}="${i}" onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id="${i}" href="#${UrlUtil.autoEncodeHash(p)}" title="${p[JSON_ITEM_NAME]}">
 					<span class="${LIST_NAME} ${CLS_COL1}">${p[JSON_ITEM_NAME]}</span>
 					<span class="${LIST_SOURCE} ${CLS_COL2} source${Parser.sourceJsonToAbv(p[JSON_ITEM_SOURCE])} text-align-center" title="${Parser.sourceJsonToFull(p[JSON_ITEM_SOURCE])}">${Parser.sourceJsonToAbv(p[JSON_ITEM_SOURCE])}</span>
@@ -105,6 +106,9 @@ function onJsonLoad (data) {
 		listClass: CLS_INVOCATION,
 		sortFunction: listSortInvocations
 	});
+	list.on("updated", () => {
+		filterBox.setCount(list.visibleItems.length, list.items.length);
+	});
 
 	filterBox.render();
 
@@ -127,15 +131,47 @@ function onJsonLoad (data) {
 				p.prerequisites.level
 			);
 		});
+		FilterBox.nextIfHidden(INVOCATION_LIST);
 	}
 
-	initHistory();
+	History.init();
 	handleFilterChange();
 	RollerUtil.addListRollButton();
+
+	const subList = ListUtil.initSublist({
+		valueNames: ["name", "ability", "prerequisite", "id"],
+		listClass: "subinvocations",
+		itemList: INVOCATION_LIST,
+		getSublistRow: getSublistItem,
+		primaryLists: [list]
+	});
+	ListUtil.bindPinButton();
+	EntryRenderer.hover.bindPopoutButton(INVOCATION_LIST);
+	UrlUtil.bindLinkExportButton(filterBox);
+	ListUtil.bindDownloadButton();
+	ListUtil.bindUploadButton();
+	ListUtil.initGenericPinnable();
+	ListUtil.loadState();
+}
+
+function getSublistItem (inv, pinId) {
+	return `
+		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
+			<a href="#${UrlUtil.autoEncodeHash(inv)}" title="${inv.name}">
+				<span class="name col-xs-3">${inv.name}</span>
+				<span class="patron col-xs-3 ${inv.prerequisites.pact === STR_ANY ? CLS_LI_NONE : ""}">${inv.prerequisites.pact}</span>
+				<span class="pact col-xs-2 ${inv.prerequisites.patron === STR_ANY ? CLS_LI_NONE : ""}">${Parser.invoPatronToShort(inv.prerequisites.patron)}</span>
+				<span class="spell col-xs-2 ${inv.prerequisites.spell === STR_NONE ? CLS_LI_NONE : ""}">${inv.prerequisites.spell}</span>
+				<span class="level col-xs-2 ${inv.prerequisites.level === STR_ANY ? CLS_LI_NONE : ""} text-align-center">${inv.prerequisites.level}</span>
+				<span class="id hidden">${pinId}</span>
+			</a>
+		</li>
+	`;
 }
 
 function loadhash (jsonIndex) {
-	const $name = $(`th.name`);
+	const $content = $(`#pagecontent`);
+	const $name = $content.find(`th.name`);
 	const STATS_PREREQUISITES = document.getElementById(ID_STATS_PREREQUISITES);
 	const STATS_TEXT = document.getElementById(ID_TEXT);
 
@@ -148,6 +184,10 @@ function loadhash (jsonIndex) {
 	function loadInvocation () {
 		STATS_PREREQUISITES.innerHTML = EntryRenderer.invocation.getPrerequisiteText(selectedInvocation);
 		STATS_TEXT.innerHTML = EntryRenderer.getDefaultRenderer().renderEntry({entries: selectedInvocation.entries}, 1);
-		$(`#source`).html(`<td colspan=6><b>Source: </b> <i>${Parser.sourceJsonToFull(selectedInvocation.source)}</i>, page ${selectedInvocation.page}</td>`);
+		$content.find(`#source`).html(`<td colspan=6><b>Source: </b> <i>${Parser.sourceJsonToFull(selectedInvocation.source)}</i>, page ${selectedInvocation.page}</td>`);
 	}
+}
+
+function loadsub (sub) {
+	filterBox.setFromSubHashes(sub);
 }

@@ -13134,6 +13134,7 @@
 			"rarity": "None",
 			"value": "2sp",
 			"weight": "5",
+			"weightNote": "(full)",
 			"source": "PHB",
 			"page": 153,
 			"entries": [
@@ -13856,7 +13857,7 @@
 			"type": "VEH",
 			"rarity": "None",
 			"value": "100gp",
-			"weight": "8",
+			"weight": "600",
 			"source": "PHB",
 			"page": 157
 		},

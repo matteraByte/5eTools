@@ -37,8 +37,8 @@ if (process.argv[2] !== "noschema") {
 					const result = validator.validate(require(`../data/${category}/${dataFile}`), require(`./schema/${category}/${schema}`));
 					checkHandleError(result);
 					results.push(result);
-				})
-			})
+				});
+			});
 		});
 
 	console.log(`All schema tests passed.`);
@@ -58,7 +58,7 @@ fs.readdirSync("./data/bestiary")
 fs.readdirSync("./img")
 	.filter(file => !file.endsWith(".png"))
 	.forEach(dir => {
-		if (dir !== "adventure" && dir !== "deities" && dir !== "variantrules" && dir !== "rules" && dir !== "objects") {
+		if (dir !== "adventure" && dir !== "deities" && dir !== "variantrules" && dir !== "rules" && dir !== "objects" && dir !== "bestiary") {
 			fs.readdirSync(`./img/${dir}`).forEach(file => {
 				existing.push(`${dir.replace("(", "").replace(")", "")}/${file}`);
 			})

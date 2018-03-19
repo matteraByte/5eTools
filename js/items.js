@@ -1,5 +1,4 @@
 "use strict";
-let tabledefault = "";
 
 let itemList;
 
@@ -23,9 +22,8 @@ function rarityValue (rarity) { // Ordered by most frequently occurring rarities
 }
 
 function sortItems (a, b, o) {
-	if (o.valueName === "name") {
-		return b._values.name.toLowerCase() > a._values.name.toLowerCase() ? 1 : -1;
-	} else if (o.valueName === "type") {
+	if (o.valueName === "name") return b._values.name.toLowerCase() > a._values.name.toLowerCase() ? 1 : -1;
+	else if (o.valueName === "type") {
 		if (b._values.type === a._values.type) return SortUtil.compareNames(a, b);
 		return b._values.type.toLowerCase() > a._values.type.toLowerCase() ? 1 : -1;
 	} else if (o.valueName === "source") {
@@ -34,13 +32,15 @@ function sortItems (a, b, o) {
 	} else if (o.valueName === "rarity") {
 		if (b._values.rarity === a._values.rarity) return SortUtil.compareNames(a, b);
 		return rarityValue(b._values.rarity) > rarityValue(a._values.rarity) ? 1 : -1;
+	} else if (o.valueName === "count") {
+		if (o.valueName === "count") return SortUtil.ascSort(Number(a.values().count), Number(b.values().count));
 	} else return 1;
 }
 
 function deselectFilter (deselectProperty, deselectValue) {
 	return function (val) {
-		if (window.location.hash.length) {
-			const itemProperty = itemList[getSelectedListElement().attr("id")][deselectProperty];
+		if (window.location.hash.length && !window.location.hash.startsWith(`#${HASH_BLANK}`)) {
+			const itemProperty = itemList[History.getSelectedListElement().attr("id")][deselectProperty];
 			if (itemProperty === deselectValue) {
 				return deselNoHash();
 			} else {
@@ -58,9 +58,8 @@ function deselectFilter (deselectProperty, deselectValue) {
 
 let mundanelist;
 let magiclist;
+let filterBox;
 function populateTablesAndFilters () {
-	tabledefault = $("#pagecontent").html();
-
 	const sourceFilter = getSourceFilter();
 	const typeFilter = new Filter({header: "Type", deselFn: deselectFilter("type", "$")});
 	const tierFilter = new Filter({header: "Tier", items: ["None", "Minor", "Major"]});
@@ -77,7 +76,7 @@ function populateTablesAndFilters () {
 	});
 	const miscFilter = new Filter({header: "Miscellaneous", items: ["Magic", "Mundane", "Sentient"]});
 
-	const filterBox = initFilterBox(sourceFilter, typeFilter, tierFilter, rarityFilter, propertyFilter, attunementFilter, categoryFilter, miscFilter);
+	filterBox = initFilterBox(sourceFilter, typeFilter, tierFilter, rarityFilter, propertyFilter, attunementFilter, categoryFilter, miscFilter);
 	const liList = {mundane: "", magic: ""}; // store the <li> tag content here and change the DOM once for each property after the loop
 
 	for (let i = 0; i < itemList.length; i++) {
@@ -99,7 +98,7 @@ function populateTablesAndFilters () {
 		curitem._fMisc.push(rarity === "None" || rarity === "Unknown" || category === "Basic" ? "Mundane" : "Magic");
 
 		liList[rarity === "None" || rarity === "Unknown" || category === "Basic" ? "mundane" : "magic"] += `
-			<li ${FLTR_ID}=${i}>
+			<li class="row" ${FLTR_ID}=${i} onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id="${i}" href="#${UrlUtil.autoEncodeHash(curitem)}" title="${name}">
 					<span class="name col-xs-4">${name}</span>
 					<span class="type col-xs-4 col-xs-4-3">${curitem.typeText}</span>
@@ -132,8 +131,14 @@ function populateTablesAndFilters () {
 
 	const mundaneWrapper = $(`.ele-mundane`);
 	const magicWrapper = $(`.ele-magic`);
-	mundanelist.on("searchComplete", function () { hideListIfEmpty(mundanelist, mundaneWrapper) });
-	magiclist.on("searchComplete", function () { hideListIfEmpty(magiclist, magicWrapper) });
+	mundanelist.on("updated", () => {
+		hideListIfEmpty(mundanelist, mundaneWrapper);
+		filterBox.setCount(mundanelist.visibleItems.length + magiclist.visibleItems.length, mundanelist.items.length + magiclist.items.length);
+	});
+	magiclist.on("updated", () => {
+		hideListIfEmpty(magiclist, magicWrapper);
+		filterBox.setCount(mundanelist.visibleItems.length + magiclist.visibleItems.length, mundanelist.items.length + magiclist.items.length);
+	});
 
 	filterBox.render();
 
@@ -161,9 +166,7 @@ function populateTablesAndFilters () {
 		}
 		mundanelist.filter(listFilter);
 		magiclist.filter(listFilter);
-
-		hideListIfEmpty(mundanelist, mundaneWrapper);
-		hideListIfEmpty(magiclist, magicWrapper);
+		FilterBox.nextIfHidden(itemList);
 	}
 
 	function hideListIfEmpty (list, $eles) {
@@ -194,23 +197,71 @@ function populateTablesAndFilters () {
 		}).siblings("ul.list").animate({
 			maxHeight: "0",
 			display: "none"
-		})
+		});
 	});
 
 	RollerUtil.addListRollButton();
 	addListShowHide();
-	initHistory();
+	History.init();
 	handleFilterChange();
+
+	const subList = ListUtil.initSublist(
+		{
+			valueNames: ["name", "weight", "price", "count", "id"],
+			listClass: "subitems",
+			sortFunction: sortItems,
+			itemList: itemList,
+			getSublistRow: getSublistItem,
+			onUpdate: onSublistChange,
+			primaryLists: [mundanelist, magiclist]
+		}
+	);
+	ListUtil.bindAddButton();
+	ListUtil.bindSubtractButton();
+	EntryRenderer.hover.bindPopoutButton(itemList);
+	UrlUtil.bindLinkExportButton(filterBox);
+	ListUtil.bindDownloadButton();
+	ListUtil.bindUploadButton();
+	ListUtil.initGenericAddable();
+	ListUtil.loadState();
+}
+
+function onSublistChange () {
+	const totalWeight = $(`#totalweight`);
+	const totalValue = $(`#totalvalue`);
+	let weight = 0;
+	let value = 0;
+	ListUtil.sublist.items.forEach(it => {
+		const item = itemList[Number(it._values.id)];
+		const count = Number($(it.elm).find(".count").text());
+		if (item.weight) weight += Number(item.weight) * count;
+		if (item.value) value += Parser.coinValueToNumber(item.value) * count;
+	});
+	totalWeight.text(`${weight.toLocaleString()} lb${weight > 1 ? "s" : ""}.`);
+	totalValue.text(`${value.toLocaleString()}gp`)
+}
+
+function getSublistItem (item, pinId, addCount) {
+	return `
+		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
+			<a href="#${UrlUtil.autoEncodeHash(item)}" title="${item.name}">
+				<span class="name col-xs-6">${item.name}</span>
+				<span class="weight text-align-center col-xs-2">${item.weight ? `${item.weight} lb${item.weight > 1 ? "s" : ""}.` : "\u2014"}</span>		
+				<span class="price text-align-center col-xs-2">${item.value || "\u2014"}</span>
+				<span class="count text-align-center col-xs-2">${addCount || 1}</span>		
+				<span class="id hidden">${pinId}</span>
+			</a>
+		</li>
+	`;
 }
 
 const renderer = new EntryRenderer();
-
 function loadhash (id) {
-	$("#currentitem").html(tabledefault);
+	const $content = $(`#pagecontent`);
 	const item = itemList[id];
 	const source = item.source;
 	const sourceFull = Parser.sourceJsonToFull(source);
-	$("th.name").html(`<span class="stats-name">${item.name}</span><span class="stats-source source${item.source}" title="${Parser.sourceJsonToFull(item.source)}">${Parser.sourceJsonToAbv(item.source)}</span>`);
+	$content.find("th.name").html(`<span class="stats-name">${item.name}</span><span class="stats-source source${item.source}" title="${Parser.sourceJsonToFull(item.source)}">${Parser.sourceJsonToAbv(item.source)}</span>`);
 
 	const type = item.type || "";
 	if (type === "INS" || type === "GS") item.additionalSources = item.additionalSources || [];
@@ -220,20 +271,20 @@ function loadhash (id) {
 		item.additionalSources.push({ "source": "XGE", "page": 81 })
 	}
 	const addSourceText = item.additionalSources ? `. Additional information from ${item.additionalSources.map(as => `<i>${Parser.sourceJsonToFull(as.source)}</i>, page ${as.page}`).join("; ")}.` : null;
-	$("td#source span").html(`<i>${sourceFull}</i>, page ${item.page}${addSourceText || ""}`);
+	$content.find("td#source span").html(`<i>${sourceFull}</i>, page ${item.page}${addSourceText || ""}`);
 
-	$("td span#value").html(item.value ? item.value + (item.weight ? ", " : "") : "");
-	$("td span#weight").html(item.weight ? item.weight + (Number(item.weight) === 1 ? " lb." : " lbs.") : "");
-	$("td span#rarity").html((item.tier ? ", " + item.tier : "") + (item.rarity ? ", " + item.rarity : ""));
-	$("td span#attunement").html(item.reqAttune ? item.reqAttune : "");
-	$("td span#type").html(item.typeText);
+	$content.find("td span#value").html(item.value ? item.value + (item.weight ? ", " : "") : "");
+	$content.find("td span#weight").html(item.weight ? item.weight + (Number(item.weight) === 1 ? " lb." : " lbs.") + (item.weightNote ? ` ${item.weightNote}` : "") : "");
+	$content.find("td span#rarity").html((item.tier ? ", " + item.tier : "") + (item.rarity ? ", " + item.rarity : ""));
+	$content.find("td span#attunement").html(item.reqAttune ? item.reqAttune : "");
+	$content.find("td span#type").html(item.typeText);
 
 	const [damage, damageType, propertiesTxt] = EntryRenderer.item.getDamageAndPropertiesText(item);
-	$("span#damage").html(damage);
-	$("span#damagetype").html(damageType);
-	$("span#properties").html(propertiesTxt);
+	$content.find("span#damage").html(damage);
+	$content.find("span#damagetype").html(damageType);
+	$content.find("span#properties").html(propertiesTxt);
 
-	$("tr.text").remove();
+	$content.find("tr.text").remove();
 	const entryList = {type: "entries", entries: item.entries};
 	const renderStack = [];
 	renderer.recursiveEntryRender(entryList, renderStack, 1);
@@ -254,21 +305,25 @@ function loadhash (id) {
 		renderer.recursiveEntryRender(additionEntriesList, renderStack, 1);
 	}
 
-	$("tr#text").after(`
+	$content.find("tr#text").after(`
 		<tr class="text">
 			<td colspan="6" class="text1">
 				${utils_makeRoller(renderStack.join("")).split(item.name.toLowerCase()).join("<i>" + item.name.toLowerCase() + "</i>").split(item.name.toLowerCase().uppercaseFirst()).join("<i>" + item.name.toLowerCase().uppercaseFirst() + "</i>")}
 			</td>
 		</tr>`);
 
-	$(".items span.roller").contents().unwrap();
-	$("#pagecontent span.roller").click(function () {
+	$content.find(".items span.roller").contents().unwrap();
+	$content.find("#pagecontent span.roller").click(function () {
 		const roll = $(this).attr("data-roll").replace(/\s+/g, "");
 		EntryRenderer.dice.roll(roll, {
 			name: item.name,
-			label: $(".stats-name").text()
+			label: $content.find(".stats-name").text()
 		});
 	})
+}
+
+function loadsub (sub) {
+	filterBox.setFromSubHashes(sub);
 }
 
 const TOOL_INS_ADDITIONAL_ENTRIES = [

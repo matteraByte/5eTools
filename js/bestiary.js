@@ -2,6 +2,7 @@
 
 const JSON_DIR = "data/bestiary/";
 const META_URL = "meta.json";
+const FLUFF_INDEX = "fluff-index.json";
 const JSON_LIST_NAME = "monster";
 const renderer = new EntryRenderer();
 
@@ -30,9 +31,19 @@ function loadMeta (nextFunction) {
 	});
 }
 
+let ixFluff = {};
+function loadFluffIndex (nextFunction) {
+	DataUtil.loadJSON(JSON_DIR + FLUFF_INDEX, function (data) {
+		ixFluff = data;
+		nextFunction();
+	});
+}
+
 window.onload = function load () {
-	loadMeta(function () {
-		multisourceLoad(JSON_DIR, JSON_LIST_NAME, pageInit, addMonsters);
+	loadMeta(() => {
+		loadFluffIndex(() => {
+			multisourceLoad(JSON_DIR, JSON_LIST_NAME, pageInit, addMonsters);
+		});
 	});
 };
 
@@ -56,6 +67,7 @@ const sizeFilter = new Filter({
 	],
 	displayFn: Parser.sizeAbvToFull
 });
+const speedFilter = new Filter({header: "Speed", items: ["walk", "burrow", "climb", "fly", "swim"], displayFn: StrUtil.uppercaseFirst});
 const typeFilter = new Filter({
 	header: "Type",
 	items: [
@@ -77,12 +89,13 @@ const typeFilter = new Filter({
 	displayFn: StrUtil.uppercaseFirst
 });
 const tagFilter = new Filter({header: "Tag", displayFn: StrUtil.uppercaseFirst});
-const miscFilter = new Filter({header: "Miscellaneous", items: ["Familiar", "Legendary"], displayFn: StrUtil.uppercaseFirst});
+const miscFilter = new Filter({header: "Miscellaneous", items: ["Familiar", "Legendary", "Swarm"], displayFn: StrUtil.uppercaseFirst});
 
 const filterBox = initFilterBox(
 	sourceFilter,
 	crFilter,
 	sizeFilter,
+	speedFilter,
 	typeFilter,
 	tagFilter,
 	miscFilter
@@ -98,6 +111,9 @@ function pageInit (loadedSources) {
 		valueNames: ["name", "source", "type", "cr"],
 		listClass: "monsters"
 	});
+	list.on("updated", () => {
+		filterBox.setCount(list.visibleItems.length, list.items.length);
+	});
 
 	// filtering function
 	$(filterBox).on(
@@ -111,6 +127,16 @@ function pageInit (loadedSources) {
 		$this.data("sortby", $this.data("sortby") === "asc" ? "desc" : "asc");
 		list.sort($this.data("sort"), {order: $this.data("sortby"), sortFunction: sortMonsters});
 	});
+
+	const subList = ListUtil.initSublist({
+		valueNames: ["name", "source", "type", "cr", "count", "id"],
+		listClass: "submonsters",
+		sortFunction: sortMonsters,
+		onUpdate: onSublistChange
+	});
+	ListUtil.bindAddButton();
+	ListUtil.bindSubtractButton();
+	ListUtil.initGenericAddable();
 
 	// proficiency bonus/dice toggle
 	const profBonusDiceBtn = $("button#profbonusdice");
@@ -132,7 +158,20 @@ function pageInit (loadedSources) {
 			})
 		}
 		this.useDice = !this.useDice;
-	})
+	});
+}
+
+function onSublistChange () {
+	const $totalCr = $(`#totalcr`);
+	let baseXp = 0;
+	let totalCount = 0;
+	ListUtil.sublist.items.forEach(it => {
+		const mon = monsters[Number(it._values.id)];
+		const count = Number($(it.elm).find(".count").text());
+		totalCount += count;
+		if (mon.cr) baseXp += Parser.crToXpNumber(mon.cr) * count;
+	});
+	$totalCr.html(`${baseXp.toLocaleString()} XP (Enc: ${(Parser.numMonstersToXpMult(totalCount) * baseXp).toLocaleString()} XP)`);
 }
 
 function handleFilterChange () {
@@ -144,11 +183,13 @@ function handleFilterChange () {
 			m.source,
 			m._pCr,
 			m.size,
+			m._fSpeed,
 			m._pTypes.type,
 			m._pTypes.tags,
 			m._fMisc
 		);
 	});
+	onFilterChangeMulti(monsters);
 }
 
 let monsters = [];
@@ -164,11 +205,12 @@ function addMonsters (data) {
 		const mon = monsters[mI];
 		mon._pTypes = Parser.monTypeToFullObj(mon.type); // store the parsed type
 		mon._pCr = mon.cr === undefined ? "Unknown" : (mon.cr.cr || mon.cr);
+		mon._fSpeed = Object.keys(mon.speed).filter(k => mon.speed[k]);
 
 		const abvSource = Parser.sourceJsonToAbv(mon.source);
 
 		textStack +=
-			`<li ${FLTR_ID}="${mI}">
+			`<li class="row" ${FLTR_ID}="${mI}" onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id=${mI} href="#${UrlUtil.autoEncodeHash(mon)}" title="${mon.name}">
 					<span class="name col-xs-4 col-xs-4-2">${mon.name}</span>
 					<span title="${Parser.sourceJsonToFull(mon.source)}" class="col-xs-2 source source${abvSource}">${abvSource}</span>
@@ -182,13 +224,9 @@ function addMonsters (data) {
 		mon._pTypes.tags.forEach(t => tagFilter.addIfAbsent(t));
 		mon._fMisc = mon.legendary || mon.legendaryGroup ? ["Legendary"] : [];
 		if (mon.familiar) mon._fMisc.push("Familiar");
+		if (mon.type.swarmSize) mon._fMisc.push("Swarm");
 	}
-	let lastSearch = null;
-	if (list.searched) {
-		lastSearch = $(`#search`).val();
-		list.search("");
-	}
-
+	const lastSearch = ListUtil.getSearchTermAndReset(list);
 	table.append(textStack);
 
 	// sort filters
@@ -199,12 +237,55 @@ function addMonsters (data) {
 	list.reIndex();
 	if (lastSearch) list.search(lastSearch);
 	list.sort("name");
-
 	filterBox.render();
+	handleFilterChange();
+
+	ListUtil.setOptions({
+		itemList: monsters,
+		getSublistRow: getSublistItem,
+		primaryLists: [list]
+	});
+	EntryRenderer.hover.bindPopoutButton(monsters);
+	UrlUtil.bindLinkExportButton(filterBox);
+	ListUtil.bindDownloadButton();
+	ListUtil.bindUploadButton((json, funcOnload) => {
+		const loaded = Object.keys(loadedSources).filter(it => loadedSources[it].loaded);
+		const toLoad = json.sources.filter(it => !loaded.includes(it));
+		const loadTotal = toLoad.length;
+		if (loadTotal) {
+			let loadCount = 0;
+			toLoad.forEach(src => {
+				loadSource(JSON_LIST_NAME, (monsters) => {
+					addMonsters(monsters);
+					if (++loadCount === loadTotal) {
+						funcOnload();
+					}
+				})(src, "yes");
+			});
+		} else {
+			funcOnload();
+		}
+	});
+	ListUtil.loadState();
+}
+
+function getSublistItem (mon, pinId, addCount) {
+	return `
+		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
+			<a href="#${UrlUtil.autoEncodeHash(mon)}" title="${mon.name}">
+				<span class="name col-xs-4">${mon.name}</span>
+				<span class="type col-xs-3">${mon._pTypes.asText.uppercaseFirst()}</span>
+				<span class="cr col-xs-3 text-align-center">${mon._pCr}</span>		
+				<span class="count col-xs-2 text-align-center">${addCount || 1}</span>		
+				<span class="id hidden">${pinId}</span>				
+			</a>
+		</li>
+	`;
 }
 
 // sorting for form filtering
 function sortMonsters (a, b, o) {
+	if (o.valueName === "count") return SortUtil.ascSort(Number(a.values().count), Number(b.values().count));
 	a = monsters[a.elm.getAttribute(FLTR_ID)];
 	b = monsters[b.elm.getAttribute(FLTR_ID)];
 	if (o.valueName === "name") return SortUtil.ascSort(a.name, b.name);
@@ -220,15 +301,120 @@ function objToTitleCaseStringWithCommas (obj) {
 	}).join(", ");
 }
 
+let profBtn = null;
 // load selected monster stat block
 function loadhash (id) {
-	$("#pagecontent").html(tableDefault);
+	const $content = $("#pagecontent");
+	const $wrpBtnProf = $(`#wrp-profbonusdice`);
+
+	const mon = monsters[id];
+
+	$content.html(tableDefault);
+	if (profBtn !== null) {
+		$wrpBtnProf.append(profBtn);
+		profBtn = null;
+	}
+
+	function buildFluffTab (showImages) {
+		$content.append(EntryRenderer.utils.getBorderTr());
+		const name = $(EntryRenderer.utils.getNameTr(monsters[id]));
+		name.find(`th`).css("padding-right", "0.3em");
+		$content.append(name);
+		const $tr = $(`<tr class='text'/>`);
+		$content.append($tr);
+		const $td = $(`<td colspan='6' class='text'/>`).appendTo($tr);
+		$content.append(EntryRenderer.utils.getBorderTr());
+		renderer.setFirstSection(true);
+		if (ixFluff[mon.source]) {
+			DataUtil.loadJSON(JSON_DIR + ixFluff[mon.source], (data) => {
+				const fluff = data.monster.find(it => (it.name === mon.name && it.source === mon.source));
+
+				if (!fluff) {
+					$td.empty();
+					$td.append(HTML_NO_INFO);
+					return;
+				}
+
+				if (fluff._copy) {
+					const cpy = data.monster.find(it => fluff._copy.name === it.name && fluff._copy.source === it.source);
+					// preserve these
+					const name = fluff.name;
+					const src = fluff.source;
+					const images = fluff.images;
+					Object.assign(fluff, cpy);
+					fluff.name = name;
+					fluff.source = src;
+					if (images) fluff.images = images;
+					delete fluff._copy;
+				}
+
+				if (fluff._appendCopy) {
+					const cpy = data.monster.find(it => fluff._appendCopy.name === it.name && fluff._appendCopy.source === it.source);
+					if (cpy.images) {
+						if (!fluff.images) fluff.images = cpy.images;
+						else fluff.images = fluff.images.concat(cpy.images);
+					}
+					if (cpy.entries) {
+						if (!fluff.entries) fluff.entries = cpy.entries;
+						else fluff.entries.entries = fluff.entries.entries.concat(cpy.entries.entries);
+					}
+					delete fluff._appendCopy;
+				}
+
+				if (showImages) {
+					if (fluff.images) {
+						fluff.images.forEach(img => $td.append(renderer.renderEntry(img, 1)));
+					} else {
+						$td.append(HTML_NO_IMAGES);
+					}
+				} else {
+					if (fluff.entries) {
+						const depth = fluff.entries.type === "section" ? -1 : 2;
+						$td.append(renderer.renderEntry(fluff.entries, depth));
+					} else {
+						$td.append(HTML_NO_INFO);
+					}
+				}
+			});
+		} else {
+			$td.empty();
+			if (showImages) $td.append(HTML_NO_IMAGES);
+			else $td.append(HTML_NO_INFO);
+		}
+	}
+
+	// reset tabs
+	const statTab = EntryRenderer.utils.tabButton(
+		"Statblock",
+		() => {
+			$wrpBtnProf.append(profBtn);
+		}
+	);
+	const infoTab = EntryRenderer.utils.tabButton(
+		"Info",
+		() => {
+			profBtn = profBtn || $wrpBtnProf.children().detach();
+		},
+		() => {
+			buildFluffTab();
+		}
+	);
+	const picTab = EntryRenderer.utils.tabButton(
+		"Images",
+		() => {
+			profBtn = profBtn || $wrpBtnProf.children().detach();
+		},
+		() => {
+			buildFluffTab(true);
+		}
+	);
+	EntryRenderer.utils.bindTabButtons(statTab, infoTab, picTab);
+
 	let renderStack = [];
 	let entryList = {};
-	var mon = monsters[id];
 	var name = mon.name;
 	let source = Parser.sourceJsonToAbv(mon.source);
-	let sourceFull = Parser.sourceJsonToFull(mon.source)
+	let sourceFull = Parser.sourceJsonToFull(mon.source);
 	var type = mon._pTypes.asText;
 
 	imgError = function (x) {
@@ -237,7 +423,7 @@ function loadhash (id) {
 	};
 
 	const imgLink = UrlUtil.link(`img/${source}/${name.replace(/"/g, "")}.png`);
-	$("th.name").html(
+	$content.find("th.name").html(
 		`<span class="stats-name">${name}</span>
 		<span class="stats-source source${source}" title="${sourceFull}">${Parser.sourceJsonToAbv(source)}</span>
 		<a href="${imgLink}" target="_blank">
@@ -245,123 +431,123 @@ function loadhash (id) {
 		</a>`
 	);
 
-	$("td span#size").html(Parser.sizeAbvToFull(mon.size));
+	$content.find("td span#size").html(Parser.sizeAbvToFull(mon.size));
 
-	$("td span#type").html(type);
+	$content.find("td span#type").html(type);
 
-	$("td span#alignment").html(mon.alignment);
+	$content.find("td span#alignment").html(mon.alignment);
 
-	$("td span#ac").html(mon.ac);
+	$content.find("td span#ac").html(mon.ac);
 
-	$("td span#hp").html(mon.hp);
+	$content.find("td span#hp").html(mon.hp);
 
-	$("td span#speed").html(mon.speed);
+	$content.find("td span#speed").html(Parser.getSpeedString(mon));
 
-	$("td#str span.score").html(mon.str);
-	$("td#str span.mod").html(Parser.getAbilityModifier(mon.str));
+	$content.find("td#str span.score").html(mon.str);
+	$content.find("td#str span.mod").html(Parser.getAbilityModifier(mon.str));
 
-	$("td#dex span.score").html(mon.dex);
-	$("td#dex span.mod").html(Parser.getAbilityModifier(mon.dex));
+	$content.find("td#dex span.score").html(mon.dex);
+	$content.find("td#dex span.mod").html(Parser.getAbilityModifier(mon.dex));
 
-	$("td#con span.score").html(mon.con);
-	$("td#con span.mod").html(Parser.getAbilityModifier(mon.con));
+	$content.find("td#con span.score").html(mon.con);
+	$content.find("td#con span.mod").html(Parser.getAbilityModifier(mon.con));
 
-	$("td#int span.score").html(mon.int);
-	$("td#int span.mod").html(Parser.getAbilityModifier(mon.int));
+	$content.find("td#int span.score").html(mon.int);
+	$content.find("td#int span.mod").html(Parser.getAbilityModifier(mon.int));
 
-	$("td#wis span.score").html(mon.wis);
-	$("td#wis span.mod").html(Parser.getAbilityModifier(mon.wis));
+	$content.find("td#wis span.score").html(mon.wis);
+	$content.find("td#wis span.mod").html(Parser.getAbilityModifier(mon.wis));
 
-	$("td#cha span.score").html(mon.cha);
-	$("td#cha span.mod").html(Parser.getAbilityModifier(mon.cha));
+	$content.find("td#cha span.score").html(mon.cha);
+	$content.find("td#cha span.mod").html(Parser.getAbilityModifier(mon.cha));
 
 	var saves = mon.save;
 	if (saves) {
-		$("td span#saves").parent().show();
-		$("td span#saves").html(saves);
+		$content.find("td span#saves").parent().show();
+		$content.find("td span#saves").html(saves);
 	} else {
-		$("td span#saves").parent().hide();
+		$content.find("td span#saves").parent().hide();
 	}
 
 	var skills = mon.skill;
 	let perception = 0;
 	if (skills) {
-		$("td span#skills").parent().show();
-		$("td span#skills").html(objToTitleCaseStringWithCommas(skills));
+		$content.find("td span#skills").parent().show();
+		$content.find("td span#skills").html(objToTitleCaseStringWithCommas(skills));
 		if (skills.perception) perception = parseInt(skills.perception);
 	} else {
-		$("td span#skills").parent().hide();
+		$content.find("td span#skills").parent().hide();
 	}
 
 	var dmgvuln = mon.vulnerable;
 	if (dmgvuln) {
-		$("td span#dmgvuln").parent().show();
-		$("td span#dmgvuln").html(dmgvuln);
+		$content.find("td span#dmgvuln").parent().show();
+		$content.find("td span#dmgvuln").html(dmgvuln);
 	} else {
-		$("td span#dmgvuln").parent().hide();
+		$content.find("td span#dmgvuln").parent().hide();
 	}
 
 	var dmgres = mon.resist;
 	if (dmgres) {
-		$("td span#dmgres").parent().show();
-		$("td span#dmgres").html(dmgres);
+		$content.find("td span#dmgres").parent().show();
+		$content.find("td span#dmgres").html(dmgres);
 	} else {
-		$("td span#dmgres").parent().hide();
+		$content.find("td span#dmgres").parent().hide();
 	}
 
 	var dmgimm = mon.immune;
 	if (dmgimm) {
-		$("td span#dmgimm").parent().show();
-		$("td span#dmgimm").html(dmgimm);
+		$content.find("td span#dmgimm").parent().show();
+		$content.find("td span#dmgimm").html(dmgimm);
 	} else {
-		$("td span#dmgimm").parent().hide();
+		$content.find("td span#dmgimm").parent().hide();
 	}
 
 	var conimm = mon.conditionImmune;
 	if (conimm) {
-		$("td span#conimm").parent().show();
-		$("td span#conimm").html(conimm);
+		$content.find("td span#conimm").parent().show();
+		$content.find("td span#conimm").html(conimm);
 	} else {
-		$("td span#conimm").parent().hide();
+		$content.find("td span#conimm").parent().hide();
 	}
 
 	var senses = mon.senses;
 	if (senses) {
-		$("td span#senses").html(senses + ", ");
+		$content.find("td span#senses").html(senses + ", ");
 	} else {
-		$("td span#senses").html("");
+		$content.find("td span#senses").html("");
 	}
 
-	$("td span#pp").html(mon.passive);
+	$content.find("td span#pp").html(mon.passive);
 
 	var languages = mon.languages;
 	if (languages) {
-		$("td span#languages").html(languages);
+		$content.find("td span#languages").html(languages);
 	} else {
-		$("td span#languages").html("\u2014");
+		$content.find("td span#languages").html("\u2014");
 	}
 
-	$("td span#cr").html(Parser.monCrToFull(mon.cr));
+	$content.find("td span#cr").html(Parser.monCrToFull(mon.cr));
 
-	$("tr.trait").remove();
+	$content.find("tr.trait").remove();
 
 	let trait = EntryRenderer.monster.getOrderedTraits(mon, renderer);
 	if (trait) renderSection("trait", "trait", trait, 1);
 
 	const action = mon.action;
-	$("tr#actions").hide();
-	$("tr.action").remove();
+	$content.find("tr#actions").hide();
+	$content.find("tr.action").remove();
 
 	if (action) renderSection("action", "action", action, 1);
 
 	const reaction = mon.reaction;
-	$("tr#reactions").hide();
-	$("tr.reaction").remove();
+	$content.find("tr#reactions").hide();
+	$content.find("tr.reaction").remove();
 
 	if (reaction) renderSection("reaction", "reaction", reaction, 1);
 
 	const variants = mon.variant;
-	const variantSect = $(`#variants`);
+	const variantSect = $content.find(`#variants`);
 	if (!variants) variantSect.hide();
 	else {
 		const rStack = [];
@@ -386,23 +572,23 @@ function loadhash (id) {
 		})
 	}
 	srcCpy.additionalSources = additional;
-	$(`#source`).append(EntryRenderer.utils.getPageTr(srcCpy));
+	$content.find(`#source`).append(EntryRenderer.utils.getPageTr(srcCpy));
 
 	const legendary = mon.legendary;
-	$("tr#legendaries").hide();
-	$("tr.legendary").remove();
+	$content.find("tr#legendaries").hide();
+	$content.find("tr.legendary").remove();
 	if (legendary) {
 		renderSection("legendary", "legendary", legendary, 1);
 		const legendaryActions = mon.legendaryActions || 3;
 		const legendaryName = name.split(",");
-		$("tr#legendaries").after(`<tr class='legendary'><td colspan='6' class='legendary'><span class='name'></span> <span>${legendaryName[0]} can take ${legendaryActions} legendary action${legendaryActions > 1 ? "s" : ""}, choosing from the options below. Only one legendary action can be used at a time and only at the end of another creature's turn. ${legendaryName[0]} regains spent legendary actions at the start of its turn.</span></td></tr>`);
+		$content.find("tr#legendaries").after(`<tr class='legendary'><td colspan='6' class='legendary'><span class='name'></span> <span>${legendaryName[0]} can take ${legendaryActions} legendary action${legendaryActions > 1 ? "s" : ""}, choosing from the options below. Only one legendary action can be used at a time and only at the end of another creature's turn. ${legendaryName[0]} regains spent legendary actions at the start of its turn.</span></td></tr>`);
 	}
 
 	const legendaryGroup = mon.legendaryGroup;
-	$("tr.lairaction").remove();
-	$("tr#lairactions").hide();
-	$("tr.regionaleffect").remove();
-	$("tr#regionaleffects").hide();
+	$content.find("tr.lairaction").remove();
+	$content.find("tr#lairactions").hide();
+	$content.find("tr.regionaleffect").remove();
+	$content.find("tr#regionaleffects").hide();
 	if (legendaryGroup) {
 		const thisGroup = meta[legendaryGroup];
 		if (thisGroup.lairActions) renderSection("lairaction", "legendary", thisGroup.lairActions, 0);
@@ -411,27 +597,27 @@ function loadhash (id) {
 
 	function renderSection (sectionTrClass, sectionTdClass, sectionEntries, sectionLevel) {
 		let pluralSectionTrClass = sectionTrClass === `legendary` ? `legendaries` : `${sectionTrClass}s`;
-		$(`tr#${pluralSectionTrClass}`).show();
+		$content.find(`tr#${pluralSectionTrClass}`).show();
 		entryList = {type: "entries", entries: sectionEntries};
 		renderStack = [];
 		sectionEntries.forEach(e => {
 			if (e.rendered) renderStack.push(e.rendered);
 			else renderer.recursiveEntryRender(e, renderStack, sectionLevel + 1);
 		})
-		$(`tr#${pluralSectionTrClass}`).after(`<tr class='${sectionTrClass}'><td colspan='6' class='${sectionTdClass}'>${renderStack.join("")}</td></tr>`);
+		$content.find(`tr#${pluralSectionTrClass}`).after(`<tr class='${sectionTrClass}'><td colspan='6' class='${sectionTdClass}'>${renderStack.join("")}</td></tr>`);
 	}
 
 	// add click links for rollables
-	$("#pagecontent #abilityscores td").each(function () {
+	$content.find("#abilityscores td").each(function () {
 		$(this).wrapInner(`<span class="roller" data-roll="1d20${$(this).children(".mod").html()}" title="${Parser.attAbvToFull($(this).prop("id"))}"></span>`);
 	});
 
 	const isProfDiceMode = $("button#profbonusdice")[0].useDice;
 	if (mon.skill) {
-		$("#skills").each(makeSkillRoller);
+		$content.find("#skills").each(makeSkillRoller);
 	}
 	if (mon.save) {
-		$("#saves").each(makeSaveRoller);
+		$content.find("#saves").each(makeSaveRoller);
 	}
 
 	function makeSkillRoller () {
@@ -499,7 +685,7 @@ function loadhash (id) {
 	}
 
 	// inline rollers
-	$("#pagecontent").find("p").each(function () {
+	$content.find("p").each(function () {
 		addNonD20Rollers(this);
 
 		// add proficiency dice stuff for attack rolls, since those _generally_ have proficiency
@@ -539,7 +725,7 @@ function loadhash (id) {
 			}
 		}));
 	});
-	$("#pagecontent").find("span#hp").each(function () {
+	$content.find("span#hp").each(function () {
 		addNonD20Rollers(this, "Hit Points");
 	});
 
@@ -561,8 +747,8 @@ function loadhash (id) {
 		return titleMaybe;
 	}
 
-	$(".spells span.roller").contents().unwrap();
-	$("#pagecontent").find("span.roller").filter((i, e) => {
+	$content.find(".spells span.roller").contents().unwrap();
+	$content.find("span.roller").filter((i, e) => {
 		const $e = $(e);
 		return !$e.prop("onclick");
 	}).click(function () {
@@ -570,7 +756,7 @@ function loadhash (id) {
 		outputRollResult($this, $this.attr("data-roll").replace(/\s+/g, ""));
 	});
 
-	$("#pagecontent").find("span.dc-roller").click(function () {
+	$content.find("span.dc-roller").click(function () {
 		const $this = $(this);
 		let roll;
 		if ($this.attr(ATB_PROF_MODE) === PROF_MODE_DICE) {
@@ -592,7 +778,7 @@ function handleUnknownHash (link, sub) {
 	if (src) {
 		loadSource(JSON_LIST_NAME, (monsters) => {
 			addMonsters(monsters);
-			hashchange();
+			History.hashChange();
 		})(src, "yes");
 	}
 }

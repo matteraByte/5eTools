@@ -19,7 +19,7 @@ function alignSort (a, b) {
 }
 
 let deitiesList;
-
+let filterBox;
 function onJsonLoad (data) {
 	deitiesList = data.deity;
 
@@ -74,7 +74,7 @@ function onJsonLoad (data) {
 		deselFn: (it) => { return it === STR_REPRINTED }
 	});
 
-	const filterBox = initFilterBox(sourceFilter, alignmentFilter, pantheonFilter, categoryFilter, domainFilter, miscFilter);
+	filterBox = initFilterBox(sourceFilter, alignmentFilter, pantheonFilter, categoryFilter, domainFilter, miscFilter);
 
 	let tempString = "";
 	deitiesList.forEach((g, i) => {
@@ -88,7 +88,7 @@ function onJsonLoad (data) {
 		g._fReprinted = g.reprinted ? STR_REPRINTED : "";
 
 		tempString += `
-			<li class="row" ${FLTR_ID}="${i}">
+			<li class="row" ${FLTR_ID}="${i}" onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id="${i}" href="#${UrlUtil.autoEncodeHash(g)}" title="${g.name}">
 					<span class="name col-xs-3">${g.name}</span>
 					<span class="pantheon col-xs-2 text-align-center">${g.pantheon}</span>
@@ -110,6 +110,9 @@ function onJsonLoad (data) {
 		valueNames: ["name", "pantheon", "alignment", "domains", "symbol", "source"],
 		listClass: "deities",
 		sortFunction: SortUtil.listSort
+	});
+	list.on("updated", () => {
+		filterBox.setCount(list.visibleItems.length, list.items.length);
 	});
 
 	filterBox.render();
@@ -134,12 +137,42 @@ function onJsonLoad (data) {
 				g._fReprinted
 			);
 		});
+		FilterBox.nextIfHidden(deitiesList);
 	}
 
-	initHistory();
+	History.init();
 	handleFilterChange();
 	RollerUtil.addListRollButton();
 	addListShowHide();
+
+	const subList = ListUtil.initSublist({
+		valueNames: ["name", "pantheon", "alignment", "domains", "id"],
+		listClass: "subdeities",
+		itemList: deitiesList,
+		getSublistRow: getSublistItem,
+		primaryLists: [list]
+	});
+	ListUtil.bindPinButton();
+	EntryRenderer.hover.bindPopoutButton(deitiesList);
+	UrlUtil.bindLinkExportButton(filterBox);
+	ListUtil.bindDownloadButton();
+	ListUtil.bindUploadButton();
+	ListUtil.initGenericPinnable();
+	ListUtil.loadState();
+}
+
+function getSublistItem (g, pinId) {
+	return `
+		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
+			<a href="#${UrlUtil.autoEncodeHash(g)}" title="${g.name}">
+				<span class="name col-xs-4">${g.name}</span>
+				<span class="pantheon col-xs-2">${g.pantheon}</span>
+				<span class="alignment col-xs-2">${g.alignment.join("")}</span>
+				<span class="domains col-xs-4 ${g.domains[0] === STR_NONE ? `list-entry-none` : ""}">${g.domains.join(", ")}</span>
+				<span class="id hidden">${pinId}</span>				
+			</a>
+		</li>
+	`;
 }
 
 const renderer = new EntryRenderer();
@@ -164,4 +197,8 @@ function loadhash (jsonIndex) {
 		${EntryRenderer.utils.getPageTr(deity)}
 		${EntryRenderer.utils.getBorderTr()}
 	`);
+}
+
+function loadsub (sub) {
+	filterBox.setFromSubHashes(sub);
 }

@@ -1,20 +1,37 @@
 {
 	"name": "5etools",
 	"author": "TheGiddyLimit",
-	"version": "1.0.0",
+	"version": "1.21.6",
 	"license": "MIT",
 	"description": "A site dedicated to making playing games with your friends as easy as possible.",
 	"scripts": {
-		"test": "eslint js node test && stylelint css/style.css && node ./test/alltests.js",
-		"gen-index": "node ./node/generate-search-index.js",
-		"version-bump": "node ./node/version-bump.js"
+		"dev-server": "autoreload-server -r **/*.{html,css,js,png,jpg}",
+		"version-bump": "npm version -m \"chore(version): bump\"",
+		"gen-index": "node node/generate-search-index.js",
+		"uglifyjs": "uglifyjs",
+		"test:js": "eslint js node test",
+		"test:styles": "stylelint scss/style.scss",
+		"test:data": "node test/alltests.js",
+		"test": "npm run test:js && npm run test:styles && npm run test:data",
+		"build:css": "node-sass --source-map=true --output-style=compressed scss/style.scss css/style.css && postcss  ./css/style.css --use autoprefixer -r",
+		"build:deploy:dev": "bash build/deploy-dev.sh",
+		"build:deploy:prod": "bash build/deploy-prod.sh",
+		"build": "npm run gen-index && npm run build:css",
+		"preversion": "npm test",
+		"version": "node node/version-bump.js"
 	},
 	"repository": "TheGiddyLimit/TheGiddyLimit.github.io",
-	"dependencies": {
+	"devDependencies": {
+		"autoprefixer": "^8.0.0",
 		"eslint": "^4.9.0",
+		"eslint-plugin-json": "^1.2.0",
 		"jsonschema": "^1.2.0",
-		"stylelint": "^8.2.0",
-		"stylelint-config-standard": "^17.0.0",
-		"eslint-plugin-json": "^1.2.0"
+		"node-sass": "^4.7.2",
+		"postcss-cli": "^5.0.0",
+		"simple-autoreload-server": "^0.2.7",
+		"simple-git": "^1.91.0",
+		"stylelint": "^9.0.0",
+		"stylelint-config-sass-guidelines": "^5.0.0",
+		"uglify-es": "^3.3.9"
 	}
 }

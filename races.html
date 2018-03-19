@@ -13,8 +13,6 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="icon" href="favicon.png">
 
-	<style id="dynamicStyle"></style> <!-- populated with JS -->
-
 	<script type="text/javascript" src="lib/js-cookie.js"></script>
 	<script type="text/javascript" src="js/styleswitch.js"></script>
 	<script type="text/javascript" src="js/navigation.js"></script>
@@ -52,6 +50,21 @@
 			<ul class="list races"></ul>
 		</div>
 		<div id="contentwrapper" class="view-col">
+			<div id="sublistcontainer">
+				<div id="sublistsort" class="sortlabel btn-group">
+					<button class="col-xs-5 sort btn btn-default btn-xs" data-sort="name">Name</button>
+					<button class="col-xs-5 sort btn btn-default btn-xs" data-sort="ability">Ability</button>
+					<button class="col-xs-2 sort btn btn-default btn-xs" data-sort="size">Size</button>
+				</div>
+				<ul class="list subraces">
+					<!-- populate with JS -->
+				</ul>
+			</div>
+
+			<div class="wrp-stat-tab" id="stat-tabs">
+				<div id="tabs-right"></div>
+			</div>
+
 			<table id="pagecontent" class="stats">
 				<tr>
 					<th class="border" colspan="6"></th>

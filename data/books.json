@@ -195,16 +195,16 @@
 			"id": "DMG",
 			"contents": [
 				{
-				    "name": "Introduction",
-				    "headers": [
+					"name": "Introduction",
+					"headers": [
 						"The Dungeon Master",
 						"How to Use This Book",
 						"Know Your Players"
-				    ]
+					]
 				},
 				{
-				    "name": "A World of Your Own",
-				    "headers": [
+					"name": "A World of Your Own",
+					"headers": [
 						"The Big Picture",
 						"Gods of Your World",
 						"Mapping Your Campaign",
@@ -217,11 +217,94 @@
 						"Play Style",
 						"Tiers of Play",
 						"Flavors of Fantasy"
-				    ],
-				    "ordinal": {
-				        "type": "chapter",
-				        "identifier": 1
-				    }
+					],
+					"ordinal": {
+						"type": "chapter",
+						"identifier": 1
+					}
+				},
+				{
+					"name": "Creating a Multiverse",
+					"headers": [
+						"The Planes",
+						"Planar Travel",
+						"Astral Plane",
+						"Ethereal Plane",
+						"Feywild",
+						"Shadowfell",
+						"Inner Planes",
+						"Outer Planes",
+						"Other Planes",
+						"Known Worlds of the Material Plane"
+					],
+					"ordinal": {
+						"type": "chapter",
+						"identifier": 2
+					}
+				},
+				{
+					"name": "Creating Adventures",
+					"headers": [
+						"Elements of a Great Adventure",
+						"Published Adventures",
+						"Adventure Structure",
+						"Adventure Types",
+						"Complications",
+						"Creating Encounters",
+						"Random Encounters"
+					],
+					"ordinal": {
+						"type": "chapter",
+						"identifier": 3
+					}
+				},
+				{
+					"name": "Creating Nonplayer Characters",
+					"headers": [
+						"Designing NPCs",
+						"NPC Party Members",
+						"Contacts",
+						"Hirelings",
+						"Extras",
+						"Villains",
+						"Villainous Class Options"
+					],
+					"ordinal": {
+						"type": "chapter",
+						"identifier": 4
+					}
+				},
+				{
+					"name": "Adventure Environments",
+					"headers": [
+						"Dungeons",
+						"Mapping a Dungeon",
+						"Wilderness",
+						"Mapping a Wilderness",
+						"Wilderness Survival",
+						"Settlements",
+						"Mapping a Settlement",
+						"Urban Encounters",
+						"Unusual Environments",
+						"Traps"
+					],
+					"ordinal": {
+						"type": "chapter",
+						"identifier": 5
+					}
+				},
+				{
+					"name": "Between Adventures",
+					"headers": [
+						"Linking Adventures",
+						"Campaign Tracking",
+						"Recurring Expenses",
+						"Downtime Activities"
+					],
+					"ordinal": {
+						"type": "chapter",
+						"identifier": 6
+					}
 				}
 			]
 		}

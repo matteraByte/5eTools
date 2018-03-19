@@ -18,7 +18,6 @@ function multisourceLoad (jsonDir, jsonListName, pageInitFn, dataFn, cbOpt) {
 }
 
 let loadedSources;
-
 function _onIndexLoad (src2UrlMap, jsonDir, dataProp, pageInitFn, addFn, cbOpt) {
 	// track loaded sources
 	loadedSources = {};
@@ -27,7 +26,7 @@ function _onIndexLoad (src2UrlMap, jsonDir, dataProp, pageInitFn, addFn, cbOpt) 
 	// collect a list of sources to load
 	const sources = Object.keys(src2UrlMap);
 	const defaultSel = sources.filter(s => defaultSourceSelFn(s));
-	const userSel = FilterBox.getSelectedSources();
+	const userSel = [...new Set((FilterBox.getSelectedSources() || []).concat((ListUtil.getSelectedSources() || [])))];
 
 	const allSources = [];
 
@@ -46,7 +45,7 @@ function _onIndexLoad (src2UrlMap, jsonDir, dataProp, pageInitFn, addFn, cbOpt) 
 
 	// add source from the current hash, if there is one
 	if (window.location.hash.length) {
-		const [link, ...sub] = _getHashParts();
+		const [link, ...sub] = History._getHashParts();
 		const src = link.split(HASH_LIST_SEP)[1];
 		const hashSrcs = {};
 		sources.forEach(src => hashSrcs[UrlUtil.encodeForHash(src)] = src);
@@ -75,10 +74,11 @@ function _onIndexLoad (src2UrlMap, jsonDir, dataProp, pageInitFn, addFn, cbOpt) 
 					cbOpt();
 				}
 
-				initHistory();
+				History.init();
 				handleFilterChange();
 				RollerUtil.addListRollButton();
 				addListShowHide();
+				History.initialLoad = false;
 			}
 		);
 	}
@@ -94,4 +94,8 @@ function loadSource (jsonListName, dataFn) {
 			});
 		}
 	}
+}
+
+function onFilterChangeMulti (multiList) {
+	FilterBox.nextIfHidden(multiList);
 }

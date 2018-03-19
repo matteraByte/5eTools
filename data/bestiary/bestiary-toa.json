@@ -8,7 +8,9 @@
 			"alignment": "neutral evil",
 			"ac": "21 (natural armor)",
 			"hp": "285 (30d8+150)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 13,
 			"dex": 16,
 			"con": 20,
@@ -203,7 +205,9 @@
 			"alignment": "any alignment",
 			"ac": "13 (hide armor)",
 			"hp": "30 (4d8+12)",
-			"speed": "25 ft.",
+			"speed": {
+				"walk": 25
+			},
 			"str": 13,
 			"dex": 13,
 			"con": 17,
@@ -269,7 +273,10 @@
 			"alignment": "lawful neutral",
 			"ac": "14 (natural armor)",
 			"hp": "49 (9d8+9)",
-			"speed": "20 ft., swim 30 ft.",
+			"speed": {
+				"walk": 20,
+				"swim": 30
+			},
 			"str": 13,
 			"dex": 8,
 			"con": 12,
@@ -317,7 +324,9 @@
 			"alignment": "unaligned",
 			"ac": "13",
 			"hp": "3 (1d6)",
-			"speed": "50 ft.",
+			"speed": {
+				"walk": 50
+			},
 			"str": 2,
 			"dex": 16,
 			"con": 10,
@@ -364,7 +373,9 @@
 			"alignment": "unaligned",
 			"ac": "14 (natural armor)",
 			"hp": "68 (8d12+16)",
-			"speed": "20 ft.",
+			"speed": {
+				"walk": 20
+			},
 			"str": 19,
 			"dex": 9,
 			"con": 15,
@@ -407,7 +418,9 @@
 			"alignment": "neutral good",
 			"ac": "14 (studded leather)",
 			"hp": "82 (15d8+15)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 10,
 			"dex": 15,
 			"con": 13,
@@ -477,7 +490,10 @@
 			"alignment": "unaligned",
 			"ac": "13 (natural armor)",
 			"hp": "85 (10d10+30)",
-			"speed": "5 ft., climb 5 ft.",
+			"speed": {
+				"walk": 5,
+				"climb": 5
+			},
 			"str": 18,
 			"dex": 10,
 			"con": 16,
@@ -526,7 +542,13 @@
 			"alignment": "neutral evil",
 			"ac": "7",
 			"hp": "225 (18d12+108)",
-			"speed": "0 ft., fly 50 ft. (hover)",
+			"speed": {
+				"walk": 0,
+				"fly": {
+					"number": 50,
+					"condition": " (hover)"
+				}
+			},
 			"str": 19,
 			"dex": 5,
 			"con": 22,
@@ -622,7 +644,11 @@
 			"alignment": "neutral",
 			"ac": "15",
 			"hp": "5 (2d4)",
-			"speed": "20 ft., climb 20 ft., swim 20 ft.",
+			"speed": {
+				"walk": 20,
+				"climb": 20,
+				"swim": 20
+			},
 			"str": 1,
 			"dex": 20,
 			"con": 10,
@@ -694,7 +720,9 @@
 			"alignment": "lawful good",
 			"ac": "17 (breastplate, shield)",
 			"hp": "120 (16d8+48)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 15,
 			"dex": 13,
 			"con": 17,
@@ -753,7 +781,10 @@
 			"alignment": "neutral evil",
 			"ac": "13",
 			"hp": "26 (4d10+4)",
-			"speed": "30 ft., fly 40 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 40
+			},
 			"str": 11,
 			"dex": 16,
 			"con": 12,
@@ -800,7 +831,11 @@
 			"alignment": "unaligned",
 			"ac": "12",
 			"hp": "3 (1d6+4)",
-			"speed": "30 ft., climb 20 ft., fly 30 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 20,
+				"fly": 30
+			},
 			"str": 8,
 			"dex": 14,
 			"con": 11,
@@ -835,7 +870,10 @@
 			"alignment": "chaotic evil",
 			"ac": "17 (natural armor)",
 			"hp": "147 (1d6+4)",
-			"speed": "30 ft., fly 60 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 60
+			},
 			"str": 19,
 			"dex": 11,
 			"con": 20,
@@ -891,7 +929,10 @@
 			"alignment": "unaligned",
 			"ac": "17 (natural armor), 12 while prone",
 			"hp": "75 (10d10+20)",
-			"speed": "30 ft., swim 40 ft.",
+			"speed": {
+				"walk": 30,
+				"swim": 40
+			},
 			"str": 19,
 			"dex": 10,
 			"con": 14,
@@ -933,7 +974,10 @@
 			"alignment": "chaotic evil",
 			"ac": "11 (natural armor)",
 			"hp": "59 (7d10+21)",
-			"speed": "30 ft., climb 30 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 30
+			},
 			"str": 18,
 			"dex": 12,
 			"con": 16,
@@ -989,7 +1033,10 @@
 			"alignment": "unaligned",
 			"ac": "14 (natural armor)",
 			"hp": "16 (3d10)",
-			"speed": "30 ft., climb 20 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 20
+			},
 			"str": 15,
 			"dex": 14,
 			"con": 11,
@@ -1042,7 +1089,9 @@
 			"alignment": "unaligned",
 			"ac": "13 (natural armor)",
 			"hp": "67 (9d10+18)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 16,
 			"dex": 16,
 			"con": 14,
@@ -1116,7 +1165,9 @@
 			"alignment": "lawful evil",
 			"ac": "15 (studded leather, shield)",
 			"hp": "84 (13d8+26)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 16,
 			"dex": 12,
 			"con": 15,
@@ -1177,7 +1228,9 @@
 			"alignment": "unaligned",
 			"ac": "12",
 			"hp": "45 (7d10+7)",
-			"speed": "5 ft.",
+			"speed": {
+				"walk": 5
+			},
 			"str": 15,
 			"dex": 14,
 			"con": 12,
@@ -1229,7 +1282,9 @@
 			"alignment": "lawful neutral",
 			"ac": "10",
 			"hp": "13 (3d8)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 6,
 			"dex": 10,
 			"con": 11,
@@ -1287,7 +1342,10 @@
 			"alignment": "neutral evil",
 			"ac": "12 (natural armor)",
 			"hp": "26 (4d10+4)",
-			"speed": "30 ft., fly 50 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 50
+			},
 			"str": 15,
 			"dex": 13,
 			"con": 12,
@@ -1351,7 +1409,9 @@
 			"alignment": "neutral evil",
 			"ac": "15 (bracers of defense)",
 			"hp": "127 (17d8+51) reduced to 107; subtract 1 for each day that passes during the adventure",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 17,
 			"dex": 16,
 			"con": 17,
@@ -1506,7 +1566,12 @@
 			"alignment": "unaligned",
 			"ac": "15 (natural armor)",
 			"hp": "157 (15d10+75)",
-			"speed": "50 ft. (in one direction chosen at the start of its turn)",
+			"speed": {
+				"walk": {
+					"number": 50,
+					"condition": " (in one direction chosen at the start of its turn)"
+				}
+			},
 			"str": 16,
 			"dex": 12,
 			"con": 15,
@@ -1562,7 +1627,10 @@
 			"alignment": "chaotic evil",
 			"ac": "12",
 			"hp": "27 (5d8+5)",
-			"speed": "30 ft., climb 30 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 30
+			},
 			"str": 14,
 			"dex": 15,
 			"con": 12,
@@ -1616,7 +1684,10 @@
 			"alignment": "chaotic good",
 			"ac": "14 (leather armor)",
 			"hp": "40 (9d8)",
-			"speed": "30 ft., climb 20 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 20
+			},
 			"str": 10,
 			"dex": 17,
 			"con": 11,
@@ -1682,7 +1753,10 @@
 			"alignment": "chaolic good",
 			"ac": "12",
 			"hp": "22 (5d8)",
-			"speed": "30 ft., climb 20 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 20
+			},
 			"str": 10,
 			"dex": 15,
 			"con": 11,
@@ -1743,7 +1817,9 @@
 			"alignment": "unaligned",
 			"ac": "10",
 			"hp": "11 (2d8+2)",
-			"speed": "5 ft.",
+			"speed": {
+				"walk": 5
+			},
 			"str": 14,
 			"dex": 15,
 			"con": 12,
@@ -1758,7 +1834,13 @@
 				{
 					"name": "Multiattack",
 					"entries": [
-						"The tri-flower frond uses its orange blossom, then its yellow blossom, and then its red blossom. Orange Blossom. The tri-flower frond chooses one creature it can see within 5 feet of it. The target must succeed on a DC 11 Constitution saving throw or be poisoned for 1 hour. While poisoned in this way, the target is unconscious. At the end of each minute, the poisoned target can repeat the saving throw, ending the effect on itself on a success."
+						"The tri-flower frond uses its orange blossom, then its yellow blossom, and then its red blossom."
+					]
+				},
+				{
+					"name": "Orange Blossom",
+					"entries": [
+						"The tri-flower frond chooses one creature it can see within 5 feet of it. The target must succeed on a DC 11 Constitution saving throw or be poisoned for 1 hour. While poisoned in this way, the target is unconscious. At the end of each minute, the poisoned target can repeat the saving throw, ending the effect on itself on a success."
 					]
 				},
 				{
@@ -1784,7 +1866,9 @@
 			"alignment": "unaligned",
 			"ac": "11 (natural armor)",
 			"hp": "136 (13d12+52)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 25,
 			"dex": 6,
 			"con": 19,
@@ -1845,7 +1929,9 @@
 			"alignment": "chaotic good",
 			"ac": "11",
 			"hp": "31 (7d8)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 9,
 			"dex": 12,
 			"con": 10,
@@ -1917,7 +2003,9 @@
 			"alignment": "neutral evil",
 			"ac": "13 (natural armor)",
 			"hp": "71 (11d8+22)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 10,
 			"dex": 11,
 			"con": 14,
@@ -2015,7 +2103,10 @@
 			"alignment": "unaligned",
 			"ac": "6",
 			"hp": "60 (11d8+11)",
-			"speed": "5 ft., climb 5 ft.",
+			"speed": {
+				"walk": 5,
+				"climb": 5
+			},
 			"str": 12,
 			"dex": 3,
 			"con": 12,
@@ -2064,7 +2155,9 @@
 			"alignment": "unaligned",
 			"ac": "9",
 			"hp": "33 (6d8+6)",
-			"speed": "20 ft.",
+			"speed": {
+				"walk": 20
+			},
 			"str": 13,
 			"dex": 9,
 			"con": 12,
@@ -2106,7 +2199,9 @@
 			"alignment": "lawful good",
 			"ac": "13 (natural armor)",
 			"hp": "110 (17d8+34)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 14,
 			"dex": 10,
 			"con": 14,
@@ -2237,7 +2332,10 @@
 			"alignment": "unaligned",
 			"ac": "10 (see Natural Armor feature)",
 			"hp": "27 (6d6+6)",
-			"speed": "30 ft., climb 30 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 30
+			},
 			"str": 13,
 			"dex": 11,
 			"con": 13,
@@ -2281,7 +2379,9 @@
 			"alignment": "unaligned",
 			"ac": "13 (natural armor)",
 			"hp": "200 (19d12+52)",
-			"speed": "50 ft.",
+			"speed": {
+				"walk": 50
+			},
 			"str": 25,
 			"dex": 10,
 			"con": 19,
@@ -2345,6 +2445,235 @@
 				}
 			],
 			"page": 106
+		},
+		{
+			"name": "Withers",
+			"size": "M",
+			"type": "undead",
+			"source": "ToA",
+			"alignment": "neutral evil",
+			"ac": "14 (studded leather)",
+			"hp": "45 (6d8+18)",
+			"speed": {
+				"walk": 30
+			},
+			"str": 15,
+			"dex": 14,
+			"con": 16,
+			"int": 16,
+			"wis": 13,
+			"cha": 15,
+			"skill": {
+				"perception": "+3",
+				"stealth": "+4"
+			},
+			"resist": "necrotic; bludgeoning, piercing, and slashing from nonmagical attacks that aren't silvered",
+			"immune": "poison",
+			"conditionImmune": "exhaustion, poisoned",
+			"senses": "darkvision 60 ft.",
+			"passive": 13,
+			"languages": "the languages he knew in life",
+			"cr": "4",
+			"trait": [
+				{
+					"name": "Special Equipment",
+					"entries": [
+						"Withers carries the {@item amulet of the black skull|ToA}."
+					]
+				},
+				{
+					"name": "Sunlight Sensitivity",
+					"entries": [
+						"While in sunlight, Withers has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight."
+					]
+				}
+			],
+			"action": [
+				{
+					"name": "Multiattack",
+					"entries": [
+						"Withers makes two longsword attacks or two longbow attacks. He can use his Life Drain in place of one longsword attack."
+					]
+				},
+				{
+					"name": "Life Drain",
+					"entries": [
+						"Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 5 (1d6+2) necrotic damage. The target must succeed on a DC 13 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken. This reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0.",
+						"A humanoid slain by this attack rises 24 hours later as a zombie under the Withers's control, unless the humanoid is restored to life or its body is destroyed. Withers can have no more than twelve zombies under its control at one time."
+					]
+				},
+				{
+					"name": "Longsword",
+					"entries": [
+						"Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8+2) slashing damage, or 7 (1d10+2) slashing damage if used with two hands."
+					]
+				}
+			],
+			"spellcasting": [
+				{
+					"name": "Spellcasting",
+					"headerEntries": [
+						"Withers is a 9th-level spellcaster. His spellcasting ability is Intelligence (spell save DC 13, {@hit 5} to hit with spell attacks). Withers has the following wizard spells prepared:"
+					],
+					"spells": {
+						"0": {
+							"spells": [
+								"{@spell acid splash}",
+								"{@spell mage hand}",
+								"{@spell minor illusion}",
+								"{@spell prestidigitation}"
+							]
+						},
+						"1": {
+							"slots": 4,
+							"spells": [
+								"{@spell detect magic}",
+								"{@spell expeditious retreat}",
+								"{@spell feather fall}",
+								"{@spell thunderwave}"
+							]
+						},
+						"2": {
+							"slots": 4,
+							"spells": [
+								"{@spell darkness}",
+								"{@spell hold person}",
+								"{@spell thunderwave}"
+							]
+						},
+						"3": {
+							"slots": 3,
+							"spells": [
+								"{@spell dispel magic}",
+								"{@spell lightning bolt}"
+							]
+						},
+						"4": {
+							"slots": 3,
+							"spells": [
+								"{@spell blight}",
+								"{@spell wall of fire}"
+							]
+						},
+						"5": {
+							"slots": 1,
+							"spells": [
+								"{@spell telekinesis}"
+							]
+						}
+					}
+				}
+			],
+			"page": 145
+		},
+		{
+			"name": "Asharra",
+			"size": "M",
+			"type": {
+				"type": "humanoid",
+				"tags": [
+					"aarakocra"
+				]
+			},
+			"source": "ToA",
+			"alignment": "lawful neutral",
+			"ac": "12",
+			"hp": "31 (7d8)",
+			"speed": {
+				"walk": 20,
+				"fly": 50
+			},
+			"str": 10,
+			"dex": 14,
+			"con": 10,
+			"int": 14,
+			"wis": 17,
+			"cha": 11,
+			"skill": {
+				"history": "+4",
+				"insight": "+5",
+				"perception": "+7"
+			},
+			"passive": 17,
+			"languages": "Auran, Common",
+			"cr": "2",
+			"trait": [
+				{
+					"name": "Dive Attack",
+					"entries": [
+						"If the aarakocra is flying and dives at least 30 ft. straight toward a target and then hits it with a melee weapon attack, the attack deals an extra 3 (1d6) damage to the target."
+					]
+				},
+				{
+				    "type": "inset",
+				    "name": "Dance of the Seven Winds",
+				    "entries": [
+				        "Asharra knows a ritual called the Dance of the Seven Winds, which temporarily grants magical flight to as many as ten nonflying creatures. The ritual, which takes 10 minutes to complete, can only be performed by an aarakocra elder and requires a black orchid as a material component.",
+						"Asharra must grind the orchid to powder, inhale it, and dance in circles around the ritual's beneficiaries uninterrupted while seven other aarakocra chant prayers to the Wind Dukes of Aaqa. When the dance concludes, Asharra's wings disappear and she loses the ability to fly. The ritual's beneficiaries each gain a magical flying speed of 30 feet (allowing them to fly 4 miles per hour). This benefit lasts for 3 days, after which Asharra's wings reappear and she regains the ability to fly."
+				    ]
+				}
+			],
+			"action": [
+				{
+					"name": "Talon",
+					"entries": [
+						"Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4+2) slashing damage."
+					]
+				},
+				{
+					"name": "Javelin",
+					"entries": [
+						"Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 30/120 ft., one target. Hit: 5 (1d6+2) piercing damage."
+					]
+				},
+				{
+					"name": "Summon Air Elemental",
+					"entries": [
+						"Five aarakocra within 30 feet of each other can magically summon an {@creature air elemental}. Each of the five must use its action and movement on three consecutive turns to perform an aerial dance and must maintain concentration while doing so (as if concentrating on a spell). When all five have finished their third turn of the dance, the elemental appears in an unoccupied space within 60 feet of them. It is friendly toward them and obeys their spoken commands. It remains for 1 hour, until it or all its summoners die, or until any of its summoners dismisses it as a bonus action. A summoner can't perform the dance again until it finishes a short rest. When the elemental returns to the Elemental Plane of Air, any aarakocra within 5 feet of it can return with it."
+					]
+				}
+			],
+			"spellcasting": [
+				{
+					"name": "Spellcasting",
+					"headerEntries": [
+						"Asharra is a 5th-level spellcaster. Her spellcasting ability is Wisdom (spell save DC 13, {@hit 5} to hit with spell attacks). Asharra has the following druid spells prepared:"
+					],
+					"spells": {
+						"0": {
+							"spells": [
+								"{@spell druidcraft}",
+								"{@spell mending}",
+								"{@spell produce flame}"
+							]
+						},
+						"1": {
+							"slots": 4,
+							"spells": [
+								"{@spell detect magic}",
+								"{@spell faerie fire}",
+								"{@spell thunderwave}"
+							]
+						},
+						"2": {
+							"slots": 3,
+							"spells": [
+								"{@spell gust of wind}",
+								"{@spell hold person}",
+								"{@spell lesser restoration}"
+							]
+						},
+						"3": {
+							"slots": 2,
+							"spells": [
+								"{@spell call lightning}",
+								"{@spell wind wall}"
+							]
+						}
+					}
+				}
+			],
+			"page": 69
 		}
 	]
 }

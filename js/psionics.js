@@ -51,7 +51,7 @@ window.onload = function load () {
 };
 
 let PSIONIC_LIST;
-
+let filterBox;
 function onJsonLoad (data) {
 	PSIONIC_LIST = data.psionic;
 
@@ -66,14 +66,14 @@ function onJsonLoad (data) {
 		items: ["Avatar", "Awakened", "Immortal", "Nomad", "Wu Jen", Parser.PSI_ORDER_NONE]
 	});
 
-	const filterBox = initFilterBox(sourceFilter, typeFilter, orderFilter);
+	filterBox = initFilterBox(sourceFilter, typeFilter, orderFilter);
 
 	let tempString = "";
 	PSIONIC_LIST.forEach(function (p, i) {
 		p[JSON_ITEM_ORDER] = Parser.psiOrderToFull(p[JSON_ITEM_ORDER]);
 
 		tempString += `
-			<li class='row' ${FLTR_ID}="${i}">
+			<li class='row' ${FLTR_ID}="${i}" onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id='${i}' href='#${UrlUtil.autoEncodeHash(p)}' title="${p[JSON_ITEM_NAME]}">
 					<span class='${LIST_NAME} ${CLS_COL1}'>${p[JSON_ITEM_NAME]}</span>
 					<span class='${LIST_SOURCE} ${CLS_COL2}' title="${Parser.sourceJsonToFull(p[JSON_ITEM_SOURCE])}">${Parser.sourceJsonToAbv(p[JSON_ITEM_SOURCE])}</span>
@@ -97,6 +97,9 @@ function onJsonLoad (data) {
 		listClass: CLS_PSIONICS,
 		sortFunction: SortUtil.listSort
 	});
+	list.on("updated", () => {
+		filterBox.setCount(list.visibleItems.length, list.items.length);
+	});
 
 	filterBox.render();
 
@@ -117,11 +120,40 @@ function onJsonLoad (data) {
 				p.order
 			);
 		});
+		FilterBox.nextIfHidden(PSIONIC_LIST);
 	}
 
-	initHistory();
+	History.init();
 	handleFilterChange();
 	RollerUtil.addListRollButton();
+
+	const subList = ListUtil.initSublist({
+		valueNames: ["name", "type", "order", "id"],
+		listClass: "subpsionics",
+		itemList: PSIONIC_LIST,
+		getSublistRow: getSublistItem,
+		primaryLists: [list]
+	});
+	ListUtil.bindPinButton();
+	EntryRenderer.hover.bindPopoutButton(PSIONIC_LIST);
+	UrlUtil.bindLinkExportButton(filterBox);
+	ListUtil.bindDownloadButton();
+	ListUtil.bindUploadButton();
+	ListUtil.initGenericPinnable();
+	ListUtil.loadState();
+}
+
+function getSublistItem (p, pinId) {
+	return `
+		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
+			<a href="#${UrlUtil.autoEncodeHash(p)}" title="${p.name}">
+				<span class="name col-xs-6">${p.name}</span>
+				<span class="type col-xs-3">${Parser.psiTypeToFull(p.type)}</span>
+				<span class="order col-xs-3 ${p.order === STR_NONE ? CLS_LI_NONE : ""}">${p.order}</span>
+				<span class="id hidden">${pinId}</span>				
+			</a>
+		</li>
+	`;
 }
 
 let renderer;
@@ -147,4 +179,8 @@ function loadhash (jsonIndex) {
 		STATS_ORDER_AND_TYPE.innerHTML = `${selectedPsionic[JSON_ITEM_ORDER]} ${Parser.psiTypeToFull(selectedPsionic[JSON_ITEM_TYPE])}`;
 		STATS_TEXT.innerHTML = EntryRenderer.psionic.getDisciplineText(selectedPsionic, renderer);
 	}
+}
+
+function loadsub (sub) {
+	filterBox.setFromSubHashes(sub);
 }

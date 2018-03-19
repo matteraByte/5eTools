@@ -8,7 +8,9 @@
 			"alignment": "lawful evil",
 			"ac": "15 (natural armor)",
 			"hp": "53 (7d10+14)",
-			"speed": "50 ft.",
+			"speed": {
+				"walk": 50
+			},
 			"str": 16,
 			"dex": 15,
 			"con": 14,
@@ -65,7 +67,13 @@
 			"alignment": "neutral evil",
 			"ac": "12",
 			"hp": "26 (4d8+8)",
-			"speed": "0 ft., fly 40 ft. (hover)",
+			"speed": {
+				"walk": 0,
+				"fly": {
+					"number": 40,
+					"condition": " (hover)"
+				}
+			},
 			"str": 6,
 			"dex": 14,
 			"con": 14,
@@ -122,7 +130,10 @@
 			"alignment": "lawful good",
 			"ac": "16 (natural armor)",
 			"hp": "56 (8d8+24)",
-			"speed": "30 ft., fly 40 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 40
+			},
 			"str": 18,
 			"dex": 15,
 			"con": 16,
@@ -190,7 +201,9 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (natural armor)",
 			"hp": "78 (12d8+24)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 10,
 			"dex": 11,
 			"con": 15,
@@ -250,7 +263,9 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (natural armor)",
 			"hp": "58 (9d8+18)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 10,
 			"dex": 11,
 			"con": 15,
@@ -310,7 +325,9 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (natural armor)",
 			"hp": "58 (9d8+18)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 10,
 			"dex": 11,
 			"con": 15,
@@ -364,7 +381,10 @@
 			"alignment": "neutral",
 			"ac": "15 (natural armor)",
 			"hp": "18 (4d6+4)",
-			"speed": "0 ft., fly 60 ft.",
+			"speed": {
+				"walk": 0,
+				"fly": 60
+			},
 			"str": 12,
 			"dex": 18,
 			"con": 12,
@@ -403,7 +423,10 @@
 			"alignment": "neutral",
 			"ac": "16 (natural armor)",
 			"hp": "38 (7d8+7)",
-			"speed": "0 ft., fly 60 ft.",
+			"speed": {
+				"walk": 0,
+				"fly": 60
+			},
 			"str": 14,
 			"dex": 18,
 			"con": 12,
@@ -450,7 +473,10 @@
 			"alignment": "neutral",
 			"ac": "18 (natural armor)",
 			"hp": "97 (13d10+26)",
-			"speed": "0 ft., fly 60 ft.",
+			"speed": {
+				"walk": 0,
+				"fly": 60
+			},
 			"str": 18,
 			"dex": 18,
 			"con": 15,
@@ -497,7 +523,10 @@
 			"alignment": "lawful evil",
 			"ac": "18 (natural armor)",
 			"hp": "119 (14d8+56)",
-			"speed": "50 ft., climb 20 ft.",
+			"speed": {
+				"walk": 50,
+				"climb": 20
+			},
 			"str": 20,
 			"dex": 18,
 			"con": 19,
@@ -566,7 +595,9 @@
 			"alignment": "chaotic evil",
 			"ac": "17 (natural armor)",
 			"hp": "147 (14d12+56)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 20,
 			"dex": 11,
 			"con": 19,
@@ -621,7 +652,9 @@
 			"alignment": "unaligned",
 			"ac": "16 (natural armor)",
 			"hp": "39 (6d8+12)",
-			"speed": "20 ft.",
+			"speed": {
+				"walk": 20
+			},
 			"str": 20,
 			"dex": 11,
 			"con": 15,
@@ -665,7 +698,9 @@
 			"alignment": "unaligned",
 			"ac": "16 (natural armor)",
 			"hp": "26 (4d8+8)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 18,
 			"dex": 11,
 			"con": 15,
@@ -716,7 +751,10 @@
 			"alignment": "chaotic neutral",
 			"ac": "17 (natural armor)",
 			"hp": "133 (14d8+70)",
-			"speed": "50 ft., climb 50 ft.",
+			"speed": {
+				"walk": 50,
+				"climb": 50
+			},
 			"str": 23,
 			"dex": 17,
 			"con": 20,
@@ -777,7 +815,10 @@
 			"alignment": "neutral evil",
 			"ac": "14 (natural armor)",
 			"hp": "39 (6d6+18)",
-			"speed": "30 ft., climb 20 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 20
+			},
 			"str": 16,
 			"dex": 14,
 			"con": 17,
@@ -861,7 +902,9 @@
 			"alignment": "neutral evil",
 			"ac": "16 (natural armor)",
 			"hp": "191 (18d12+74)",
-			"speed": "20 ft.",
+			"speed": {
+				"walk": 20
+			},
 			"str": 22,
 			"dex": 10,
 			"con": 21,
@@ -927,7 +970,9 @@
 			"alignment": "lawful evil",
 			"ac": "14 (natural armor)",
 			"hp": "39 (6d8+12)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 13,
 			"dex": 10,
 			"con": 15,
@@ -972,7 +1017,9 @@
 			"alignment": "chaotic evil",
 			"ac": "18 (Sylvan Warrior)",
 			"hp": "84 (13d8+26)",
-			"speed": "60 ft.",
+			"speed": {
+				"walk": 60
+			},
 			"str": 14,
 			"dex": 19,
 			"con": 15,
@@ -1057,7 +1104,10 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (natural armor)",
 			"hp": "120 (16d8+48)",
-			"speed": "30 ft., fly 40 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 40
+			},
 			"str": 14,
 			"dex": 19,
 			"con": 16,
@@ -1121,7 +1171,9 @@
 			"alignment": "lawful neutral",
 			"ac": "15 (scale mail)",
 			"hp": "11 (2d8+2)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 12,
 			"dex": 13,
 			"con": 12,
@@ -1158,7 +1210,9 @@
 			"alignment": "chaotic evil",
 			"ac": "19 (natural armor)",
 			"hp": "168 (16d8+96)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 24,
 			"dex": 20,
 			"con": 22,
@@ -1216,7 +1270,9 @@
 			"alignment": "neutral evil",
 			"ac": "12",
 			"hp": "195 (17d12+85)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 22,
 			"dex": 15,
 			"con": 20,
@@ -1279,7 +1335,9 @@
 			"alignment": "neutral evil",
 			"ac": "12",
 			"hp": "195 (17d12+85)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 22,
 			"dex": 15,
 			"con": 22,
@@ -1354,7 +1412,9 @@
 			"alignment": "neutral evil",
 			"ac": "14 (natural armor)",
 			"hp": "362 (25d12+200)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 26,
 			"dex": 6,
 			"con": 26,
@@ -1400,7 +1460,9 @@
 			"alignment": "neutral evil",
 			"ac": "13 (natural armor)",
 			"hp": "153 (18d8+72)",
-			"speed": "25 ft.",
+			"speed": {
+				"walk": 25
+			},
 			"str": 18,
 			"dex": 10,
 			"con": 18,
@@ -1446,7 +1508,9 @@
 			"alignment": "neutral evil",
 			"ac": "14 (natural armor)",
 			"hp": "253 (22d10+132)",
-			"speed": "25 ft.",
+			"speed": {
+				"walk": 25
+			},
 			"str": 22,
 			"dex": 8,
 			"con": 22,
@@ -1492,7 +1556,9 @@
 			"alignment": "chaotic evil",
 			"ac": "14 (natural armor)",
 			"hp": "39 (6d8+12)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 13,
 			"dex": 15,
 			"con": 14,
@@ -1542,7 +1608,10 @@
 			"alignment": "chaotic evil",
 			"ac": "14",
 			"hp": "21 (6d6)",
-			"speed": "40 ft., climb 30 ft.",
+			"speed": {
+				"walk": 40,
+				"climb": 30
+			},
 			"str": 10,
 			"dex": 18,
 			"con": 10,
@@ -1597,7 +1666,9 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "133 (14d10+56)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 20,
 			"dex": 18,
 			"con": 19,
@@ -1649,7 +1720,9 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (natural armor)",
 			"hp": "97 (15d8+30)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 18,
 			"dex": 16,
 			"con": 15,
@@ -1707,7 +1780,9 @@
 			"alignment": "neutral evil",
 			"ac": "16 (studded leather)",
 			"hp": "32 (5d8+10)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 9,
 			"dex": 18,
 			"con": 14,
@@ -1810,7 +1885,9 @@
 			"alignment": "neutral evil",
 			"ac": "16 (natural armor)",
 			"hp": "95 (10d10+40)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 22,
 			"dex": 10,
 			"con": 18,
@@ -1866,7 +1943,9 @@
 			"alignment": "unaligned",
 			"ac": "19 (natural armor)",
 			"hp": "133 (14d10+56)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 23,
 			"dex": 10,
 			"con": 18,
@@ -1940,7 +2019,9 @@
 			"alignment": "chaotic good",
 			"ac": "12 (leather armor)",
 			"hp": "9 (2d8)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 9,
 			"dex": 12,
 			"con": 11,
@@ -1992,7 +2073,9 @@
 			"alignment": "chaotic good",
 			"ac": "15 (natural armor)",
 			"hp": "22 (4d8+4)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 8,
 			"dex": 16,
 			"con": 13,
@@ -2047,7 +2130,10 @@
 			"alignment": "unaligned",
 			"ac": "16 (natural armor)",
 			"hp": "67 (9d8+27)",
-			"speed": "30 ft., climb 30 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 30
+			},
 			"str": 16,
 			"dex": 13,
 			"con": 16,
@@ -2120,7 +2206,10 @@
 			"alignment": "chaotic evil",
 			"ac": "14 (natural armor)",
 			"hp": "27 (6d6+6)",
-			"speed": "25 ft., climb 15 ft.",
+			"speed": {
+				"walk": 25,
+				"climb": 15
+			},
 			"str": 16,
 			"dex": 14,
 			"con": 13,
@@ -2172,7 +2261,9 @@
 			"alignment": "neutral evil",
 			"ac": "17 (natural armor)",
 			"hp": "114 (12d10+48)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 19,
 			"dex": 10,
 			"con": 18,
@@ -2230,7 +2321,11 @@
 			"alignment": "unaligned",
 			"ac": "12 (natural armor)",
 			"hp": "14 (4d6)",
-			"speed": "30 ft., burrow 15 ft., climb 30 ft.",
+			"speed": {
+				"walk": 30,
+				"burrow": 15,
+				"climb": 30
+			},
 			"str": 10,
 			"dex": 11,
 			"con": 11,
@@ -2273,7 +2368,9 @@
 			"alignment": "lawful neutral",
 			"ac": "17 (natural armor)",
 			"hp": "22 (3d8+9)",
-			"speed": "20 ft.",
+			"speed": {
+				"walk": 20
+			},
 			"str": 15,
 			"dex": 9,
 			"con": 16,
@@ -2314,7 +2411,9 @@
 			"alignment": "neutral",
 			"ac": "16 (natural armor)",
 			"hp": "44 (8d8+8)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 10,
 			"dex": 16,
 			"con": 13,
@@ -2377,7 +2476,10 @@
 			"alignment": "neutral evil",
 			"ac": "11",
 			"hp": "38 (7d8+7)",
-			"speed": "0 ft., fly 30 ft.",
+			"speed": {
+				"walk": 0,
+				"fly": 30
+			},
 			"str": 8,
 			"dex": 13,
 			"con": 12,
@@ -2438,7 +2540,10 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "230 (20d12+100)",
-			"speed": "20 ft., swim 20 ft.",
+			"speed": {
+				"walk": 20,
+				"swim": 20
+			},
 			"str": 22,
 			"dex": 11,
 			"con": 21,
@@ -2513,7 +2618,9 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "37 (5d8+15)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 18,
 			"dex": 12,
 			"con": 17,
@@ -2567,7 +2674,9 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (natural armor)",
 			"hp": "22 (4d8+4)",
-			"speed": "50 ft.",
+			"speed": {
+				"walk": 50
+			},
 			"str": 12,
 			"dex": 16,
 			"con": 13,
@@ -2627,7 +2736,9 @@
 			"alignment": "chaotic evil",
 			"ac": "20 (natural armor)",
 			"hp": "231 (22d10+110)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 22,
 			"dex": 14,
 			"con": 21,
@@ -2697,7 +2808,10 @@
 			"alignment": "chaotic evil",
 			"ac": "20 (natural armor)",
 			"hp": "332 (19d20+133)",
-			"speed": "40 ft., swim 40 ft.",
+			"speed": {
+				"walk": 40,
+				"swim": 40
+			},
 			"str": 26,
 			"dex": 18,
 			"con": 25,
@@ -2750,7 +2864,7 @@
 				{
 					"name": "Chaotic Breath (Recharge 5\u20146)",
 					"entries": [
-						"The abyssal wurm dissolvees a blast of elemental energy in a 90-foot cone. Each creature in that area must make a DC 22 saving throw, taking 56 (15d6) damage on a failed save, or half as much damage on a successful one. Roll a d10 to determine the damage type and the type of saving throw used against it: 1,2\u2014fire, Dexterity; 3,4\u2014cold, Constitution; 5,6\u2014acid, Dexterity; 7,8\u2014lightning, Dexterity; 9,10\u2014poison, Constitution. The wurm then teleports to an unoccupied space anywhere within the cone or within 5 feet of the cone"
+						"The abyssal wurm dissolvees a blast of elemental energy in a 90-foot cone. Each creature in that area must make a DC 22 saving throw, taking 56 (15d6) damage on a failed save, or half as much damage on a successful one. Roll a d10 to determine the damage type and the type of saving throw used against it: 1,2\u2014fire, Dexterity; 3,4\u2014cold, Constitution; 5,6\u2014acid, Dexterity; 7,8\u2014lightning, Dexterity; 9,10\u2014poison, Constitution. The wurm then teleports to an unoccupied space anywhere within the cone or within 5 feet of the cone."
 					]
 				}
 			],
@@ -2789,7 +2903,9 @@
 			"alignment": "chaotic evil",
 			"ac": "18 (full plate)",
 			"hp": "57 (6d10+24)",
-			"speed": "60 ft.",
+			"speed": {
+				"walk": 60
+			},
 			"str": 16,
 			"dex": 12,
 			"con": 19,
@@ -2858,7 +2974,9 @@
 			"alignment": "chaotic evil",
 			"ac": "14 (natural armor)",
 			"hp": "52 (8d8+16)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 14,
 			"dex": 12,
 			"con": 15,
@@ -2948,7 +3066,9 @@
 			"alignment": "chaotic evil",
 			"ac": "14",
 			"hp": "58 (9d8+18)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 19,
 			"dex": 18,
 			"con": 15,
@@ -3017,7 +3137,9 @@
 			"alignment": "chaotic evil",
 			"ac": "13 (natural armor)",
 			"hp": "26 (4d8+8)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 16,
 			"dex": 11,
 			"con": 14,
@@ -3080,7 +3202,9 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "123 (13d10+52)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 17,
 			"dex": 14,
 			"con": 19,
@@ -3143,7 +3267,10 @@
 			"alignment": "chaotic evil",
 			"ac": "19 (natural armor)",
 			"hp": "142 (15d10+60)",
-			"speed": "40 ft., fly 50 ft.",
+			"speed": {
+				"walk": 40,
+				"fly": 50
+			},
 			"str": 14,
 			"dex": 22,
 			"con": 18,
@@ -3218,7 +3345,10 @@
 			"alignment": "chaotic evil",
 			"ac": "13 (natural armor)",
 			"hp": "13 (2d6+6)",
-			"speed": "20 ft., fly 30 ft.",
+			"speed": {
+				"walk": 20,
+				"fly": 30
+			},
 			"str": 14,
 			"dex": 10,
 			"con": 17,
@@ -3262,7 +3392,10 @@
 			"alignment": "chaotic evil",
 			"ac": "20 (natural armor)",
 			"hp": "218 (19d12+95)",
-			"speed": "40 ft., climb 40 ft.",
+			"speed": {
+				"walk": 40,
+				"climb": 40
+			},
 			"str": 22,
 			"dex": 14,
 			"con": 21,
@@ -3343,7 +3476,9 @@
 			"alignment": "chaotic evil",
 			"ac": "20 (natural armor)",
 			"hp": "171 (18d10+72)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 20,
 			"dex": 10,
 			"con": 18,
@@ -3408,7 +3543,10 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "68 (8d8+32)",
-			"speed": "30 ft., fly 50 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 50
+			},
 			"str": 14,
 			"dex": 19,
 			"con": 18,
@@ -3465,7 +3603,9 @@
 			"alignment": "chaotic evil",
 			"ac": "14 (natural armor)",
 			"hp": "33 (6d6+12)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 10,
 			"dex": 15,
 			"con": 15,
@@ -3512,7 +3652,10 @@
 			"alignment": "chaotic evil",
 			"ac": "20 (natural armor)",
 			"hp": "337 (25d12+175)",
-			"speed": "40 ft., fly 60 ft.",
+			"speed": {
+				"walk": 40,
+				"fly": 60
+			},
 			"str": 27,
 			"dex": 13,
 			"con": 25,
@@ -3619,7 +3762,9 @@
 			"alignment": "chaotic evil",
 			"ac": "19 (natural armor)",
 			"hp": "230 (20d10+120)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 20,
 			"dex": 16,
 			"con": 22,
@@ -3688,7 +3833,10 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "52 (7d8+21)",
-			"speed": "30 ft., fly 50 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 50
+			},
 			"str": 11,
 			"dex": 16,
 			"con": 17,
@@ -3751,7 +3899,10 @@
 			"alignment": "chaotic evil",
 			"ac": "18 (natural armor)",
 			"hp": "142 (15d8+75)",
-			"speed": "30 ft., fly 50 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 50
+			},
 			"str": 15,
 			"dex": 20,
 			"con": 21,
@@ -3832,7 +3983,9 @@
 			"alignment": "chaotic evil",
 			"ac": "18 (natural armor)",
 			"hp": "210 (20d10+100)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 17,
 			"dex": 12,
 			"con": 20,
@@ -3913,7 +4066,9 @@
 			"alignment": "chaotic evil",
 			"ac": "14",
 			"hp": "6 (1d6+3)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 11,
 			"dex": 18,
 			"con": 17,
@@ -3966,7 +4121,10 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "79 (8d8+40)",
-			"speed": "30 ft., climb 20 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 20
+			},
 			"str": 18,
 			"dex": 15,
 			"con": 20,
@@ -4066,7 +4224,10 @@
 			"alignment": "chaotic evil",
 			"ac": "16",
 			"hp": "184 (16d10+96)",
-			"speed": "20 ft., fly 40 ft.",
+			"speed": {
+				"walk": 20,
+				"fly": 40
+			},
 			"str": 10,
 			"dex": 22,
 			"con": 17,
@@ -4129,7 +4290,9 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (natural armor)",
 			"hp": "27 (5d6+10)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 13,
 			"dex": 17,
 			"con": 15,
@@ -4186,7 +4349,9 @@
 			"alignment": "chaotic evil",
 			"ac": "13",
 			"hp": "32 (5d8+10)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 15,
 			"dex": 17,
 			"con": 15,
@@ -4226,7 +4391,7 @@
 		},
 		{
 			"source": "CC 3pp",
-			"name": "Scion Of Zuggtmoy",
+			"name": "Scion of Zuggtmoy",
 			"size": "M",
 			"type": {
 				"type": "plant",
@@ -4237,7 +4402,9 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (natural armor)",
 			"hp": "67 (9d8+27)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 13,
 			"dex": 17,
 			"con": 17,
@@ -4277,7 +4444,7 @@
 		},
 		{
 			"source": "CC 3pp",
-			"name": "Spore Lord Of Zuggtmoy",
+			"name": "Spore Lord of Zuggtmoy",
 			"size": "M",
 			"type": {
 				"type": "plant",
@@ -4288,7 +4455,9 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (natural armor)",
 			"hp": "109 (14d8+42)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 15,
 			"dex": 16,
 			"con": 17,
@@ -4339,7 +4508,9 @@
 			"alignment": "chaotic evil",
 			"ac": "17 (natural armor)",
 			"hp": "170 (16d12+80)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 22,
 			"dex": 8,
 			"con": 21,
@@ -4402,7 +4573,9 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "180 (19d10+76)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 18,
 			"dex": 10,
 			"con": 19,
@@ -4459,7 +4632,10 @@
 			"alignment": "chaotic evil",
 			"ac": "18 (natural armor)",
 			"hp": "220 (21d10+105)",
-			"speed": "40 ft., fly 60 ft.",
+			"speed": {
+				"walk": 40,
+				"fly": 60
+			},
 			"str": 21,
 			"dex": 15,
 			"con": 20,
@@ -4551,7 +4727,9 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "75 (10d8+30)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 16,
 			"dex": 15,
 			"con": 16,
@@ -4610,7 +4788,9 @@
 			"alignment": "chaotic evil",
 			"ac": "18 (natural armor)",
 			"hp": "202 (15d12+105)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 23,
 			"dex": 12,
 			"con": 25,
@@ -4667,7 +4847,9 @@
 			"alignment": "chaotic evil",
 			"ac": "18 (natural armor)",
 			"hp": "120 (16d10+32)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 18,
 			"dex": 17,
 			"con": 14,
@@ -4741,7 +4923,9 @@
 			"alignment": "neutral evil",
 			"ac": "16 (natural armor)",
 			"hp": "120 (9d10+27)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 18,
 			"dex": 12,
 			"con": 16,
@@ -4796,7 +4980,11 @@
 			"alignment": "chaotic evil",
 			"ac": "14 (natural armor)",
 			"hp": "22 (3d8+9)",
-			"speed": "25 ft., climb 15 ft., swim 15 ft.",
+			"speed": {
+				"walk": 25,
+				"climb": 15,
+				"swim": 15
+			},
 			"str": 17,
 			"dex": 12,
 			"con": 17,
@@ -4836,7 +5024,11 @@
 			"alignment": "any chaotic alignment",
 			"ac": "22 (natural armor)",
 			"hp": "385 (22d20+154)",
-			"speed": "40 ft., burrow 40 ft., fly 80 ft.",
+			"speed": {
+				"walk": 40,
+				"burrow": 40,
+				"fly": 80
+			},
 			"str": 27,
 			"dex": 10,
 			"con": 24,
@@ -4954,7 +5146,11 @@
 			"alignment": "any chaotic alignment",
 			"ac": "19 (natural armor)",
 			"hp": "207 (18d12+90)",
-			"speed": "40 ft., burrow 40 ft., fly 80 ft.",
+			"speed": {
+				"walk": 40,
+				"burrow": 40,
+				"fly": 80
+			},
 			"str": 23,
 			"dex": 10,
 			"con": 20,
@@ -5072,7 +5268,11 @@
 			"alignment": "any chaotic alignment",
 			"ac": "18 (natural armor)",
 			"hp": "127 (15d10+45)",
-			"speed": "40 ft., burrow 40 ft., fly 80 ft.",
+			"speed": {
+				"walk": 40,
+				"burrow": 40,
+				"fly": 80
+			},
 			"str": 19,
 			"dex": 10,
 			"con": 16,
@@ -5141,7 +5341,6 @@
 					]
 				}
 			],
-			"legendaryGroup": "Moon Dragon",
 			"page": 72
 		},
 		{
@@ -5152,7 +5351,11 @@
 			"alignment": "any chaotic alignment",
 			"ac": "17 (natural armor)",
 			"hp": "38 (7d8+7)",
-			"speed": "30 ft., burrow 30 ft., fly 60 ft.",
+			"speed": {
+				"walk": 30,
+				"burrow": 30,
+				"fly": 60
+			},
 			"str": 15,
 			"dex": 10,
 			"con": 12,
@@ -5201,7 +5404,6 @@
 					]
 				}
 			],
-			"legendaryGroup": "Moon Dragon",
 			"page": 72
 		},
 		{
@@ -5212,7 +5414,10 @@
 			"alignment": "any lawful alignment",
 			"ac": "21 (natural armor)",
 			"hp": "455 (26d20+182)",
-			"speed": "40 ft., fly 80 ft.",
+			"speed": {
+				"walk": 40,
+				"fly": 80
+			},
 			"str": 27,
 			"dex": 14,
 			"con": 25,
@@ -5335,7 +5540,10 @@
 			"alignment": "any lawful alignment",
 			"ac": "18 (natural armor)",
 			"hp": "230 (20d12+100)",
-			"speed": "40 ft., fly 80 ft.",
+			"speed": {
+				"walk": 40,
+				"fly": 80
+			},
 			"str": 23,
 			"dex": 14,
 			"con": 21,
@@ -5452,7 +5660,10 @@
 			"alignment": "any lawful alignment",
 			"ac": "17 (natural armor)",
 			"hp": "144 (17d10+51)",
-			"speed": "40 ft., fly 80 ft.",
+			"speed": {
+				"walk": 40,
+				"fly": 80
+			},
 			"str": 19,
 			"dex": 14,
 			"con": 17,
@@ -5520,7 +5731,6 @@
 					]
 				}
 			],
-			"legendaryGroup": "Sun Dragon",
 			"page": 76
 		},
 		{
@@ -5531,7 +5741,10 @@
 			"alignment": "any lawful alignment",
 			"ac": "16 (natural armor)",
 			"hp": "38 (7d8+7)",
-			"speed": "30 ft., fly 60 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 60
+			},
 			"str": 15,
 			"dex": 14,
 			"con": 13,
@@ -5580,7 +5793,6 @@
 					]
 				}
 			],
-			"legendaryGroup": "Sun Dragon",
 			"page": 76
 		},
 		{
@@ -5591,7 +5803,10 @@
 			"alignment": "any chaotic alignment",
 			"ac": "22 (natural armor)",
 			"hp": "546 (28d20+252)",
-			"speed": "40 ft., fly 80 ft.",
+			"speed": {
+				"walk": 40,
+				"fly": 80
+			},
 			"str": 30,
 			"dex": 10,
 			"con": 28,
@@ -5721,7 +5936,10 @@
 			"alignment": "any chaotic alignment",
 			"ac": "19 (natural armor)",
 			"hp": "226 (17d12+116)",
-			"speed": "40 ft., fly 80 ft.",
+			"speed": {
+				"walk": 40,
+				"fly": 80
+			},
 			"str": 27,
 			"dex": 10,
 			"con": 24,
@@ -5844,7 +6062,10 @@
 			"alignment": "any chaotic alignment",
 			"ac": "18 (natural armor)",
 			"hp": "144 (17d10+51)",
-			"speed": "40 ft., fly 80 ft.",
+			"speed": {
+				"walk": 40,
+				"fly": 80
+			},
 			"str": 23,
 			"dex": 10,
 			"con": 20,
@@ -5918,7 +6139,6 @@
 					]
 				}
 			],
-			"legendaryGroup": "Time Dragon",
 			"page": 79
 		},
 		{
@@ -5929,7 +6149,10 @@
 			"alignment": "any chaotic alignment",
 			"ac": "17 (natural armor)",
 			"hp": "75 (10d8+30)",
-			"speed": "30 ft., fly 60 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 60
+			},
 			"str": 19,
 			"dex": 10,
 			"con": 16,
@@ -5985,7 +6208,6 @@
 					]
 				}
 			],
-			"legendaryGroup": "Time Dragon",
 			"page": 79
 		},
 		{
@@ -5996,7 +6218,13 @@
 			"alignment": "chaotic evil",
 			"ac": "21 (natural armor)",
 			"hp": "420 (24d20+168)",
-			"speed": "40 ft., fly 80 ft. (hover)",
+			"speed": {
+				"walk": 40,
+				"fly": {
+					"number": 80,
+					"condition": " (hover)"
+				}
+			},
 			"str": 27,
 			"dex": 12,
 			"con": 25,
@@ -6114,7 +6342,13 @@
 			"alignment": "chaotic evil",
 			"ac": "18 (natural armor)",
 			"hp": "195 (17d12+85)",
-			"speed": "40 ft., fly 80 ft. (hover)",
+			"speed": {
+				"walk": 40,
+				"fly": {
+					"number": 80,
+					"condition": " (hover)"
+				}
+			},
 			"str": 23,
 			"dex": 12,
 			"con": 20,
@@ -6232,7 +6466,13 @@
 			"alignment": "chaotic evil",
 			"ac": "17 (natural armor)",
 			"hp": "127 (15d10+45)",
-			"speed": "40 ft., fly 80 ft. (hover)",
+			"speed": {
+				"walk": 40,
+				"fly": {
+					"number": 80,
+					"condition": " (hover)"
+				}
+			},
 			"str": 19,
 			"dex": 12,
 			"con": 16,
@@ -6301,7 +6541,6 @@
 					]
 				}
 			],
-			"legendaryGroup": "Void Dragon",
 			"page": 83
 		},
 		{
@@ -6312,7 +6551,13 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "33 (6d8+6)",
-			"speed": "30 ft., fly 60 ft. (hover)",
+			"speed": {
+				"walk": 30,
+				"fly": {
+					"number": 60,
+					"condition": " (hover)"
+				}
+			},
 			"str": 15,
 			"dex": 12,
 			"con": 12,
@@ -6361,7 +6606,6 @@
 					]
 				}
 			],
-			"legendaryGroup": "Void Dragon",
 			"page": 83
 		},
 		{
@@ -6372,7 +6616,14 @@
 			"alignment": "any lawful alignment",
 			"ac": "22 (natural armor)",
 			"hp": "481 (26d20+208)",
-			"speed": "40 ft., fly 80 ft. (hover), swim 40 ft.",
+			"speed": {
+				"walk": 40,
+				"fly": {
+					"number": 80,
+					"condition": " (hover)"
+				},
+				"swim": 40
+			},
 			"str": 29,
 			"dex": 12,
 			"con": 27,
@@ -6458,16 +6709,10 @@
 								{
 									"type": "item",
 									"name": "Collapsing Breath",
-									"entry": "The dragon pulls a single Huge or smaller creature within 120 ft. into its maw. The creature must succeed on a DC 23 Strength saving throw or be swallowed. While swallowed, the creature is blinded and restrained, it has total cover against attacks and other effects outside the dragon, and it takes 42 (12d6) bludgeoning damage at the start of each of the dragon's"
+									"entry": "The dragon pulls a single Huge or smaller creature within 120 ft. into its maw. The creature must succeed on a DC 23 Strength saving throw or be swallowed. While swallowed, the creature is blinded and restrained, it has total cover against attacks and other effects outside the dragon, and it takes 42 (12d6) bludgeoning damage at the start of each of the dragon's turns. If the dragon takes 50 damage or more on a single turn from a creature inside it, the dragon must succeed on a DC 24 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of the dragon. If the dragon dies, a swallowed creature is no longer restrained by it and can escape from the corpse using 15 feet of movement, exiting prone."
 								}
 							]
 						}
-					]
-				},
-				{
-					"name": "turns",
-					"entries": [
-						"If the dragon takes 50 damage or more on a single turn from a creature inside it, the dragon must succeed on a DC 24 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of the dragon. If the dragon dies, a swallowed creature is no longer restrained by it and can escape from the corpse using 15 feet of movement, exiting prone."
 					]
 				}
 			],
@@ -6502,7 +6747,14 @@
 			"alignment": "any lawful alignment",
 			"ac": "19 (natural armor)",
 			"hp": "212 (17d12+102)",
-			"speed": "40 ft., fly 80 ft. (hover), swim 40 ft.",
+			"speed": {
+				"walk": 40,
+				"fly": {
+					"number": 80,
+					"condition": " (hover)"
+				},
+				"swim": 40
+			},
 			"str": 25,
 			"dex": 12,
 			"con": 23,
@@ -6626,7 +6878,14 @@
 			"alignment": "any lawful alignment",
 			"ac": "18 (natural armor)",
 			"hp": "142 (15d10+60)",
-			"speed": "40 ft., fly 80 ft. (hover), swim 40 ft.",
+			"speed": {
+				"walk": 40,
+				"fly": {
+					"number": 80,
+					"condition": " (hover)"
+				},
+				"swim": 40
+			},
 			"str": 19,
 			"dex": 10,
 			"con": 16,
@@ -6688,20 +6947,13 @@
 								{
 									"type": "item",
 									"name": "Vortex Breath",
-									"entry": "The dragon pulls a single Medium or smaller creature within 60 ft. into its maw. The creature must succeed on a DC 16 Strength saving throw or be swallowed. While swallowed, the creature is blinded and restrained, it has total cover against attacks and other effects outside the dragon, and it takes 21 (6d6) bludgeoning damage at the start of each of the dragon's"
+									"entry": "The dragon pulls a single Medium or smaller creature within 60 ft. into its maw. The creature must succeed on a DC 16 Strength saving throw or be swallowed. While swallowed, the creature is blinded and restrained, it has total cover against attacks and other effects outside the dragon, and it takes 21 (6d6) bludgeoning damage at the start of each of the dragon's turns. If the dragon takes 25 damage or more on a single turn from a creature inside it, the dragon must succeed on a DC 17 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 5 feet of the dragon. If the dragon dies, a swallowed creature is no longer restrained by it and can escape from the corpse using 5 feet of movement, exiting prone."
 								}
 							]
 						}
 					]
-				},
-				{
-					"name": "turns",
-					"entries": [
-						"If the dragon takes 25 damage or more on a single turn from a creature inside it, the dragon must succeed on a DC 17 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 5 feet of the dragon. If the dragon dies, a swallowed creature is no longer restrained by it and can escape from the corpse using 5 feet of movement, exiting prone."
-					]
 				}
 			],
-			"legendaryGroup": "Warp Dragon",
 			"page": 86
 		},
 		{
@@ -6712,7 +6964,14 @@
 			"alignment": "any lawful alignment",
 			"ac": "17 (natural armor)",
 			"hp": "45 (7d8+14)",
-			"speed": "30 ft., fly 60 ft. (hover), swim 30 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": {
+					"number": 60,
+					"condition": " (hover)"
+				},
+				"swim": 30
+			},
 			"str": 15,
 			"dex": 10,
 			"con": 12,
@@ -6762,7 +7021,6 @@
 					]
 				}
 			],
-			"legendaryGroup": "Warp Dragon",
 			"page": 86
 		},
 		{
@@ -6773,7 +7031,9 @@
 			"alignment": "neutral evil",
 			"ac": "16 (natural armor)",
 			"hp": "76 (9d10+27)",
-			"speed": "50 ft.",
+			"speed": {
+				"walk": 50
+			},
 			"str": 18,
 			"dex": 12,
 			"con": 16,
@@ -6839,7 +7099,9 @@
 			"alignment": "unaligned",
 			"ac": "18 (natural armor, shield)",
 			"hp": "39 (6d8+12)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 17,
 			"dex": 11,
 			"con": 14,
@@ -6885,7 +7147,9 @@
 			"alignment": "unaligned",
 			"ac": "20 (natural armor, shield)",
 			"hp": "86 (8d10+24)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 20,
 			"dex": 9,
 			"con": 16,
@@ -6934,7 +7198,9 @@
 			"alignment": "neutral evil",
 			"ac": "12 (natural armor)",
 			"hp": "51 (6d10+18)",
-			"speed": "50 ft.",
+			"speed": {
+				"walk": 50
+			},
 			"str": 18,
 			"dex": 10,
 			"con": 16,
@@ -6990,7 +7256,9 @@
 			"alignment": "neutral",
 			"ac": "12 (natural armor, 16 with barkskin)",
 			"hp": "45 (6d8+18)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 12,
 			"dex": 10,
 			"con": 13,
@@ -7082,7 +7350,9 @@
 			"alignment": "unaligned",
 			"ac": "17 (natural armor)",
 			"hp": "126 (16d10+48)",
-			"speed": "25 ft.",
+			"speed": {
+				"walk": 25
+			},
 			"str": 18,
 			"dex": 10,
 			"con": 16,
@@ -7139,7 +7409,9 @@
 			"alignment": "unaligned",
 			"ac": "18 (natural armor)",
 			"hp": "76 (9d10+27)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 20,
 			"dex": 13,
 			"con": 16,
@@ -7188,7 +7460,9 @@
 			"alignment": "lawful evil",
 			"ac": "15 (scale mail)",
 			"hp": "30 (4d10+8)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 17,
 			"dex": 13,
 			"con": 14,
@@ -7244,7 +7518,9 @@
 			"alignment": "lawful evil",
 			"ac": "15 (scale mail)",
 			"hp": "59 (7d10+21)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 19,
 			"dex": 13,
 			"con": 16,
@@ -7297,7 +7573,10 @@
 			"alignment": "neutral evil",
 			"ac": "15 (natural armor)",
 			"hp": "97 (15d8+30)",
-			"speed": "30 ft., climb 30 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 30
+			},
 			"str": 17,
 			"dex": 15,
 			"con": 14,
@@ -7396,7 +7675,10 @@
 			"alignment": "neutral",
 			"ac": "15 (natural armor)",
 			"hp": "93 (17d8+17)",
-			"speed": "30 ft., fly 40 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 40
+			},
 			"str": 11,
 			"dex": 14,
 			"con": 13,
@@ -7474,7 +7756,9 @@
 			"alignment": "neutral",
 			"ac": "12",
 			"hp": "21 (6d6)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 7,
 			"dex": 14,
 			"con": 10,
@@ -7540,7 +7824,9 @@
 			"alignment": "lawful neutral",
 			"ac": "12",
 			"hp": "5 (1d6+2)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 13,
 			"dex": 14,
 			"con": 14,
@@ -7589,7 +7875,9 @@
 			"alignment": "lawful neutral",
 			"ac": "15 (natural armor)",
 			"hp": "39 (6d8+12)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 17,
 			"dex": 14,
 			"con": 15,
@@ -7653,7 +7941,9 @@
 			"alignment": "lawful neutral",
 			"ac": "15 (natural armor)",
 			"hp": "71 (11d8+22)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 17,
 			"dex": 16,
 			"con": 15,
@@ -7722,7 +8012,9 @@
 			"alignment": "lawful neutral",
 			"ac": "20 (natural armor)",
 			"hp": "102 (12d10+36)",
-			"speed": "50 ft.",
+			"speed": {
+				"walk": 50
+			},
 			"str": 19,
 			"dex": 16,
 			"con": 17,
@@ -7793,7 +8085,9 @@
 			"alignment": "lawful neutral",
 			"ac": "18 (natural armor)",
 			"hp": "231 (22d10+110)",
-			"speed": "0 ft.",
+			"speed": {
+				"walk": 0
+			},
 			"str": 1,
 			"dex": 1,
 			"con": 20,
@@ -7952,7 +8246,10 @@
 			"alignment": "chaotic evil",
 			"ac": "14 (natural armor)",
 			"hp": "78 (12d8+24)",
-			"speed": "30 ft., climb 30 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 30
+			},
 			"str": 11,
 			"dex": 15,
 			"con": 14,
@@ -8014,7 +8311,10 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "119 (14d10+42)",
-			"speed": "30 ft., climb 30 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 30
+			},
 			"str": 15,
 			"dex": 13,
 			"con": 17,
@@ -8075,7 +8375,10 @@
 			"alignment": "chaotic evil",
 			"ac": "18 (natural armor)",
 			"hp": "218 (19d12+95)",
-			"speed": "30 ft., climb 30 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 30
+			},
 			"str": 19,
 			"dex": 11,
 			"con": 20,
@@ -8136,7 +8439,10 @@
 			"alignment": "chaotic evil",
 			"ac": "20 (natural armor)",
 			"hp": "396 (24d20+144)",
-			"speed": "30 ft., climb 30 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 30
+			},
 			"str": 21,
 			"dex": 11,
 			"con": 22,
@@ -8197,7 +8503,10 @@
 			"alignment": "unaligned",
 			"ac": "17 (natural armor)",
 			"hp": "172 (15d12+75)",
-			"speed": "30 ft., burrow 20 ft.",
+			"speed": {
+				"walk": 30,
+				"burrow": 20
+			},
 			"str": 22,
 			"dex": 10,
 			"con": 20,
@@ -8270,7 +8579,10 @@
 			"alignment": "neutral evil",
 			"ac": "17 (half plate)",
 			"hp": "276 (24d12+120)",
-			"speed": "50 ft., climb 20 ft.",
+			"speed": {
+				"walk": 50,
+				"climb": 20
+			},
 			"str": 26,
 			"dex": 14,
 			"con": 21,
@@ -8355,7 +8667,9 @@
 			"alignment": "chaotic neutral",
 			"ac": "16 (hide, shield, 14 without shield)",
 			"hp": "104 (11d10+44)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 18,
 			"dex": 15,
 			"con": 18,
@@ -8409,7 +8723,10 @@
 			"alignment": "chaotic neutral",
 			"ac": "14 (hide) in giant form, 16 (natural armor) in bear form",
 			"hp": "126 (12d10+60)",
-			"speed": "40 ft., climb 30 ft.",
+			"speed": {
+				"walk": 40,
+				"climb": 30
+			},
 			"str": 20,
 			"dex": 15,
 			"con": 20,
@@ -8494,7 +8811,9 @@
 			"alignment": "chaotic neutral",
 			"ac": "15 (leather)",
 			"hp": "142 (15d10+60)",
-			"speed": "50 ft.",
+			"speed": {
+				"walk": 50
+			},
 			"str": 20,
 			"dex": 18,
 			"con": 18,
@@ -8584,7 +8903,9 @@
 			"alignment": "chaotic neutral",
 			"ac": "16 (leather)",
 			"hp": "114 (12d10+48)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 18,
 			"dex": 20,
 			"con": 18,
@@ -8668,7 +8989,10 @@
 			"alignment": "unaligned",
 			"ac": "15 (natural armor)",
 			"hp": "95 (10d10+40)",
-			"speed": "40 ft., climb 40 ft.",
+			"speed": {
+				"walk": 40,
+				"climb": 40
+			},
 			"str": 20,
 			"dex": 16,
 			"con": 18,
@@ -8732,7 +9056,9 @@
 			"alignment": "unaligned",
 			"ac": "17 (natural armor)",
 			"hp": "119 (13d10+48)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 20,
 			"dex": 10,
 			"con": 22,
@@ -8783,7 +9109,9 @@
 			"alignment": "chaotic evil",
 			"ac": "12",
 			"hp": "14 (4d4+4)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 8,
 			"dex": 15,
 			"con": 12,
@@ -8843,7 +9171,9 @@
 			"alignment": "unaligned",
 			"ac": "19 (natural armor)",
 			"hp": "153 (18d10+54)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 18,
 			"dex": 10,
 			"con": 16,
@@ -8930,7 +9260,9 @@
 			"alignment": "neutral",
 			"ac": "16 (half plate, shield, or 14 without shield)",
 			"hp": "82 (10d10+27)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 19,
 			"dex": 9,
 			"con": 17,
@@ -9016,7 +9348,9 @@
 			"alignment": "neutral",
 			"ac": "16 (natural armor)",
 			"hp": "189 (18d10+90)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 20,
 			"dex": 13,
 			"con": 20,
@@ -9068,7 +9402,10 @@
 			"alignment": "chaotic evil",
 			"ac": "18 (natural armor)",
 			"hp": "103 (9d12+45)",
-			"speed": "40 ft., climb 40 ft.",
+			"speed": {
+				"walk": 40,
+				"climb": 40
+			},
 			"str": 22,
 			"dex": 16,
 			"con": 20,
@@ -9140,7 +9477,9 @@
 			"alignment": "chaotic evil",
 			"ac": "14 (natural armor)",
 			"hp": "45 (6d10+12)",
-			"speed": "50 ft.",
+			"speed": {
+				"walk": 50
+			},
 			"str": 19,
 			"dex": 15,
 			"con": 15,
@@ -9189,7 +9528,10 @@
 			"alignment": "chaotic evil",
 			"ac": "13 (natural armor)",
 			"hp": "16 (3d6+6)",
-			"speed": "10 ft., fly 50 ft.",
+			"speed": {
+				"walk": 10,
+				"fly": 50
+			},
 			"str": 12,
 			"dex": 13,
 			"con": 15,
@@ -9243,7 +9585,10 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (natural armor)",
 			"hp": "46 (6d8+18)",
-			"speed": "10 ft., fly 50 ft.",
+			"speed": {
+				"walk": 10,
+				"fly": 50
+			},
 			"str": 16,
 			"dex": 12,
 			"con": 17,
@@ -9300,7 +9645,9 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "76 (8d10+32)",
-			"speed": "20 ft.",
+			"speed": {
+				"walk": 20
+			},
 			"str": 18,
 			"dex": 11,
 			"con": 18,
@@ -9357,7 +9704,10 @@
 			"alignment": "neutral evil",
 			"ac": "15",
 			"hp": "39 (6d8+12)",
-			"speed": "0 ft., fly 50 ft.",
+			"speed": {
+				"walk": 0,
+				"fly": 50
+			},
 			"str": 5,
 			"dex": 20,
 			"con": 14,
@@ -9420,7 +9770,9 @@
 			"alignment": "neutral",
 			"ac": "13 (studded leather)",
 			"hp": "19 (3d8+6)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 15,
 			"dex": 12,
 			"con": 14,
@@ -9470,7 +9822,9 @@
 			"alignment": "unaligned",
 			"ac": "13 (natural armor)",
 			"hp": "15 (2d8+6)",
-			"speed": "50 ft.",
+			"speed": {
+				"walk": 50
+			},
 			"str": 15,
 			"dex": 14,
 			"con": 17,
@@ -9516,7 +9870,10 @@
 			"alignment": "unaligned",
 			"ac": "17 (natural armor)",
 			"hp": "152 (16d10+64)",
-			"speed": "40 ft., climb 40 ft.",
+			"speed": {
+				"walk": 40,
+				"climb": 40
+			},
 			"str": 18,
 			"dex": 16,
 			"con": 18,
@@ -9583,7 +9940,9 @@
 			"alignment": "unaligned",
 			"ac": "15 (natural armor)",
 			"hp": "37 (5d8+15)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 12,
 			"dex": 17,
 			"con": 16,
@@ -9626,7 +9985,10 @@
 			"alignment": "chaotic evil",
 			"ac": "13 (natural armor)",
 			"hp": "36 (5d8)",
-			"speed": "5 ft., swim 40 ft.",
+			"speed": {
+				"walk": 5,
+				"swim": 40
+			},
 			"str": 15,
 			"dex": 14,
 			"con": 11,
@@ -9687,7 +10049,10 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (natural armor)",
 			"hp": "60 (8d10+16)",
-			"speed": "5 ft., swim 40 ft.",
+			"speed": {
+				"walk": 5,
+				"swim": 40
+			},
 			"str": 19,
 			"dex": 12,
 			"con": 15,
@@ -9736,7 +10101,9 @@
 			"alignment": "neutral",
 			"ac": "12 (natural armor)",
 			"hp": "13 (3d8)",
-			"speed": "50 ft.",
+			"speed": {
+				"walk": 50
+			},
 			"str": 14,
 			"dex": 15,
 			"con": 11,
@@ -9795,7 +10162,9 @@
 			"alignment": "lawful evil",
 			"ac": "15 (natural armor)",
 			"hp": "27 (6d6+6)",
-			"speed": "50 ft.",
+			"speed": {
+				"walk": 50
+			},
 			"str": 13,
 			"dex": 18,
 			"con": 13,
@@ -9841,7 +10210,9 @@
 			"alignment": "lawful evil",
 			"ac": "18 (natural armor)",
 			"hp": "42 (8d8+6)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 15,
 			"dex": 20,
 			"con": 13,
@@ -9905,7 +10276,9 @@
 			"alignment": "lawful evil",
 			"ac": "19 (natural armor)",
 			"hp": "95 (10d10+40)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 24,
 			"dex": 18,
 			"con": 19,
@@ -9971,7 +10344,9 @@
 			"alignment": "neutral evil",
 			"ac": "15 (18 with mage armor)",
 			"hp": "202 (24d8+96)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 13,
 			"dex": 20,
 			"con": 18,
@@ -10156,7 +10531,10 @@
 			"alignment": "neutral",
 			"ac": "16 (natural armor)",
 			"hp": "37 (5d10+10)",
-			"speed": "40 ft., swim 30 ft.",
+			"speed": {
+				"walk": 40,
+				"swim": 30
+			},
 			"str": 18,
 			"dex": 10,
 			"con": 15,
@@ -10220,7 +10598,9 @@
 			"alignment": "neutral",
 			"ac": "14 (natural armor)",
 			"hp": "13 (3d6+3)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 12,
 			"dex": 15,
 			"con": 12,
@@ -10279,7 +10659,10 @@
 			"alignment": "neutral",
 			"ac": "15 (chain shirt)",
 			"hp": "13 (2d8+4)",
-			"speed": "30 ft., climb 30 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 30
+			},
 			"str": 14,
 			"dex": 14,
 			"con": 14,
@@ -10322,7 +10705,11 @@
 			"alignment": "unaligned",
 			"ac": "16 (natural armor)",
 			"hp": "114 (12d10+48)",
-			"speed": "30 ft., burrow 20 ft., climb 20 ft.",
+			"speed": {
+				"walk": 30,
+				"burrow": 20,
+				"climb": 20
+			},
 			"str": 20,
 			"dex": 13,
 			"con": 18,
@@ -10382,7 +10769,9 @@
 			"alignment": "chaotic evil",
 			"ac": "18 (breastplate, shield)",
 			"hp": "114 (12d10+48)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 21,
 			"dex": 16,
 			"con": 18,
@@ -10455,7 +10844,9 @@
 			"alignment": "neutral",
 			"ac": "15 (natural armor)",
 			"hp": "66 (7d8+35)",
-			"speed": "20 ft.",
+			"speed": {
+				"walk": 20
+			},
 			"str": 20,
 			"dex": 13,
 			"con": 20,
@@ -10514,7 +10905,9 @@
 			"alignment": "lawful neutral",
 			"ac": "16 (natural armor)",
 			"hp": "42 (4d10+20)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 20,
 			"dex": 13,
 			"con": 20,
@@ -10587,7 +10980,9 @@
 			"alignment": "chaotic evil",
 			"ac": "12",
 			"hp": "22 (5d8)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 14,
 			"dex": 15,
 			"con": 11,
@@ -10640,13 +11035,15 @@
 		},
 		{
 			"source": "CC 3pp",
-			"name": "Meenlock Half\u2014Spawn",
+			"name": "Meenlock Half-Spawn",
 			"size": "S",
 			"type": "fey",
 			"alignment": "neutral evil",
 			"ac": "13 (natural armor)",
 			"hp": "21 (6d6)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 8,
 			"dex": 15,
 			"con": 10,
@@ -10704,7 +11101,10 @@
 			"alignment": "neutral evil",
 			"ac": "15",
 			"hp": "136 (16d8+64)",
-			"speed": "30 ft., climb 30 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 30
+			},
 			"str": 13,
 			"dex": 20,
 			"con": 18,
@@ -10764,7 +11164,9 @@
 			"alignment": "neutral",
 			"ac": "13",
 			"hp": "32 (5d8+10)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 17,
 			"dex": 17,
 			"con": 15,
@@ -10823,7 +11225,9 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "105 (14d8+42)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 17,
 			"dex": 18,
 			"con": 17,
@@ -10875,7 +11279,10 @@
 			"alignment": "lawful evil",
 			"ac": "14 (natural armor)",
 			"hp": "152 (16d12+48)",
-			"speed": "30 ft., swim 30 ft.",
+			"speed": {
+				"walk": 30,
+				"swim": 30
+			},
 			"str": 18,
 			"dex": 11,
 			"con": 16,
@@ -11036,7 +11443,9 @@
 			"alignment": "chaotic evil",
 			"ac": "14 (natural armor)",
 			"hp": "39 (6d8+12)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 15,
 			"dex": 16,
 			"con": 15,
@@ -11083,7 +11492,9 @@
 			"alignment": "neutral evil",
 			"ac": "13 (16 with mage armor)",
 			"hp": "155 (24d8+48)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 12,
 			"dex": 16,
 			"con": 15,
@@ -11215,7 +11626,9 @@
 			"alignment": "neutral",
 			"ac": "16 (natural armor)",
 			"hp": "19 (3d8+6)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 13,
 			"dex": 16,
 			"con": 15,
@@ -11305,7 +11718,9 @@
 			"alignment": "neutral",
 			"ac": "17 (natural armor)",
 			"hp": "45 (7d8+14)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 13,
 			"dex": 15,
 			"con": 14,
@@ -11394,7 +11809,9 @@
 			"alignment": "neutral",
 			"ac": "14 (natural armor)",
 			"hp": "9 (2d8+2)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 10,
 			"dex": 15,
 			"con": 12,
@@ -11475,7 +11892,10 @@
 			"alignment": "chaotic evil",
 			"ac": "21 (natural armor)",
 			"hp": "232 (16d20+64)",
-			"speed": "30 ft., burrow 40 ft.",
+			"speed": {
+				"walk": 30,
+				"burrow": 40
+			},
 			"str": 30,
 			"dex": 10,
 			"con": 18,
@@ -11591,7 +12011,10 @@
 			"alignment": "chaotic evil",
 			"ac": "19 (natural armor)",
 			"hp": "178 (17d12+68)",
-			"speed": "40 ft., fly 20 ft.",
+			"speed": {
+				"walk": 40,
+				"fly": 20
+			},
 			"str": 26,
 			"dex": 14,
 			"con": 18,
@@ -11694,7 +12117,10 @@
 			"alignment": "chaotic evil",
 			"ac": "18 (natural armor)",
 			"hp": "142 (15d12+45)",
-			"speed": "20 ft., fly 60 ft.",
+			"speed": {
+				"walk": 20,
+				"fly": 60
+			},
 			"str": 22,
 			"dex": 18,
 			"con": 17,
@@ -11793,7 +12219,11 @@
 			"alignment": "chaotic good",
 			"ac": "15",
 			"hp": "5 (2d4)",
-			"speed": "5 ft., fly 30 ft., swim 30 ft.",
+			"speed": {
+				"walk": 5,
+				"fly": 30,
+				"swim": 30
+			},
 			"str": 3,
 			"dex": 20,
 			"con": 10,
@@ -11869,7 +12299,9 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor, shield)",
 			"hp": "19 (3d6+9)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 16,
 			"dex": 13,
 			"con": 17,
@@ -11913,7 +12345,10 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "60 (8d6+32)",
-			"speed": "30 ft., burrow 30 ft.",
+			"speed": {
+				"walk": 30,
+				"burrow": 30
+			},
 			"str": 18,
 			"dex": 13,
 			"con": 18,
@@ -11987,7 +12422,11 @@
 			"alignment": "chaotic evil",
 			"ac": "17 (natural armor)",
 			"hp": "201 (18d12+90)",
-			"speed": "50 ft., climb 50 ft., fly 50 ft.",
+			"speed": {
+				"walk": 50,
+				"climb": 50,
+				"fly": 50
+			},
 			"str": 25,
 			"dex": 10,
 			"con": 21,
@@ -12074,7 +12513,11 @@
 			"alignment": "chaotic evil",
 			"ac": "12",
 			"hp": "15 (6d4)",
-			"speed": "0 ft., swim 40 ft., fly 40 ft.",
+			"speed": {
+				"walk": 0,
+				"swim": 40,
+				"fly": 40
+			},
 			"str": 10,
 			"dex": 14,
 			"con": 11,
@@ -12129,7 +12572,10 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (natural armor)",
 			"hp": "153 (18d10+54)",
-			"speed": "40 ft., swim 40 ft.",
+			"speed": {
+				"walk": 40,
+				"swim": 40
+			},
 			"str": 19,
 			"dex": 16,
 			"con": 17,
@@ -12233,7 +12679,9 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (natural armor)",
 			"hp": "102 (14d8+42)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 18,
 			"dex": 17,
 			"con": 16,
@@ -12287,7 +12735,11 @@
 			"alignment": "chaotic evil",
 			"ac": "13 (natural armor)",
 			"hp": "27 (6d6+6)",
-			"speed": "30 ft., climb 30 ft., fly 50 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 30,
+				"fly": 50
+			},
 			"str": 10,
 			"dex": 14,
 			"con": 13,
@@ -12354,7 +12806,11 @@
 			"alignment": "chaotic evil",
 			"ac": "18 (natural armor)",
 			"hp": "202 (17d12+85)",
-			"speed": "30 ft., burrow 50 ft., swim 50 ft.",
+			"speed": {
+				"walk": 30,
+				"burrow": 50,
+				"swim": 50
+			},
 			"str": 23,
 			"dex": 15,
 			"con": 20,
@@ -12426,7 +12882,13 @@
 			"alignment": "chaotic evil",
 			"ac": "19 (natural armor)",
 			"hp": "533 (26d20+260)",
-			"speed": "0 ft., fly 50 ft. (hover)",
+			"speed": {
+				"walk": 0,
+				"fly": {
+					"number": 50,
+					"condition": " (hover)"
+				}
+			},
 			"str": 30,
 			"dex": 10,
 			"con": 30,
@@ -12562,7 +13024,13 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (natural armor)",
 			"hp": "127 (17d8+51)",
-			"speed": "0 ft., fly 30 ft. (hover)",
+			"speed": {
+				"walk": 0,
+				"fly": {
+					"number": 30,
+					"condition": " (hover)"
+				}
+			},
 			"str": 16,
 			"dex": 17,
 			"con": 17,
@@ -12628,7 +13096,10 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "76 (8d10+32)",
-			"speed": "30 ft., swim 30 ft.",
+			"speed": {
+				"walk": 30,
+				"swim": 30
+			},
 			"str": 19,
 			"dex": 15,
 			"con": 19,
@@ -12697,7 +13168,13 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "225 (18d10+126)",
-			"speed": "0 ft., fly 20 ft. (hover)",
+			"speed": {
+				"walk": 0,
+				"fly": {
+					"number": 20,
+					"condition": " (hover)"
+				}
+			},
 			"str": 16,
 			"dex": 8,
 			"con": 24,
@@ -12799,7 +13276,10 @@
 			"alignment": "chaotic evil",
 			"ac": "19 (natural armor)",
 			"hp": "262 (21d10+126)",
-			"speed": "40 ft., climb 40 ft.",
+			"speed": {
+				"walk": 40,
+				"climb": 40
+			},
 			"str": 21,
 			"dex": 15,
 			"con": 22,
@@ -12897,7 +13377,11 @@
 			"alignment": "chaotic neutral",
 			"ac": "14 (shield)",
 			"hp": "17 (4d8)",
-			"speed": "25 ft., climb 15 ft., swim 40 ft.",
+			"speed": {
+				"walk": 25,
+				"climb": 15,
+				"swim": 40
+			},
 			"str": 14,
 			"dex": 15,
 			"con": 11,
@@ -12948,7 +13432,10 @@
 			"alignment": "lawful evil",
 			"ac": "16 (natural armor)",
 			"hp": "84 (10d8+40)",
-			"speed": "0 ft., fly 40 ft.",
+			"speed": {
+				"walk": 0,
+				"fly": 40
+			},
 			"str": 14,
 			"dex": 18,
 			"con": 18,
@@ -13010,7 +13497,10 @@
 			"alignment": "chaotic neutral",
 			"ac": "16",
 			"hp": "220 (21d10+105)",
-			"speed": "0 ft., fly 50 ft.",
+			"speed": {
+				"walk": 0,
+				"fly": 50
+			},
 			"str": 20,
 			"dex": 22,
 			"con": 21,
@@ -13084,7 +13574,9 @@
 			"alignment": "unaligned",
 			"ac": "13 (natural armor)",
 			"hp": "30 (4d8+12)",
-			"speed": "20 ft.",
+			"speed": {
+				"walk": 20
+			},
 			"str": 14,
 			"dex": 10,
 			"con": 16,
@@ -13124,7 +13616,12 @@
 			"alignment": "unaligned",
 			"ac": "15 (natural armor), 17 when curled up",
 			"hp": "26 (4d8+8)",
-			"speed": "15 ft., 50 ft. when curled up",
+			"speed": {
+				"walk": {
+					"number": 15,
+					"condition": " (50 ft. when curled up)"
+				}
+			},
 			"str": 13,
 			"dex": 15,
 			"con": 14,
@@ -13168,7 +13665,9 @@
 			"alignment": "unaligned",
 			"ac": "18 (natural armor)",
 			"hp": "230 (20d10+120)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 22,
 			"dex": 13,
 			"con": 22,
@@ -13231,7 +13730,9 @@
 			"alignment": "unaligned",
 			"ac": "18 (natural armor)",
 			"hp": "147 (14d10+70)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 20,
 			"dex": 13,
 			"con": 20,
@@ -13300,7 +13801,9 @@
 			"alignment": "unaligned",
 			"ac": "18 (natural armor)",
 			"hp": "65 (10d8+20)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 14,
 			"dex": 18,
 			"con": 15,
@@ -13364,7 +13867,9 @@
 			"alignment": "unaligned",
 			"ac": "18 (natural armor)",
 			"hp": "168 (16d10+80)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 20,
 			"dex": 17,
 			"con": 20,
@@ -13428,7 +13933,9 @@
 			"alignment": "unaligned",
 			"ac": "18 (natural armor)",
 			"hp": "114 (12d10+48)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 20,
 			"dex": 15,
 			"con": 19,
@@ -13481,7 +13988,10 @@
 			"alignment": "neutral good",
 			"ac": "20 (plate, shield)",
 			"hp": "45 (6d8+18)",
-			"speed": "30 ft., fly 40 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 40
+			},
 			"str": 17,
 			"dex": 12,
 			"con": 16,
@@ -13541,7 +14051,10 @@
 			"alignment": "neutral good",
 			"ac": "18 (half plate, shield)",
 			"hp": "26 (4d8+8)",
-			"speed": "30 ft., fly 40 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 40
+			},
 			"str": 15,
 			"dex": 12,
 			"con": 15,
@@ -13594,7 +14107,9 @@
 			"alignment": "chaotic evil",
 			"ac": "16",
 			"hp": "22 (5d4+10)",
-			"speed": "120 ft.",
+			"speed": {
+				"walk": 120
+			},
 			"str": 8,
 			"dex": 22,
 			"con": 14,
@@ -13656,7 +14171,9 @@
 			"alignment": "lawful good",
 			"ac": "16 (chainmail, shield)",
 			"hp": "42 (5d10+15)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 21,
 			"dex": 12,
 			"con": 17,
@@ -13715,7 +14232,9 @@
 			"alignment": "lawful good",
 			"ac": "18 (half plate, shield)",
 			"hp": "76 (8d10+28)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 22,
 			"dex": 12,
 			"con": 19,
@@ -13780,7 +14299,13 @@
 			"alignment": "neutral",
 			"ac": "14 (natural armor)",
 			"hp": "26 (4d8+8)",
-			"speed": "5 ft., fly 50 ft. (hover)",
+			"speed": {
+				"walk": 5,
+				"fly": {
+					"number": 50,
+					"condition": " (hover)"
+				}
+			},
 			"str": 14,
 			"dex": 12,
 			"con": 14,
@@ -13843,7 +14368,13 @@
 			"alignment": "neutral",
 			"ac": "13 (natural armor)",
 			"hp": "48 (9d8+9)",
-			"speed": "20 ft., fly 50 ft. (hover)",
+			"speed": {
+				"walk": 20,
+				"fly": {
+					"number": 50,
+					"condition": " (hover)"
+				}
+			},
 			"str": 13,
 			"dex": 10,
 			"con": 13,
@@ -13900,7 +14431,9 @@
 			"alignment": "chaotic evil",
 			"ac": "14 (natural armor)",
 			"hp": "119 (14d6+70)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 22,
 			"dex": 14,
 			"con": 20,
@@ -13965,7 +14498,10 @@
 			"alignment": "chaotic evil",
 			"ac": "18 (natural armor)",
 			"hp": "190 (20d8+100)",
-			"speed": "30 ft., fly 40 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 40
+			},
 			"str": 18,
 			"dex": 19,
 			"con": 20,
@@ -14016,7 +14552,9 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (natural armor)",
 			"hp": "75 (10d8+30)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 16,
 			"dex": 15,
 			"con": 17,
@@ -14063,7 +14601,9 @@
 			"alignment": "lawful evil",
 			"ac": "16 (natural armor, shield)",
 			"hp": "76 (8d10+32)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 21,
 			"dex": 10,
 			"con": 19,
@@ -14127,7 +14667,9 @@
 			"alignment": "lawful evil",
 			"ac": "16 (natural armor, shield)",
 			"hp": "63 (6d10+30)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 19,
 			"dex": 10,
 			"con": 17,
@@ -14169,13 +14711,15 @@
 		},
 		{
 			"source": "CC 3pp",
-			"name": "Shadar\u2014Kai",
+			"name": "Shadar-Kai",
 			"size": "M",
 			"type": "fey",
 			"alignment": "neutral evil",
 			"ac": "14 (studded leather)",
 			"hp": "9 (2d8)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 10,
 			"dex": 15,
 			"con": 11,
@@ -14242,7 +14786,9 @@
 			"alignment": "chaotic neutral",
 			"ac": "15 (natural armor)",
 			"hp": "68 (8d10+24)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 20,
 			"dex": 16,
 			"con": 16,
@@ -14311,7 +14857,10 @@
 			"alignment": "neutral evil",
 			"ac": "18 (natural armor)",
 			"hp": "104 (11d10+44)",
-			"speed": "30 ft., swim 40 ft.",
+			"speed": {
+				"walk": 30,
+				"swim": 40
+			},
 			"str": 22,
 			"dex": 13,
 			"con": 19,
@@ -14374,7 +14923,9 @@
 			"alignment": "lawful evil",
 			"ac": "20 (natural armor)",
 			"hp": "136 (13d10+65)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 26,
 			"dex": 10,
 			"con": 21,
@@ -14442,7 +14993,9 @@
 			"alignment": "neutral",
 			"ac": "14 (studded leather)",
 			"hp": "33 (6d8+6)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 10,
 			"dex": 15,
 			"con": 12,
@@ -14512,7 +15065,9 @@
 			"alignment": "neutral",
 			"ac": "16 (breastplate, shield)",
 			"hp": "19 (3d8+6)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 16,
 			"dex": 10,
 			"con": 14,
@@ -14558,7 +15113,9 @@
 			"alignment": "chaotic evil",
 			"ac": "16 (natural armor)",
 			"hp": "64 (8d8+32)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 18,
 			"dex": 14,
 			"con": 18,
@@ -14609,7 +15166,11 @@
 			"alignment": "unaligned",
 			"ac": "13",
 			"hp": "13 (3d6+3)",
-			"speed": "40 ft., climb 20 ft., swim 20 ft.",
+			"speed": {
+				"walk": 40,
+				"climb": 20,
+				"swim": 20
+			},
 			"str": 10,
 			"dex": 17,
 			"con": 13,
@@ -14664,7 +15225,9 @@
 			"alignment": "chaotic evil",
 			"ac": "14 (studded leather)",
 			"hp": "9 (2d8)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 11,
 			"dex": 14,
 			"con": 11,
@@ -14724,7 +15287,9 @@
 			"alignment": "lawful evil",
 			"ac": "17 (half plate)",
 			"hp": "156 (24d8+48)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 14,
 			"dex": 19,
 			"con": 15,
@@ -14822,7 +15387,12 @@
 			"alignment": "lawful evil",
 			"ac": "14",
 			"hp": "27 (6d4+12)",
-			"speed": "0 ft. fly 40 ft.",
+			"speed": {
+				"walk": {
+					"number": 0,
+					"condition": " fly 40 ft."
+				}
+			},
 			"str": 2,
 			"dex": 18,
 			"con": 15,
@@ -14867,7 +15437,10 @@
 			"alignment": "chaotic evil",
 			"ac": "11",
 			"hp": "22 (4d8+4)",
-			"speed": "20 ft., swim 40 ft.",
+			"speed": {
+				"walk": 20,
+				"swim": 40
+			},
 			"str": 16,
 			"dex": 13,
 			"con": 13,
@@ -14919,7 +15492,10 @@
 			"alignment": "chaotic evil",
 			"ac": "12 (natural armor)",
 			"hp": "22 (4d8+4)",
-			"speed": "30 ft., swim 10 ft.",
+			"speed": {
+				"walk": 30,
+				"swim": 10
+			},
 			"str": 8,
 			"dex": 13,
 			"con": 13,
@@ -14966,7 +15542,10 @@
 			"alignment": "neutral evil",
 			"ac": "11",
 			"hp": "30 (4d10+8)",
-			"speed": "0 ft., fly 60 ft.",
+			"speed": {
+				"walk": 0,
+				"fly": 60
+			},
 			"str": 6,
 			"dex": 13,
 			"con": 14,
@@ -15029,7 +15608,9 @@
 			"alignment": "neutral",
 			"ac": "15 (natural armor)",
 			"hp": "45 (10d8)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 9,
 			"dex": 16,
 			"con": 10,
@@ -15171,7 +15752,12 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (studded leather)",
 			"hp": "22 (5d6+5)",
-			"speed": "20 ft. (30 ft. in enlarged form)",
+			"speed": {
+				"walk": {
+					"number": 20,
+					"condition": " (30 ft. in enlarged form)"
+				}
+			},
 			"str": 10,
 			"dex": 17,
 			"con": 12,
@@ -15229,7 +15815,9 @@
 			"alignment": "neutral",
 			"ac": "20 (natural armor)",
 			"hp": "103 (11d10+44)",
-			"speed": "50 ft.",
+			"speed": {
+				"walk": 50
+			},
 			"str": 22,
 			"dex": 21,
 			"con": 19,
@@ -15310,7 +15898,10 @@
 			"alignment": "unaligned",
 			"ac": "16 (natural armor)",
 			"hp": "34 (4d8+16)",
-			"speed": "20 ft., burrow 10 ft.",
+			"speed": {
+				"walk": 20,
+				"burrow": 10
+			},
 			"str": 18,
 			"dex": 8,
 			"con": 19,
@@ -15356,7 +15947,9 @@
 			"alignment": "neutral good",
 			"ac": "16 (natural armor)",
 			"hp": "19 (2d8+10)",
-			"speed": "50 ft.",
+			"speed": {
+				"walk": 50
+			},
 			"str": 19,
 			"dex": 10,
 			"con": 20,
@@ -15405,7 +15998,10 @@
 			"alignment": "unaligned",
 			"ac": "15 (natural armor)",
 			"hp": "37 (5d8+15)",
-			"speed": "30 ft., climb 40 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 40
+			},
 			"str": 16,
 			"dex": 18,
 			"con": 17,
@@ -15473,7 +16069,9 @@
 			"alignment": "chaotic evil",
 			"ac": "11 (natural armor)",
 			"hp": "60 (8d8+24)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 18,
 			"dex": 8,
 			"con": 16,
@@ -15523,7 +16121,7 @@
 		},
 		{
 			"source": "CC 3pp",
-			"name": "Swarm Of Parasite Worms",
+			"name": "Swarm of Parasite Worms",
 			"size": "M",
 			"type": {
 				"type": "aberration",
@@ -15532,7 +16130,10 @@
 			"alignment": "chaotic evil",
 			"ac": "10",
 			"hp": "30 (4d8+12)",
-			"speed": "5 ft., burrow 5 ft.",
+			"speed": {
+				"walk": 5,
+				"burrow": 5
+			},
 			"str": 3,
 			"dex": 10,
 			"con": 16,
@@ -15577,7 +16178,10 @@
 			"alignment": "neutral",
 			"ac": "15 (natural armor)",
 			"hp": "44 (8d8+8)",
-			"speed": "30 ft., burrow 20 ft.",
+			"speed": {
+				"walk": 30,
+				"burrow": 20
+			},
 			"str": 15,
 			"dex": 13,
 			"con": 13,
@@ -15622,7 +16226,9 @@
 			"alignment": "neutral good",
 			"ac": "14 (leaf armor), 16 with shield",
 			"hp": "33 (6d6+12)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 13,
 			"dex": 16,
 			"con": 15,
@@ -15670,7 +16276,10 @@
 			"alignment": "neutral",
 			"ac": "17 (natural armor)",
 			"hp": "33 (6d6+12)",
-			"speed": "10 ft., swim 60 ft.",
+			"speed": {
+				"walk": 10,
+				"swim": 60
+			},
 			"str": 14,
 			"dex": 13,
 			"con": 15,
@@ -15739,7 +16348,10 @@
 			"alignment": "neutral",
 			"ac": "18 (natural armor)",
 			"hp": "58 (9d8+18)",
-			"speed": "10 ft., swim 60 ft.",
+			"speed": {
+				"walk": 10,
+				"swim": 60
+			},
 			"str": 16,
 			"dex": 13,
 			"con": 15,
@@ -15808,7 +16420,10 @@
 			"alignment": "neutral",
 			"ac": "19 (natural armor)",
 			"hp": "123 (13d10+52)",
-			"speed": "10 ft., swim 60 ft.",
+			"speed": {
+				"walk": 10,
+				"swim": 60
+			},
 			"str": 20,
 			"dex": 13,
 			"con": 19,
@@ -15882,7 +16497,9 @@
 			"alignment": "neutral",
 			"ac": "18 (natural armor)",
 			"hp": "228 (24d8+120)",
-			"speed": "35 ft.",
+			"speed": {
+				"walk": 35
+			},
 			"str": 24,
 			"dex": 15,
 			"con": 20,
@@ -15947,7 +16564,9 @@
 			"alignment": "neutral",
 			"ac": "18 (natural armor)",
 			"hp": "247 (26d8+130)",
-			"speed": "35 ft.",
+			"speed": {
+				"walk": 35
+			},
 			"str": 22,
 			"dex": 15,
 			"con": 20,
@@ -16066,7 +16685,7 @@
 		},
 		{
 			"source": "CC 3pp",
-			"name": "Tulgar Half\u2014Spirit",
+			"name": "Tulgar Half-Spirit",
 			"size": "M",
 			"type": {
 				"type": "humanoid",
@@ -16077,7 +16696,12 @@
 			"alignment": "neutral",
 			"ac": "19 (natural armor; 13 in spirit form)",
 			"hp": "266 (28d8+140)",
-			"speed": "35 ft. (0 ft., fly 35 ft. in spirit form)",
+			"speed": {
+				"walk": {
+					"number": 35,
+					"condition": " (0 ft. fly 35 ft. in spirit form)"
+				}
+			},
 			"str": 24,
 			"dex": 17,
 			"con": 20,
@@ -16152,7 +16776,9 @@
 			"alignment": "chaotic evil",
 			"ac": "15 (natural armor)",
 			"hp": "201 (13d20+65)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 26,
 			"dex": 13,
 			"con": 20,
@@ -16223,7 +16849,10 @@
 			"alignment": "neutral evil",
 			"ac": "15",
 			"hp": "84 (13d8+26)",
-			"speed": "0 ft., fly 40 ft.",
+			"speed": {
+				"walk": 0,
+				"fly": 40
+			},
 			"str": 3,
 			"dex": 20,
 			"con": 15,
@@ -16286,7 +16915,9 @@
 			"alignment": "lawful evil",
 			"ac": "16 (hide armor, shield)",
 			"hp": "104 (11d10+44)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 22,
 			"dex": 14,
 			"con": 19,
@@ -16341,7 +16972,10 @@
 			"alignment": "lawful evil",
 			"ac": "17 (natural armor)",
 			"hp": "67 (9d8+27)",
-			"speed": "30 ft., fly 40 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 40
+			},
 			"str": 15,
 			"dex": 18,
 			"con": 16,
@@ -16413,7 +17047,9 @@
 			"alignment": "unaligned",
 			"ac": "16 (natural armor)",
 			"hp": "37 (6d8+10)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 19,
 			"dex": 10,
 			"con": 22,
@@ -16460,7 +17096,9 @@
 			"alignment": "chaotic evil",
 			"ac": "14 (natural armor)",
 			"hp": "114 (12d12+36)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 24,
 			"dex": 8,
 			"con": 17,
@@ -16518,7 +17156,9 @@
 			"alignment": "neutral evil",
 			"ac": "13",
 			"hp": "39 (6d6+18)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 12,
 			"dex": 16,
 			"con": 16,
@@ -16571,7 +17211,9 @@
 			"alignment": "neutral evil",
 			"ac": "13",
 			"hp": "52 (8d6+24)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 18,
 			"dex": 14,
 			"con": 16,
@@ -16617,7 +17259,9 @@
 			"alignment": "neutral",
 			"ac": "13 (leather armor)",
 			"hp": "22 (4d8+4)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 11,
 			"dex": 15,
 			"con": 12,
@@ -16682,7 +17326,9 @@
 			"alignment": "lawful neutral",
 			"ac": "19 (natural armor, shield)",
 			"hp": "133 (14d10+56)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 22,
 			"dex": 10,
 			"con": 18,
@@ -16751,7 +17397,9 @@
 			"alignment": "chaotic evil",
 			"ac": "13 (natural armor)",
 			"hp": "42 (5d8+20)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 19,
 			"dex": 10,
 			"con": 18,
@@ -16803,7 +17451,9 @@
 			"alignment": "lawful evil",
 			"ac": "15 (studded leather)",
 			"hp": "32 (5d8+10)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 15,
 			"dex": 16,
 			"con": 15,
@@ -16877,7 +17527,9 @@
 			"alignment": "chaotic evil",
 			"ac": "11",
 			"hp": "18 (4d6+4)",
-			"speed": "25 ft.",
+			"speed": {
+				"walk": 25
+			},
 			"str": 14,
 			"dex": 12,
 			"con": 12,
@@ -16954,7 +17606,10 @@
 			"alignment": "neutral",
 			"ac": "16 (natural armor)",
 			"hp": "104 (11d12+33)",
-			"speed": "20 ft., fly 60 ft.",
+			"speed": {
+				"walk": 20,
+				"fly": 60
+			},
 			"str": 20,
 			"dex": 14,
 			"con": 17,
@@ -17015,7 +17670,10 @@
 			"alignment": "neutral evil",
 			"ac": "17 (natural armor)",
 			"hp": "85 (10d10+30)",
-			"speed": "30 ft., burrow 30 ft.",
+			"speed": {
+				"walk": 30,
+				"burrow": 30
+			},
 			"str": 19,
 			"dex": 13,
 			"con": 17,
@@ -17067,7 +17725,10 @@
 			"alignment": "neutral evil",
 			"ac": "15 (natural armor)",
 			"hp": "57 (6d10+24)",
-			"speed": "30 ft., swim 60 ft.",
+			"speed": {
+				"walk": 30,
+				"swim": 60
+			},
 			"str": 17,
 			"dex": 13,
 			"con": 18,
@@ -17134,7 +17795,10 @@
 			"alignment": "neutral evil",
 			"ac": "18 (natural armor)",
 			"hp": "58 (9d8+18)",
-			"speed": "30 ft., swim 20 ft.",
+			"speed": {
+				"walk": 30,
+				"swim": 20
+			},
 			"str": 17,
 			"dex": 11,
 			"con": 15,
@@ -17192,7 +17856,10 @@
 			"alignment": "neutral evil",
 			"ac": "16 (natural armor)",
 			"hp": "59 (7d10+21)",
-			"speed": "30 ft., climb 20 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 20
+			},
 			"str": 21,
 			"dex": 15,
 			"con": 17,
@@ -17259,7 +17926,10 @@
 			"alignment": "neutral evil",
 			"ac": "19 (natural armor)",
 			"hp": "138 (12d12+60)",
-			"speed": "30 ft., climb 20 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 20
+			},
 			"str": 24,
 			"dex": 13,
 			"con": 21,
@@ -17326,7 +17996,9 @@
 			"alignment": "neutral evil",
 			"ac": "17 (natural armor)",
 			"hp": "142 (15d10+60)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 22,
 			"dex": 14,
 			"con": 19,
@@ -17412,7 +18084,10 @@
 			"alignment": "unaligned",
 			"ac": "9 (natural armor)",
 			"hp": "27 (5d8+5)",
-			"speed": "20 ft., climb 20 ft.",
+			"speed": {
+				"walk": 20,
+				"climb": 20
+			},
 			"str": 12,
 			"dex": 8,
 			"con": 13,
@@ -17449,7 +18124,10 @@
 			"alignment": "unaligned",
 			"ac": "12",
 			"hp": "1 (1d4-1)",
-			"speed": "10 ft., fly 50 ft.",
+			"speed": {
+				"walk": 10,
+				"fly": 50
+			},
 			"str": 2,
 			"dex": 14,
 			"con": 8,
@@ -17493,7 +18171,10 @@
 			"alignment": "unaligned",
 			"ac": "18 (natural armor)",
 			"hp": "264 (16d20+96)",
-			"speed": "0 ft., swim 50 ft.",
+			"speed": {
+				"walk": 0,
+				"swim": 50
+			},
 			"str": 27,
 			"dex": 6,
 			"con": 22,
@@ -17537,7 +18218,10 @@
 			"alignment": "unaligned",
 			"ac": "11",
 			"hp": "2 (1d4)",
-			"speed": "15 ft., climb 15 ft.",
+			"speed": {
+				"walk": 15,
+				"climb": 15
+			},
 			"str": 4,
 			"dex": 12,
 			"con": 10,
@@ -17595,7 +18279,9 @@
 			"alignment": "unaligned",
 			"ac": "10",
 			"hp": "3 (1d4+1)",
-			"speed": "20 ft.",
+			"speed": {
+				"walk": 20
+			},
 			"str": 3,
 			"dex": 11,
 			"con": 12,
@@ -17630,7 +18316,10 @@
 			"alignment": "unaligned",
 			"ac": "18 (natural armor)",
 			"hp": "145 (10d12+50)",
-			"speed": "30 ft., swim 30 ft.",
+			"speed": {
+				"walk": 30,
+				"swim": 30
+			},
 			"str": 22,
 			"dex": 13,
 			"con": 20,
@@ -17681,7 +18370,10 @@
 			"alignment": "unaligned",
 			"ac": "12",
 			"hp": "5 (2d4)",
-			"speed": "20 ft., fly 40 ft.",
+			"speed": {
+				"walk": 20,
+				"fly": 40
+			},
 			"str": 2,
 			"dex": 15,
 			"con": 10,
@@ -17727,7 +18419,9 @@
 			"alignment": "unaligned",
 			"ac": "12",
 			"hp": "11 (2d8+2)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 11,
 			"dex": 14,
 			"con": 12,
@@ -17769,7 +18463,9 @@
 			"alignment": "unaligned",
 			"ac": "11",
 			"hp": "3 (1d4+1)",
-			"speed": "20 ft.",
+			"speed": {
+				"walk": 20
+			},
 			"str": 4,
 			"dex": 12,
 			"con": 12,
@@ -17815,7 +18511,10 @@
 			"alignment": "unaligned",
 			"ac": "14 (natural armor)",
 			"hp": "105 (10d12+40)",
-			"speed": "40 ft., climb 30 ft.",
+			"speed": {
+				"walk": 40,
+				"climb": 30
+			},
 			"str": 24,
 			"dex": 10,
 			"con": 18,
@@ -17865,7 +18564,10 @@
 			"alignment": "unaligned",
 			"ac": "13 (natural armor)",
 			"hp": "30 (4d10+12)",
-			"speed": "30 ft., climb 30 ft.",
+			"speed": {
+				"walk": 30,
+				"climb": 30
+			},
 			"str": 18,
 			"dex": 12,
 			"con": 16,
@@ -17916,7 +18618,9 @@
 			"alignment": "unaligned",
 			"ac": "8",
 			"hp": "10 (3d4+3)",
-			"speed": "5 ft.",
+			"speed": {
+				"walk": 5
+			},
 			"str": 2,
 			"dex": 6,
 			"con": 12,
@@ -17952,7 +18656,10 @@
 			"alignment": "unaligned",
 			"ac": "13 (natural armor)",
 			"hp": "47 (5d10+20)",
-			"speed": "15 ft., swim 40 ft.",
+			"speed": {
+				"walk": 15,
+				"swim": 40
+			},
 			"str": 18,
 			"dex": 10,
 			"con": 18,
@@ -17990,7 +18697,10 @@
 			"alignment": "unaligned",
 			"ac": "18 (natural armor)",
 			"hp": "57 (6d10+24)",
-			"speed": "20 ft., swim 40 ft.",
+			"speed": {
+				"walk": 20,
+				"swim": 40
+			},
 			"str": 19,
 			"dex": 6,
 			"con": 18,
@@ -18034,7 +18744,9 @@
 			"alignment": "unaligned",
 			"ac": "16 (natural armor)",
 			"hp": "26 (4d8+8)",
-			"speed": "15 ft.",
+			"speed": {
+				"walk": 15
+			},
 			"str": 16,
 			"dex": 6,
 			"con": 15,
@@ -18069,7 +18781,10 @@
 			"alignment": "unaligned",
 			"ac": "17 (natural armor)",
 			"hp": "155 (10d10+100)",
-			"speed": "20 ft., swim 20 ft.",
+			"speed": {
+				"walk": 20,
+				"swim": 20
+			},
 			"str": 20,
 			"dex": 6,
 			"con": 30,
@@ -18093,7 +18808,7 @@
 				{
 					"name": "Cryptobiosis",
 					"entries": [
-						"When exposed to an environment or effect that is lethal to the waterbear over time, such as an environment that lacks breathable water, being frozen solid, or taking poison damage over time, the waterbear enters a state of suspended animation. While in this state the, waterbear is unconscious but immune to any environmental effects, as well as poison and necrotic damage and the poisoned condition. Any such ongoing effect is suspended but not removed. The cryptobiotic state ends as soon as conditions become tolerable for the waterbear. The waterbear can remain in this state for up to 30 years. If it remains in this state longer, it dies."
+						"When exposed to an environment or effect that is lethal to the waterbear over time, such as an environment that lacks breathable water, being frozen solid, or taking poison damage over time, the waterbear enters a state of suspended animation. While in this state, the waterbear is unconscious but immune to any environmental effects, as well as poison and necrotic damage and the poisoned condition. Any such ongoing effect is suspended but not removed. The cryptobiotic state ends as soon as conditions become tolerable for the waterbear. The waterbear can remain in this state for up to 30 years. If it remains in this state longer, it dies."
 					]
 				}
 			],
@@ -18115,7 +18830,9 @@
 			"alignment": "neutral evil",
 			"ac": "13",
 			"hp": "30 (4d8+12)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 14,
 			"dex": 17,
 			"con": 16,
@@ -18162,7 +18879,10 @@
 			"alignment": "unaligned",
 			"ac": "16 (natural armor)",
 			"hp": "51 (6d10+18)",
-			"speed": "30 ft., swim 30 ft.",
+			"speed": {
+				"walk": 30,
+				"swim": 30
+			},
 			"str": 17,
 			"dex": 13,
 			"con": 16,
@@ -18207,7 +18927,10 @@
 			"alignment": "chaotic neutral",
 			"ac": "14 (natural armor)",
 			"hp": "73 (7d12+28)",
-			"speed": "40 ft., climb 30 ft.",
+			"speed": {
+				"walk": 40,
+				"climb": 30
+			},
 			"str": 20,
 			"dex": 15,
 			"con": 17,
@@ -18253,7 +18976,10 @@
 			"alignment": "unaligned",
 			"ac": "10 (natural armor)",
 			"hp": "51 (6d10+18)",
-			"speed": "40 ft., swim 40 ft.",
+			"speed": {
+				"walk": 40,
+				"swim": 40
+			},
 			"str": 20,
 			"dex": 8,
 			"con": 16,
@@ -18288,7 +19014,9 @@
 			"alignment": "unaligned",
 			"ac": "14 (natural armor)",
 			"hp": "22 (4d6+8)",
-			"speed": "50 ft.",
+			"speed": {
+				"walk": 50
+			},
 			"str": 14,
 			"dex": 15,
 			"con": 14,
@@ -18336,7 +19064,12 @@
 			"alignment": "neutral evil",
 			"ac": "15 (natural armor)",
 			"hp": "65 (10d8+20)",
-			"speed": "50 ft. (30 ft. in goblin form)",
+			"speed": {
+				"walk": {
+					"number": 50,
+					"condition": " (30 ft. in goblin form)"
+				}
+			},
 			"str": 15,
 			"dex": 16,
 			"con": 14,
@@ -18400,7 +19133,9 @@
 			"alignment": "chaotic evil",
 			"ac": "13",
 			"hp": "26 (4d8+8)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 13,
 			"dex": 17,
 			"con": 15,
@@ -18448,7 +19183,10 @@
 			"alignment": "unaligned",
 			"ac": "11",
 			"hp": "2 (1d4)",
-			"speed": "10 ft., fly 40 ft.",
+			"speed": {
+				"walk": 10,
+				"fly": 40
+			},
 			"str": 3,
 			"dex": 12,
 			"con": 10,
@@ -18483,7 +19221,9 @@
 			"alignment": "unaligned",
 			"ac": "12",
 			"hp": "1 (1d4-1)",
-			"speed": "50 ft.",
+			"speed": {
+				"walk": 50
+			},
 			"str": 2,
 			"dex": 14,
 			"con": 8,
@@ -18535,7 +19275,10 @@
 			"alignment": "unaligned",
 			"ac": "12",
 			"hp": "34 (4d10+12)",
-			"speed": "15 ft., swim 60 ft.",
+			"speed": {
+				"walk": 15,
+				"swim": 60
+			},
 			"str": 18,
 			"dex": 15,
 			"con": 16,
@@ -18580,7 +19323,10 @@
 			"alignment": "unaligned",
 			"ac": "16 (natural armor)",
 			"hp": "26 (4d8+8)",
-			"speed": "10 ft., swim 40 ft.",
+			"speed": {
+				"walk": 10,
+				"swim": 40
+			},
 			"str": 16,
 			"dex": 6,
 			"con": 15,
@@ -18621,7 +19367,10 @@
 			"alignment": "unaligned",
 			"ac": "12",
 			"hp": "13 (2d8+4)",
-			"speed": "15 ft., swim 50 ft.",
+			"speed": {
+				"walk": 15,
+				"swim": 50
+			},
 			"str": 12,
 			"dex": 15,
 			"con": 14,
@@ -18659,7 +19408,10 @@
 			"alignment": "unaligned",
 			"ac": "14 (natural armor)",
 			"hp": "11 (2d6+4)",
-			"speed": "15 ft., swim 30 ft.",
+			"speed": {
+				"walk": 15,
+				"swim": 30
+			},
 			"str": 14,
 			"dex": 10,
 			"con": 14,
@@ -18700,7 +19452,10 @@
 			"alignment": "unaligned",
 			"ac": "15 (natural armor)",
 			"hp": "201 (13d20+65)",
-			"speed": "0 ft., swim 50 ft.",
+			"speed": {
+				"walk": 0,
+				"swim": 50
+			},
 			"str": 25,
 			"dex": 8,
 			"con": 20,
@@ -18751,7 +19506,10 @@
 			"alignment": "unaligned",
 			"ac": "13",
 			"hp": "1 (1d4-1)",
-			"speed": "40 ft., climb 40 ft.",
+			"speed": {
+				"walk": 40,
+				"climb": 40
+			},
 			"str": 2,
 			"dex": 16,
 			"con": 8,
@@ -18790,7 +19548,7 @@
 		},
 		{
 			"source": "CC 3pp",
-			"name": "Swarm Of Blood Ravens",
+			"name": "Swarm of Blood Ravens",
 			"size": "M",
 			"type": {
 				"type": "beast",
@@ -18799,7 +19557,10 @@
 			"alignment": "unaligned",
 			"ac": "12",
 			"hp": "24 (7d8 \u2014 7)",
-			"speed": "10 ft., fly 40 ft.",
+			"speed": {
+				"walk": 10,
+				"fly": 40
+			},
 			"str": 6,
 			"dex": 14,
 			"con": 8,
@@ -18839,7 +19600,7 @@
 		},
 		{
 			"source": "CC 3pp",
-			"name": "Swarm Of Corpseflies",
+			"name": "Swarm of Corpseflies",
 			"size": "M",
 			"type": {
 				"type": "beast",
@@ -18848,7 +19609,10 @@
 			"alignment": "unaligned",
 			"ac": "12",
 			"hp": "27 (6d8)",
-			"speed": "20 ft., fly 40 ft.",
+			"speed": {
+				"walk": 20,
+				"fly": 40
+			},
 			"str": 2,
 			"dex": 15,
 			"con": 10,
@@ -18889,7 +19653,7 @@
 		},
 		{
 			"source": "CC 3pp",
-			"name": "Swarm Of Giant Maggots",
+			"name": "Swarm of Giant Maggots",
 			"size": "M",
 			"type": {
 				"type": "beast",
@@ -18898,7 +19662,9 @@
 			"alignment": "unaligned",
 			"ac": "8",
 			"hp": "49 (9d8+9)",
-			"speed": "5 ft.",
+			"speed": {
+				"walk": 5
+			},
 			"str": 2,
 			"dex": 6,
 			"con": 12,
@@ -18936,7 +19702,7 @@
 		},
 		{
 			"source": "CC 3pp",
-			"name": "Swarm Of Squirrels",
+			"name": "Swarm of Squirrels",
 			"size": "M",
 			"type": {
 				"type": "beast",
@@ -18945,7 +19711,10 @@
 			"alignment": "unaligned",
 			"ac": "13",
 			"hp": "24 (7d8 \u2014 7)",
-			"speed": "40 ft., climb 40 ft.",
+			"speed": {
+				"walk": 40,
+				"climb": 40
+			},
 			"str": 2,
 			"dex": 16,
 			"con": 8,
@@ -18991,7 +19760,9 @@
 			"alignment": "unaligned",
 			"ac": "12 (natural armor)",
 			"hp": "3 (1d4+1)",
-			"speed": "10 ft.",
+			"speed": {
+				"walk": 10
+			},
 			"str": 3,
 			"dex": 6,
 			"con": 12,
@@ -19033,7 +19804,10 @@
 			"alignment": "unaligned",
 			"ac": "12 (natural armor)",
 			"hp": "3 (1d4+1)",
-			"speed": "10 ft., swim 30 ft.",
+			"speed": {
+				"walk": 10,
+				"swim": 30
+			},
 			"str": 2,
 			"dex": 7,
 			"con": 12,
@@ -19081,7 +19855,13 @@
 			"alignment": "neutral evil",
 			"ac": "14",
 			"hp": "33 (6d8+6)",
-			"speed": "50 ft., fly 50 ft. (hover)",
+			"speed": {
+				"walk": 50,
+				"fly": {
+					"number": 50,
+					"condition": " (hover)"
+				}
+			},
 			"str": 12,
 			"dex": 18,
 			"con": 13,
@@ -19141,7 +19921,12 @@
 			"alignment": "lawful evil",
 			"ac": "13 (natural armor)",
 			"hp": "30 (4d10+8)",
-			"speed": "10 ft., 40 ft. in charging form",
+			"speed": {
+				"walk": {
+					"number": 10,
+					"condition": " (40 ft. in charging form)"
+				}
+			},
 			"str": 18,
 			"dex": 12,
 			"con": 15,
@@ -19193,7 +19978,10 @@
 			"alignment": "lawful evil",
 			"ac": "15",
 			"hp": "60 (8d10+16)",
-			"speed": "50 ft., climb 20 ft.",
+			"speed": {
+				"walk": 50,
+				"climb": 20
+			},
 			"str": 18,
 			"dex": 20,
 			"con": 15,
@@ -19251,7 +20039,9 @@
 			"alignment": "lawful evil",
 			"ac": "12",
 			"hp": "16 (3d6+6)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 14,
 			"dex": 14,
 			"con": 15,
@@ -19291,7 +20081,9 @@
 			"alignment": "lawful evil",
 			"ac": "13 (natural armor)",
 			"hp": "26 (4d8+8)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 16,
 			"dex": 12,
 			"con": 15,
@@ -19331,7 +20123,9 @@
 			"alignment": "lawful evil",
 			"ac": "14 (natural armor)",
 			"hp": "37 (5d10+10)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 20,
 			"dex": 12,
 			"con": 15,
@@ -19382,7 +20176,9 @@
 			"alignment": "lawful evil",
 			"ac": "13 (natural armor)",
 			"hp": "11 (2d6+4)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 12,
 			"dex": 14,
 			"con": 15,
@@ -19422,7 +20218,9 @@
 			"alignment": "lawful evil",
 			"ac": "14 (natural armor)",
 			"hp": "19 (3d8+6)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 15,
 			"dex": 14,
 			"con": 15,
@@ -19486,7 +20284,9 @@
 			"alignment": "lawful evil",
 			"ac": "14 (natural armor)",
 			"hp": "30 (4d10+8)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 19,
 			"dex": 12,
 			"con": 15,
@@ -19543,7 +20343,9 @@
 			"alignment": "lawful evil",
 			"ac": "12 (natural armor)",
 			"hp": "13 (2d8+4)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 13,
 			"dex": 12,
 			"con": 15,
@@ -19588,7 +20390,9 @@
 			"alignment": "lawful evil",
 			"ac": "12 (natural armor)",
 			"hp": "22 (3d10+6)",
-			"speed": "45 ft.",
+			"speed": {
+				"walk": 45
+			},
 			"str": 16,
 			"dex": 11,
 			"con": 15,
@@ -19645,7 +20449,9 @@
 			"alignment": "lawful evil",
 			"ac": "13 (natural armor)",
 			"hp": "34 (4d12+8)",
-			"speed": "45 ft.",
+			"speed": {
+				"walk": 45
+			},
 			"str": 20,
 			"dex": 10,
 			"con": 15,
@@ -19696,7 +20502,9 @@
 			"alignment": "lawful evil",
 			"ac": "12",
 			"hp": "4 (1d4+2)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 11,
 			"dex": 14,
 			"con": 15,
@@ -19742,7 +20550,9 @@
 			"alignment": "lawful evil",
 			"ac": "13 (natural armor)",
 			"hp": "11 (2d6+4)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 13,
 			"dex": 14,
 			"con": 15,
@@ -19782,7 +20592,17 @@
 			"alignment": "lawful evil",
 			"ac": "13 (natural armor)",
 			"hp": "26 (4d8+8)",
-			"speed": "30 ft.; burrow, climb, or swim 30 ft.",
+			"speed": {
+				"walk": 30,
+				"choose": {
+					"from": [
+						"burrow",
+						"climb",
+						"swim"
+					],
+					"amount": 30
+				}
+			},
 			"str": 14,
 			"dex": 12,
 			"con": 15,
@@ -19821,7 +20641,17 @@
 			"alignment": "lawful evil",
 			"ac": "15 (natural armor)",
 			"hp": "97 (13d10+26)",
-			"speed": "40 ft.; burrow, climb, or swim 30 ft.",
+			"speed": {
+				"walk": 40,
+				"choose": {
+					"from": [
+						"burrow",
+						"climb",
+						"swim"
+					],
+					"amount": 30
+				}
+			},
 			"str": 18,
 			"dex": 11,
 			"con": 15,
@@ -19866,7 +20696,17 @@
 			"alignment": "lawful evil",
 			"ac": "16 (natural armor)",
 			"hp": "127 (15d12+30)",
-			"speed": "40 ft.; burrow, climb, or swim 40 ft.",
+			"speed": {
+				"walk": 40,
+				"choose": {
+					"from": [
+						"burrow",
+						"climb",
+						"swim"
+					],
+					"amount": 40
+				}
+			},
 			"str": 22,
 			"dex": 11,
 			"con": 15,
@@ -19932,7 +20772,17 @@
 			"alignment": "lawful evil",
 			"ac": "18 (natural armor)",
 			"hp": "212 (17d20+34)",
-			"speed": "40 ft.; burrow, climb, or swim 40 ft.",
+			"speed": {
+				"walk": 40,
+				"choose": {
+					"from": [
+						"burrow",
+						"climb",
+						"swim"
+					],
+					"amount": 40
+				}
+			},
 			"str": 26,
 			"dex": 11,
 			"con": 15,
@@ -20010,7 +20860,9 @@
 			"alignment": "lawful evil",
 			"ac": "13 (armor scraps)",
 			"hp": "5 (1d6+2)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 10,
 			"dex": 14,
 			"con": 15,
@@ -20056,7 +20908,9 @@
 			"alignment": "lawful evil",
 			"ac": "12 (armor scraps)",
 			"hp": "52 (7d10+14)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 18,
 			"dex": 10,
 			"con": 15,
@@ -20095,7 +20949,9 @@
 			"alignment": "lawful evil",
 			"ac": "14 (armor scraps)",
 			"hp": "93 (11d12+22)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 22,
 			"dex": 10,
 			"con": 15,
@@ -20140,7 +20996,9 @@
 			"alignment": "lawful evil",
 			"ac": "16 (natural armor)",
 			"hp": "78 (12d8+24)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 14,
 			"dex": 22,
 			"con": 15,
@@ -20195,7 +21053,9 @@
 			"alignment": "neutral evil",
 			"ac": "9",
 			"hp": "26 (4d6+12)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 12,
 			"dex": 8,
 			"con": 16,
@@ -20240,7 +21100,9 @@
 			"alignment": "neutral evil",
 			"ac": "9 (natural armor)",
 			"hp": "37 (5d8+15)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 17,
 			"dex": 6,
 			"con": 16,
@@ -20285,7 +21147,9 @@
 			"alignment": "neutral evil",
 			"ac": "9 (natural armor)",
 			"hp": "51 (6d10+18)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 20,
 			"dex": 6,
 			"con": 16,
@@ -20336,7 +21200,9 @@
 			"alignment": "neutral evil",
 			"ac": "10 (natural armor)",
 			"hp": "19 (3d6+9)",
-			"speed": "20 ft.",
+			"speed": {
+				"walk": 20
+			},
 			"str": 12,
 			"dex": 8,
 			"con": 16,
@@ -20381,7 +21247,9 @@
 			"alignment": "neutral evil",
 			"ac": "9 (natural armor)",
 			"hp": "30 (4d8+12)",
-			"speed": "20 ft.",
+			"speed": {
+				"walk": 20
+			},
 			"str": 14,
 			"dex": 6,
 			"con": 16,
@@ -20438,7 +21306,9 @@
 			"alignment": "neutral evil",
 			"ac": "10 (natural armor)",
 			"hp": "47 (5d10+20)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 19,
 			"dex": 6,
 			"con": 18,
@@ -20495,7 +21365,9 @@
 			"alignment": "neutral evil",
 			"ac": "8",
 			"hp": "22 (3d8+9)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 15,
 			"dex": 6,
 			"con": 16,
@@ -20545,7 +21417,9 @@
 			"alignment": "neutral evil",
 			"ac": "9 (natural armor)",
 			"hp": "34 (4d10+12)",
-			"speed": "35 ft.",
+			"speed": {
+				"walk": 35
+			},
 			"str": 19,
 			"dex": 6,
 			"con": 16,
@@ -20601,7 +21475,9 @@
 			"alignment": "neutral evil",
 			"ac": "11 (natural armor)",
 			"hp": "52 (5d12+20)",
-			"speed": "35 ft.",
+			"speed": {
+				"walk": 35
+			},
 			"str": 23,
 			"dex": 6,
 			"con": 18,
@@ -20657,7 +21533,10 @@
 			"alignment": "neutral evil",
 			"ac": "10",
 			"hp": "11 (2d4+6)",
-			"speed": "20 ft., fly 20 ft.",
+			"speed": {
+				"walk": 20,
+				"fly": 20
+			},
 			"str": 12,
 			"dex": 10,
 			"con": 16,
@@ -20708,7 +21587,10 @@
 			"alignment": "neutral evil",
 			"ac": "11 (natural armor)",
 			"hp": "19 (3d6+9)",
-			"speed": "20 ft., fly 20 ft.",
+			"speed": {
+				"walk": 20,
+				"fly": 20
+			},
 			"str": 13,
 			"dex": 10,
 			"con": 16,
@@ -20753,7 +21635,18 @@
 			"alignment": "neutral evil",
 			"ac": "12 (natural armor)",
 			"hp": "45 (6d8+18)",
-			"speed": "20 ft., fly 20 ft.; burrow, climb, or swim 20 ft.",
+			"speed": {
+				"walk": 20,
+				"fly": 20,
+				"choose": {
+					"from": [
+						"burrow",
+						"climb",
+						"swim"
+					],
+					"amount": 20
+				}
+			},
 			"str": 16,
 			"dex": 8,
 			"con": 16,
@@ -20792,7 +21685,18 @@
 			"alignment": "neutral evil",
 			"ac": "15 (natural armor)",
 			"hp": "142 (15d10+60)",
-			"speed": "30 ft., fly 40 ft.; burrow, climb, or swim 20 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 40,
+				"choose": {
+					"from": [
+						"burrow",
+						"climb",
+						"swim"
+					],
+					"amount": 20
+				}
+			},
 			"str": 20,
 			"dex": 6,
 			"con": 18,
@@ -20849,7 +21753,18 @@
 			"alignment": "neutral evil",
 			"ac": "16 (natural armor)",
 			"hp": "207 (18d12+90)",
-			"speed": "30 ft., fly 40 ft.; burrow, climb, or swim 30 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 40,
+				"choose": {
+					"from": [
+						"burrow",
+						"climb",
+						"swim"
+					],
+					"amount": 30
+				}
+			},
 			"str": 26,
 			"dex": 6,
 			"con": 20,
@@ -20921,7 +21836,18 @@
 			"alignment": "neutral evil",
 			"ac": "19 (natural armor)",
 			"hp": "341 (22d20+110)",
-			"speed": "30 ft.; burrow, climb, or swim 30 ft. (Variant A: fly)",
+			"speed": {
+				"walk": 30,
+				"choose": {
+					"from": [
+						"burrow",
+						"climb",
+						"swim"
+					],
+					"amount": 30,
+					"note": "(Variant A: fly)"
+				}
+			},
 			"str": 30,
 			"dex": 11,
 			"con": 20,
@@ -20999,7 +21925,9 @@
 			"alignment": "neutral evil",
 			"ac": "9",
 			"hp": "13 (2d6+6)",
-			"speed": "20 ft.",
+			"speed": {
+				"walk": 20
+			},
 			"str": 12,
 			"dex": 8,
 			"con": 16,
@@ -21044,7 +21972,9 @@
 			"alignment": "neutral evil",
 			"ac": "10 (armor scraps)",
 			"hp": "161 (14d12+70)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 24,
 			"dex": 6,
 			"con": 20,
@@ -21089,7 +22019,13 @@
 			"alignment": "neutral",
 			"ac": "13",
 			"hp": "27 (6d6+6)",
-			"speed": "0 ft., fly 50 ft. (hover)",
+			"speed": {
+				"walk": 0,
+				"fly": {
+					"number": 50,
+					"condition": " (hover)"
+				}
+			},
 			"str": 12,
 			"dex": 16,
 			"con": 12,
@@ -21141,7 +22077,10 @@
 			"alignment": "neutral",
 			"ac": "14 (natural armor)",
 			"hp": "39 (6d6+18)",
-			"speed": "30 ft., burrow 30 ft.",
+			"speed": {
+				"walk": 30,
+				"burrow": 30
+			},
 			"str": 16,
 			"dex": 10,
 			"con": 16,
@@ -21188,7 +22127,9 @@
 			"alignment": "neutral",
 			"ac": "12",
 			"hp": "33 (6d6+12)",
-			"speed": "35 ft.",
+			"speed": {
+				"walk": 35
+			},
 			"str": 10,
 			"dex": 15,
 			"con": 14,
@@ -21246,7 +22187,10 @@
 			"alignment": "neutral",
 			"ac": "13 (natural armor)",
 			"hp": "33 (6d6+12)",
-			"speed": "30 ft., swim 50 ft.",
+			"speed": {
+				"walk": 30,
+				"swim": 50
+			},
 			"str": 15,
 			"dex": 14,
 			"con": 15,
@@ -21304,7 +22248,13 @@
 			"alignment": "neutral",
 			"ac": "14",
 			"hp": "49 (9d8+9)",
-			"speed": "0 ft., fly 70 ft. (hover)",
+			"speed": {
+				"walk": 0,
+				"fly": {
+					"number": 70,
+					"condition": " (hover)"
+				}
+			},
 			"str": 14,
 			"dex": 18,
 			"con": 13,
@@ -21356,7 +22306,10 @@
 			"alignment": "neutral",
 			"ac": "15 (natural armor)",
 			"hp": "76 (9d8+36)",
-			"speed": "30 ft., burrow 30 ft.",
+			"speed": {
+				"walk": 30,
+				"burrow": 30
+			},
 			"str": 18,
 			"dex": 9,
 			"con": 18,
@@ -21409,7 +22362,9 @@
 			"alignment": "neutral",
 			"ac": "13",
 			"hp": "58 (9d8+18)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 10,
 			"dex": 16,
 			"con": 15,
@@ -21473,7 +22428,10 @@
 			"alignment": "neutral",
 			"ac": "13 (natural armor)",
 			"hp": "67 (9d8+27)",
-			"speed": "30 ft., swim 70 ft.",
+			"speed": {
+				"walk": 30,
+				"swim": 70
+			},
 			"str": 16,
 			"dex": 14,
 			"con": 16,
@@ -21531,7 +22489,13 @@
 			"alignment": "neutral",
 			"ac": "16",
 			"hp": "119 (14d12+28)",
-			"speed": "0 ft., fly 90 ft. (hover)",
+			"speed": {
+				"walk": 0,
+				"fly": {
+					"number": 90,
+					"condition": " (hover)"
+				}
+			},
 			"str": 16,
 			"dex": 22,
 			"con": 15,
@@ -21586,7 +22550,10 @@
 			"alignment": "neutral",
 			"ac": "18 (natural armor)",
 			"hp": "161 (14d12+70)",
-			"speed": "40 ft., burrow 40 ft.",
+			"speed": {
+				"walk": 40,
+				"burrow": 40
+			},
 			"str": 22,
 			"dex": 7,
 			"con": 21,
@@ -21642,7 +22609,9 @@
 			"alignment": "neutral",
 			"ac": "15",
 			"hp": "133 (14d12+42)",
-			"speed": "70 ft.",
+			"speed": {
+				"walk": 70
+			},
 			"str": 10,
 			"dex": 20,
 			"con": 17,
@@ -21709,7 +22678,10 @@
 			"alignment": "neutral",
 			"ac": "15 (natural armor)",
 			"hp": "147 (14d12+56)",
-			"speed": "40 ft., swim 90 ft.",
+			"speed": {
+				"walk": 40,
+				"swim": 90
+			},
 			"str": 20,
 			"dex": 16,
 			"con": 19,
@@ -21776,7 +22748,13 @@
 			"alignment": "neutral",
 			"ac": "17",
 			"hp": "216 (16d20+48)",
-			"speed": "0 ft., fly 100 ft. (hover)",
+			"speed": {
+				"walk": 0,
+				"fly": {
+					"number": 100,
+					"condition": " (hover)"
+				}
+			},
 			"str": 18,
 			"dex": 24,
 			"con": 16,
@@ -21823,13 +22801,7 @@
 				{
 					"name": "Whirlwind (Recharge 4\u20146)",
 					"entries": [
-						"Each creature in the elemental's space must make a DC 18 Strength saving"
-					]
-				},
-				{
-					"name": "throw",
-					"entries": [
-						"On a failure, a target takes 43 (8d8+7) bludgeoning damage and is flung up 80 feet away from the elemental in a random direction and knocked prone. If a thrown target strikes an object, such as a wall or floor, the target takes 3 (1d6) bludgeoning damage for every 10 feet it was thrown. If the target is thrown at another creature, that creature must succeed on a DC 18 Dexterity saving throw or take the same damage and be knocked prone. If the saving throw is successful, the target takes half the bludgeoning damage and isn't flung away or knocked prone."
+						"Each creature in the elemental's space must make a DC 18 Strength saving throw. On a failure, a target takes 43 (8d8+7) bludgeoning damage and is flung up 80 feet away from the elemental in a random direction and knocked prone. If a thrown target strikes an object, such as a wall or floor, the target takes 3 (1d6) bludgeoning damage for every 10 feet it was thrown. If the target is thrown at another creature, that creature must succeed on a DC 18 Dexterity saving throw or take the same damage and be knocked prone. If the saving throw is successful, the target takes half the bludgeoning damage and isn't flung away or knocked prone."
 					]
 				}
 			],
@@ -21863,7 +22835,10 @@
 			"alignment": "neutral",
 			"ac": "20 (natural armor)",
 			"hp": "264 (16d20+96)",
-			"speed": "40 ft., burrow 40 ft.",
+			"speed": {
+				"walk": 40,
+				"burrow": 40
+			},
 			"str": 24,
 			"dex": 6,
 			"con": 22,
@@ -21945,7 +22920,9 @@
 			"alignment": "neutral",
 			"ac": "16",
 			"hp": "232 (16d20+64)",
-			"speed": "70 ft.",
+			"speed": {
+				"walk": 70
+			},
 			"str": 10,
 			"dex": 22,
 			"con": 18,
@@ -22032,7 +23009,10 @@
 			"alignment": "neutral",
 			"ac": "16 (natural armor)",
 			"hp": "248 (16d20+70)",
-			"speed": "40 ft., swim 90 ft.",
+			"speed": {
+				"walk": 40,
+				"swim": 90
+			},
 			"str": 22,
 			"dex": 16,
 			"con": 20,
@@ -22119,7 +23099,10 @@
 			"alignment": "unaligned",
 			"ac": "15 (natural armor)",
 			"hp": "13 (3d8)",
-			"speed": "30 ft., swim 30 ft.",
+			"speed": {
+				"walk": 30,
+				"swim": 30
+			},
 			"str": 13,
 			"dex": 15,
 			"con": 11,
@@ -22147,7 +23130,7 @@
 		},
 		{
 			"source": "CC 3pp",
-			"name": "Half\u2014Celestial Human Champion",
+			"name": "Half-Celestial Human Champion",
 			"size": "M",
 			"type": {
 				"type": "celestial",
@@ -22158,7 +23141,10 @@
 			"alignment": "neutral good",
 			"ac": "18 (plate)",
 			"hp": "143 (22d8+44)",
-			"speed": "30 ft., fly 60 ft.",
+			"speed": {
+				"walk": 30,
+				"fly": 60
+			},
 			"str": 21,
 			"dex": 16,
 			"con": 15,
@@ -22227,7 +23213,9 @@
 			"alignment": "neutral good",
 			"ac": "14 (natural armor)",
 			"hp": "26 (4d10+4)",
-			"speed": "60 ft.",
+			"speed": {
+				"walk": 60
+			},
 			"str": 19,
 			"dex": 16,
 			"con": 14,
@@ -22275,7 +23263,9 @@
 			"alignment": "unaligned",
 			"ac": "13 (natural armor)",
 			"hp": "11 (2d8+2)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 17,
 			"dex": 15,
 			"con": 13,
@@ -22324,7 +23314,9 @@
 			"alignment": "neutral evil",
 			"ac": "13 (natural armor)",
 			"hp": "59 (7d10+21)",
-			"speed": "40 ft.",
+			"speed": {
+				"walk": 40
+			},
 			"str": 20,
 			"dex": 12,
 			"con": 17,
@@ -22372,13 +23364,16 @@
 		},
 		{
 			"source": "CC 3pp",
-			"name": "Half\u2014Fiend Minotaur",
+			"name": "Half-Fiend Minotaur",
 			"size": "L",
 			"type": "fiend",
 			"alignment": "chaotic evil",
 			"ac": "14 (natural armor)",
 			"hp": "76 (9d10+27)",
-			"speed": "40 ft., fly 60 ft.",
+			"speed": {
+				"walk": 40,
+				"fly": 60
+			},
 			"str": 18,
 			"dex": 11,
 			"con": 16,
@@ -22445,7 +23440,9 @@
 			"alignment": "chaotic neutral",
 			"ac": "14 (natural armor)",
 			"hp": "138 (12d12+60)",
-			"speed": "30 ft.",
+			"speed": {
+				"walk": 30
+			},
 			"str": 22,
 			"dex": 11,
 			"con": 20,
@@ -22525,7 +23522,11 @@
 			"alignment": "lawful evil",
 			"ac": "21 (natural armor)",
 			"hp": "385 (22d20+154)",
-			"speed": "40 ft., fly 80 ft., swim 40 ft.",
+			"speed": {
+				"walk": 40,
+				"fly": 80,
+				"swim": 40
+			},
 			"str": 27,
 			"dex": 12,
 			"con": 25,
@@ -22613,6 +23614,360 @@
 				}
 			],
 			"page": 257
+		},
+		{
+			"source": "CC 3pp",
+			"name": "Wandering Tower",
+			"size": "G",
+			"type": {
+				"type": "monstrosity",
+				"tags": [
+					"shapechanger"
+				]
+			},
+			"alignment": "neutral",
+			"ac": "18 (natural armor)",
+			"hp": "292 (15d20+135)",
+			"speed": {
+				"walk": 10
+			},
+			"str": 27,
+			"dex": 6,
+			"con": 28,
+			"int": 16,
+			"wis": 18,
+			"cha": 12,
+			"skill": {
+				"stealth": "+8"
+			},
+			"resist": "(Object Form Only) bludgeoning, cold, force, lightning, necrotic, piercing, poison, radiant, slashing, thunder",
+			"immune": "acid, fire",
+			"conditionImmune": "charmed, frightened, prone",
+			"senses": "darkvision 60 ft.",
+			"passive": 14,
+			"languages": "telepathy 120 ft. (mimics only)",
+			"cr": "16",
+			"trait": [
+				{
+					"name": "Core",
+					"entries": [
+						"A wandering tower doesn't normally reveal its nature until its victims are trapped inside it and at rest. As a result the mimic is usually fought from inside. It has a Huge sized core that normally disguises itself as a piece of the interior decoration of the building the mimic is posing as. The core can't leave the building and is immune to any effect that would transport it out of the tower but it can move through the inside at a speed of 30 feet and pass through interior objects without resistance. If the core ends its move inside an object, the obstacle is shoved aside. If its move ends inside a wall, enough of the core's form stands out both sides of the wall for creatures to be able to attack it without it gaining cover. The core can move up the mimic's walls as though it had a 30-foot climb speed. The wandering tower may move and have its core move on the same turn. When it uses a dash action, both the wandering tower's normal movement and the core's movement benefit from it.",
+						"When a creature attacks the wandering tower, it may choose to attack the core (it must have reach and line of sight to the core as though it were a separate creature). Attacks against the wandering tower's core ignore its damage resistances but not immunities.",
+						"Some abilities are noted as \"Core Only\", or \"Exterior Only\": \"Core Only\" abilities measure reach, range and line of sight from the core while \"Exterior Only\" abilities measure from the outer form of the mimic and can only affect creatures outside the mimic. Any abilities marked as \"Core or Exterior\" can be measured from either point, but if they are measured from the core, can only affect creature inside the mimic, and if they are measured from the exterior can only affect creatures outside the mimic."
+					]
+				},
+				{
+					"name": "False Appearance (Object Form Only)",
+					"entries": [
+						"While the mimic, or its core remains motionless, it is indistinguishable from an ordinary object."
+					]
+				},
+				{
+					"name": "Interior Awareness",
+					"entries": [
+						"The mimic can sense everything going on inside it as though it had blindsight reaching everywhere in its interior."
+					]
+				},
+				{
+					"name": "Lockdown (Object Form Only)",
+					"entries": [
+						"A wandering tower may choose for any doors on its object form to be locked and it can choose the DC for each lock to be anywhere from 5 to 20 or make the lock impossible to pick. A lock that is impossible to pick will become obvious to anyone trying to open it, either completely lacking the unlocking mechanism or the keyhole being filled out with some solid material. Using an action, the wandering tower can open or close any or all doors, windows and containers making up its object form and choose to lock or unlock any or all of them, including changing the DCs to unlock or making them impossible to unlock.",
+						"A creature can attempt to break down a door by attacking it. If the wandering tower takes a total of 25 damage (unless it is part of the core, the door benefits from the wandering tower's damage resistances), all of which directed at one door or window, that door or window breaks open, and the wandering tower can no longer open or close it, until the tower reverted to its amorphous form and back to object form at least once."
+					]
+				},
+				{
+					"name": "Shapechanger",
+					"entries": [
+						"The mimic can use its action to polymorph into an object or back into its true, amorphous form. Its statistics are the same in each form. Any equipment it is wearing or carrying isn‘t transformed. It reverts to its true form if it dies.",
+						"The exterior and the core can transform as part of the same action or independently of each other. While there are living creatures inside it, and the exterior assumes its amorphous form, any creatures inside it are expelled to an unoccupied space within 5 feet of the mimic, exiting prone."
+					]
+				},
+				{
+					"name": "Legendary Resistance (3/Day)",
+					"entries": [
+						"If the mimic fails a saving throw, it can choose to succeed instead."
+					]
+				}
+			],
+			"action": [
+				{
+					"name": "Multiattack",
+					"entries": [
+						"The mimic makes three melee attacks, only one of which can be a bite."
+					]
+				},
+				{
+					"name": "Bite (Core Only)",
+					"entries": [
+						"Melee Weapon Attack: +12 to hit, reach 10 ft., one target. Hit: 21 (3d8+8) piercing damage."
+					]
+				},
+				{
+					"name": "Pseudopod (Core or Exterior)",
+					"entries": [
+						"Melee Weapon Attack: +12 to hit, reach 15 ft., one target. Hit: 15 (2d6+8) bludgeoning damage and the target is grappled. The wandering tower can create a total of up to four pseudopods on its exterior and at its core, each of which can grapple one Large or smaller creature. Until this grapple ends, the target is restrained and the pseudopod can't attack another creature."
+					]
+				},
+				{
+					"name": "Stuff (Exterior Only)",
+					"entries": [
+						"The mimic stuffs a creature it is grappling into its interior. It makes a Strength (Athletics) check opposed by the target's Strength (Athletics) or Dexterity (Acrobatics) check (target's choice). If the mimic is successful, it opens any exterior door or window, stuffs the target into the room it is adjacent to and then closes and locks that door or window as per the lockdown ability and the grapple ends."
+					]
+				},
+				{
+					"name": "Rippling Architecture (Core Only, Recharge 6)",
+					"entries": [
+						"Creatures inside the mimic‘s building form within 30 feet of the core must succeed on a DC 20 Dexterity saving throw or be knocked prone."
+					]
+				}
+			],
+			"legendary": [
+				{
+					"name": "",
+					"entries": [
+						"The wandering tower can make 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The wandering tower regains spent legendary actions at the start of its turn."
+					]
+				},
+				{
+					"name": "Pseudopod",
+					"entries": [
+						"The mimic makes a pseudopod attack."
+					]
+				},
+				{
+					"name": "Stuff",
+					"entries": [
+						"The mimic uses its stuff ability."
+					]
+				},
+				{
+					"name": "Ripples",
+					"entries": [
+						"The mimic uses its rippling architecture ability."
+					]
+				},
+				{
+					"name": "Lockdown",
+					"entries": [
+						"The mimic opens and closes doors and containers in or on itself, as per its Lockdown ability."
+					]
+				}
+			],
+			"page": 141
+		},
+		{
+			"source": "CC 3pp",
+			"name": "Worm That Walks",
+			"size": "H",
+			"type": {
+				"type": "aberration",
+				"swarmSize": "T"
+			},
+			"alignment": "neutral evil",
+			"ac": "20 (natural armor)",
+			"hp": "337 (25d12+175)",
+			"speed": {
+				"walk": 30
+			},
+			"str": 25,
+			"dex": 16,
+			"con": 24,
+			"int": 25,
+			"wis": 14,
+			"cha": 10,
+			"save": "Con +15, Int +15, Wis +10, Cha +8",
+			"skill": {
+				"arcana": "+15",
+				"insight": "+10",
+				"perception": "+10",
+				"religion": "+15"
+			},
+			"resist": "bludgeoning, cold, fire, piercing, slashing",
+			"immune": "lightning, poison",
+			"conditionImmune": "blinded, charmed, frightened, paralyzed, petrified, poisoned, prone, restrained, stunned",
+			"senses": "blindsight 500 ft. (blind beyond this range)",
+			"passive": 20,
+			"languages": "Common, Deep Speech, magically understands and speaks all languages",
+			"cr": "28",
+			"trait": [
+				{
+					"name": "Anathematic Secrecy",
+					"entries": [
+						"The Worm that Walks can't be magically scryed upon. Any spell attempting to detect or scry on the Worm automatically fails."
+					]
+				},
+				{
+					"name": "Create Spawn",
+					"entries": [
+						"A Medium or smaller humanoid slain by the Worm's Corrupting Slam, Worm Smite or Engulf abilities rises at the start of the next round as a spawn of Kyuss (see Volo's Guide to Monsters, p. 192). Roll initiative for the spawn separately."
+					]
+				},
+				{
+					"name": "Discorporate",
+					"entries": [
+						"At any point during its turn, the Worm that Walks may collapse into a pile of individual worms that slither away, burrowing into the earth or fleeing into cracks in the floor (no action required). As long as any of the worms survive, they can breed and create a new body for the Worm that Walks a few months or years later, depending on the amount of damage the Worm that Walks has taken (the exact time is up to DM discretion)."
+					]
+				},
+				{
+					"name": "Legendary Resistance (3/Day)",
+					"entries": [
+						"If the Worm fails a saving throw, it can choose to succeed instead."
+					]
+				},
+				{
+					"name": "Magic Resistance",
+					"entries": [
+						"The Worm has advantage on saving throws against spells and other magical effects."
+					]
+				},
+				{
+					"name": "Swarm",
+					"entries": [
+						"The Worm that Walks can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny larva. However it may have to leave some of its gear behind if the opening is too small."
+					]
+				},
+				{
+					"name": "Worm Smite (Recharge 6)",
+					"entries": [
+						"If the Worm hits a creature with its Corrupting Slam, it may cover the target in ravenous worms. The target must succeed on a DC 21 Dexterity saving throw or be covered in worms until the worms are destroyed or removed. While coverd in worms a creature takes 35 (10d6) piercing damage at the start of each of its turns. A creature may use its action to repeat the saving throw, removing the worms on a success. Dealing a total of at least 20 fire or acid damage to the target also destroys the worms. The worms are removed if the Worm that Walks dies or uses its Discorporate ability."
+					]
+				}
+			],
+			"spellcasting": [
+				{
+					"name": "Spellcasting",
+					"headerEntries": [
+						"The Worm that Walks mage is a 20th level spellcaster. Its spellcasting ability is intelligence (Spell save DC 23, {@hit 15} to hit with spell attacks), it can only cast spells in humanoid form, and has the following wizard spells prepared:"
+					],
+					"spells": {
+						"0": {
+							"spells": [
+								"{@spell chill touch}",
+								"{@spell fire bolt}",
+								"{@spell mage hand}",
+								"{@spell true strike}"
+							]
+						},
+						"1": {
+							"slots": 4,
+							"spells": [
+								"{@spell false life}",
+								"{@spell magic missile}",
+								"{@spell mage armor}",
+								"{@spell ray of sickness}"
+							]
+						},
+						"2": {
+							"slots": 3,
+							"spells": [
+								"{@spell crown of madness}",
+								"{@spell mirror image}",
+								"{@spell phantasmal force}",
+								"{@spell scorching ray}"
+							]
+						},
+						"3": {
+							"slots": 3,
+							"spells": [
+								"{@spell fear}",
+								"{@spell fireball}",
+								"{@spell fly}",
+								"{@spell slow}"
+							]
+						},
+						"4": {
+							"slots": 3,
+							"spells": [
+								"{@spell dimension door}",
+								"{@spell evard's black tentacles}",
+								"{@spell greater invisibility}"
+							]
+						},
+						"5": {
+							"slots": 3,
+							"spells": [
+								"{@spell cloudkill}",
+								"{@spell hold monster}",
+								"{@spell scrying}"
+							]
+						},
+						"6": {
+							"slots": 1,
+							"spells": [
+								"{@spell chain lightning}",
+								"{@spell eyebite}"
+							]
+						},
+						"7": {
+							"slots": 1,
+							"spells": [
+								"{@spell finger of death}",
+								"{@spell prismatic spray}"
+							]
+						},
+						"8": {
+							"slots": 1,
+							"spells": [
+								"{@spell mind blank}",
+								"{@spell power word stun}"
+							]
+						},
+						"9": {
+							"slots": 1,
+							"spells": [
+								"{@spell power word kill}"
+							]
+						}
+					}
+				}
+			],
+			"action": [
+				{
+					"name": "Multiattack",
+					"entries": [
+						"The Worm that Walks casts a spell and uses either its Corrupting Touch or Engulf attack."
+					]
+				},
+				{
+					"name": "Corrupting Slam",
+					"entries": [
+						"Melee Weapon Attack: +15 to hit, reach 15 ft., Hit: 21 (4d6+7) bludgeoning damage plus 36 (8d8) necrotic damage and the target must succeed on a DC 21 Constitution saving throw or be poisoned until it finishes a long rest."
+					]
+				},
+				{
+					"name": "Engulf (Recharge 5\u20146)",
+					"entries": [
+						"Melee Weapon Attack: +15 to hit, reach 0 ft., one target in the worm's space. Hit: 140 (40d6) piercing damage."
+					]
+				}
+			],
+			"legendary": [
+				{
+					"name": "",
+					"entries": [
+						"The Worm that Walks can make 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The Worm regains spent legendary actions at the start of its turn."
+					]
+				},
+				{
+					"name": "Spell",
+					"entries": [
+						"The Worm casts a cantrip or spell of up to 5th level."
+					]
+				},
+				{
+					"name": "Horrific visage (Costs 2 Actions)",
+					"entries": [
+						"The Worm displays its writhing face to one creature it can see within 30 feet of it. The target must succeed on a DC 23 Wisdom saving throw against this magic or become frightened for 1 minute. The frightened target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a target's saving throw is successful or the effect ends for it, the target is immune to the Worm's visage for the next 24 hours."
+					]
+				},
+				{
+					"name": "Corrupting Slam (Costs 2 Actions)",
+					"entries": [
+						"The Worm uses its Corrupting Slam."
+					]
+				}
+			],
+			"page": 128
 		}
 	]
 }

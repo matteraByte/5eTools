@@ -316,6 +316,9 @@ function pageInit (loadedSources) {
 		valueNames: ["name", "source", "level", "time", "school", "range", "classes", "uniqueid"],
 		listClass: "spells"
 	});
+	list.on("updated", () => {
+		filterBox.setCount(list.visibleItems.length, list.items.length);
+	});
 
 	// filtering function
 	$(filterBox).on(
@@ -330,6 +333,28 @@ function pageInit (loadedSources) {
 		} else $this.attr("sortby", "asc");
 		list.sort($this.data("sort"), {order: $this.attr("sortby"), sortFunction: sortSpells});
 	});
+
+	const subList = ListUtil.initSublist({
+		valueNames: ["name", "level", "time", "school", "range", "id"],
+		listClass: "subspells",
+		sortFunction: sortSpells
+	});
+	ListUtil.initGenericPinnable();
+}
+
+function getSublistItem (spell, pinId) {
+	return `
+		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
+			<a href="#${UrlUtil.autoEncodeHash(spell)}" title="${spell.name}">
+				<span class="name col-xs-3 col-xs-3-9">${spell.name}</span>
+				<span class="level col-xs-1 col-xs-1-5">${Parser.spLevelToFull(spell.level)}</span>
+				<span class="time col-xs-1 col-xs-1-8" title="${Parser.spTimeListToFull(spell.time)}">${getTblTimeStr(spell.time[0])}</span>
+				<span class="school col-xs-1 col-xs-1-2 school_${spell.school}" title="${Parser.spSchoolAbvToFull(spell.school)}">${Parser.spSchoolAbvToShort(spell.school)}</span>
+				<span class="range col-xs-3 col-xs-3-6">${Parser.spRangeToFull(spell.range)}</span>		
+				<span class="id hidden">${pinId}</span>				
+			</a>
+		</li>
+	`;
 }
 
 function handleFilterChange () {
@@ -350,6 +375,7 @@ function handleFilterChange () {
 			s._fRangeType
 		);
 	});
+	onFilterChangeMulti(spellList);
 }
 
 let spellList = [];
@@ -416,7 +442,7 @@ function addSpells (data) {
 
 		// populate table
 		tempString += `
-			<li class="row" ${FLTR_ID}="${spI}">
+			<li class="row" ${FLTR_ID}="${spI}" onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id="${spI}" href="#${UrlUtil.autoEncodeHash(spell)}" title="${spell.name}">
 					<span class="name col-xs-3 col-xs-3-5">${spell.name}</span>
 					<span class="source col-xs-1 col-xs-1-7 source${Parser.stringToCasedSlug(spell.source)}" title="${Parser.sourceJsonToFull(spell.source)}">${Parser.sourceJsonToAbv(spell.source)}</span>
@@ -434,13 +460,7 @@ function addSpells (data) {
 		spell._fClasses.forEach(c => classFilter.addIfAbsent(c));
 		spell._fSubclasses.forEach(sc => subclassFilter.addIfAbsent(sc));
 	}
-
-	let lastSearch = null;
-	if (list.searched) {
-		lastSearch = $(`#search`).val();
-		list.search("");
-	}
-
+	const lastSearch = ListUtil.getSearchTermAndReset(list);
 	spellTable.append(tempString);
 
 	// sort filters
@@ -450,8 +470,37 @@ function addSpells (data) {
 	list.reIndex();
 	if (lastSearch) list.search(lastSearch);
 	list.sort("name");
-
 	filterBox.render();
+	handleFilterChange();
+
+	ListUtil.setOptions({
+		itemList: spellList,
+		getSublistRow: getSublistItem,
+		primaryLists: [list]
+	});
+	ListUtil.bindPinButton();
+	EntryRenderer.hover.bindPopoutButton(spellList);
+	UrlUtil.bindLinkExportButton(filterBox);
+	ListUtil.bindDownloadButton();
+	ListUtil.bindUploadButton((json, funcOnload) => {
+		const loaded = Object.keys(loadedSources).filter(it => loadedSources[it].loaded);
+		const toLoad = json.sources.filter(it => !loaded.includes(it));
+		const loadTotal = toLoad.length;
+		if (loadTotal) {
+			let loadCount = 0;
+			toLoad.forEach(src => {
+				loadSource(JSON_LIST_NAME, (spells) => {
+					addSpells(spells);
+					if (++loadCount === loadTotal) {
+						funcOnload();
+					}
+				})(src, "yes");
+			});
+		} else {
+			funcOnload();
+		}
+	});
+	ListUtil.loadState();
 }
 
 function sortSpells (a, b, o) {
@@ -516,10 +565,10 @@ function handleUnknownHash (link, sub) {
 	if (src) {
 		loadSource(JSON_LIST_NAME, (spells) => {
 			addSpells(spells);
-			hashchange();
+			History.hashChange();
 		})(src, "yes");
 	} else {
-		_freshLoad();
+		History._freshLoad();
 	}
 }
 

@@ -1,6 +1,8 @@
 "use strict";
 
 const JSON_URL = "data/objects.json";
+const NM_GENERIC_OBJECT = "Generic Object";
+const STAT_VARIES = "Varies (see below)";
 
 window.onload = function load () {
 	DataUtil.loadJSON(JSON_URL, onJsonLoad);
@@ -9,13 +11,26 @@ window.onload = function load () {
 let objectsList;
 function onJsonLoad (data) {
 	objectsList = data.object;
+	if (!objectsList.find(({name}) => name === NM_GENERIC_OBJECT)) {
+		objectsList.push({
+			name: NM_GENERIC_OBJECT,
+			size: "V",
+			type: "generic",
+			source: "DMG",
+			page: 246,
+			ac: STAT_VARIES,
+			hp: STAT_VARIES,
+			immune: STAT_VARIES,
+			entries: data.generic
+		});
+	}
 
 	let tempString = "";
 	objectsList.forEach((obj, i) => {
 		const abvSource = Parser.sourceJsonToAbv(obj.source);
 
 		tempString += `
-			<li class="row" ${FLTR_ID}="${i}">
+			<li class="row" ${FLTR_ID}="${i}" onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id="${i}" href="#${UrlUtil.autoEncodeHash(obj)}" title="${obj.name}">
 					<span class="name col-xs-8">${obj.name}</span>
 					<span class="size col-xs-2">${Parser.sizeAbvToFull(obj.size)}</span>
@@ -32,7 +47,31 @@ function onJsonLoad (data) {
 		sortFunction: SortUtil.listSort
 	});
 
-	initHistory();
+	History.init();
+	EntryRenderer.hover.bindPopoutButton(objectsList);
+
+	const subList = ListUtil.initSublist({
+		valueNames: ["name", "size", "id"],
+		listClass: "subobjects",
+		itemList: objectsList,
+		getSublistRow: getSublistItem,
+		primaryLists: [list]
+	});
+	ListUtil.bindPinButton();
+	ListUtil.initGenericPinnable();
+	ListUtil.loadState();
+}
+
+function getSublistItem (obj, pinId) {
+	return `
+		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
+			<a href="#${UrlUtil.autoEncodeHash(obj)}" title="${obj.name}">
+				<span class="name col-xs-9">${obj.name}</span>		
+				<span class="ability col-xs-3">${Parser.sizeAbvToFull(obj.size)}</span>		
+				<span class="id hidden">${pinId}</span>				
+			</a>
+		</li>
+	`;
 }
 
 const renderer = new EntryRenderer();
@@ -48,7 +87,7 @@ function loadhash (jsonIndex) {
 	$content.html(`
 		${EntryRenderer.utils.getBorderTr()}
 		${EntryRenderer.utils.getNameTr(obj)}
-		<tr class="text"><td colspan="6"><i>${Parser.sizeAbvToFull(obj.size)} object</i><br></td></tr>
+		<tr class="text"><td colspan="6"><i>${obj.type !== "generic" ? `${Parser.sizeAbvToFull(obj.size)} object` : `Variable size object`}</i><br></td></tr>
 		<tr class="text"><td colspan="6">
 			<b>Armor Class:</b> ${obj.ac}<br>
 			<b>Hit Points:</b> ${obj.hp}<br>
