@@ -5,9 +5,17 @@
 // in deployment, `_IS_DEPLOYED = "<version number>";` should be prepended here
 IS_DEPLOYED = typeof _IS_DEPLOYED !== "undefined" && _IS_DEPLOYED;
 VERSION_NUMBER = IS_DEPLOYED ? _IS_DEPLOYED : "-1";
-DEPLOYED_STATIC_ROOT = "https://static.5etools.com/";
+DEPLOYED_STATIC_ROOT = ""; // "https://static.5etools.com/"; // FIXME re-enable this when we have a CDN again
 // for the roll20 script to set
 IS_ROLL20 = false;
+
+// the GitHub API has a 60 requests/hour limit per IP which we quickly hit if the user refreshes their Roll20 a couple of times
+// embed shitty OAth2 details here to enable 5k/hour requests per IP (sending them with requests to the API relaxes the limit)
+// naturally these are client-visible and should not be used to secure anything
+HOMEBREW_CLIENT_ID = `67e57877469da38a85a7`;
+HOMEBREW_CLIENT_SECRET = `c00dede21ca63a855abcd9a113415e840aca3f92`;
+
+IMGUR_CLIENT_ID = `abdea4de492d3b0`;
 
 HASH_PART_SEP = ",";
 HASH_LIST_SEP = "_";
@@ -71,6 +79,7 @@ ATB_DATA_SRC = "data-source";
 STR_CANTRIP = "Cantrip";
 STR_NONE = "None";
 STR_ANY = "Any";
+STR_SPECIAL = "Special";
 
 RNG_SPECIAL = "special";
 RNG_POINT = "point";
@@ -98,6 +107,12 @@ ABIL_CHA = "Charisma";
 ABIL_CH_ANY = "Choose Any";
 
 HOMEBREW_STORAGE = "HOMEBREW_STORAGE";
+HOMEBREW_META_STORAGE = "HOMEBREW_META_STORAGE";
+EXCLUDES_STORAGE = "EXCLUDES_STORAGE";
+DMSCREEN_STORAGE = "DMSCREEN_STORAGE";
+ROLLER_MACRO_STORAGE = "ROLLER_MACRO_STORAGE";
+
+JSON_HOMEBREW_INDEX = `homebrew/index.json`;
 
 // STRING ==============================================================================================================
 // Appropriated from StackOverflow (literally, the site uses this code)
@@ -179,22 +194,74 @@ String.prototype.rtrim = String.prototype.rtrim ||
 		return this.replace(/\s+$/, "");
 	};
 
-StrUtil = {
-	joinPhraseArray: function (array, joiner, lastJoiner) {
-		if (array.length === 0) return "";
-		if (array.length === 1) return array[0];
-		if (array.length === 2) return array.join(lastJoiner);
+String.prototype.escapeQuotes = String.prototype.escapeQuotes ||
+	function () {
+		return this.replace(/'/g, `&singlequot;`).replace(/"/g, `&quot;`);
+	};
+
+String.prototype.unescapeQuotes = String.prototype.unescapeQuotes ||
+	function () {
+		return this.replace(/&singlequot;/g, `'`).replace(/&quot;/g, `"`);
+	};
+
+/**
+ * Calculates the Damerau-Levenshtein distance between two strings.
+ * https://gist.github.com/IceCreamYou/8396172
+ */
+String.prototype.distance = String.prototype.distance ||
+	function (target) {
+		let source = this; let i; let j;
+		if (!source) return target ? target.length : 0;
+		else if (!target) return source.length;
+
+		const m = source.length; const n = target.length; const INF = m + n; const score = new Array(m + 2); const sd = {};
+		for (i = 0; i < m + 2; i++) score[i] = new Array(n + 2);
+		score[0][0] = INF;
+		for (i = 0; i <= m; i++) {
+			score[i + 1][1] = i;
+			score[i + 1][0] = INF;
+			sd[source[i]] = 0;
+		}
+		for (j = 0; j <= n; j++) {
+			score[1][j + 1] = j;
+			score[0][j + 1] = INF;
+			sd[target[j]] = 0;
+		}
+
+		for (i = 1; i <= m; i++) {
+			let DB = 0;
+			for (j = 1; j <= n; j++) {
+				const i1 = sd[target[j - 1]]; const j1 = DB;
+				if (source[i - 1] === target[j - 1]) {
+					score[i + 1][j + 1] = score[i][j];
+					DB = j;
+				} else {
+					score[i + 1][j + 1] = Math.min(score[i][j], Math.min(score[i + 1][j], score[i][j + 1])) + 1;
+				}
+				score[i + 1][j + 1] = Math.min(score[i + 1][j + 1], score[i1] ? score[i1][j1] + (i - i1 - 1) + 1 + (j - j1 - 1) : Infinity);
+			}
+			sd[source[i - 1]] = i;
+		}
+		return score[m + 1][n + 1];
+	};
+
+Array.prototype.joinConjunct = Array.prototype.joinConjunct ||
+	function (joiner, lastJoiner, nonOxford) {
+		if (this.length === 0) return "";
+		if (this.length === 1) return this[0];
+		if (this.length === 2) return this.join(lastJoiner);
 		else {
 			let outStr = "";
-			for (let i = 0; i < array.length; ++i) {
-				outStr += array[i];
-				if (i < array.length - 2) outStr += joiner;
-				else if (i === array.length - 2) outStr += lastJoiner
+			for (let i = 0; i < this.length; ++i) {
+				outStr += this[i];
+				if (i < this.length - 2) outStr += joiner;
+				else if (i === this.length - 2) outStr += `${(!nonOxford && this.length > 2 ? joiner.trim() : "")}${lastJoiner}`;
 			}
 			return outStr;
 		}
-	},
+	};
 
+StrUtil = {
 	uppercaseFirst: function (string) {
 		return string.uppercaseFirst();
 	},
@@ -223,12 +290,6 @@ function utils_makeAttChoose (attList) {
 		}
 		return attsTemp.join(" or ") + " modifier (your choice)";
 	}
-}
-
-DICE_REGEX = /([1-9]\d*)?d([1-9]\d*)(\s?[+-]\s?\d+)?/g;
-
-function utils_makeRoller (text) {
-	return text.replace(DICE_REGEX, "<span class='roller' data-roll='$&'>$&</span>").replace(/(-|\+)?\d+(?= to hit)/g, "<span class='roller' data-roll='1d20$&'>$&</span>").replace(/(-|\+)?\d+(?= bonus to)/g, "<span class='roller' data-roll='1d20$&'>$&</span>").replace(/(bonus of )(=?-|\+\d+)/g, "$1<span class='roller' data-roll='1d20$2'>$2</span>");
 }
 
 class AbilityData {
@@ -294,7 +355,7 @@ function utils_getAbilityData (abObj) {
 						outStack += "any other ";
 					}
 					if (item.count !== undefined && item.count > 1) {
-						outStack += getNumberString(item.count) + " ";
+						outStack += Parser.numberToText(item.count) + " ";
 					}
 					if (allAbilities || allAbilitiesWithParent) {
 						outStack += amount;
@@ -336,13 +397,6 @@ function utils_getAbilityData (abObj) {
 		}
 		return tempAbilities.length === 6;
 	}
-
-	function getNumberString (amount) {
-		if (amount === 1) return "one";
-		if (amount === 2) return "two";
-		if (amount === 3) return "three";
-		else return amount;
-	}
 }
 
 // PARSING =============================================================================================================
@@ -362,6 +416,49 @@ Parser._parse_bToA = function (abMap, b) {
 		if (abMap[v] === b) return v
 	}
 	return b;
+};
+
+Parser.numberToText = function (number) {
+	if (Math.abs(number) >= 100) return number;
+
+	function getAsText (num) {
+		const abs = Math.abs(num);
+		switch (abs) {
+			case 0: return "zero";
+			case 1: return "one";
+			case 2: return "two";
+			case 3: return "three";
+			case 4: return "four";
+			case 5: return "five";
+			case 6: return "six";
+			case 7: return "seven";
+			case 8: return "eight";
+			case 9: return "nine";
+			case 10: return "ten";
+			case 11: return "eleven";
+			case 12: return "twelve";
+			case 13: return "thirteen";
+			case 14: return "fourteen";
+			case 15: return "fifteen";
+			case 16: return "sixteen";
+			case 17: return "seventeen";
+			case 18: return "eighteen";
+			case 19: return "nineteen";
+			case 20: return "twenty";
+			case 30: return "thirty";
+			case 40: return "forty";
+			case 50: return "fiddy"; // :^)
+			case 60: return "sixty";
+			case 70: return "seventy";
+			case 80: return "eighty";
+			case 90: return "ninety";
+			default: {
+				const str = String(abs);
+				return `${getAsText(Number(`${str[0]}0`))}-${getAsText(Number(str[1]))}`;
+			}
+		}
+	}
+	return `${number < 0 ? "negative " : ""}${getAsText(number)}`;
 };
 
 Parser.attAbvToFull = function (abv) {
@@ -388,7 +485,12 @@ Parser.getAbilityModifier = function (abilityScore) {
 
 Parser.getSpeedString = (it) => {
 	function procSpeed (propName) {
-		if (it.speed[propName]) stack.push(`${propName} ${getVal(it.speed[propName])}ft.${getCond(it.speed[propName])}`);
+		function addSpeed (s) {
+			stack.push(`${propName === "walk" ? "" : `${propName} `}${getVal(s)}ft.${getCond(s)}`);
+		}
+
+		if (it.speed[propName] || propName === "walk") addSpeed(it.speed[propName] || 0);
+		if (it.speed.alternate && it.speed.alternate[propName]) it.speed.alternate[propName].forEach(addSpeed);
 	}
 
 	function getVal (speedProp) {
@@ -402,14 +504,14 @@ Parser.getSpeedString = (it) => {
 	const stack = [];
 	if (typeof it.speed === "object") {
 		let joiner = ", ";
-		if (it.speed.walk) stack.push(`${getVal(it.speed.walk)}ft.${getCond(it.speed.walk)}`);
+		procSpeed("walk");
 		procSpeed("burrow");
 		procSpeed("climb");
 		procSpeed("fly");
 		procSpeed("swim");
 		if (it.speed.choose) {
 			joiner = "; ";
-			stack.push(`${CollectionUtil.joinConjunct(it.speed.choose.from.sort(), ", ", ", or ")} ${it.speed.choose.amount} ft.${it.speed.choose.note ? ` ${it.speed.choose.note}` : ""}`);
+			stack.push(`${it.speed.choose.from.sort().joinConjunct(", ", " or ")} ${it.speed.choose.amount} ft.${it.speed.choose.note ? ` ${it.speed.choose.note}` : ""}`);
 		}
 		return stack.join(joiner);
 	} else {
@@ -457,6 +559,57 @@ Parser.crToNumber = function (cr) {
 	else return 0;
 };
 
+Parser.crToPb = function (cr) {
+	if (cr === "Unknown" || cr == null) return 0;
+	cr = cr.cr || cr;
+	if (Parser.crToNumber(cr) < 5) return 2;
+	return Math.ceil(cr / 4) + 1;
+};
+
+Parser.dragonColorToFull = function (c) {
+	return Parser._parse_bToA(DRAGON_COLOR_TO_FULL, c);
+};
+
+DRAGON_COLOR_TO_FULL = {
+	B: "black",
+	U: "blue",
+	G: "green",
+	R: "red",
+	W: "white",
+	A: "brass",
+	Z: "bronze",
+	C: "copper",
+	O: "gold",
+	S: "silver"
+};
+
+Parser.acToFull = function (ac) {
+	if (typeof ac === "string") return ac; // handle classic format
+
+	const renderer = EntryRenderer.getDefaultRenderer();
+	let stack = "";
+	for (let i = 0; i < ac.length; ++i) {
+		const cur = ac[i];
+		const nxt = ac[i + 1];
+
+		if (cur.ac) {
+			stack += cur.ac;
+			if (cur.from) stack += ` (${cur.from.map(it => renderer.renderEntry(it)).join(", ")})`;
+			if (cur.condition) stack += ` ${renderer.renderEntry(cur.condition)}`;
+			if (cur.braces) stack += ")";
+		} else {
+			stack += cur;
+		}
+
+		if (nxt) {
+			if (nxt.braces) stack += " (";
+			else stack += ", ";
+		}
+	}
+
+	return stack.trim();
+};
+
 MONSTER_COUNT_TO_XP_MULTIPLIER = [1, 1.5, 2, 2, 2, 2, 2.5, 2.5, 2.5, 2.5, 3, 3, 3, 3, 4];
 Parser.numMonstersToXpMult = function (num) {
 	if (num >= MONSTER_COUNT_TO_XP_MULTIPLIER.length) return 4;
@@ -471,20 +624,28 @@ Parser._getSourceStringFromSource = function (source) {
 	if (source && source.source) return source.source;
 	return source;
 };
+Parser.hasSourceFull = function (source) {
+	return !!Parser.SOURCE_JSON_TO_FULL[source];
+};
+Parser.hasSourceAbv = function (source) {
+	return !!Parser.SOURCE_JSON_TO_ABV[source];
+};
 Parser.sourceJsonToFull = function (source) {
 	source = Parser._getSourceStringFromSource(source);
-	return Parser._parse_aToB(Parser.SOURCE_JSON_TO_FULL, source).replace(/'/g, STR_APOSTROPHE);
+	if (Parser.hasSourceFull(source)) return Parser._parse_aToB(Parser.SOURCE_JSON_TO_FULL, source).replace(/'/g, STR_APOSTROPHE);
+	if (BrewUtil.hasSourceJson(source)) return BrewUtil.sourceJsonToFull(source).replace(/'/g, STR_APOSTROPHE);
+	return Parser._parse_aToB(Parser.SOURCE_JSON_TO_FULL, source).replace(/'/g, STR_APOSTROPHE)
 };
 Parser.sourceJsonToFullCompactPrefix = function (source) {
-	source = Parser._getSourceStringFromSource(source);
-	return Parser._parse_aToB(Parser.SOURCE_JSON_TO_FULL, source)
-		.replace(/'/g, STR_APOSTROPHE)
+	return Parser.sourceJsonToFull(source)
 		.replace(UA_PREFIX, UA_PREFIX_SHORT)
 		.replace(AL_PREFIX, AL_PREFIX_SHORT)
 		.replace(PS_PREFIX, PS_PREFIX_SHORT);
 };
 Parser.sourceJsonToAbv = function (source) {
 	source = Parser._getSourceStringFromSource(source);
+	if (Parser.hasSourceAbv(source)) return Parser._parse_aToB(Parser.SOURCE_JSON_TO_ABV, source);
+	if (BrewUtil.hasSourceJson(source)) return BrewUtil.sourceJsonToAbv(source);
 	return Parser._parse_aToB(Parser.SOURCE_JSON_TO_ABV, source);
 };
 
@@ -500,6 +661,10 @@ Parser.itemTypeToAbv = function (type) {
 	return Parser._parse_aToB(Parser.ITEM_TYPE_JSON_TO_ABV, type);
 };
 
+Parser.itemWeightToFull = function (item) {
+	return item.weight ? item.weight + (Number(item.weight) === 1 ? " lb." : " lbs.") + (item.weightNote ? ` ${item.weightNote}` : "") : "";
+};
+
 Parser._coinValueToNumberMultipliers = {
 	"cp": 0.01,
 	"sp": 0.1,
@@ -508,11 +673,24 @@ Parser._coinValueToNumberMultipliers = {
 	"pp": 10
 };
 Parser.coinValueToNumber = function (value) {
+	if (!value) return 0;
+	// handle oddities
+	if (value === "x4" || value === "Varies") return 0;
+
 	// input e.g. "25gp", "1,000pp"
 	value = value.replace(/[\s,]*/g, "").toLowerCase();
 	const m = /(\d+(\.\d+)?)([csegp]p)/.exec(value);
 	if (!m) throw new Error(`Badly formatted value ${value}`);
 	return Number(m[1]) * Parser._coinValueToNumberMultipliers[m[3]];
+};
+
+Parser.weightValueToNumber = function (value) {
+	if (!value) return 0;
+	// handle oddities
+	if (value === "x2") return 0;
+
+	if (Number(value)) return Number(value);
+	else throw new Error(`Badly formatted value ${value}`)
 };
 
 Parser.dmgTypeToFull = function (dmgType) {
@@ -565,6 +743,10 @@ Parser.spLevelToFull = function (level) {
 	return level + "th";
 };
 
+Parser.spLevelToFullLevelText = function (level, dash) {
+	return `${Parser.spLevelToFull(level)}${(level === 0 ? "s" : `${dash ? "-" : " "}level`)}`;
+};
+
 Parser.spMetaToFull = function (meta) {
 	// these tags are (so far) mutually independent, so we don't need to combine the text
 	if (meta && meta.ritual) return " (ritual)";
@@ -579,7 +761,7 @@ Parser.spLevelSchoolMetaToFull = function (level, school, meta) {
 };
 
 Parser.spTimeListToFull = function (times) {
-	return times.map(t => `${Parser.getTimeToFull(t)}${t.condition ? `, ${t.condition}` : ""}`).join(" or ");
+	return times.map(t => `${Parser.getTimeToFull(t)}${t.condition ? `, ${EntryRenderer.getDefaultRenderer().renderEntry(t.condition)}` : ""}`).join(" or ");
 };
 
 Parser.getTimeToFull = function (time) {
@@ -627,7 +809,7 @@ Parser.spRangeToFull = function (range) {
 		function getAreaStyleStr () {
 			switch (range.type) {
 				case RNG_SPHERE:
-					return "-radius";
+					return " radius";
 				case RNG_HEMISPHERE:
 					return `-radius ${range.type}`;
 				default:
@@ -647,7 +829,7 @@ Parser.spComponentsToFull = function (comp) {
 	const out = [];
 	if (comp.v) out.push("V");
 	if (comp.s) out.push("S");
-	if (comp.m) out.push("M" + (comp.m.length ? ` (${comp.m})` : ""));
+	if (comp.m) out.push("M" + (comp.m !== true ? ` (${comp.m.text || comp.m})` : ""));
 	return out.join(", ");
 };
 
@@ -659,10 +841,10 @@ Parser.spDurationToFull = function (dur) {
 			case "instant":
 				return `Instantaneous${d.condition ? ` (${d.condition})` : ""}`;
 			case "timed":
-				return `${d.concentration ? "Concentration, " : ""}${d.duration.upTo && d.concentration ? "u" : d.duration.upTo ? "U" : ""}${d.duration.upTo ? "p to " : ""}${d.duration.amount} ${d.duration.amount === 1 ? Parser.getSingletonUnit(d.duration.type) : d.duration.type}`;
+				return `${d.concentration ? "Concentration, " : ""}${d.concentration ? "u" : d.duration.upTo ? "U" : ""}${d.concentration || d.duration.upTo ? "p to " : ""}${d.duration.amount} ${d.duration.amount === 1 ? d.duration.type : `${d.duration.type}s`}`;
 			case "permanent":
 				if (d.ends) {
-					return `Until ${d.ends.map(m => m === "dispell" ? "dispelled" : m === "trigger" ? "triggered" : m === "discharge" ? "discharged" : undefined).join(" or ")}`
+					return `Until ${d.ends.map(m => m === "dispel" ? "dispelled" : m === "trigger" ? "triggered" : m === "discharge" ? "discharged" : undefined).join(" or ")}`
 				} else {
 					return "Permanent";
 				}
@@ -670,31 +852,42 @@ Parser.spDurationToFull = function (dur) {
 	}).join(" or ") + (dur.length > 1 ? " (see below)" : "");
 };
 
-Parser.spClassesToFull = function (classes) {
-	const fromSubclasses = Parser.spSubclassesToFull(classes);
-	return Parser.spMainClassesToFull(classes) + (fromSubclasses ? ", " + fromSubclasses : "");
+Parser.spClassesToFull = function (classes, textOnly) {
+	const fromSubclasses = Parser.spSubclassesToFull(classes, textOnly);
+	return Parser.spMainClassesToFull(classes, textOnly) + (fromSubclasses ? ", " + fromSubclasses : "");
 };
 
-Parser.spMainClassesToFull = function (classes) {
+Parser.spMainClassesToFull = function (classes, textOnly) {
 	return classes.fromClassList
 		.sort((a, b) => SortUtil.ascSort(a.name, b.name))
-		.map(c => `<span title="Source: ${Parser.sourceJsonToFull(c.source)}">${c.name}</span>`)
+		.map(c => textOnly ? c.name : `<span title="Source: ${Parser.sourceJsonToFull(c.source)}">${c.name}</span>`)
 		.join(", ");
 };
 
-Parser.spSubclassesToFull = function (classes) {
+Parser.spSubclassesToFull = function (classes, textOnly) {
 	if (!classes.fromSubclass) return "";
 	return classes.fromSubclass
 		.sort((a, b) => {
 			const byName = SortUtil.ascSort(a.class.name, b.class.name);
 			return byName || SortUtil.ascSort(a.subclass.name, b.subclass.name);
 		})
-		.map(c => Parser._spSubclassItem(c))
+		.map(c => Parser._spSubclassItem(c, textOnly))
 		.join(", ");
 };
 
-Parser._spSubclassItem = function (fromSubclass) {
-	return `<span class="italic" title="Source: ${Parser.sourceJsonToFull(fromSubclass.subclass.source)}">${fromSubclass.subclass.name}${fromSubclass.subclass.subSubclass ? ` (${fromSubclass.subclass.subSubclass})` : ""}</span> <span title="Source: ${Parser.sourceJsonToFull(fromSubclass.class.source)}">${fromSubclass.class.name}</span>`;
+Parser._spSubclassItem = function (fromSubclass, textOnly) {
+	const text = `${fromSubclass.subclass.name}${fromSubclass.subclass.subSubclass ? ` (${fromSubclass.subclass.subSubclass})` : ""}`;
+	if (textOnly) return text;
+	return `<span class="italic" title="Source: ${Parser.sourceJsonToFull(fromSubclass.subclass.source)}">${text}</span> <span title="Source: ${Parser.sourceJsonToFull(fromSubclass.class.source)}">${fromSubclass.class.name}</span>`;
+};
+
+Parser.SPELL_ATTACK_TYPE_TO_FULL = {};
+Parser.SPELL_ATTACK_TYPE_TO_FULL["M"] = "Melee";
+Parser.SPELL_ATTACK_TYPE_TO_FULL["R"] = "Ranged";
+Parser.SPELL_ATTACK_TYPE_TO_FULL["O"] = "Other/Unknown";
+
+Parser.spAttackTypeToFull = function (type) {
+	return Parser._parse_aToB(Parser.SPELL_ATTACK_TYPE_TO_FULL, type);
 };
 
 // mon-prefix functions are for parsing monster data, and shared with the roll20 script
@@ -738,13 +931,54 @@ Parser.monTypeToPlural = function (type) {
 };
 
 Parser.monCrToFull = function (cr) {
-	if (typeof cr === "string") return `${cr} (${Parser.crToXp(cr)} XP)`;
+	if (typeof cr === "string" || !cr) return `${cr || "Unknown"} (${Parser.crToXp(cr)} XP)`;
 	else {
 		const stack = [Parser.monCrToFull(cr.cr)];
 		if (cr.lair) stack.push(`${Parser.monCrToFull(cr.lair)} when encountered in lair`);
 		if (cr.coven) stack.push(`${Parser.monCrToFull(cr.coven)} when part of a coven`);
 		return stack.join(" or ");
 	}
+};
+
+Parser.monImmResToFull = function (toParse) {
+	const outerLen = toParse.length;
+	let maxDepth = 0;
+	if (outerLen === 1 && (toParse[0].immune || toParse[0].resist)) {
+		return toParse.map(it => toString(it, -1)).join(maxDepth ? "; " : ", ");
+	}
+
+	function toString (it, depth = 0) {
+		maxDepth = Math.max(maxDepth, depth);
+		if (typeof it === "string") {
+			return it;
+		} else if (it.special) {
+			return it.special;
+		} else {
+			let stack = it.preNote ? `${it.preNote} ` : "";
+			if (it.immune) {
+				const toJoin = it.immune.map(nxt => toString(nxt, depth + 1));
+				stack += depth ? toJoin.join(maxDepth ? "; " : ", ") : toJoin.joinConjunct(", ", " and ");
+			} else if (it.resist) {
+				const toJoin = it.resist.map(nxt => toString(nxt, depth + 1));
+				stack += depth ? toJoin.join(maxDepth ? "; " : ", ") : toJoin.joinConjunct(", ", " and ");
+			} else if (it.vulnerable) {
+				const toJoin = it.vulnerable.map(nxt => toString(nxt, depth + 1));
+				stack += depth ? toJoin.join(maxDepth ? "; " : ", ") : toJoin.joinConjunct(", ", " and ");
+			}
+			if (it.note) stack += ` ${it.note}`;
+			return stack;
+		}
+	}
+
+	return toParse.map(it => toString(it)).join(maxDepth ? "; " : ", ");
+};
+
+Parser.monCondImmToFull = function (condImm) {
+	return condImm.map(it => {
+		if (it.special) return it.special;
+		if (it.conditionImmune) return `${it.preNote ? `${it.preNote} ` : ""}${it.conditionImmune.join(", ")}${it.note ? ` ${it.note}` : ""}`;
+		return it;
+	}).join(", ");
 };
 
 // psi-prefix functions are for parsing psionic data, and shared with the roll20 script
@@ -771,7 +1005,8 @@ Parser.levelToFull = function (level) {
 
 Parser.invoSpellToFull = function (spell) {
 	if (spell === "Eldritch Blast") return EntryRenderer.getDefaultRenderer().renderEntry(`{@spell ${spell}} cantrip`);
-	if (spell === "Hex/Curse") return EntryRenderer.getDefaultRenderer().renderEntry("{@spell Hex} spell or a warlock feature that curses");
+	else if (spell === "Hex/Curse") return EntryRenderer.getDefaultRenderer().renderEntry("{@spell Hex} spell or a warlock feature that curses");
+	else if (spell) return EntryRenderer.getDefaultRenderer().renderEntry(`{@spell ${spell}}`);
 	return STR_NONE
 };
 
@@ -787,21 +1022,68 @@ Parser.invoPatronToShort = function (patron) {
 	return /^The (.*?)$/.exec(patron)[1];
 };
 
-Parser.dtAlignmentToFull = function (alignment) {
-	alignment = alignment.toUpperCase();
-	switch (alignment) {
-		case "L":
-			return "Lawful";
-		case "N":
-			return "Neutral";
-		case "C":
-			return "Chaotic";
-		case "G":
-			return "Good";
-		case "E":
-			return "Evil";
+Parser.alignmentAbvToFull = function (alignment) {
+	if (typeof alignment === "object") {
+		if (alignment.special) {
+			// use in MTF Sacred Statue
+			return alignment.special;
+		} else {
+			// e.g. `{alignment: ["N", "G"], chance: 50}` or `{alignment: ["N", "G"]}`
+			return `${alignment.alignment.map(a => Parser.alignmentAbvToFull(a)).join(" ")}${alignment.chance ? ` (${alignment.chance}%)` : ""}`;
+		}
+	} else {
+		alignment = alignment.toUpperCase();
+		switch (alignment) {
+			case "L":
+				return "Lawful";
+			case "N":
+				return "Neutral";
+			case "NX":
+				return "Neutral (Law/Chaos axis)";
+			case "NY":
+				return "Neutral (Good/Evil axis)";
+			case "C":
+				return "Chaotic";
+			case "G":
+				return "Good";
+			case "E":
+				return "Evil";
+			// "special" values
+			case "U":
+				return "Unaligned";
+			case "A":
+				return "Any alignment";
+		}
+		return alignment;
 	}
-	return alignment;
+};
+
+Parser.alignmentListToFull = function (alignList) {
+	// assume all single-length arrays can be simply parsed
+	if (alignList.length === 1) return Parser.alignmentAbvToFull(alignList[0]);
+	// two-length arrays can be:
+	// 1. "[object] or [object]"
+	// 2. a pair of abv's, e.g. "L" "G"
+	if (alignList.length === 2) {
+		if (typeof alignList[0] === "object" && typeof alignList[1] === "object") return `${Parser.alignmentAbvToFull(alignList[0])} or ${Parser.alignmentAbvToFull(alignList[1]).toLowerCase()}`;
+		else if (typeof alignList[0] === "string" && typeof alignList[1] === "string") return alignList.map(a => Parser.alignmentAbvToFull(a)).join(" ");
+		else throw new Error(`Malformed alignment pair: ${JSON.stringify(alignList)}`);
+	}
+	// longer arrays should have a custom mapping
+	// available options are:
+	// "L", "NX", "C" ("NX" = "neutral X" = neutral law/chaos axis)
+	// "G", "NY", "E" ("NY" = "neutral Y" = neutral good/evil axis)
+	if (alignList.length === 5) {
+		if (!alignList.includes("G")) return "any non-good alignment";
+		if (!alignList.includes("L")) return "any non-lawful alignment";
+	}
+	if (alignList.length === 4) {
+		if (!alignList.includes("L") && !alignList.includes("NX")) return "any chaotic alignment";
+		if (!alignList.includes("G") && !alignList.includes("NY")) return "any evil alignment";
+		if (!alignList.includes("C") && !alignList.includes("NX")) return "any lawful alignment";
+		if (!alignList.includes("E") && !alignList.includes("NY")) return "any good alignment";
+	}
+	throw new Error(`Unmapped alignment: ${JSON.stringify(alignList)}`);
 };
 
 Parser.CAT_ID_CREATURE = 1;
@@ -822,6 +1104,9 @@ Parser.CAT_ID_OBJECT = 15;
 Parser.CAT_ID_TRAP = 16;
 Parser.CAT_ID_HAZARD = 17;
 Parser.CAT_ID_QUICKREF = 18;
+Parser.CAT_ID_CULT = 19;
+Parser.CAT_ID_BOON = 20;
+Parser.CAT_ID_DISEASE = 21;
 
 Parser.CAT_ID_TO_FULL = {};
 Parser.CAT_ID_TO_FULL[Parser.CAT_ID_CREATURE] = "Bestiary";
@@ -842,6 +1127,9 @@ Parser.CAT_ID_TO_FULL[Parser.CAT_ID_OBJECT] = "Object";
 Parser.CAT_ID_TO_FULL[Parser.CAT_ID_TRAP] = "Trap";
 Parser.CAT_ID_TO_FULL[Parser.CAT_ID_HAZARD] = "Hazard";
 Parser.CAT_ID_TO_FULL[Parser.CAT_ID_QUICKREF] = "Quick Reference";
+Parser.CAT_ID_TO_FULL[Parser.CAT_ID_CULT] = "Cult";
+Parser.CAT_ID_TO_FULL[Parser.CAT_ID_BOON] = "Boon";
+Parser.CAT_ID_TO_FULL[Parser.CAT_ID_DISEASE] = "Disease";
 
 Parser.pageCategoryToFull = function (catId) {
 	return Parser._parse_aToB(Parser.CAT_ID_TO_FULL, catId);
@@ -868,7 +1156,7 @@ Parser.spSubclassesToCurrentAndLegacyFull = function (classes) {
 			const nm = c.subclass.name;
 			const src = c.subclass.source;
 			const toAdd = Parser._spSubclassItem(c);
-			if (hasBeenReprinted(nm, src)) {
+			if (SourceUtil.hasBeenReprinted(nm, src)) {
 				out[1].push(toAdd);
 			} else if (Parser.sourceJsonToFull(src).startsWith(UA_PREFIX) || Parser.sourceJsonToFull(src).startsWith(PS_PREFIX)) {
 				const cleanName = mapClassShortNameToMostRecent(nm.split("(")[0].trim().split(/v\d+/)[0].trim());
@@ -914,7 +1202,37 @@ Parser.trapTypeToFull = function (type) {
 Parser.TRAP_TYPE_TO_FULL = {};
 Parser.TRAP_TYPE_TO_FULL["MECH"] = "Mechanical trap";
 Parser.TRAP_TYPE_TO_FULL["MAG"] = "Magical trap";
+Parser.TRAP_TYPE_TO_FULL["SMPL"] = "Simple trap";
+Parser.TRAP_TYPE_TO_FULL["CMPX"] = "Complex trap";
 Parser.TRAP_TYPE_TO_FULL["HAZ"] = "Hazard";
+
+Parser.tierToFullLevel = function (tier) {
+	return Parser._parse_aToB(Parser.TIER_TO_FULL_LEVEL, tier);
+};
+
+Parser.TIER_TO_FULL_LEVEL = {};
+Parser.TIER_TO_FULL_LEVEL[1] = "level 1\u20144";
+Parser.TIER_TO_FULL_LEVEL[2] = "level 5\u201410";
+Parser.TIER_TO_FULL_LEVEL[3] = "level 11\u201416";
+Parser.TIER_TO_FULL_LEVEL[4] = "level 17\u201420";
+
+Parser.threatToFull = function (threat) {
+	return Parser._parse_aToB(Parser.THREAT_TO_FULL, threat);
+};
+
+Parser.THREAT_TO_FULL = {};
+Parser.THREAT_TO_FULL[1] = "moderate";
+Parser.THREAT_TO_FULL[2] = "dangerous";
+Parser.THREAT_TO_FULL[3] = "deadly";
+
+Parser.trapInitToFull = function (init) {
+	return Parser._parse_aToB(Parser.TRAP_INIT_TO_FULL, init);
+};
+
+Parser.TRAP_INIT_TO_FULL = {};
+Parser.TRAP_INIT_TO_FULL[1] = "initiative count 10";
+Parser.TRAP_INIT_TO_FULL[2] = "initiative count 20";
+Parser.TRAP_INIT_TO_FULL[3] = "initiative count 20 and initiative count 10";
 
 Parser.ATK_TYPE_TO_FULL = {};
 Parser.ATK_TYPE_TO_FULL["MW"] = "Melee Weapon Attack";
@@ -1056,6 +1374,7 @@ SRC_TYP_WPM = "TftYP-WPM";
 SRC_VGM = "VGM";
 SRC_XGE = "XGE";
 SRC_OGA = "OGA";
+SRC_MTF = "MTF";
 
 SRC_ALCoS = "ALCurseOfStrahd";
 SRC_ALEE = "ALElementalEvil";
@@ -1109,16 +1428,15 @@ SRC_UAMAC = SRC_UA_PREFIX + "MassCombat";
 SRC_UA3PE = SRC_UA_PREFIX + "ThreePillarExperience";
 SRC_UAGHI = SRC_UA_PREFIX + "GreyhawkInitiative";
 SRC_UATSC = SRC_UA_PREFIX + "ThreeSubclasses";
+SRC_UAOD = SRC_UA_PREFIX + "OrderDomain";
+SRC_UACAM = SRC_UA_PREFIX + "CentaursMinotaurs";
+SRC_UAGSS = SRC_UA_PREFIX + "GiantSoulSorcerer";
+SRC_UAWGE = SRC_UA_PREFIX + "WGE";
+SRC_UARoE = SRC_UA_PREFIX + "RacesOfEberron";
 
 SRC_3PP_SUFFIX = " 3pp";
-SRC_BOLS_3PP = "BoLS" + SRC_3PP_SUFFIX;
-SRC_CC_3PP = "CC" + SRC_3PP_SUFFIX;
-SRC_FEF_3PP = "FEF" + SRC_3PP_SUFFIX;
-SRC_GDoF_3PP = "GDoF" + SRC_3PP_SUFFIX;
-SRC_ToB_3PP = "ToB" + SRC_3PP_SUFFIX;
-
 SRC_STREAM = "Stream";
-SRC_HOMEBREW = "Homebrew";
+SRC_TWITTER = "Twitter";
 
 AL_PREFIX = "Adventurers League: ";
 AL_PREFIX_SHORT = "AL: ";
@@ -1126,7 +1444,6 @@ PS_PREFIX = "Plane Shift: ";
 PS_PREFIX_SHORT = "PS: ";
 UA_PREFIX = "Unearthed Arcana: ";
 UA_PREFIX_SHORT = "UA: ";
-PP3_SUFFIX = " (3pp)";
 TftYP_NAME = "Tales from the Yawning Portal";
 
 Parser.SOURCE_JSON_TO_FULL = {};
@@ -1159,6 +1476,7 @@ Parser.SOURCE_JSON_TO_FULL[SRC_TYP_WPM] = TftYP_NAME;
 Parser.SOURCE_JSON_TO_FULL[SRC_VGM] = "Volo's Guide to Monsters";
 Parser.SOURCE_JSON_TO_FULL[SRC_XGE] = "Xanathar's Guide to Everything";
 Parser.SOURCE_JSON_TO_FULL[SRC_OGA] = "One Grung Above";
+Parser.SOURCE_JSON_TO_FULL[SRC_MTF] = "Mordenkainen's Tome of Foes";
 Parser.SOURCE_JSON_TO_FULL[SRC_ALCoS] = AL_PREFIX + "Curse of Strahd";
 Parser.SOURCE_JSON_TO_FULL[SRC_ALEE] = AL_PREFIX + "Elemental Evil";
 Parser.SOURCE_JSON_TO_FULL[SRC_ALRoD] = AL_PREFIX + "Rage of Demons";
@@ -1205,13 +1523,13 @@ Parser.SOURCE_JSON_TO_FULL[SRC_UAMAC] = UA_PREFIX + "Mass Combat";
 Parser.SOURCE_JSON_TO_FULL[SRC_UA3PE] = UA_PREFIX + "Three-Pillar Experience";
 Parser.SOURCE_JSON_TO_FULL[SRC_UAGHI] = UA_PREFIX + "Greyhawk Initiative";
 Parser.SOURCE_JSON_TO_FULL[SRC_UATSC] = UA_PREFIX + "Three Subclasses";
-Parser.SOURCE_JSON_TO_FULL[SRC_BOLS_3PP] = "Book of Lost Spells" + PP3_SUFFIX;
-Parser.SOURCE_JSON_TO_FULL[SRC_CC_3PP] = "Critter Compendium" + PP3_SUFFIX;
-Parser.SOURCE_JSON_TO_FULL[SRC_FEF_3PP] = "Fifth Edition Foes" + PP3_SUFFIX;
-Parser.SOURCE_JSON_TO_FULL[SRC_GDoF_3PP] = "Gem Dragons of Faerûn" + PP3_SUFFIX;
-Parser.SOURCE_JSON_TO_FULL[SRC_ToB_3PP] = "Tome of Beasts" + PP3_SUFFIX;
-Parser.SOURCE_JSON_TO_FULL[SRC_HOMEBREW] = "Homebrew";
+Parser.SOURCE_JSON_TO_FULL[SRC_UAOD] = UA_PREFIX + "Order Domain";
+Parser.SOURCE_JSON_TO_FULL[SRC_UACAM] = UA_PREFIX + "Centaurs and Minotaurs";
+Parser.SOURCE_JSON_TO_FULL[SRC_UAGSS] = UA_PREFIX + "Giant Soul Sorcerer";
+Parser.SOURCE_JSON_TO_FULL[SRC_UARoE] = UA_PREFIX + "Races of Eberron";
+Parser.SOURCE_JSON_TO_FULL[SRC_UAWGE] = "Wayfinder's Guide to Eberron";
 Parser.SOURCE_JSON_TO_FULL[SRC_STREAM] = "Livestream";
+Parser.SOURCE_JSON_TO_FULL[SRC_TWITTER] = "Twitter";
 
 Parser.SOURCE_JSON_TO_ABV = {};
 Parser.SOURCE_JSON_TO_ABV[SRC_CoS] = "CoS";
@@ -1243,6 +1561,7 @@ Parser.SOURCE_JSON_TO_ABV[SRC_TYP_WPM] = "TftYP";
 Parser.SOURCE_JSON_TO_ABV[SRC_VGM] = "VGM";
 Parser.SOURCE_JSON_TO_ABV[SRC_XGE] = "XGE";
 Parser.SOURCE_JSON_TO_ABV[SRC_OGA] = "OGA";
+Parser.SOURCE_JSON_TO_ABV[SRC_MTF] = "MTF";
 Parser.SOURCE_JSON_TO_ABV[SRC_ALCoS] = "ALCoS";
 Parser.SOURCE_JSON_TO_ABV[SRC_ALEE] = "ALEE";
 Parser.SOURCE_JSON_TO_ABV[SRC_ALRoD] = "ALRoD";
@@ -1271,7 +1590,7 @@ Parser.SOURCE_JSON_TO_ABV[SRC_UARAR] = "UARAR";
 Parser.SOURCE_JSON_TO_ABV[SRC_UAATOSC] = "UAATOSC";
 Parser.SOURCE_JSON_TO_ABV[SRC_UABPP] = "UABPP";
 Parser.SOURCE_JSON_TO_ABV[SRC_UARSC] = "UARSC";
-Parser.SOURCE_JSON_TO_ABV[SRC_UAKOO] = "UAKOO";
+Parser.SOURCE_JSON_TO_ABV[SRC_UAKOO] = "UAKoO";
 Parser.SOURCE_JSON_TO_ABV[SRC_UABBC] = "UABBC";
 Parser.SOURCE_JSON_TO_ABV[SRC_UACDD] = "UACDD";
 Parser.SOURCE_JSON_TO_ABV[SRC_UAD] = "UAD";
@@ -1289,18 +1608,19 @@ Parser.SOURCE_JSON_TO_ABV[SRC_UAMAC] = "UAMAC";
 Parser.SOURCE_JSON_TO_ABV[SRC_UA3PE] = "UA3PE";
 Parser.SOURCE_JSON_TO_ABV[SRC_UAGHI] = "UAGHI";
 Parser.SOURCE_JSON_TO_ABV[SRC_UATSC] = "UATSC";
-Parser.SOURCE_JSON_TO_ABV[SRC_BOLS_3PP] = "BoLS (3pp)";
-Parser.SOURCE_JSON_TO_ABV[SRC_CC_3PP] = "CC (3pp)";
-Parser.SOURCE_JSON_TO_ABV[SRC_FEF_3PP] = "FEF (3pp)";
-Parser.SOURCE_JSON_TO_ABV[SRC_GDoF_3PP] = "GDoF (3pp)";
-Parser.SOURCE_JSON_TO_ABV[SRC_ToB_3PP] = "ToB (3pp)";
-Parser.SOURCE_JSON_TO_ABV[SRC_HOMEBREW] = "Brew";
+Parser.SOURCE_JSON_TO_ABV[SRC_UAOD] = "UAOD";
+Parser.SOURCE_JSON_TO_ABV[SRC_UACAM] = "UACAM";
+Parser.SOURCE_JSON_TO_ABV[SRC_UAGSS] = "UAGSS";
+Parser.SOURCE_JSON_TO_ABV[SRC_UARoE] = "UARoE";
+Parser.SOURCE_JSON_TO_ABV[SRC_UAWGE] = "WGE";
 Parser.SOURCE_JSON_TO_ABV[SRC_STREAM] = "Stream";
+Parser.SOURCE_JSON_TO_ABV[SRC_TWITTER] = "Twitter";
 
 Parser.ITEM_TYPE_JSON_TO_ABV = {
 	"A": "Ammunition",
 	"AF": "Ammunition",
 	"AT": "Artisan Tool",
+	"EM": "Eldritch Machine",
 	"EXP": "Explosive",
 	"G": "Adventuring Gear",
 	"GS": "Gaming Set",
@@ -1369,45 +1689,52 @@ Parser.NUMBERS_TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 's
 Parser.NUMBERS_TEENS = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
 
 // SOURCES =============================================================================================================
-function hasBeenReprinted (shortName, source) {
-	/* can accept sources of the form:
-	{
-		"source": "UAExample",
-		"forceStandard": true
-	}
-	 */
-	if (source && source.source) source = source.source;
-	return (shortName !== undefined && shortName !== null && source !== undefined && source !== null) &&
-		(
-			(shortName === "Sun Soul" && source === SRC_SCAG) ||
-			(shortName === "Mastermind" && source === SRC_SCAG) ||
-			(shortName === "Swashbuckler" && source === SRC_SCAG) ||
-			(shortName === "Storm" && source === SRC_SCAG) ||
-			(shortName === "Deep Stalker Conclave" && source === SRC_UATRR)
-		);
-}
+SourceUtil = {
+	hasBeenReprinted (shortName, source) {
+		/* can accept sources of the form:
+		{
+			"source": "UAExample",
+			"forceStandard": true
+		}
+		 */
+		if (source && source.source) source = source.source;
+		return (shortName !== undefined && shortName !== null && source !== undefined && source !== null) &&
+			(
+				(shortName === "Sun Soul" && source === SRC_SCAG) ||
+				(shortName === "Mastermind" && source === SRC_SCAG) ||
+				(shortName === "Swashbuckler" && source === SRC_SCAG) ||
+				(shortName === "Storm" && source === SRC_SCAG) ||
+				(shortName === "Deep Stalker Conclave" && source === SRC_UATRR)
+			);
+	},
 
-function isNonstandardSource (source) {
-	/* can accept sources of the form:
-	{
-		"source": "UAExample",
-		"forceStandard": true
-	}
-	 */
-	if (source && source.forceStandard !== undefined) {
-		return !source.forceStandard;
-	}
-	if (source && source.source) source = source.source;
-	return (source !== undefined && source !== null) && (_isNonStandardSourceWiz(source) || _isNonStandardSource3pp(source));
-}
+	isNonstandardSource (source) {
+		/* can accept sources of the form:
+		{
+			"source": "UAExample",
+			"forceStandard": true
+		}
+		 */
+		if (source && source.forceStandard !== undefined) {
+			return !source.forceStandard;
+		}
+		if (source && source.source) source = source.source;
+		return (source !== undefined && source !== null) && !BrewUtil.hasSourceJson(source) && (SourceUtil._isNonstandardSourceWiz(source) || SourceUtil._isNonstandardSource3pp(source));
+	},
 
-function _isNonStandardSourceWiz (source) {
-	return source.startsWith(SRC_UA_PREFIX) || source.startsWith(SRC_PS_PREFIX) || source === SRC_OGA || source === SRC_Mag || source === SRC_STREAM;
-}
+	_isNonstandardSourceWiz (source) {
+		return source.startsWith(SRC_UA_PREFIX) || source.startsWith(SRC_PS_PREFIX) || source === SRC_OGA || source === SRC_Mag || source === SRC_STREAM || source === SRC_TWITTER;
+	},
 
-function _isNonStandardSource3pp (source) {
-	return source.endsWith(SRC_3PP_SUFFIX);
-}
+	_isNonstandardSource3pp (source) {
+		return source.endsWith(SRC_3PP_SUFFIX);
+	},
+
+	getFilterGroup (source) {
+		if (BrewUtil.hasSourceJson(source)) return 2;
+		return Number(SourceUtil.isNonstandardSource(source))
+	}
+};
 
 // CONVENIENCE/ELEMENTS ================================================================================================
 function xor (a, b) {
@@ -1423,6 +1750,29 @@ function implies (a, b) {
 
 function noModifierKeys (e) {
 	return !e.ctrlKey && !e.altKey && !e.metaKey;
+}
+
+function isObject (obj) {
+	const type = typeof obj;
+	return (type === 'function' || type === 'object') && !!obj;
+}
+
+function isString (str) {
+	return typeof str === 'string';
+}
+
+function isNumber (obj) {
+	return toString.call(obj) === '[object Number]';
+}
+
+function isEmpty (obj) {
+	if (obj == null) {
+		return true;
+	}
+	if (Array.isArray(obj) || isString(obj)) {
+		return obj.length === 0;
+	}
+	return Object.keys(obj).length === 0;
 }
 
 if (typeof window !== "undefined") {
@@ -1455,11 +1805,65 @@ function copyText (text) {
 	$temp.remove();
 }
 
+function showCopiedEffect ($ele) {
+	const $temp = $(`<div class="copied-tip"><span>Copied!</span></div>`);
+	const pos = $ele.offset();
+	$temp.css({
+		top: pos.top - 17,
+		left: pos.left - 36 + ($ele.width() / 2)
+	}).appendTo($(`body`)).animate({
+		top: "-=8",
+		opacity: 0
+	}, 250, () => {
+		$temp.remove();
+	});
+}
+
+// TODO refactor other misc utils into this
+MiscUtil = {
+	clearSelection () {
+		if (document.getSelection) {
+			document.getSelection().removeAllRanges();
+			document.getSelection().addRange(document.createRange());
+		} else if (window.getSelection) {
+			if (window.getSelection().removeAllRanges) {
+				window.getSelection().removeAllRanges();
+				window.getSelection().addRange(document.createRange());
+			} else if (window.getSelection().empty) {
+				window.getSelection().empty();
+			}
+		} else if (document.selection) {
+			document.selection.empty();
+		}
+	},
+
+	randomColor () {
+		let r; let g; let b;
+		const h = RollerUtil.randomise(30, 0) / 30;
+		const i = ~~(h * 6);
+		const f = h * 6 - i;
+		const q = 1 - f;
+		switch (i % 6) {
+			case 0: r = 1; g = f; b = 0; break;
+			case 1: r = q; g = 1; b = 0; break;
+			case 2: r = 0; g = 1; b = f; break;
+			case 3: r = 0; g = q; b = 1; break;
+			case 4: r = f; g = 0; b = 1; break;
+			case 5: r = 1; g = 0; b = q; break;
+		}
+		return `#${("00" + (~~(r * 255)).toString(16)).slice(-2)}${("00" + (~~(g * 255)).toString(16)).slice(-2)}${("00" + (~~(b * 255)).toString(16)).slice(-2)}`;
+	}
+};
+
 // LIST AND SEARCH =====================================================================================================
 ListUtil = {
+	SUB_HASH_PREFIX: "sublistselected",
+
 	_first: true,
 
 	search: (options) => {
+		if (!options.sortFunction && options.valueNames && options.valueNames.includes("name")) options.sortFunction = SortUtil.listSort;
+
 		const list = new List("listcontainer", options);
 		list.sort("name");
 		$("#reset").click(function () {
@@ -1484,6 +1888,8 @@ ListUtil = {
 				// K up; J down
 				if (noModifierKeys(e)) {
 					if (e.key === "k" || e.key === "j") {
+						// don't switch if the user is typing somewhere else
+						if (e.target.nodeName === "INPUT" || e.target.nodeName === "TEXTAREA") return;
 						const it = History.getSelectedListElementWithIndex();
 
 						if (it) {
@@ -1539,9 +1945,15 @@ ListUtil = {
 	toggleSelected: (evt, ele) => {
 		if (evt.shiftKey) {
 			evt.preventDefault();
-			const $ele = $(ele);
-			$ele.toggleClass("list-multi-selected")
+			$(ele).toggleClass("list-multi-selected");
+		} else {
+			ListUtil._primaryLists.forEach(l => ListUtil.deslectAll(l));
+			$(ele).addClass("list-multi-selected");
 		}
+	},
+
+	updateSelected: () => {
+		ListUtil.toggleSelected({}, History.getSelectedListElement().parent());
 	},
 
 	_ctxInit: {},
@@ -1569,15 +1981,9 @@ ListUtil = {
 	},
 
 	openContextMenu: (evt, ele) => {
-		const anySel = ListUtil._primaryLists.find(l => ListUtil.isAnySelected(l));
-		const $menu = $(`#contextMenu`);
-		if (anySel) {
-			$menu.find(`[data-ctx-id=3]`).show();
-			$menu.find(`[data-ctx-id=4]`).show();
-		} else {
-			$menu.find(`[data-ctx-id=3]`).hide();
-			$menu.find(`[data-ctx-id=4]`).hide();
-		}
+		const selCount = ListUtil._primaryLists.map(l => ListUtil.getSelectedCount(l)).reduce((a, b) => a + b, 0);
+		if (selCount === 1) ListUtil._primaryLists.forEach(l => ListUtil.deslectAll(l));
+		if (selCount === 0 || selCount === 1) $(ele).addClass("list-multi-selected");
 		ListUtil._handleOpenContextMenu(evt, ele, "contextMenu");
 	},
 
@@ -1676,7 +2082,7 @@ ListUtil = {
 				if (evt.shiftKey) ListUtil.doSublistAdd(History.lastLoadedId, true, 20);
 				else ListUtil.doSublistAdd(History.lastLoadedId, true);
 			})
-			.attr("title", "Add (Shift for 20)");
+			.attr("title", "Add (SHIFT for 20)");
 	},
 
 	bindSubtractButton: () => {
@@ -1686,17 +2092,24 @@ ListUtil = {
 				if (evt.shiftKey) ListUtil.doSublistSubtract(History.lastLoadedId, 20);
 				else ListUtil.doSublistSubtract(History.lastLoadedId);
 			})
-			.attr("title", "Subtract (Shift for 20)");
+			.attr("title", "Subtract (SHIFT for 20)");
 	},
 
 	bindDownloadButton: () => {
-		ListUtil.getOrTabRightButton(`btn-sublist-download`, `download`)
-			.off("click")
-			.on("click", () => {
-				const filename = `${UrlUtil.getCurrentPage().replace(".html", "")}-sublist`;
-				DataUtil.userDownload(filename, JSON.stringify(ListUtil._getExportableSublist(), null, "\t"));
+		const $btn = ListUtil.getOrTabRightButton(`btn-sublist-download`, `download`);
+		$btn.off("click")
+			.on("click", (evt) => {
+				if (evt.shiftKey) {
+					const toEncode = JSON.stringify(ListUtil._getExportableSublist());
+					const parts = [window.location.href, (UrlUtil.packSubHash(ListUtil.SUB_HASH_PREFIX, [toEncode], true))];
+					copyText(parts.join(HASH_PART_SEP));
+					showCopiedEffect($btn);
+				} else {
+					const filename = `${UrlUtil.getCurrentPage().replace(".html", "")}-sublist`;
+					DataUtil.userDownload(filename, JSON.stringify(ListUtil._getExportableSublist(), null, "\t"));
+				}
 			})
-			.attr("title", "Download List");
+			.attr("title", "Download List (SHIFT for Link)");
 	},
 
 	bindUploadButton: (funcPreload) => {
@@ -1727,10 +2140,41 @@ ListUtil = {
 				}).appendTo($(`body`));
 				$iptAdd.click();
 			})
-			.attr("title", "Upload List (Shift for Additive)");
+			.attr("title", "Upload List (SHIFT for Add Only)");
+	},
+
+	setFromSubHashes: (subHashes, funcPreload) => {
+		function funcOnload (json) {
+			ListUtil._loadSavedSublist(json.items, false);
+			ListUtil._finaliseSublist();
+
+			const [link, ...sub] = History._getHashParts();
+			const outSub = [];
+			Object.keys(unpacked)
+				.filter(k => k !== ListUtil.SUB_HASH_PREFIX)
+				.forEach(k => {
+					outSub.push(`${k}${HASH_SUB_KV_SEP}${unpacked[k].join(HASH_SUB_LIST_SEP)}`)
+				});
+			History.setSuppressHistory(true);
+			window.location.hash = `#${link}${outSub.length ? `${HASH_PART_SEP}${outSub.join(HASH_PART_SEP)}` : ""}`;
+		}
+
+		const unpacked = {};
+		subHashes.forEach(s => Object.assign(unpacked, UrlUtil.unpackSubHash(s, true)));
+		const setFrom = unpacked[ListUtil.SUB_HASH_PREFIX];
+		if (setFrom) {
+			const json = JSON.parse(setFrom);
+
+			if (funcPreload) funcPreload(json, () => funcOnload(json));
+			else funcOnload(json);
+		}
 	},
 
 	doSublistAdd: (index, doFinalise, addCount) => {
+		if (index == null) {
+			alert("Please first view something from the list");
+			return;
+		}
 		const count = ListUtil._pinned[index] || 0;
 		addCount = addCount || 1;
 		ListUtil._pinned[index] = count + addCount;
@@ -1747,6 +2191,10 @@ ListUtil = {
 			ListUtil._setCount(index, count - subtractCount);
 			ListUtil._handleCallUpdateFn();
 		} else if (count) ListUtil.doSublistRemove(index);
+	},
+
+	getSublistedIds: () => {
+		return Object.keys(ListUtil._pinned).map(it => Number(it));
 	},
 
 	_setCount: (index, newCount) => {
@@ -1768,7 +2216,7 @@ ListUtil = {
 			.map(it => {
 				const $elm = $(it.elm);
 				sources.add(ListUtil._allItems[Number($elm.attr(FLTR_ID))].source);
-				return {h: $elm.find(`a`).prop("hash").slice(1), c: $elm.find(".count").text()};
+				return {h: $elm.find(`a`).prop("hash").slice(1), c: $elm.find(".count").text() || undefined};
 			});
 		return {items: toSave, sources: Array.from(sources)};
 	},
@@ -1839,7 +2287,9 @@ ListUtil = {
 			}
 		} catch (e) {
 			StorageUtil.removeForPage("sublist");
-			throw e;
+			setTimeout(() => {
+				throw e
+			});
 		}
 	},
 
@@ -1861,8 +2311,8 @@ ListUtil = {
 	},
 
 	initGenericPinnable: () => {
-		ListUtil.initContextMenu(ListUtil.handleGenericContextMenuClick, "Popout", "Toggle Pinned", "Toggle Selected", "Pin All Selected", "Clear Selected");
-		ListUtil.initSubContextMenu(ListUtil.handleGenericSubContextMenuClick, "Popout", "Unpin", "Unpin All");
+		ListUtil.initContextMenu(ListUtil.handleGenericContextMenuClick, "Popout", "Pin");
+		ListUtil.initSubContextMenu(ListUtil.handleGenericSubContextMenuClick, "Popout", "Unpin", "Clear Pins");
 	},
 
 	handleGenericContextMenuClick: (evt, ele, $invokedOn, $selectedMenu) => {
@@ -1872,25 +2322,12 @@ ListUtil = {
 				EntryRenderer.hover.doPopout($invokedOn, ListUtil._allItems, itId, evt.clientX);
 				break;
 			case 1:
-				if (!ListUtil.isSublisted(itId)) ListUtil.doSublistAdd(itId, true);
-				else ListUtil.doSublistRemove(itId);
-				break;
-			case 2:
-				$invokedOn.toggleClass("list-multi-selected");
-				break;
-			case 3:
 				ListUtil._primaryLists.forEach(l => {
 					ListUtil.forEachSelected(l, (it) => {
 						if (!ListUtil.isSublisted(it)) ListUtil.doSublistAdd(it);
-						else ListUtil.doSublistRemove(it);
 					});
 				});
 				ListUtil._finaliseSublist();
-				break;
-			case 4:
-				ListUtil._primaryLists.forEach(l => {
-					ListUtil.deslectAll(l);
-				});
 				break;
 		}
 	},
@@ -1911,32 +2348,21 @@ ListUtil = {
 	},
 
 	initGenericAddable: () => {
-		ListUtil.initContextMenu(ListUtil.handleGenericMultiContextMMenuClick, "Popout", "Add", "Toggle Selected", "Add All Selected", "Clear Selected");
+		ListUtil.initContextMenu(ListUtil.handleGenericMultiContextMenuClick, "Popout", "Add");
 		ListUtil.initSubContextMenu(ListUtil.handleGenericMulriSubContextMenuClick, "Popout", "Remove", "Clear List");
 	},
 
-	handleGenericMultiContextMMenuClick: (evt, ele, $invokedOn, $selectedMenu) => {
+	handleGenericMultiContextMenuClick: (evt, ele, $invokedOn, $selectedMenu) => {
 		const itId = Number($invokedOn.attr(FLTR_ID));
 		switch (Number($selectedMenu.data("ctx-id"))) {
 			case 0:
 				EntryRenderer.hover.doPopout($invokedOn, ListUtil._allItems, itId, evt.clientX);
 				break;
 			case 1:
-				ListUtil.doSublistAdd(itId, true);
-				break;
-			case 2:
-				$invokedOn.toggleClass("list-multi-selected");
-				break;
-			case 3:
 				ListUtil._primaryLists.forEach(l => {
 					ListUtil.forEachSelected(l, (it) => ListUtil.doSublistAdd(it));
 				});
 				ListUtil._finaliseSublist();
-				break;
-			case 4:
-				ListUtil._primaryLists.forEach(l => {
-					ListUtil.deslectAll(l);
-				});
 				break;
 		}
 	},
@@ -1956,14 +2382,89 @@ ListUtil = {
 		}
 	},
 
-	getSearchTermAndReset: (list) => {
+	/**
+	 * Assumes any other lists have been searched using the same term
+	 */
+	getSearchTermAndReset: (list, ...otherLists) => {
 		let lastSearch = null;
 		if (list.searched) {
 			lastSearch = $(`#search`).val();
 			list.search();
+			otherLists.forEach(l => l.search());
 		}
 		list.filter();
+		otherLists.forEach(l => l.filter());
 		return lastSearch;
+	},
+
+	toggleCheckbox (evt, ele) {
+		const $ipt = $(ele).find(`input`);
+		$ipt.prop("checked", !$ipt.prop("checked"))
+	},
+
+	getCompleteSources (it) {
+		return it.otherSources ? [it.source].concat(it.otherSources.map(src => src.source)) : it.source;
+	},
+
+	bindShowTableButton (id, title, dataList, colTransforms, sorter) {
+		$(`#${id}`).click("click", () => ListUtil.showTable(title, dataList, colTransforms, sorter));
+	},
+
+	getVisibleIds () {
+		return BrewUtil._lists.map(l => l.visibleItems.map(it => Number(it.elm.getAttribute(FLTR_ID)))).reduce((la, lb) => la.concat(lb), []);
+	},
+
+	showTable (title, dataList, colTransforms, filter, sorter) {
+		const $modal = $(`<div class="modal-outer dropdown-menu"/>`);
+		const $wrpModal = $(`<div class="modal-wrapper">`).appendTo($(`body`)).click(() => $wrpModal.remove());
+		$modal.appendTo($wrpModal);
+		const $modalInner = $(`<div class="modal-inner"/>`).appendTo($modal).click((evt) => evt.stopPropagation());
+
+		const $pnlControl = $(`<div class="split my-3"/>`).appendTo($modalInner);
+		const $pnlCols = $(`<div class="flex" style="align-items: center;"/>`).appendTo($pnlControl);
+		Object.values(colTransforms).forEach((c, i) => {
+			const $wrpCb = $(`<label class="flex-${c.flex} px-2 mr-2 no-wrap inline-flex">${c.name} </label>`).appendTo($pnlCols);
+			const $cbToggle = $(`<input type="checkbox" class="ml-1" data-name="${c.name}" checked>`)
+				.click(() => {
+					const toToggle = $modalInner.find(`.col_${i}`);
+					if ($cbToggle.prop("checked")) {
+						toToggle.show();
+					} else {
+						toToggle.hide();
+					}
+				})
+				.appendTo($wrpCb)
+		});
+		const $pnlBtns = $(`<div/>`).appendTo($pnlControl);
+		function getAsCsv () {
+			const headers = $pnlCols.find(`input:checked`).map((i, e) => $(e).data("name")).get();
+			const rows = $modalInner.find(`.data-row`).map((i, e) => $(e)).get().map($e => {
+				return $e.find(`td:visible`).map((j, d) => $(d).text()).get();
+			});
+			return DataUtil.getCsv(headers, rows);
+		}
+		const $btnCsv = $(`<div class="btn btn-primary mr-3">Download CSV</div>`).click(() => {
+			DataUtil.userDownloadText(`${title}.csv`, getAsCsv());
+		}).appendTo($pnlBtns);
+		const $btnCopy = $(`<div class="btn btn-primary">Copy CSV to Clipboard</div>`).click(() => {
+			copyText(getAsCsv());
+			showCopiedEffect($btnCopy);
+		}).appendTo($pnlBtns);
+		$modalInner.append(`<hr>`);
+
+		if (typeof filter === "object" && filter.generator) filter = filter.generator();
+
+		let temp = `<table class="table-striped" style="width: 100%;"><thead><tr class="flex">${Object.values(colTransforms).map((c, i) => `<th class="col_${i} flex-${c.flex} px-2">${c.name}</th>`).join("")}</tr></thead><tbody>`;
+		(sorter ? JSON.parse(JSON.stringify(dataList)).sort(sorter) : dataList).filter((it, i) => filter ? filter(i) : it).forEach(it => {
+			temp += `<tr class="flex data-row">`;
+			temp += Object.keys(colTransforms).map((k, i) => {
+				const c = colTransforms[k];
+				return `<td class="col_${i} flex-${c.flex} px-2">${c.transform === true ? it[k] : c.transform(it[k])}</td>`;
+			}).join("");
+			temp += `</tr>`;
+		});
+		temp += `</tbody></table>`;
+		$modalInner.append(temp);
 	}
 };
 
@@ -1973,17 +2474,19 @@ ListUtil = {
  * @param options overrides for the default filter options
  * @returns {*} a `Filter`
  */
-function getSourceFilter (options) {
+function getSourceFilter (options = {}) {
 	const baseOptions = {
 		header: FilterBox.SOURCE_HEADER,
 		displayFn: Parser.sourceJsonToFullCompactPrefix,
-		selFn: defaultSourceSelFn
+		selFn: defaultSourceSelFn,
+		groupFn: SourceUtil.getFilterGroup
 	};
-	return getFilterWithMergedOptions(baseOptions, options);
+	Object.assign(baseOptions, options);
+	return new GroupedFilter(baseOptions);
 }
 
 function defaultSourceDeselFn (val) {
-	return isNonstandardSource(val);
+	return SourceUtil.isNonstandardSource(val);
 }
 
 function defaultSourceSelFn (val) {
@@ -2049,8 +2552,12 @@ UrlUtil.getCurrentPage = function () {
  * @param href the link
  */
 UrlUtil.link = function (href) {
-	if (!IS_ROLL20 && IS_DEPLOYED) return `${DEPLOYED_STATIC_ROOT}${href}?ver=${VERSION_NUMBER}`;
-	else if (IS_DEPLOYED) return `${href}?ver=${VERSION_NUMBER}`;
+	function addGetParam (curr) {
+		if (href.includes("?")) return `${curr}&ver=${VERSION_NUMBER}`;
+		else return `${curr}?ver=${VERSION_NUMBER}`;
+	}
+	if (!IS_ROLL20 && IS_DEPLOYED) return addGetParam(`${DEPLOYED_STATIC_ROOT}${href}`);
+	else if (IS_DEPLOYED) return addGetParam(href);
 	return href;
 };
 
@@ -2088,7 +2595,7 @@ UrlUtil.PG_SPELLS = "spells.html";
 UrlUtil.PG_BACKGROUNDS = "backgrounds.html";
 UrlUtil.PG_ITEMS = "items.html";
 UrlUtil.PG_CLASSES = "classes.html";
-UrlUtil.PG_CONDITIONS = "conditions.html";
+UrlUtil.PG_CONDITIONS_DISEASES = "conditionsdiseases.html";
 UrlUtil.PG_FEATS = "feats.html";
 UrlUtil.PG_INVOCATIONS = "invocations.html";
 UrlUtil.PG_PSIONICS = "psionics.html";
@@ -2096,11 +2603,13 @@ UrlUtil.PG_RACES = "races.html";
 UrlUtil.PG_REWARDS = "rewards.html";
 UrlUtil.PG_VARIATNRULES = "variantrules.html";
 UrlUtil.PG_ADVENTURE = "adventure.html";
+UrlUtil.PG_ADVENTURES = "adventures.html";
 UrlUtil.PG_DEITIES = "deities.html";
 UrlUtil.PG_CULTS_BOONS = "cultsboons.html";
 UrlUtil.PG_OBJECTS = "objects.html";
 UrlUtil.PG_TRAPS_HAZARDS = "trapshazards.html";
 UrlUtil.PG_QUICKREF = "quickreference.html";
+UrlUtil.PG_MAKE_SHAPED = "makeshaped.html";
 
 UrlUtil.URL_TO_HASH_BUILDER = {};
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_BESTIARY] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
@@ -2108,16 +2617,16 @@ UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_SPELLS] = (it) => UrlUtil.encodeForHash([
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_BACKGROUNDS] = (it) => UrlUtil.encodeForHash([it.name, Parser.sourceJsonToAbv(it.source)]);
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_ITEMS] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_CLASSES] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
-UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_CONDITIONS] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
+UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_CONDITIONS_DISEASES] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_FEATS] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_INVOCATIONS] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_PSIONICS] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_RACES] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
-UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_REWARDS] = (it) => UrlUtil.encodeForHash(it.name);
+UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_REWARDS] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_VARIATNRULES] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_ADVENTURE] = (it) => UrlUtil.encodeForHash(it.id);
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_DEITIES] = (it) => UrlUtil.encodeForHash([it.name, it.pantheon, it.source]);
-UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_CULTS_BOONS] = (it) => UrlUtil.encodeForHash(it.name);
+UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_CULTS_BOONS] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_OBJECTS] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
 UrlUtil.URL_TO_HASH_BUILDER[UrlUtil.PG_TRAPS_HAZARDS] = (it) => UrlUtil.encodeForHash([it.name, it.source]);
 
@@ -2127,7 +2636,7 @@ UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_SPELL] = UrlUtil.PG_SPELLS;
 UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_BACKGROUND] = UrlUtil.PG_BACKGROUNDS;
 UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_ITEM] = UrlUtil.PG_ITEMS;
 UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_CLASS] = UrlUtil.PG_CLASSES;
-UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_CONDITION] = UrlUtil.PG_CONDITIONS;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_CONDITION] = UrlUtil.PG_CONDITIONS_DISEASES;
 UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_FEAT] = UrlUtil.PG_FEATS;
 UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_ELDRITCH_INVOCATION] = UrlUtil.PG_INVOCATIONS;
 UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_PSIONIC] = UrlUtil.PG_PSIONICS;
@@ -2140,41 +2649,39 @@ UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_OBJECT] = UrlUtil.PG_OBJECTS;
 UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_TRAP] = UrlUtil.PG_TRAPS_HAZARDS;
 UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_HAZARD] = UrlUtil.PG_TRAPS_HAZARDS;
 UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_QUICKREF] = UrlUtil.PG_QUICKREF;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_CULT] = UrlUtil.PG_CULTS_BOONS;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_BOON] = UrlUtil.PG_CULTS_BOONS;
+UrlUtil.CAT_TO_PAGE[Parser.CAT_ID_DISEASE] = UrlUtil.PG_CONDITIONS_DISEASES;
 
 UrlUtil.bindLinkExportButton = (filterBox) => {
 	const $btn = ListUtil.getOrTabRightButton(`btn-link-export`, `magnet`);
 	$btn.addClass("btn-copy-effect")
 		.off("click")
-		.on("click", () => {
+		.on("click", (evt) => {
 			let url = window.location.href;
 
 			const toHash = filterBox.getAsSubHashes();
-			const parts = Object.keys(toHash).map(hK => {
+			parts = Object.keys(toHash).map(hK => {
 				const hV = toHash[hK];
 				return UrlUtil.packSubHash(hK, hV, true);
 			});
+			if (evt.shiftKey) {
+				const toEncode = JSON.stringify(ListUtil._getExportableSublist());
+				const part2 = UrlUtil.packSubHash(ListUtil.SUB_HASH_PREFIX, [toEncode], true);
+				parts = parts.concat(part2);
+			}
 			parts.unshift(url);
 
 			copyText(parts.join(HASH_PART_SEP));
-			const $temp = $(`<div class="copied-tip"><span>Copied!</span></div>`);
-			const pos = $btn.offset();
-			$temp.css({
-				top: pos.top - 17,
-				left: pos.left - 36 + ($btn.width() / 2)
-			}).appendTo($(`body`)).animate({
-				top: "-=8",
-				opacity: 0
-			}, 250, () => {
-				$temp.remove();
-			});
+			showCopiedEffect($btn);
 		})
-		.attr("title", "Get Link (Including Filters)")
+		.attr("title", "Get Link to Filters (SHIFT adds List)")
 };
 
 if (!IS_DEPLOYED && !IS_ROLL20 && typeof window !== "undefined") {
 	// for local testing, hotkey to get a link to the current page on the main site
 	window.addEventListener("keypress", (e) => {
-		if (noModifierKeys(e)) {
+		if (noModifierKeys(e) && typeof d20 === "undefined") {
 			if (e.key === "#") {
 				const spl = window.location.href.split("/");
 				window.prompt("Copy to clipboard: Ctrl+C, Enter", `https://5e.tools/${spl[spl.length - 1]}`);
@@ -2231,6 +2738,17 @@ SortUtil = {
 		if (a.toLowerCase().trim() === "special equipment") return -1;
 		if (b.toLowerCase().trim() === "special equipment") return 1;
 		return SortUtil.ascSort(a, b)
+	},
+
+	_alignFirst: ["L", "C"],
+	_alignSecond: ["G", "E"],
+	alignmentSort: (a, b) => {
+		if (a === b) return 0;
+		if (SortUtil._alignFirst.includes(a)) return -1;
+		if (SortUtil._alignSecond.includes(a)) return 1;
+		if (SortUtil._alignFirst.includes(b)) return 1;
+		if (SortUtil._alignSecond.includes(b)) return -1;
+		return 0;
 	}
 };
 
@@ -2238,70 +2756,164 @@ SortUtil = {
 DataUtil = {
 	_loaded: {},
 
-	loadJSON: function (url, onLoadFunction, ...otherData) {
-		function handleAlreadyLoaded (url) {
-			onLoadFunction(DataUtil._loaded[url], otherData);
-		}
+	loadJSON: function (url, ...otherData) {
+		return new Promise((resolve, reject) => {
+			function handleAlreadyLoaded (url) {
+				resolve(DataUtil._loaded[url], otherData);
+			}
 
-		if (this._loaded[url]) {
-			handleAlreadyLoaded(url);
-			return;
-		}
+			if (this._loaded[url]) {
+				handleAlreadyLoaded(url);
+				return;
+			}
 
-		const procUrl = UrlUtil.link(url);
-		if (this._loaded[procUrl]) {
-			handleAlreadyLoaded(procUrl);
-			return;
-		}
+			const procUrl = UrlUtil.link(url);
+			if (this._loaded[procUrl]) {
+				handleAlreadyLoaded(procUrl);
+				return;
+			}
 
-		const request = getRequest(procUrl);
-		if (procUrl !== url) {
-			request.onerror = function () {
-				const fallbackRequest = getRequest(url);
-				fallbackRequest.send();
-			};
-		}
-		request.send();
+			const request = getRequest(procUrl);
+			if (procUrl !== url) {
+				request.onerror = function () {
+					const fallbackRequest = getRequest(url);
+					fallbackRequest.send();
+				};
+			}
+			request.send();
 
-		function getRequest (toUrl) {
-			const request = new XMLHttpRequest();
-			request.open("GET", toUrl, true);
-			request.overrideMimeType("application/json");
-			request.onload = function () {
-				const data = JSON.parse(this.response);
-				DataUtil._loaded[toUrl] = data;
-				onLoadFunction(data, otherData);
-			};
-			return request;
-		}
+			function getRequest (toUrl) {
+				const request = new XMLHttpRequest();
+				request.open("GET", toUrl, true);
+				request.overrideMimeType("application/json");
+				request.onload = function () {
+					try {
+						const data = JSON.parse(this.response);
+						DataUtil._loaded[toUrl] = data;
+						resolve(data, otherData);
+					} catch (e) {
+						reject(new Error(`Could not parse JSON from ${toUrl}: ${e}`));
+					}
+				};
+				request.onerror = (e) => reject(new Error(`Error during JSON request: ${e}`));
+				return request;
+			}
+		});
 	},
 
 	multiLoadJSON: function (toLoads, onEachLoadFunction, onFinalLoadFunction) {
 		if (!toLoads.length) onFinalLoadFunction([]);
-		const dataStack = [];
-
-		let loadedCount = 0;
-		toLoads.forEach(tl => {
-			this.loadJSON(
-				tl.url,
-				function (data) {
-					onEachLoadFunction(tl, data);
-					dataStack.push(data);
-
-					loadedCount++;
-					if (loadedCount >= toLoads.length) {
-						onFinalLoadFunction(dataStack);
-					}
-				}
-			)
+		return Promise.all(toLoads.map(tl => this.loadJSON(tl.url))).then(datas => {
+			datas.forEach((data, i) => {
+				if (onEachLoadFunction) onEachLoadFunction(toLoads[i], data);
+			});
+			return onFinalLoadFunction(datas);
 		});
 	},
 
 	userDownload: function (filename, data) {
-		const $a = $(`<a href="data:text/json;charset=utf-8,${encodeURIComponent(data)}" download="${filename}.json" style="display: none;" target="_blank">DL</a>`);
+		if (typeof data !== "string") data = JSON.stringify(data, null, "\t");
+		const $a = $(`<a href="data:text/json;charset=utf-8,${encodeURIComponent(data)}" download="${filename}.json" style="display: none;">DL</a>`);
 		$(`body`).append($a);
 		$a[0].click();
 		$a.remove();
+	},
+
+	getCsv (headers, rows) {
+		function escapeCsv (str) {
+			return `"${str.replace(/"/g, `""`)}"`;
+		}
+
+		function toCsv (row) {
+			return row.map(str => escapeCsv(str)).join(",");
+		}
+
+		return `${toCsv(headers)}\n${rows.map(r => toCsv(r)).join("\n")}`;
+	},
+
+	userDownloadText (filename, string) {
+		const $a = $(`<a href="data:text/plain;charset=utf-8,${encodeURIComponent(string)}" download="${filename}" style="display: none;">DL</a>`);
+		$(`body`).append($a);
+		$a[0].click();
+		$a.remove();
+	},
+
+	userUpload (fnCallback) {
+		function loadSaved (event) {
+			const input = event.target;
+
+			const reader = new FileReader();
+			reader.onload = () => {
+				const text = reader.result;
+				const json = JSON.parse(text);
+				fnCallback(json);
+			};
+			reader.readAsText(input.files[0]);
+		}
+
+		const $iptAdd = $(`<input type="file" accept=".json" style="position: fixed; top: -100px; left: -100px; display: none;">`).on("change", (evt) => {
+			loadSaved(evt);
+		}).appendTo($(`body`));
+		$iptAdd.click();
+	},
+
+	class: {
+		loadJSON: function (baseUrl = "") {
+			return new Promise((resolve) => {
+				DataUtil.loadJSON(`${baseUrl}data/class/index.json`).then((index) => {
+					Promise.all(Object.values(index).map(it => DataUtil.loadJSON(`${baseUrl}data/class/${it}`))).then((all) => {
+						resolve(all.reduce((a, b) => ({class: a.class.concat(b.class)}), {class: []}));
+					});
+				})
+			});
+		}
+	},
+
+	deity: {
+		doPostLoad: function (data, callbackFn) {
+			const PRINT_ORDER = [
+				SRC_PHB,
+				SRC_DMG,
+				SRC_SCAG,
+				SRC_MTF
+			];
+
+			const inSource = {};
+			PRINT_ORDER.forEach(src => {
+				inSource[src] = {};
+				data.deity.filter(it => it.source === src).forEach(it => inSource[src][it.reprintAlias || it.name] = it); // TODO need to handle similar names
+			});
+
+			const laterPrinting = [PRINT_ORDER.last()];
+			[...PRINT_ORDER].reverse().slice(1).forEach(src => {
+				laterPrinting.forEach(laterSrc => {
+					Object.keys(inSource[src]).forEach(name => {
+						const newer = inSource[laterSrc][name];
+						if (newer) {
+							const old = inSource[src][name];
+							old.reprinted = true;
+							if (!newer._isEnhanced) {
+								newer.previousVersions = newer.previousVersions || [];
+								newer.previousVersions.push(old);
+							}
+						}
+					});
+				});
+
+				laterPrinting.push(src);
+			});
+			data.deity.forEach(g => g._isEnhanced = true);
+
+			callbackFn(data);
+		},
+
+		loadJSON: function (baseUrl = "") {
+			return new Promise((resolve) => {
+				DataUtil.loadJSON(`${baseUrl}data/deities.json`).then((data) => {
+					DataUtil.deity.doPostLoad(data, resolve);
+				})
+			});
+		}
 	}
 };
 
@@ -2339,6 +2951,43 @@ function addListShowHide () {
 
 // ROLLING =============================================================================================================
 RollerUtil = {
+	isCrypto: () => {
+		return typeof window !== "undefined" && typeof window.crypto !== "undefined";
+	},
+
+	randomise: (max, min = 1) => {
+		if (RollerUtil.isCrypto()) {
+			return RollerUtil._randomise(min, max + min);
+		} else {
+			return RollerUtil.roll(max) + min;
+		}
+	},
+
+	/**
+	 * Cryptographically secure RNG
+	 */
+	_randomise: (min, max) => {
+		const range = max - min;
+		const bytesNeeded = Math.ceil(Math.log2(range) / 8);
+		const randomBytes = new Uint8Array(bytesNeeded);
+		const maximumRange = Math.pow(Math.pow(2, 8), bytesNeeded);
+		const extendedRange = Math.floor(maximumRange / range) * range;
+		let i;
+		let randomInteger;
+		while (true) {
+			window.crypto.getRandomValues(randomBytes);
+			randomInteger = 0;
+			for (i = 0; i < bytesNeeded; i++) {
+				randomInteger <<= 8;
+				randomInteger += randomBytes[i];
+			}
+			if (randomInteger < extendedRange) {
+				randomInteger %= range;
+				return min + randomInteger;
+			}
+		}
+	},
+
 	/**
 	 * Result in range: 0 to (max-1); inclusive
 	 * e.g. roll(20) gives results ranging from 0 to 19
@@ -2366,7 +3015,14 @@ RollerUtil = {
 		});
 
 		$(`#filter-search-input-group`).find(`#reset`).before($btnRoll);
-	}
+	},
+
+	isRollCol (string) {
+		if (typeof string !== "string") return false;
+		return !!/^({@dice )?(\d+)?d\d+([+-](\d+)?d\d+)*(})?$/.exec(string.trim());
+	},
+
+	DICE_REGEX: /([1-9]\d*)?d([1-9]\d*)(\s?[+-]\s?\d+)?/g
 };
 
 // STORAGE =============================================================================================================
@@ -2378,6 +3034,7 @@ StorageUtil = {
 		} catch (e) {
 			// if the user has disabled cookies, build a fake version
 			return {
+				isFake: true,
 				getItem: (k) => {
 					return StorageUtil._fakeStorage[k];
 				},
@@ -2391,52 +3048,120 @@ StorageUtil = {
 		}
 	},
 
+	isFake () {
+		return StorageUtil.getStorage().isFake
+	},
+
 	setForPage: (key, value) => {
-		const p = UrlUtil.getCurrentPage();
-		StorageUtil.getStorage().setItem(`${key}_${p}`, JSON.stringify(value));
+		StorageUtil.set(`${key}_${UrlUtil.getCurrentPage()}`, value);
+	},
+
+	set (key, value) {
+		StorageUtil.getStorage().setItem(key, JSON.stringify(value));
 	},
 
 	getForPage: (key) => {
-		const p = UrlUtil.getCurrentPage();
-		const rawOut = StorageUtil.getStorage().getItem(`${key}_${p}`);
+		return StorageUtil.get(`${key}_${UrlUtil.getCurrentPage()}`);
+	},
+
+	get (key) {
+		const rawOut = StorageUtil.getStorage().getItem(key);
 		if (rawOut && rawOut !== "undefined" && rawOut !== "null") return JSON.parse(rawOut);
 		return null;
 	},
 
 	removeForPage: (key) => {
-		const p = UrlUtil.getCurrentPage();
-		StorageUtil.getStorage().removeItem(`${key}_${p}`);
+		StorageUtil.remove(`${key}_${UrlUtil.getCurrentPage()}`)
+	},
+
+	remove (key) {
+		StorageUtil.getStorage().removeItem(key);
 	}
 };
 
 // HOMEBREW ============================================================================================================
 BrewUtil = {
 	homebrew: null,
-	_list: null,
+	homebrewMeta: null, // TODO
+	_lists: null,
 	storage: StorageUtil.getStorage(),
+	_sourceCache: null,
+	_filterBox: null,
+	_sourceFilter: null,
 
-	// provide ref to List.js instance
-	setList: (list) => {
-		BrewUtil._list = list;
+	bind (options) {
+		// provide ref to List.js instance
+		if (options.list) BrewUtil._lists = [options.list];
+		else if (options.lists) BrewUtil._lists = options.lists;
+		// provide ref to FilterBox and Filter instance
+		if (options.filterBox) BrewUtil._filterBox = options.filterBox;
+		if (options.sourceFilter) BrewUtil._sourceFilter = options.sourceFilter;
 	},
 
-	addBrewData: (brewHandler, brewLocation) => {
-		const rawBrew = BrewUtil.storage.getItem(brewLocation);
-		if (rawBrew) {
-			try {
-				BrewUtil.homebrew = JSON.parse(rawBrew);
-				brewHandler(BrewUtil.homebrew);
-			} catch (e) {
-				// on error, purge all brew and reset hash
-				purgeBrew();
-			}
-		}
+	pAddBrewData: () => {
+		return new Promise(resolve => {
+			if (BrewUtil.homebrew) {
+				resolve(BrewUtil.homebrew);
+			} else {
+				const rawBrew = BrewUtil.storage.getItem(HOMEBREW_STORAGE);
+				const rawBrewMeta = BrewUtil.storage.getItem(HOMEBREW_META_STORAGE);
 
-		function purgeBrew () {
-			BrewUtil.storage.removeItem(brewLocation);
-			BrewUtil.homebrew = null;
-			window.location.hash = "";
+				new Promise((resolve) => {
+					if (rawBrewMeta) {
+						BrewUtil.homebrewMeta = JSON.parse(rawBrewMeta);
+						BrewUtil.homebrewMeta.sources = BrewUtil.homebrewMeta.sources || [];
+						resolve();
+					} else {
+						BrewUtil.homebrewMeta = {sources: []};
+						resolve();
+					}
+				}).then(new Promise((resolve) => {
+					if (rawBrew) {
+						BrewUtil.homebrew = JSON.parse(rawBrew);
+						resolve();
+					} else {
+						BrewUtil.homebrew = {};
+						resolve();
+					}
+				}).then(BrewUtil._pLoadLocal()).then(() => {
+					BrewUtil._resetSourceCache();
+				}).then(() => resolve(BrewUtil.homebrew))).catch(error => {
+					// on error, purge all brew and reset hash
+					BrewUtil.purgeBrew();
+					setTimeout(() => {
+						throw error
+					});
+				});
+			}
+		});
+	},
+
+	purgeBrew (error) {
+		window.alert("Error when loading homebrew! Purging corrupt data...");
+		BrewUtil.storage.removeItem(HOMEBREW_STORAGE);
+		BrewUtil.homebrew = null;
+		window.location.hash = "";
+		if (error) {
+			setTimeout(() => {
+				throw error
+			}, 1);
 		}
+	},
+
+	_pLoadLocal (callbackFn = (d, page) => BrewUtil.doHandleBrewJson(d, page, null)) {
+		if (!IS_ROLL20) {
+			return DataUtil.loadJSON(`${EntryRenderer.getDefaultRenderer().baseUrl}${JSON_HOMEBREW_INDEX}`).then((data) => {
+				// auto-load from `homebrew/`, for custom versions of the site
+				if (data.toImport.length) {
+					const page = UrlUtil.getCurrentPage();
+					Promise.all(data.toImport.map(it => DataUtil.loadJSON(`homebrew/${it}`))).then((datas) => {
+						datas.forEach(d => callbackFn(d, page));
+						Promise.resolve();
+					});
+				} else Promise.resolve();
+			});
+		}
+		return () => {}; // no-op
 	},
 
 	manageBrew: (funcAddCallback) => {
@@ -2448,61 +3173,317 @@ BrewUtil = {
 			$body.css("overflow", "");
 			$overlay.remove();
 		});
+
+		function makeNextOverlay () {
+			$overlay.css("background", "transparent");
+			const $overlay2 = $(`<div class="homebrew-overlay"/>`);
+			$overlay2.on("click", () => {
+				$overlay2.remove();
+				$overlay.css("background", "");
+			});
+			$body.append($overlay2);
+			return $overlay2;
+		}
+
 		const $window = $(`
-		<div class="homebrew-window dropdown-menu" style="display: block;">
-			<h4>Manage Homebrew</h4>
+		<div class="homebrew-window dropdown-menu">
+			<h4 class="title"><span>Manage Homebrew</span><button class="btn btn-xs btn-danger">Delete All (Including Legacy)</button></h4>
 			<hr>
 		</div>`
 		);
 		$window.on("click", (evt) => {
 			evt.stopPropagation();
 		});
-		const $brewList = $(`<div></div>`);
+		const $btnDelAll = $window.find(`button`);
+		const $brewList = $(`<div class="current-brew"/>`);
 		$window.append($brewList);
 
 		refreshBrewList();
 
-		const $iptAdd = $(`<input multiple type="file" accept=".json" style="display: none;">`).on("change", (evt) => {
-			addBrew(evt, funcAddCallback);
+		const $iptAdd = $(`<input multiple type="file" accept=".json" style="display: none;">`).change((evt) => {
+			addBrewLocal(evt, funcAddCallback);
+		});
+
+		const $btnLoadFromUrl = $(`<button class="btn btn-default btn-sm">Load from URL</button>`);
+		$btnLoadFromUrl.click(() => {
+			const enteredUrl = window.prompt('Please enter the URL of the homebrew:');
+			if (!enteredUrl) return;
+
+			let parsedUrl;
+			try {
+				parsedUrl = new URL(enteredUrl);
+			} catch (e) {
+				window.alert('The entered URL does not seem to be valid.');
+				return;
+			}
+			BrewUtil.addBrewRemote(null, parsedUrl.href).catch(() => {
+				window.alert('Could not load homebrew from the given URL.')
+			});
+		});
+
+		const $btnGet = $(`<button class="btn btn-default btn-sm">Get Homebrew 2.0</button>`);
+		$btnGet.click(() => {
+			const $lst = $(`
+				<div id="brewlistcontainer" class="listcontainer homebrew-window dropdown-menu">
+					<input type="search" class="search form-control" placeholder="Find homebrew..." style="width: 100%">
+					<div class="filtertools sortlabel btn-group">
+						<button class="col-xs-4 sort btn btn-default btn-xs" data-sort="filename">Filename</button>
+						<button class="col-xs-8 sort btn btn-default btn-xs" data-sort="source">Source</button>
+					</div>
+					<ul class="list brew-list">
+						<li><section><span style="font-style: italic;">Loading...</span></section></li>
+					</ul>
+				</div>
+			`);
+			const $nxt = makeNextOverlay();
+			$nxt.append($lst);
+			$lst.on("click", (evt) => {
+				evt.stopPropagation();
+			});
+
+			// populate list
+			const $ul = $lst.find(`ul`);
+			function getBrewDirs () {
+				switch (page) {
+					case UrlUtil.PG_SPELLS:
+						return ["spell"];
+					case UrlUtil.PG_CLASSES:
+						return ["class", "subclass"];
+					case UrlUtil.PG_BESTIARY:
+						return ["creature"];
+					case UrlUtil.PG_BACKGROUNDS:
+						return ["background"];
+					case UrlUtil.PG_FEATS:
+						return ["feat"];
+					case UrlUtil.PG_INVOCATIONS:
+						return ["invocation"];
+					case UrlUtil.PG_RACES:
+						return ["race"];
+					case UrlUtil.PG_OBJECTS:
+						return ["object"];
+					case UrlUtil.PG_TRAPS_HAZARDS:
+						return ["trap", "hazard"];
+					case UrlUtil.PG_DEITIES:
+						return ["deity"];
+					case UrlUtil.PG_ITEMS:
+						return ["item"];
+					case UrlUtil.PG_REWARDS:
+						return ["reward"];
+					case UrlUtil.PG_PSIONICS:
+						return ["psionic"];
+					case UrlUtil.PG_VARIATNRULES:
+						return ["variantrule"];
+					case UrlUtil.PG_CONDITIONS_DISEASES:
+						return ["condition", "disease"];
+					case UrlUtil.PG_ADVENTURES:
+						return ["adventure"];
+					case UrlUtil.PG_MAKE_SHAPED:
+						return ["spell", "creature"];
+					default:
+						throw new Error(`No homebrew properties defined for category ${page}`);
+				}
+			}
+			const urls = getBrewDirs().map(it => ({url: `https://api.github.com/repos/TheGiddyLimit/homebrew/contents/${it}?client_id=${HOMEBREW_CLIENT_ID}&client_secret=${HOMEBREW_CLIENT_SECRET}&${(new Date()).getTime()}`}));
+			DataUtil.multiLoadJSON(urls, null, (json) => {
+				let stack = "";
+				const all = [].concat.apply([], json);
+				all.forEach(it => {
+					stack += `<li>
+						<section onclick="BrewUtil.addBrewRemote(this, '${(it.download_url || "").escapeQuotes()}', true)">
+							<span class="col-xs-4 filename">${it.name.trim().replace(/\.json$/, "")}</span>
+							<span class="col-xs-8 source" title="${it.download_url}">${it.download_url}</span>
+						</section>
+					</li>`;
+				});
+
+				$ul.empty();
+				$ul.append(stack);
+
+				const list = new List("brewlistcontainer", {
+					valueNames: ["filename"],
+					listClass: "brew-list"
+				});
+			});
 		});
 		$window.append(
 			$(`<div class="text-align-center"/>`)
-				.append($(`<label class="btn btn-default btn-sm btn-file">Load File</label>`).append($iptAdd))
+				.append($btnGet)
 				.append(" ")
-				.append(`<a href="https://github.com/TheGiddyLimit/homebrew" target="_blank"><button class="btn btn-default btn-sm btn-file">Get Brew</button></a>`)
+				.append($(`<label class="btn btn-default btn-sm btn-file">Upload File</label>`).append($iptAdd))
+				.append(" ")
+				.append($btnLoadFromUrl)
+				.append(" ")
+				.append(`<a href="https://github.com/TheGiddyLimit/homebrew" target="_blank"><button class="btn btn-default btn-sm btn-file">Browse Repository</button></a>`)
 		);
 
 		$overlay.append($window);
 		$body.append($overlay);
 
 		function refreshBrewList () {
-			function render (type, prop, deleteFn) {
-				BrewUtil.homebrew[prop].forEach(j => {
-					const $btnDel = $(`<button class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash""></span></button>`).on("click", () => {
-						deleteFn(j.uniqueId);
-					});
-					const $btnExport = $(`<button class="btn btn-default btn-sm"><span class="glyphicon glyphicon-download-alt"></span></button>`).on("click", () => {
-						DataUtil.userDownload(j.name, JSON.stringify(j, null, "\t"));
-					});
-					$brewList.append($(`<p>`).append($btnDel).append(" ").append($btnExport).append(`&nbsp; <i>${type}${prop === "subclass" ? ` (${j.class})` : ""}:</i> <b>${j.name} ${j.version ? ` (v${j.version})` : ""}</b> by ${j.authors ? j.authors.join(", ") : "Anonymous"}. ${j.url ? `<a href="${j.url}" target="_blank">Source.</a>` : ""}`));
+			function showSourceManager (source, $overlay2) {
+				const $wrpBtnDel = $(`<div class="wrp-btn-del-selected"/>`);
+				const $lst = $(`
+					<div id="brewlistcontainer" class="listcontainer homebrew-window dropdown-menu">
+						<input type="search" class="search form-control" placeholder="Search entries..." style="width: 100%">
+						<div class="filtertools sortlabel btn-group">
+							<button class="col-xs-7 sort btn btn-default btn-xs" data-sort="name">Name</button>
+							<button class="col-xs-4 sort btn btn-default btn-xs" data-sort="category">Category</button>
+							<span class="col-xs-1 wrp-cb-all"><input type="checkbox"></span>
+						</div>
+						<ul class="list brew-list"></ul>
+					</div>
+				`);
+				$lst.prepend($wrpBtnDel);
+				$overlay2.append($lst);
+				$lst.on("click", (evt) => {
+					evt.stopPropagation();
 				});
+
+				const $cbAll = $lst.find(`.wrp-cb-all input`);
+
+				// populate list
+				function populateList () {
+					function getDisplayCat (cat) {
+						if (cat === "variantrule") return "Variant Rule";
+						return cat.uppercaseFirst();
+					}
+
+					function getExtraInfo (category, entry) {
+						switch (category) {
+							case "subclass":
+								return ` (${entry.class})`;
+							case "psionic":
+								return ` (${Parser.psiTypeToFull(entry.type)})`;
+							default:
+								return "";
+						}
+					}
+
+					const $ul = $lst.find(`ul`);
+					let stack = "";
+					BrewUtil._getBrewCategories().forEach(cat => {
+						BrewUtil.homebrew[cat].filter(it => it.source === source).sort((a, b) => SortUtil.ascSort(a.name, b.name)).forEach(it => {
+							stack += `<li><section onclick="ListUtil.toggleCheckbox(event, this)">
+							<span class="col-xs-7 name">${it.name}</span>
+							<span class="col-xs-4 category">${getDisplayCat(cat)}${getExtraInfo(cat, it)}</span>
+							<span class="col-xs-1 text-align-center"><input type="checkbox" onclick="event.stopPropagation()"></span>
+							<span class="hidden uid">${it.uniqueId}</span>
+						</section></li>`;
+						})
+					});
+					$ul.empty();
+					$ul.append(stack);
+				}
+				populateList();
+
+				const list = new List("brewlistcontainer", {
+					valueNames: ["name", "category", "uid"],
+					listClass: "brew-list"
+				});
+
+				$cbAll.change(function () {
+					const val = this.checked;
+					list.items.forEach(it => $(it.elm).find(`input`).prop("checked", val));
+				});
+				$(`<button class="btn btn-danger btn-sm">Delete Selected</button>`).on("click", () => {
+					const toDel = list.items.filter(it => $(it.elm).find(`input`).prop("checked")).map(it => it.values());
+
+					if (!toDel.length) return;
+					if (!window.confirm("Are you sure?")) return;
+
+					if (toDel.length === list.items.length) {
+						deleteSource(source, false);
+						$overlay2.click();
+					} else {
+						toDel.forEach(it => {
+							const deleteFn = getDeleteFunction(it.category.toLowerCase().replace(/ /g, ""));
+							deleteFn(it.uid, false);
+						});
+						BrewUtil.storage.setItem(HOMEBREW_STORAGE, JSON.stringify(BrewUtil.homebrew));
+						populateList();
+						refreshBrewList();
+						window.location.hash = "";
+					}
+				}).appendTo($wrpBtnDel);
 			}
 
-			$brewList.html("");
+			$brewList.empty();
 			if (BrewUtil.homebrew) {
-				switch (page) {
-					case UrlUtil.PG_SPELLS:
-						render("Spell", "spell", deleteSpellBrew);
-						break;
-					case UrlUtil.PG_CLASSES:
-						render("Class", "class", deleteClassBrew);
-						render("Subclass", "subclass", deleteSubclassBrew);
-						break;
-				}
+				const $lst = $(`
+					<div id="outerbrewlistcontainer" class="listcontainer">
+						<input type="search" class="search form-control" placeholder="Search homebrew..." style="width: calc(100% - 3px)">
+						<div class="filtertools sortlabel btn-group">
+							<button class="col-xs-5 sort btn btn-default btn-xs" data-sort="source">Source</button>
+							<button class="col-xs-4 sort btn btn-default btn-xs" data-sort="authors">Authors</button>
+							<button class="col-xs-1 btn btn-default btn-xs" disabled>&nbsp;</button>
+							<button class="col-xs-2 btn btn-default btn-xs" disabled>&nbsp;</button>
+						</div>
+						<ul class="list-display-only brew-list"></ul>
+					</div>
+				`);
+				$brewList.append($lst);
+
+				// populate list
+				const $ul = $lst.find(`ul`);
+				$ul.empty();
+
+				BrewUtil.getJsonSources().forEach(src => {
+					const $row = $(`<li class="row no-click">
+						<span class="col-xs-5 col-tall source">${src.full}</span>
+						<span class="col-xs-4 col-tall authors">${(src.authors || []).join(", ")}</span>
+						<${src.url ? "a" : "span"} class="col-xs-1 col-tall" ${src.url ? `href="${src.url}" target="_blank"` : ""}>${src.url ? "Source" : ""}</${src.url ? "a" : "span"}>
+					</li>`);
+					const $btns = $(`<span class="col-xs-2 text-align-right"/>`).appendTo($row);
+					$(`<button class="btn btn-sm btn-default">View/Manage</button>`)
+						.on("click", () => {
+							const $nxt = makeNextOverlay();
+							showSourceManager(src.json, $nxt);
+						})
+						.appendTo($btns);
+					$btns.append(" ");
+					$(`<button class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span></button>`)
+						.on("click", () => {
+							deleteSource(src.json, true);
+						})
+						.appendTo($btns);
+
+					$ul.append($row);
+				});
+
+				// hack to delay list indexing, otherwise it seems to fail
+				setTimeout(() => {
+					const list = new List("outerbrewlistcontainer", {
+						valueNames: ["source", "authors"],
+						listClass: "brew-list"
+					});
+				}, 5);
 			}
 		}
 
-		function addBrew (event, funcAddCallback) {
+		$btnDelAll.on("click", () => {
+			if (!window.confirm("Are you sure?")) return;
+			BrewUtil.storage.setItem(HOMEBREW_STORAGE, "{}");
+			BrewUtil.storage.setItem(HOMEBREW_META_STORAGE, "{}");
+			window.location.hash = "";
+			location.reload();
+		});
+
+		BrewUtil.addBrewRemote = (ele, jsonUrl, doUnescape) => {
+			const $src = $(ele).find(`span.source`);
+			const cached = $src.text();
+			$src.text("Loading...");
+			if (doUnescape) jsonUrl = jsonUrl.unescapeQuotes();
+			return DataUtil.loadJSON(`${jsonUrl}?${(new Date()).getTime()}`).then((data) => {
+				BrewUtil.doHandleBrewJson(data, page, refreshBrewList);
+				$src.text("Done!");
+				setInterval(() => {
+					$src.text(cached);
+				}, 500);
+				if (funcAddCallback) funcAddCallback();
+			});
+		};
+
+		function addBrewLocal (event, funcAddCallback) {
 			const input = event.target;
 
 			let readIndex = 0;
@@ -2511,88 +3492,106 @@ BrewUtil = {
 				const text = reader.result;
 				const json = JSON.parse(text);
 
-				function storePrep (arrName) {
-					if (json[arrName]) {
-						json[arrName].forEach(it => {
-							it.uniqueId = CryptUtil.md5(JSON.stringify(it));
-						});
-					} else json[arrName] = [];
-				}
+				BrewUtil.doHandleBrewJson(json, page, refreshBrewList);
+				ExcludeUtil.setList(json.blacklist || []);
 
-				// prepare for storage
-				storePrep("class");
-				storePrep("subclass");
-				storePrep("spell");
-
-				// store
-				function checkAndAdd (prop) {
-					const areNew = [];
-					const existingIds = BrewUtil.homebrew[prop].map(it => it.uniqueId);
-					json[prop].forEach(it => {
-						if (!existingIds.find(id => it.uniqueId === id)) {
-							it.source = SRC_HOMEBREW;
-							BrewUtil.homebrew[prop].push(it);
-							areNew.push(it);
-						}
-					});
-					return areNew;
-				}
-
-				let classesToAdd = json.class;
-				let subclassesToAdd = json.subclass;
-				let spellsToAdd = json.spell;
-				if (!BrewUtil.homebrew) {
-					BrewUtil.homebrew = json;
-				} else {
-					// only add if unique ID not already present
-					classesToAdd = checkAndAdd("class");
-					subclassesToAdd = checkAndAdd("subclass");
-					spellsToAdd = checkAndAdd("spell");
-				}
-				BrewUtil.storage.setItem(HOMEBREW_STORAGE, JSON.stringify(BrewUtil.homebrew));
-
-				switch (page) {
-					case UrlUtil.PG_SPELLS:
-						addSpells(spellsToAdd);
-						break;
-					case UrlUtil.PG_CLASSES:
-						addClassData({class: classesToAdd});
-						addSubclassData({subclass: subclassesToAdd});
-						break;
-				}
-
-				refreshBrewList();
 				if (input.files[readIndex]) {
 					reader.readAsText(input.files[readIndex++]);
 				} else {
 					// reset the input
 					$(event.target).val("");
-					funcAddCallback();
+					if (funcAddCallback) funcAddCallback();
 				}
 			};
 			reader.readAsText(input.files[readIndex++]);
 		}
 
-		function getIndex (arrName, uniqueId) {
-			return BrewUtil.homebrew[arrName].findIndex(it => it.uniqueId === uniqueId);
+		function getIndex (arrName, uniqueId, isChild) {
+			return BrewUtil.homebrew[arrName].findIndex(it => isChild ? it.parentUniqueId : it.uniqueId === uniqueId);
 		}
 
-		function doRemove (arrName, uniqueId) {
-			const index = getIndex(arrName, uniqueId);
+		function deleteSource (source, doConfirm) {
+			if (doConfirm && !window.confirm(`Are you sure you want to remove all homebrew with source "${source}"?`)) return;
+
+			BrewUtil._getBrewCategories().forEach(k => {
+				const cat = BrewUtil.homebrew[k];
+				const deleteFn = getDeleteFunction(k);
+				const toDel = [];
+				cat.forEach(it => {
+					if (it.source === source) {
+						toDel.push(it.uniqueId);
+					}
+				});
+				toDel.forEach(uId => {
+					deleteFn(uId, false);
+				});
+			});
+			BrewUtil.storage.setItem(HOMEBREW_STORAGE, JSON.stringify(BrewUtil.homebrew));
+			BrewUtil.removeJsonSource(source);
+			if (page === UrlUtil.PG_MAKE_SHAPED) {
+				removeBrewSource(source);
+			}
+			// remove the source from the filters and re-render the filter box
+			if (BrewUtil._sourceFilter) BrewUtil._sourceFilter.removeIfExists(source);
+			if (BrewUtil._filterBox) BrewUtil._filterBox.render();
+			refreshBrewList();
+			window.location.hash = "";
+			if (BrewUtil._filterBox) BrewUtil._filterBox._fireValChangeEvent();
+		}
+
+		function doRemove (arrName, uniqueId, doRefresh, isChild) {
+			const index = getIndex(arrName, uniqueId, isChild);
 			if (~index) {
 				BrewUtil.homebrew[arrName].splice(index, 1);
-				BrewUtil.storage.setItem(HOMEBREW_STORAGE, JSON.stringify(BrewUtil.homebrew));
-				refreshBrewList();
-				BrewUtil._list.remove("uniqueid", uniqueId);
-				History.hashChange();
+				if (doRefresh) refreshBrewList();
+				if (BrewUtil._lists) {
+					BrewUtil._lists.forEach(l => l.remove(isChild ? "parentuniqueid" : "uniqueid", uniqueId));
+					if (doRefresh) History.hashChange();
+				}
 			}
 		}
 
-		function deleteClassBrew (uniqueId) {
-			doRemove("class", uniqueId);
+		function getDeleteFunction (category) {
+			switch (category) {
+				case "spell":
+				case "monster":
+				case "background":
+				case "feat":
+				case "invocation":
+				case "race":
+				case "object":
+				case "trap":
+				case "hazard":
+				case "deity":
+				case "item":
+				case "itemType":
+				case "itemProperty":
+				case "reward":
+				case "psionic":
+				case "variantrule":
+				case "legendaryGroup":
+				case "condition":
+				case "disease":
+					return deleteGenericBrew(category);
+				case "subclass":
+					return deleteSubclassBrew;
+				case "class":
+					return deleteClassBrew;
+				case "adventure":
+					return deleteAdventureBrew;
+				case "adventureData":
+					// Do nothing, handled by deleting the associated adventure
+					return () => {};
+				default:
+					throw new Error(`No homebrew delete function defined for category ${category}`);
+			}
 		}
 
-		function deleteSubclassBrew (uniqueId) {
+		function deleteClassBrew (uniqueId, doRefresh) {
+			doRemove("class", uniqueId, doRefresh);
+		}
+
+		function deleteSubclassBrew (uniqueId, doRefresh) {
 			let subClass;
 			let index = 0;
 			for (; index < BrewUtil.homebrew.subclass.length; ++index) {
@@ -2605,21 +3604,177 @@ BrewUtil = {
 				const forClass = subClass.class;
 				BrewUtil.homebrew.subclass.splice(index, 1);
 				BrewUtil.storage.setItem(HOMEBREW_STORAGE, JSON.stringify(BrewUtil.homebrew));
-				refreshBrewList();
-				const c = classes.find(c => c.name.toLowerCase() === forClass.toLowerCase());
+				const c = ClassData.classes.find(c => c.name.toLowerCase() === forClass.toLowerCase());
 
 				const indexInClass = c.subclasses.findIndex(it => it.uniqueId === uniqueId);
 				if (~indexInClass) {
 					c.subclasses.splice(indexInClass, 1);
 					c.subclasses = c.subclasses.sort((a, b) => SortUtil.ascSort(a.name, b.name));
 				}
-				refreshBrewList();
-				window.location.hash = "";
+				if (doRefresh) {
+					refreshBrewList();
+					window.location.hash = "";
+				}
 			}
 		}
 
-		function deleteSpellBrew (uniqueId) {
-			doRemove("spell", uniqueId);
+		function deleteGenericBrew (category) {
+			return (uniqueId, doRefresh) => {
+				doRemove(category, uniqueId, doRefresh);
+			}
+		}
+
+		function deleteAdventureBrew () {
+			return (uniqueId, doRefresh) => {
+				doRemove("adventure", uniqueId, false);
+				doRemove("adventureData", uniqueId, doRefresh, true);
+			}
+		}
+	},
+
+	doHandleBrewJson: function (json, page, funcRefresh) {
+		function storePrep (arrName) {
+			if (json[arrName]) {
+				json[arrName].forEach(it => {
+					it.uniqueId = CryptUtil.md5(JSON.stringify(it));
+				});
+			} else json[arrName] = [];
+		}
+
+		// prepare for storage
+		if (json.race && json.race.length) json.race = EntryRenderer.race.mergeSubraces(json.race);
+		const storable = ["class", "subclass", "spell", "monster", "background", "feat", "invocation", "race", "deity", "item", "itemProperty", "itemType", "psionic", "reward", "object", "trap", "hazard", "variantrule", "legendaryGroup", "condition", "disease", "adventure", "adventureData"];
+		storable.forEach(storePrep);
+
+		if (json["adventure"] && json["adventureData"]) {
+			json["adventure"].forEach(adv => {
+				const data = json["adventureData"].find(it => it.id === adv.id);
+				if (data) {
+					data.parentUniqueId = adv.uniqueId;
+				}
+			})
+		}
+
+		// store
+		function checkAndAdd (prop) {
+			const areNew = [];
+			if (!BrewUtil.homebrew[prop]) BrewUtil.homebrew[prop] = [];
+			const existingIds = BrewUtil.homebrew[prop].map(it => it.uniqueId);
+			json[prop].forEach(it => {
+				if (!existingIds.find(id => it.uniqueId === id)) {
+					BrewUtil.homebrew[prop].push(it);
+					areNew.push(it);
+				}
+			});
+			return areNew;
+		}
+
+		function checkAndAddSources () {
+			if (!json._meta || !json._meta.sources) return [];
+			const areNew = [];
+			if (!BrewUtil.homebrewMeta) BrewUtil.homebrewMeta = {sources: []};
+			const existing = BrewUtil.homebrewMeta.sources.map(src => src.json);
+			json._meta.sources.forEach(src => {
+				if (!existing.find(it => it === src.json)) {
+					BrewUtil.homebrewMeta.sources.push(src);
+					areNew.push(src);
+				}
+			});
+			return areNew;
+		}
+
+		let sourcesToAdd = json._meta ? json._meta.sources : [];
+		const toAdd = {};
+		storable.forEach(k => toAdd[k] = json[k]);
+		if (!BrewUtil.homebrew) {
+			BrewUtil.homebrew = json;
+		} else {
+			sourcesToAdd = checkAndAddSources(); // adding source(s) to Filter should happen in per-page addX functions
+			storable.forEach(k => toAdd[k] = checkAndAdd(k)); // only add if unique ID not already present
+		}
+		BrewUtil.storage.setItem(HOMEBREW_STORAGE, JSON.stringify(BrewUtil.homebrew));
+		BrewUtil.storage.setItem(HOMEBREW_META_STORAGE, JSON.stringify(BrewUtil.homebrewMeta));
+
+		// wipe old cache
+		BrewUtil._resetSourceCache();
+
+		// display on page
+		// FIXME this requires changing the pAddBrewData in the page JS, as well as here
+		// TODO complete refactoring so this always call `handleBrew` which can be defined per-page
+		switch (page) {
+			case UrlUtil.PG_SPELLS:
+				handleBrew(toAdd);
+				break;
+			case UrlUtil.PG_CLASSES:
+				handleBrew(toAdd);
+				break;
+			case UrlUtil.PG_BESTIARY:
+				handleBrew(toAdd);
+				break;
+			case UrlUtil.PG_BACKGROUNDS:
+				addBackgrounds({background: toAdd.background});
+				break;
+			case UrlUtil.PG_FEATS:
+				addFeats({feat: toAdd.feat});
+				break;
+			case UrlUtil.PG_INVOCATIONS:
+				addInvocations({invocation: toAdd.invocation});
+				break;
+			case UrlUtil.PG_RACES:
+				addRaces({race: toAdd.race});
+				break;
+			case UrlUtil.PG_OBJECTS:
+				addObjects({object: toAdd.object});
+				break;
+			case UrlUtil.PG_TRAPS_HAZARDS:
+				handleBrew(toAdd);
+				break;
+			case UrlUtil.PG_DEITIES:
+				addDeities({deity: toAdd.deity});
+				break;
+			case UrlUtil.PG_ITEMS:
+				handleBrew(toAdd);
+				break;
+			case UrlUtil.PG_REWARDS:
+				addRewards({reward: toAdd.reward});
+				break;
+			case UrlUtil.PG_PSIONICS:
+				addPsionics({psionic: toAdd.psionic});
+				break;
+			case UrlUtil.PG_VARIATNRULES:
+				addVariantRules({variantrule: toAdd.variantrule});
+				break;
+			case UrlUtil.PG_CONDITIONS_DISEASES:
+				handleBrew(toAdd);
+				break;
+			case UrlUtil.PG_ADVENTURES:
+				handleBrew(toAdd);
+				break;
+			case UrlUtil.PG_MAKE_SHAPED:
+				handleBrew(toAdd);
+				break;
+			case "NO_PAGE":
+				break;
+			default:
+				throw new Error(`No homebrew add function defined for category ${page}`);
+		}
+
+		if (funcRefresh) funcRefresh();
+
+		if (BrewUtil._filterBox && BrewUtil._sourceFilter) {
+			const cur = BrewUtil._filterBox.getValues();
+			if (cur.Source) {
+				const toSet = JSON.parse(JSON.stringify(cur.Source));
+
+				if (toSet._totals.yes || toSet._totals.no) {
+					if (page === UrlUtil.PG_CLASSES) toSet["Core"] = 1;
+					else sourcesToAdd.forEach(src => toSet[src.json] = 1);
+
+					const toSetValues = Object.keys(toSet).filter(k => !k.startsWith("_")).filter(k => toSet[k]).map(k => `${!~toSet[k] ? "!" : ""}${k}`.toLowerCase());
+					BrewUtil._filterBox.setFromValues({Source: toSetValues});
+				}
+			}
+			BrewUtil._filterBox._fireValChangeEvent();
 		}
 	},
 
@@ -2627,6 +3782,93 @@ BrewUtil = {
 		$(`#${id}`).on("click", () => {
 			BrewUtil.manageBrew(funcAddCallback);
 		});
+	},
+
+	_getBrewCategories () {
+		return Object.keys(BrewUtil.homebrew).filter(it => !it.startsWith("_"));
+	},
+
+	_buildSourceCache () {
+		function doBuild () {
+			if (BrewUtil.homebrewMeta && BrewUtil.homebrewMeta.sources) {
+				BrewUtil.homebrewMeta.sources.forEach(src => BrewUtil._sourceCache[src.json] = ({abbreviation: src.abbreviation, full: src.full}));
+			}
+		}
+
+		if (!BrewUtil._sourceCache) {
+			BrewUtil._sourceCache = {};
+
+			if (!BrewUtil.homebrewMeta) {
+				const rawBrew = BrewUtil.storage.getItem(HOMEBREW_META_STORAGE);
+				const temp = rawBrew ? ((JSON.parse(rawBrew) || {})._meta || {}) : {};
+				temp.sources = temp.sources || [];
+
+				// FIXME Async code that, to be properly implemented, requires everything to be rewritten.
+				// This *should* complete before anything further is allowed to execute.
+				// The downside of not doing this, is homebrew sources will appear in the "official" section of the source filter.
+				// This didn't seem worth breaking everything to fix.
+				BrewUtil._pLoadLocal(d => {
+					if (d._meta && !d._meta.sources) {
+						const existing = temp.sources.map(src => src.json);
+						d._meta.sources.forEach(src => {
+							if (!existing.find(it => it === src.json)) {
+								temp.sources.push(src);
+							}
+						});
+					}
+				});
+				BrewUtil.homebrewMeta = temp;
+				doBuild();
+			} else {
+				doBuild();
+			}
+		}
+	},
+
+	_resetSourceCache () {
+		BrewUtil._sourceCache = null;
+	},
+
+	removeJsonSource (source) {
+		BrewUtil._resetSourceCache();
+		const ix = BrewUtil.homebrewMeta.sources.findIndex(it => it.json === source);
+		if (~ix) BrewUtil.homebrewMeta.sources.splice(ix, 1);
+		BrewUtil.storage.setItem(HOMEBREW_META_STORAGE, JSON.stringify(BrewUtil.homebrewMeta));
+	},
+
+	getJsonSources () {
+		BrewUtil._buildSourceCache();
+		return BrewUtil.homebrewMeta && BrewUtil.homebrewMeta.sources ? BrewUtil.homebrewMeta.sources : [];
+	},
+
+	hasSourceJson (source) {
+		BrewUtil._buildSourceCache();
+		return !!BrewUtil._sourceCache[source];
+	},
+
+	sourceJsonToFull (source) {
+		BrewUtil._buildSourceCache();
+		return BrewUtil._sourceCache[source] ? BrewUtil._sourceCache[source].full || source : source;
+	},
+
+	sourceJsonToAbv (source) {
+		BrewUtil._buildSourceCache();
+		return BrewUtil._sourceCache[source] ? BrewUtil._sourceCache[source].abbreviation || source : source;
+	},
+
+	/**
+	 * Get data in a format similar to the main search index
+	 */
+	getSearchIndex () {
+		BrewUtil._buildSourceCache();
+		const indexer = new Omnidexer(Omnisearch.highestId + 1);
+
+		if (BrewUtil.homebrew) {
+			Omnidexer.TO_INDEX__FROM_INDEX_JSON.filter(ti => BrewUtil.homebrew[ti.listProp]).forEach(ti => indexer.addToIndex(ti, BrewUtil.homebrew));
+			Omnidexer.TO_INDEX.filter(ti => BrewUtil.homebrew[ti.listProp]).forEach(ti => indexer.addToIndex(ti, BrewUtil.homebrew));
+		}
+
+		return indexer.getIndex();
 	}
 };
 
@@ -2806,7 +4048,197 @@ CollectionUtil = {
 		}
 	},
 
-	joinConjunct: (arr, joinWith, conjunctWith) => {
-		return arr.length === 1 ? String(arr[0]) : arr.length === 2 ? arr.join(conjunctWith) : arr.slice(0, -1).join(joinWith) + conjunctWith + arr.slice(-1);
+	arrayEq (array1, array2) {
+		if (!array1 && !array2) return true;
+		else if ((!array1 && array2) || (array1 && !array2)) return false;
+
+		let temp = [];
+		if ((!array1[0]) || (!array2[0])) return false;
+		if (array1.length !== array2.length) return false;
+		let key;
+		// Put all the elements from array1 into a "tagged" array
+		for (let i = 0; i < array1.length; i++) {
+			key = (typeof array1[i]) + "~" + array1[i]; // Use "typeof" so a number 1 isn't equal to a string "1".
+			if (temp[key]) temp[key]++;
+			else temp[key] = 1;
+		}
+		// Go through array2 - if same tag missing in "tagged" array, not equal
+		for (let i = 0; i < array2.length; i++) {
+			key = (typeof array2[i]) + "~" + array2[i];
+			if (temp[key]) {
+				if (temp[key] === 0) return false;
+				else temp[key]--;
+			} else return false;
+		}
+		return true;
 	}
 };
+
+Array.prototype.last = Array.prototype.last ||
+	function () {
+		return this[this.length - 1];
+	};
+
+// OVERLAY VIEW ========================================================================================================
+/**
+ * Relies on:
+ * - page implementing HashUtil's `loadsub` with handling to show/hide the book view based on hashKey changes
+ * - page running no-argument `loadsub` when `hashchange` occurs
+ *
+ * @param hashKey to use in the URL so that forward/back can open/close the view
+ * @param $openBtn jQuery-selected button to bind click open/close
+ * @param noneVisibleMsg "error" message to display if user has not selected any viewable content
+ * @param popTblGetNumShown function which should populate the view with HTML content and return the number of items displayed
+ * @constructor
+ */
+function BookModeView (hashKey, $openBtn, noneVisibleMsg, popTblGetNumShown) {
+	this.hashKey = hashKey;
+	this.$openBtn = $openBtn;
+	this.noneVisibleMsg = noneVisibleMsg;
+	this.popTblGetNumShown = popTblGetNumShown;
+
+	this.active = false;
+	this._$body = null;
+	this._$wrpBook = null;
+
+	const self = this;
+
+	self.$openBtn.on("click", () => {
+		History.cleanSetHash(`${window.location.hash}${HASH_PART_SEP}${self.hashKey}:true`);
+	});
+
+	this.open = () => {
+		function hashTeardown () {
+			History.cleanSetHash(window.location.hash.replace(`${self.hashKey}:true`, ""));
+		}
+
+		if (self.active) return;
+		self.active = true;
+
+		const $body = $(`body`);
+		const $wrpBook = $(`<div class="book-mode"/>`);
+		self._$body = $body;
+		self._$wrpBook = $wrpBook;
+		$body.css("overflow", "hidden");
+		$body.addClass("book-mode-active");
+
+		const $bkTbl = $(`<table class="stats stats-book" style="font-size: 1.0em; font-family: inherit;"/>`);
+		const $brdTop = $(`<tr><th class="border close-border" style="width: 100%;"><div/></th></tr>`);
+		const $hdTxt = $(`<span class="spacer-name"/>`); // pass this to the content function to allow it to set a main header
+		const $btnClose = $(`<span class="delete-icon glyphicon glyphicon-remove"></span>`)
+			.on("click", () => {
+				hashTeardown();
+			});
+		$brdTop.find(`div`).append($hdTxt).append($btnClose);
+		$bkTbl.append($brdTop);
+
+		const $tbl = $(`<table class="stats stats-book" style="width: auto; margin: 0 auto; font-family: inherit;"/>`);
+
+		const numShown = self.popTblGetNumShown($tbl, $hdTxt);
+
+		const $tblRow = $(`<tr/>`);
+		$tblRow.append($(`<div class="wrp-content" style="${numShown ? "" : "display: none;"}"/>`).append($tbl));
+		const $msgRow = $(`<tr ${numShown ? `style="display: none;"` : ""}><td class="text-align-center"><span class="initial-message">${self.noneVisibleMsg}</span><br></td></tr>`);
+		$msgRow.find(`td`).append($(`<button class="btn btn-default">Close</button>`).on("click", () => {
+			hashTeardown();
+		}));
+		$bkTbl.append($tblRow).append($msgRow).append(EntryRenderer.utils.getBorderTr());
+
+		$wrpBook.append($bkTbl);
+		$body.append($wrpBook);
+	};
+
+	this.teardown = () => {
+		if (self.active) {
+			self._$body.css("overflow", "");
+			self._$body.removeClass("book-mode-active");
+			self._$wrpBook.remove();
+			self.active = false;
+		}
+	}
+}
+
+// CONTENT EXCLUSION ===================================================================================================
+ExcludeUtil = {
+	_excludes: null,
+	storage: StorageUtil.getStorage(),
+
+	initialise () {
+		const raw = ExcludeUtil.storage.getItem(EXCLUDES_STORAGE);
+		if (raw) {
+			try {
+				ExcludeUtil._excludes = JSON.parse(raw);
+			} catch (e) {
+				window.alert("Error when loading content blacklist! Purging corrupt data...");
+				ExcludeUtil.storage.removeItem(EXCLUDES_STORAGE);
+				ExcludeUtil._excludes = null;
+				window.location.hash = "";
+				setTimeout(() => {
+					throw e
+				});
+			}
+		} else {
+			ExcludeUtil._excludes = [];
+		}
+	},
+
+	getList () {
+		return ExcludeUtil._excludes || [];
+	},
+
+	setList (toSet) {
+		ExcludeUtil._excludes = toSet;
+		ExcludeUtil._save();
+	},
+
+	isExcluded (name, category, source) {
+		if (!ExcludeUtil._excludes) return false;
+		source = source.source || source;
+		return !!ExcludeUtil._excludes.find(row => (row.source === "*" || row.source === source) && (row.category === "*" || row.category === category) && (row.name === "*" || row.name === name));
+	},
+
+	addExclude (name, category, source) {
+		if (!ExcludeUtil._excludes.find(row => row.source === source && row.category === category && row.name === name)) {
+			ExcludeUtil._excludes.push({name, category, source});
+			ExcludeUtil._save();
+			return true;
+		}
+		return false;
+	},
+
+	removeExclude (name, category, source) {
+		const ix = ExcludeUtil._excludes.findIndex(row => row.source === source && row.category === category && row.name === name);
+		if (~ix) {
+			ExcludeUtil._excludes.splice(ix, 1);
+			ExcludeUtil._save();
+		}
+	},
+
+	_save () {
+		ExcludeUtil.storage.setItem(EXCLUDES_STORAGE, JSON.stringify(ExcludeUtil._excludes));
+	},
+
+	resetExcludes () {
+		ExcludeUtil._excludes = [];
+		ExcludeUtil._save();
+	}
+};
+
+// LEGAL NOTICE ========================================================================================================
+if (!IS_ROLL20 && typeof window !== "undefined") {
+	// add an obnoxious banner
+	window.addEventListener("load", () => {
+		// FIXME is this something we want? If so, delete this
+		/* eslint-disable */
+		return;
+
+		if (!StorageUtil.isFake() && StorageUtil.get("seenLegal")) return;
+		const $wrpBanner = $(`<div id="legal-notice"><span>Don't go posting this shit to Reddit</span></div>`);
+		$(`<button class="btn btn-sm btn-default">Whatever, kid</button>`).on("click", () => {
+			StorageUtil.set("seenLegal", true);
+			$wrpBanner.remove();
+		}).appendTo($wrpBanner);
+		$(`body`).append($wrpBanner);
+		/* eslint-enable */
+	});
+}

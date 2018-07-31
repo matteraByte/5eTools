@@ -1,5 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-06/schema#",
+	"version": "1.0.0",
 	"type": "object",
 	"properties": {
 		"cult": {
@@ -13,6 +14,9 @@
 					},
 					"source": {
 						"type": "string"
+					},
+					"page": {
+						"type": "integer"
 					},
 					"goal": {
 						"type": "object",
@@ -76,6 +80,9 @@
 					},
 					"source": {
 						"type": "string"
+					},
+					"page": {
+						"type": "integer"
 					},
 					"type": {
 						"type": "string"

@@ -1,13 +1,15 @@
 {
 	"name": "5etools",
 	"author": "TheGiddyLimit",
-	"version": "1.21.6",
+	"version": "1.58.0",
 	"license": "MIT",
 	"description": "A site dedicated to making playing games with your friends as easy as possible.",
 	"scripts": {
 		"dev-server": "autoreload-server -r **/*.{html,css,js,png,jpg}",
 		"version-bump": "npm version -m \"chore(version): bump\"",
 		"gen-index": "node node/generate-search-index.js",
+		"clean-jsons": "node node/clean-jsons.js",
+		"gen-reference": "node node/generate-quick-reference.js && node node/generate-dmscreen-reference.js",
 		"uglifyjs": "uglifyjs",
 		"test:js": "eslint js node test",
 		"test:styles": "stylelint scss/style.scss",
@@ -16,22 +18,36 @@
 		"build:css": "node-sass --source-map=true --output-style=compressed scss/style.scss css/style.css && postcss  ./css/style.css --use autoprefixer -r",
 		"build:deploy:dev": "bash build/deploy-dev.sh",
 		"build:deploy:prod": "bash build/deploy-prod.sh",
-		"build": "npm run gen-index && npm run build:css",
+		"build": "npm run clean-jsons && npm run gen-index && npm run gen-reference && npm run build:css",
 		"preversion": "npm test",
 		"version": "node node/version-bump.js"
 	},
-	"repository": "TheGiddyLimit/TheGiddyLimit.github.io",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/TheGiddyLimit/TheGiddyLimit.github.io.git"
+	},
 	"devDependencies": {
-		"autoprefixer": "^8.0.0",
-		"eslint": "^4.9.0",
+		"autoprefixer": "^8.6.5",
+		"eslint": "^4.19.1",
 		"eslint-plugin-json": "^1.2.0",
-		"jsonschema": "^1.2.0",
-		"node-sass": "^4.7.2",
-		"postcss-cli": "^5.0.0",
+		"jsonschema": "1.2.0",
+		"node-sass": "^4.9.2",
+		"postcss-cli": "^5.0.1",
+		"postcss-syntax": "^0.10.0",
 		"simple-autoreload-server": "^0.2.7",
-		"simple-git": "^1.91.0",
-		"stylelint": "^9.0.0",
+		"simple-git": "^1.96.0",
+		"stylelint": "^9.3.0",
 		"stylelint-config-sass-guidelines": "^5.0.0",
-		"uglify-es": "^3.3.9"
+		"uglify-es": "^3.3.10"
+	},
+	"dependencies": {},
+	"bugs": {
+		"url": "https://github.com/TheGiddyLimit/TheGiddyLimit.github.io/issues"
+	},
+	"homepage": "https://github.com/TheGiddyLimit/TheGiddyLimit.github.io#readme",
+	"main": ".eslintrc.js",
+	"directories": {
+		"lib": "lib",
+		"test": "test"
 	}
 }

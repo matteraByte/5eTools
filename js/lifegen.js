@@ -2,7 +2,7 @@
 
 const JSON_URL = "data/life.json";
 
-const RNG = EntryRenderer.dice.randomise;
+const RNG = RollerUtil.randomise;
 
 function _testRng (rollFn) {
 	const counts = {};
@@ -14,51 +14,41 @@ function _testRng (rollFn) {
 	return counts;
 }
 
-function _getFromTable (table, roll) {
-	const it = {};
-	Object.assign(it, table.find(it => {
-		return it.min === roll || (it.max && roll >= it.min && roll <= it.max);
-	}));
-	Object.keys(it).forEach(k => {
-		if (typeof it[k] === "function") {
-			it[k] = it[k]();
-		}
-	});
-	return it;
-}
 function rollSuppAlignment () {
-	return _getFromTable(SUPP_ALIGNMENT, RNG(6) + RNG(6) + RNG(6));
+	return GenUtil.getFromTable(SUPP_ALIGNMENT, RNG(6) + RNG(6) + RNG(6));
 }
 function rollSuppDeath () {
-	return _getFromTable(SUPP_DEATH, RNG(12));
+	return GenUtil.getFromTable(SUPP_DEATH, RNG(12));
 }
 function rollSuppClass () {
-	return _getFromTable(SUPP_CLASS, RNG(100));
+	return GenUtil.getFromTable(SUPP_CLASS, RNG(100));
 }
 function rollSuppOccupation () {
-	return _getFromTable(SUPP_OCCUPATION, RNG(100));
+	return GenUtil.getFromTable(SUPP_OCCUPATION, RNG(100));
 }
 function rollSuppRace () {
-	return _getFromTable(SUPP_RACE, RNG(100));
+	return GenUtil.getFromTable(SUPP_RACE, RNG(100));
 }
 function rollSuppRelationship () {
-	return _getFromTable(SUPP_RELATIONSHIP, RNG(4) + RNG(4) + RNG(4));
+	return GenUtil.getFromTable(SUPP_RELATIONSHIP, RNG(4) + RNG(4) + RNG(4));
 }
 function rollSuppStatus () {
-	return _getFromTable(SUPP_STATUS, RNG(6) + RNG(6) + RNG(6));
+	return GenUtil.getFromTable(SUPP_STATUS, RNG(6) + RNG(6) + RNG(6));
 }
 
-function getPersonDetails (doRace) {
+function getPersonDetails (doRace, isParent) {
 	const status = rollSuppStatus();
-	const align = rollSuppAlignment().result.map(it => Parser.dtAlignmentToFull(it)).join(" ");
+	const align = rollSuppAlignment().result.map(it => Parser.alignmentAbvToFull(it)).join(" ");
 	const occ = rollSuppOccupation().result;
 	const relate = rollSuppRelationship().result;
 	const out = [
-		`Alignment: ${align}`,
-		`Occupation: ${occ}`,
-		`Relationship: ${relate}`,
-		`Status: ${status.result}`
+		`<b>Alignment:</b> ${align}`,
+		`<b>Occupation:</b> ${occ}`,
+		`<b>Relationship:</b> ${relate}`
 	];
+	if (!isParent) {
+		out.push(`<b>Status:</b> ${status.result}`);
+	}
 	if (doRace) {
 		const race = rollSuppRace().result;
 		out.splice(index, 0, race);
@@ -67,31 +57,31 @@ function getPersonDetails (doRace) {
 }
 
 function rollEvtAdventure () {
-	return _getFromTable(LIFE_EVENTS_ADVENTURES, RNG(100));
+	return GenUtil.getFromTable(LIFE_EVENTS_ADVENTURES, RNG(100));
 }
 function rollEvtArcaneMatter () {
-	return _getFromTable(LIFE_EVENTS_ARCANE_MATTERS, RNG(10));
+	return GenUtil.getFromTable(LIFE_EVENTS_ARCANE_MATTERS, RNG(10));
 }
 function rollEvtBoon () {
-	return _getFromTable(LIFE_EVENTS_BOONS, RNG(10));
+	return GenUtil.getFromTable(LIFE_EVENTS_BOONS, RNG(10));
 }
 function rollEvtCrime () {
-	return _getFromTable(LIFE_EVENTS_CRIME, RNG(8));
+	return GenUtil.getFromTable(LIFE_EVENTS_CRIME, RNG(8));
 }
 function rollEvtPunishment () {
-	return _getFromTable(LIFE_EVENTS_PUNISHMENT, RNG(12));
+	return GenUtil.getFromTable(LIFE_EVENTS_PUNISHMENT, RNG(12));
 }
 function rollEvtSupernatural () {
-	return _getFromTable(LIFE_EVENTS_SUPERNATURAL, RNG(100));
+	return GenUtil.getFromTable(LIFE_EVENTS_SUPERNATURAL, RNG(100));
 }
 function rollEvtTragedy () {
-	return _getFromTable(LIFE_EVENTS_TRAGEDIES, RNG(12));
+	return GenUtil.getFromTable(LIFE_EVENTS_TRAGEDIES, RNG(12));
 }
 function rollEvtWar () {
-	return _getFromTable(LIFE_EVENTS_WAR, RNG(12));
+	return GenUtil.getFromTable(LIFE_EVENTS_WAR, RNG(12));
 }
 function rollEvtWeird () {
-	return _getFromTable(LIFE_EVENTS_WEIRD_STUFF, RNG(12));
+	return GenUtil.getFromTable(LIFE_EVENTS_WEIRD_STUFF, RNG(12));
 }
 
 function choose (...lst) {
@@ -147,7 +137,7 @@ const BIRTHPLACES = [
 	{"min": 86, "max": 88, "result": "Among people of a different race"},
 	{"min": 89, "max": 91, "result": () => `On board a boat or a ship ${choose("boat", "ship")}`, "display": "On board a boat or a ship"},
 	{"min": 92, "max": 93, "result": () => `In a prison or in the headquarters of a secret organization ${choose("prison", "headquarters of a secret organization")}`, "display": "In a prison or in the headquarters of a secret organization"},
-	{"min": 94, "max": 95, "result": "In a sage’s laboratory"},
+	{"min": 94, "max": 95, "result": "In a sage's laboratory"},
 	{"min": 96, "result": "In the Feywild"},
 	{"min": 97, "result": "In the Shadowfell"},
 	{"min": 98, "result": () => `On the Astral Plane or the Ethereal Plane ${choose("Astral Plane", "Ethereal Plane")}`, "display": "On the Astral Plane or the Ethereal Plane"},
@@ -156,7 +146,7 @@ const BIRTHPLACES = [
 ];
 
 function absentParent (parent) {
-	return _getFromTable(ABSENT_PARENT, RNG(4)).result.replace("parent", `$& ${fmtChoice(parent)}</i>`);
+	return GenUtil.getFromTable(ABSENT_PARENT, RNG(4)).result.replace("parent", `$& ${fmtChoice(parent)}</i>`);
 }
 
 function absentBothParents () {
@@ -228,10 +218,10 @@ const CHILDHOOD_MEMORIES = [
 
 const LIFE_EVENTS_AGE = [
 	{"min": 1, "max": 20, "age": () => RNG(20), "result": "20 years or younger", "events": 1},
-	{"min": 21, "max": 59, "age": () => RNG(10) + 20, "result": "21–30 years", "events": () => RNG(4)},
-	{"min": 60, "max": 69, "age": () => RNG(10) + 30, "result": "31–40 years", "events": () => RNG(6)},
-	{"min": 70, "max": 89, "age": () => RNG(10) + 40, "result": "41–50 years", "events": () => RNG(8)},
-	{"min": 90, "max": 99, "age": () => RNG(10) + 50, "result": "51–60 years", "events": () => RNG(10)},
+	{"min": 21, "max": 59, "age": () => RNG(10) + 20, "result": "21\u201430 years", "events": () => RNG(4)},
+	{"min": 60, "max": 69, "age": () => RNG(10) + 30, "result": "31\u201440 years", "events": () => RNG(6)},
+	{"min": 70, "max": 89, "age": () => RNG(10) + 40, "result": "41\u201450 years", "events": () => RNG(8)},
+	{"min": 90, "max": 99, "age": () => RNG(10) + 50, "result": "51\u201460 years", "events": () => RNG(10)},
 	{"min": 100, "age": () => RNG(690) + 60, "result": "61 years or older", "events": () => RNG(12)} // max age = 750; max elven age
 ];
 
@@ -262,10 +252,10 @@ const LIFE_EVENTS = [
 	{"min": 1, "max": 10, "result": "You suffered a tragedy. Roll on the Tragedies table.", "nextRoll": () => _lifeEvtResult("Tragedy", rollEvtTragedy())},
 	{"min": 11, "max": 20, "result": "You gained a bit of good fortune. Roll on the Boons table.", "nextRoll": () => _lifeEvtResult("Boon", rollEvtBoon())},
 	{"min": 21, "max": 30, "result": "You fell in love or got married. If you get this result more than once, you can choose to have a child instead. Work with your DM to determine the identity of your love interest.", "nextRoll": () => _lifeEvtPerson(marriageIndex++ === 0 ? "Spouse" : "Spouse/Child", getPersonDetails())},
-	{"min": 31, "max": 40, "result": `You made an enemy of an adventurer. Roll a d6 ${fmtChoice(RNG(6))}. An odd number indicates you are to blame for the rift, and an even number indicates you are blameless. Use the supplemental tables and work with your DM to determine this hostile character’s identity and the danger this enemy poses to you.`, "display": "You made an enemy of an adventurer. Roll a d6. An odd number indicates you are to blame for the rift, and an even number indicates you are blameless. Use the supplemental tables and work with your DM to determine this hostile character’s identity and the danger this enemy poses to you.", "nextRoll": () => _lifeEvtPerson("Enemy", getPersonDetails())},
+	{"min": 31, "max": 40, "result": `You made an enemy of an adventurer. Roll a d6 ${fmtChoice(RNG(6))}. An odd number indicates you are to blame for the rift, and an even number indicates you are blameless. Use the supplemental tables and work with your DM to determine this hostile character's identity and the danger this enemy poses to you.`, "display": "You made an enemy of an adventurer. Roll a d6. An odd number indicates you are to blame for the rift, and an even number indicates you are blameless. Use the supplemental tables and work with your DM to determine this hostile character's identity and the danger this enemy poses to you.", "nextRoll": () => _lifeEvtPerson("Enemy", getPersonDetails())},
 	{"min": 41, "max": 50, "result": "You made a friend of an adventurer. Use the supplemental tables and work with your DM to add more detail to this friendly character and establish how your friendship began.", "nextRoll": () => _lifeEvtPerson("Friend", getPersonDetails())},
 	{"min": 51, "max": 70, "result": `You spent time working in a job related to your background. Start the game with an extra 2d6 ${fmtChoice(RNG(6) + RNG(6))} gp.`, "display": "You spent time working in a job related to your background. Start the game with an extra 2d6 gp."},
-	{"min": 71, "max": 75, "result": "You met someone important. Use the supplemental tables to determine this character’s identity and how this individual feels about you. Work out additional details with your DM as needed to fit this character into your backstory.", "nextRoll": () => _lifeEvtPerson("Meeting", getPersonDetails())},
+	{"min": 71, "max": 75, "result": "You met someone important. Use the supplemental tables to determine this character's identity and how this individual feels about you. Work out additional details with your DM as needed to fit this character into your backstory.", "nextRoll": () => _lifeEvtPerson("Meeting", getPersonDetails())},
 	{"min": 76, "max": 80, "result": "You went on an adventure. Roll on the Adventures table to see what happened to you. Work with your DM to determine the nature of the adventure and the creatures you encountered.", "nextRoll": () => _lifeEvtResult("Adventure", rollEvtAdventure())},
 	{"min": 81, "max": 85, "result": "You had a supernatural experience. Roll on the Supernatural Events table to find out what it was.", "nextRoll": () => _lifeEvtResult("Supernatural Experience", rollEvtSupernatural())},
 	{"min": 86, "max": 90, "result": "You fought in a battle. Roll on the War table to learn what happened to you. Work with your DM to come up with the reason for the battle and the factions involved. It might have been a small conflict between your community and a band of orcs, or it could have been a major battle in a larger war.", "nextRoll": () => _lifeEvtResult("War", rollEvtWar())},
@@ -285,24 +275,24 @@ const LIFE_EVENTS_ADVENTURES = [
 	{"min": 71, "max": 80, "result": "You learned a great deal during your adventure. The next time you make an ability check or a saving throw, you have advantage on the roll."},
 	{"min": 81, "max": 90, "result": `You found some treasure on your adventure. You have 2d6 ${fmtChoice(RNG(6) + RNG(6))} gp left from your share of it.`, "display": "You found some treasure on your adventure. You have 2d6 gp left from your share of it."},
 	{"min": 91, "max": 99, "result": `You found a considerable amount of treasure on your adventure. You have 1d20 + 50 ${fmtChoice(RNG(20) + 50)} gp left from your share of it.`, "display": "You found a considerable amount of treasure on your adventure. You have 1d20 + 50 gp left from your share of it."},
-	{"min": 100, "result": "You came across a common magic item (of the DM’s choice)."}
+	{"min": 100, "result": "You came across a common magic item (of the DM's choice)."}
 ];
 
 const LIFE_EVENTS_ARCANE_MATTERS = [
 	{"min": 1, "result": "You were charmed or frightened by a spell."},
 	{"min": 2, "result": "You were injured by the effect of a spell."},
 	{"min": 3, "result": "You witnessed a powerful spell being cast by a cleric, a druid, a sorcerer, a warlock, or a wizard."},
-	{"min": 4, "result": "You drank a potion (of the DM’s choice)."},
-	{"min": 5, "result": "You found a spell scroll (of the DM’s choice) and succeeded in casting the spell it contained."},
+	{"min": 4, "result": "You drank a potion (of the DM's choice)."},
+	{"min": 5, "result": "You found a spell scroll (of the DM's choice) and succeeded in casting the spell it contained."},
 	{"min": 6, "result": "You were affected by teleportation magic."},
 	{"min": 7, "result": "You turned invisible for a time."},
 	{"min": 8, "result": "You identified an illusion for what it was."},
 	{"min": 9, "result": "You saw a creature being conjured by magic."},
-	{"min": 10, "result": () => `Your fortune was read by a diviner. Roll twice on the Life Events table, but don’t apply the results. Instead, the DM picks one event as a portent of your future (which might or might not come true). ${fmtChoice(_getFromTable(LIFE_EVENTS, RNG(100)).display || _getFromTable(LIFE_EVENTS, RNG(100)).result)} ${fmtChoice(_getFromTable(LIFE_EVENTS, RNG(100)).display || _getFromTable(LIFE_EVENTS, RNG(100)).result)}`, "display": "Your fortune was read by a diviner. Roll twice on the Life Events table, but don’t apply the results. Instead, the DM picks one event as a portent of your future (which might or might not come true)."}
+	{"min": 10, "result": () => `Your fortune was read by a diviner. Roll twice on the Life Events table, but don't apply the results. Instead, the DM picks one event as a portent of your future (which might or might not come true). ${fmtChoice(GenUtil.getFromTable(LIFE_EVENTS, RNG(100)).display || GenUtil.getFromTable(LIFE_EVENTS, RNG(100)).result)} ${fmtChoice(GenUtil.getFromTable(LIFE_EVENTS, RNG(100)).display || GenUtil.getFromTable(LIFE_EVENTS, RNG(100)).result)}`, "display": "Your fortune was read by a diviner. Roll twice on the Life Events table, but don't apply the results. Instead, the DM picks one event as a portent of your future (which might or might not come true)."}
 ];
 
 const LIFE_EVENTS_BOONS = [
-	{"min": 1, "result": "A friendly wizard gave you a spell scroll containing one cantrip (of the DM’s choice)."},
+	{"min": 1, "result": "A friendly wizard gave you a spell scroll containing one cantrip (of the DM's choice)."},
 	{"min": 2, "result": "You saved the life of a commoner, who now owes you a life debt. This individual accompanies you on your travels and performs mundane tasks for you, but will leave if neglected, abused, or imperiled. Determine details about this character by using the supplemental tables and working with your DM."},
 	{"min": 3, "result": "You found a riding horse."},
 	{"min": 4, "result": () => `You found some money. You have 1d20 ${fmtChoice(RNG(20))} gp in addition to your regular starting funds.`, "display": "You found some money. You have 1d20 gp in addition to your regular starting funds."},
@@ -335,7 +325,7 @@ const LIFE_EVENTS_PUNISHMENT = [
 const LIFE_EVENTS_SUPERNATURAL = [
 	{"min": 1, "max": 5, "result": () => `You were ensorcelled by a fey and enslaved for 1d6 ${fmtChoice(RNG(6))} years before you escaped.`, "display": "You were ensorcelled by a fey and enslaved for 1d6 years before you escaped."},
 	{"min": 6, "max": 10, "result": "You saw a demon and ran away before it could do anything to you."},
-	{"min": 11, "max": 15, "result": () => `A devil tempted you. Make a DC 10 Wisdom saving throw. On a failed save, your alignment shifts one step toward evil (if it’s not evil already), and you start the game with an additional 1d20 + 50 ${fmtChoice(RNG(20) + 50)} gp.`, "display": "A devil tempted you. Make a DC 10 Wisdom saving throw. On a failed save, your alignment shifts one step toward evil (if it’s not evil already), and you start the game with an additional 1d20 + 50 gp."},
+	{"min": 11, "max": 15, "result": () => `A devil tempted you. Make a DC 10 Wisdom saving throw. On a failed save, your alignment shifts one step toward evil (if it's not evil already), and you start the game with an additional 1d20 + 50 ${fmtChoice(RNG(20) + 50)} gp.`, "display": "A devil tempted you. Make a DC 10 Wisdom saving throw. On a failed save, your alignment shifts one step toward evil (if it's not evil already), and you start the game with an additional 1d20 + 50 gp."},
 	{"min": 16, "max": 20, "result": "You woke up one morning miles from your home, with no idea how you got there."},
 	{"min": 21, "max": 30, "result": "You visited a holy site and felt the presence of the divine there."},
 	{"min": 31, "max": 40, "result": "You witnessed a falling red star, a face appearing in the frost, or some other bizarre happening. You are certain that it was an omen of some sort."},
@@ -354,14 +344,14 @@ const LIFE_EVENTS_TRAGEDIES = [
 	{"min": 1, "max": 2, "result": () => `A family member or a close friend died. Roll on the Cause of Death supplemental table to find out how.`, "display": "A family member or a close friend died. Roll on the Cause of Death supplemental table to find out how.", "nextRoll": () => _lifeEvtResult("Cause of Death", rollSuppDeath())},
 	{"min": 3, "result": "A friendship ended bitterly, and the other person is now hostile to you. The cause might have been a misunderstanding or something you or the former friend did."},
 	{"min": 4, "result": "You lost all your possessions in a disaster, and you had to rebuild your life."},
-	{"min": 5, "result": () => `You were imprisoned for a crime you didn’t commit and spent 1d6 ${fmtChoice(RNG(6))} years at hard labor, in jail, or shackled to an oar in a slave galley.`, "display": "You were imprisoned for a crime you didn’t commit and spent 1d6 years at hard labor, in jail, or shackled to an oar in a slave galley."},
+	{"min": 5, "result": () => `You were imprisoned for a crime you didn't commit and spent 1d6 ${fmtChoice(RNG(6))} years at hard labor, in jail, or shackled to an oar in a slave galley.`, "display": "You were imprisoned for a crime you didn't commit and spent 1d6 years at hard labor, in jail, or shackled to an oar in a slave galley."},
 	{"min": 6, "result": "War ravaged your home community, reducing everything to rubble and ruin. In the aftermath, you either helped your town rebuild or moved somewhere else."},
 	{"min": 7, "result": "A lover disappeared without a trace. You have been looking for that person ever since."},
 	{"min": 8, "result": "A terrible blight in your home community caused crops to fail, and many starved. You lost a sibling or some other family member."},
 	{"min": 9, "result": "You did something that brought terrible shame to you in the eyes of your family. You might have been involved in a scandal, dabbled in dark magic, or offended someone important. The attitude of your family members toward you becomes indifferent at best, though they might eventually forgive you."},
 	{"min": 10, "result": "For a reason you were never told, you were exiled from your community. You then either wandered in the wilderness for a time or promptly found a new place to live."},
 	{"min": 11, "result": () => `A romantic relationship ended. Roll a d6 ${fmtChoice(RNG(6))}. An odd number means it ended with bad feelings, while an even number means it ended amicably.`, "display": "A romantic relationship ended. Roll a d6. An odd number means it ended with bad feelings, while an even number means it ended amicably."},
-	{"min": 12, "result": () => `A current or prospective romantic partner of yours died. Roll on the Cause of Death supplemental table to find out how. If the result is murder, roll a d12. On a 1, you were responsible, whether directly or indirectly.`, "display": "A current or prospective romantic partner of yours died. Roll on the Cause of Death supplemental table to find out how. If the result is murder, roll a d12. On a 1, you were responsible, whether directly or indirectly.", "nextRoll": () => { const r = RNG(12); const p = _getFromTable(SUPP_DEATH, r); return `${p.result}${r === 2 && RNG(12) === 1 ? ` ${fmtChoice("you were responsible")}` : ""}` }}
+	{"min": 12, "result": () => `A current or prospective romantic partner of yours died. Roll on the Cause of Death supplemental table to find out how. If the result is murder, roll a d12. On a 1, you were responsible, whether directly or indirectly.`, "display": "A current or prospective romantic partner of yours died. Roll on the Cause of Death supplemental table to find out how. If the result is murder, roll a d12. On a 1, you were responsible, whether directly or indirectly.", "nextRoll": () => { const r = RNG(12); const p = GenUtil.getFromTable(SUPP_DEATH, r); return `${p.result}${r === 2 && RNG(12) === 1 ? ` ${fmtChoice("you were responsible")}` : ""}` }}
 ];
 
 const LIFE_EVENTS_WAR = [
@@ -377,7 +367,7 @@ const LIFE_EVENTS_WAR = [
 const LIFE_EVENTS_WEIRD_STUFF = [
 	{"min": 1, "result": () => `You were turned into a toad and remained in that form for 1d4 ${fmtChoice(RNG(4))} weeks.`, "display": "You were turned into a toad and remained in that form for 1d4 weeks."},
 	{"min": 2, "result": "You were petrified and remained a stone statue for a time until someone freed you."},
-	{"min": 3, "result": () => `You were enslaved by a hag, a satyr, or some other being and lived in that creature’s thrall for 1d6 ${fmtChoice(RNG(6))} years.`, "display": "You were enslaved by a hag, a satyr, or some other being and lived in that creature’s thrall for 1d6 years."},
+	{"min": 3, "result": () => `You were enslaved by a hag, a satyr, or some other being and lived in that creature's thrall for 1d6 ${fmtChoice(RNG(6))} years.`, "display": "You were enslaved by a hag, a satyr, or some other being and lived in that creature’s thrall for 1d6 years."},
 	{"min": 4, "result": () => `A dragon held you as a prisoner for 1d4 ${fmtChoice(RNG(4))} months until adventurers killed it.`, "display": "A dragon held you as a prisoner for 1d4 months until adventurers killed it."},
 	{"min": 5, "result": "You were taken captive by a race of evil humanoids such as drow, kuo-toa, or quaggoths. You lived as a slave in the Underdark until you escaped."},
 	{"min": 6, "result": "You served a powerful adventurer as a hireling. You have only recently left that service. Use the supplemental tables and work with your DM to determine the basic details about your former employer."},
@@ -477,7 +467,7 @@ const SUPP_STATUS = [
 ];
 
 window.onload = function load () {
-	DataUtil.loadJSON(JSON_URL, onJsonLoad);
+	DataUtil.loadJSON(JSON_URL).then(onJsonLoad);
 };
 
 let classList;
@@ -527,8 +517,15 @@ function concatSentences (...lst) {
 	});
 	return joinParaList(stack);
 }
+
 function joinParaList (lst) {
-	return `<p>${lst.join(`</p><p>`)}</p>`;
+	return lst.join(`<br>`);
+}
+
+const _VOWELS = ["a", "e", "i", "o", "u"];
+function addN (name) {
+	const c = name[0].toLowerCase();
+	return _VOWELS.includes(c) ? "n" : "";
 }
 
 // SECTIONS ============================================================================================================
@@ -539,33 +536,33 @@ let race;
 function sectParents () {
 	knowParents = RNG(100) > 5;
 	const selRace = $selRace.val();
-	race = selRace === "Random" ? _getFromTable(SUPP_RACE, RNG(100)).result : selRace;
+	race = selRace === "Random" ? GenUtil.getFromTable(SUPP_RACE, RNG(100)).result : selRace;
 
 	const $parents = $(`#parents`);
-	const knowParentsStr = knowParents ? "Parents: You know who your parents are or were." : "Parents: You do not know who your parents were.";
+	const knowParentsStr = knowParents ? "<b>Parents:</b> You know who your parents are or were." : "<b>Parents:</b> You do not know who your parents were.";
 
 	let parentage = null;
 	if (knowParents) {
 		switch (race) {
 			case "Half-elf":
-				parentage = `${race} parents: ${_getFromTable(PARENTS_HALF_ELF, RNG(8)).result}`;
+				parentage = `<b>${race} parents:</b> ${GenUtil.getFromTable(PARENTS_HALF_ELF, RNG(8)).result}`;
 				break;
 			case "Half-orc":
-				parentage = `${race} parents: ${_getFromTable(PARENTS_HALF_ORC, RNG(8)).result}`;
+				parentage = `<b>${race} parents:</b> ${GenUtil.getFromTable(PARENTS_HALF_ORC, RNG(8)).result}`;
 				break;
 			case "Tiefling":
-				parentage = `${race} parents: ${_getFromTable(PARENTS_TIEFLING, RNG(8)).result}`;
+				parentage = `<b>${race} parents:</b> ${GenUtil.getFromTable(PARENTS_TIEFLING, RNG(8)).result}`;
 				break;
 		}
 	}
 
-	$parents.html(concatSentences(`<p>Race: ${race}${selRace === "Random" ? ` ${fmtChoice("generated using the Supplemental Race table")}` : ""}</p>`, knowParentsStr, parentage));
+	$parents.html(concatSentences(`<b>Race:</b> ${race}${selRace === "Random" ? ` ${fmtChoice("generated using the Supplemental Race table")}` : ""}`, knowParentsStr, parentage));
 	if (knowParents) {
-		const mum = getPersonDetails();
-		const dad = getPersonDetails();
-		$parents.append(`<p><b>Mother:</b></p>`);
+		const mum = getPersonDetails(false, true);
+		const dad = getPersonDetails(false, true);
+		$parents.append(`<h5>Mother</h5>`);
 		$parents.append(joinParaList(mum));
-		$parents.append(`<p><b>Father:</b></p>`);
+		$parents.append(`<h5>Father</h5>`);
 		$parents.append(joinParaList(dad));
 	}
 }
@@ -574,7 +571,7 @@ function sectParents () {
 function sectBirthplace () {
 	const $birthplace = $(`#birthplace`);
 	const rollBirth = RNG(100);
-	const birth = `Birthplace: ${_getFromTable(BIRTHPLACES, rollBirth).result}`;
+	const birth = `<b>Birthplace:</b> ${GenUtil.getFromTable(BIRTHPLACES, rollBirth).result}`;
 
 	const strangeBirth = RNG(100) === 100 ? "A strange event coincided with your birth: the moon briefly turning red, all the milk within a mile spoiling, the water in the area freezing solid in midsummer, all the iron in the home rusting or turning to silver, or some other unusual event of your choice" : "";
 	$birthplace.html(concatSentences(birth, strangeBirth));
@@ -618,7 +615,7 @@ function sectSiblings () {
 		$siblings.empty();
 		$siblings.append(`<p>You have ${sibCount} sibling${sibCount > 1 ? "s" : ""}.</p>`);
 		for (let i = 0; i < sibCount; ++i) {
-			$siblings.append(`<p><b>${getBirthOrder()} sibling ${choose("brother", "sister")}:</b></p>`);
+			$siblings.append(`<h5>${getBirthOrder()} sibling ${choose("brother", "sister")}</h5>`);
 			$siblings.append(joinParaList(getPersonDetails()));
 		}
 	} else {
@@ -629,27 +626,28 @@ function sectSiblings () {
 // FAMILY
 function sectFamily () {
 	const $family = $(`#family`);
-	const $wrpFam = $(`<div><p>Family: ${_getFromTable(FAMILY, RNG(100)).result}</p></div>`);
 	$family.empty();
-	$family.append($wrpFam);
+	$family.append(`<b>Family:</b> ${GenUtil.getFromTable(FAMILY, RNG(100)).result}<br>`);
 	let famIndex = 1;
-	const $btnSuppFam = $(`<button class="btn btn-xs btn-default">Roll Supplemental Tables details</button>`).on("click", () => {
+	const $btnSuppFam = $(`<button class="btn btn-xs btn-default btn-supp-fam noprint"></button>`).on("click", () => {
 		const supDetails = getPersonDetails();
 		const $wrpRes = $(`<div class="output-wrp-border"/>`);
-		$wrpRes.append(`<p><b>Family Member Roll ${famIndex++}</b></p>`);
+		$wrpRes.append(`<h5>Family Member Roll ${famIndex++}</h5>`);
 		$wrpRes.append(joinParaList(supDetails));
-		$wrpFam.append($wrpRes);
+		$btnSuppFam.css("margin-bottom", 5);
+		$btnSuppFam.after($wrpRes);
 	});
-	$wrpFam.append(`<p>You can roll on the Relationship table to determine how your family members or other important figures in your life feel about you. You can also use the Race, Occupation, and Alignment tables to learn more about the family members or guardians who raised you.</p>`).append($(`<p>`).append($btnSuppFam));
+	$family.append(`<span class="note">You can roll on the Relationship table to determine how your family members or other important figures in your life feel about you. You can also use the Race, Occupation, and Alignment tables to learn more about the family members or guardians who raised you.</span>`);
+	$family.append($btnSuppFam);
 
-	const rollFamLifestyle = _getFromTable(FAMILY_LIFESTYLE, RNG(6) + RNG(6) + RNG(6));
-	$family.append(`<p>Family lifestyle: ${rollFamLifestyle.result}`);
+	const rollFamLifestyle = GenUtil.getFromTable(FAMILY_LIFESTYLE, RNG(6) + RNG(6) + RNG(6));
+	$family.append(`<b>Family lifestyle:</b> ${rollFamLifestyle.result}<br>`);
 	const rollFamHome = Math.min(Math.max(RNG(100) + rollFamLifestyle.modifier, 0), 111);
-	const rollFamHomeRes = _getFromTable(CHILDHOOD_HOME, rollFamHome).result;
-	$family.append(`<p>Childhood Home: ${rollFamHomeRes}</p>`);
+	const rollFamHomeRes = GenUtil.getFromTable(CHILDHOOD_HOME, rollFamHome).result;
+	$family.append(`<b>Childhood Home:</b> ${rollFamHomeRes}<br>`);
 
 	const rollChildMems = Math.min(Math.max(RNG(6) + RNG(6) + RNG(6) + Number($selCha.val()), 3), 18);
-	$family.append(`<p>Childhood memories: ${_getFromTable(CHILDHOOD_MEMORIES, rollChildMems).result}`);
+	$family.append(`<b>Childhood memories</b>: ${GenUtil.getFromTable(CHILDHOOD_MEMORIES, rollChildMems).result}`);
 }
 
 // PERSONAL DECISIONS
@@ -657,8 +655,8 @@ function sectPersonalDecisions () {
 	const $personal = $(`#personal`).empty();
 	const selBg = Number($selBg.val());
 	const myBg = selBg === -1 ? rollOnArray(bgList) : bgList[selBg];
-	$personal.append(`<p>Background: ${myBg.name}</p>`);
-	$personal.append(`<p>I became a ${myBg.name} because: ${rollOnArray(myBg.reasons)}</p>`);
+	$personal.append(`<b>Background:</b> ${myBg.name}<br>`);
+	$personal.append(`<b>I became a${addN(myBg.name)} ${myBg.name} because:</b> ${rollOnArray(myBg.reasons)}`);
 }
 
 // CLASS TRAINING
@@ -666,30 +664,31 @@ function sectClassTraining () {
 	const $clss = $(`#clss`).empty();
 	const selClass = Number($selClass.val());
 	const myClass = selClass === -1 ? rollOnArray(classList) : classList[selClass];
-	$clss.append(`<p>Class: ${myClass.name}</p>`);
-	$clss.append(`<p>I became a ${myClass.name} because: ${rollOnArray(myClass.reasons)}</p>`);
+	$clss.append(`<b>Class:</b> ${myClass.name}<br>`);
+	$clss.append(`<b>I became a${addN(myClass.name)} ${myClass.name} because:</b> ${rollOnArray(myClass.reasons)}`);
 }
 
 // LIFE EVENTS
 function sectLifeEvents () {
 	const $events = $(`#events`).empty();
 	marriageIndex = 0;
-	const age = _getFromTable(LIFE_EVENTS_AGE, RNG(100));
-	$events.append(`<p>Current age: ${age.result} ${fmtChoice(`${age.age} year${age.age > 1 ? "s" : ""} old`)}</p>`);
+	const $selAge = $(`#age`);
+	const age = GenUtil.getFromTable(LIFE_EVENTS_AGE, Number($selAge.val()) || RNG(100));
+	$events.append(`<b>Current age:</b> ${age.result} ${fmtChoice(`${age.age} year${age.age > 1 ? "s" : ""} old`)}`);
 	for (let i = 0; i < age.events; ++i) {
-		$events.append(`<p><b>Life Event ${i + 1}</b></p>`);
-		const evt = _getFromTable(LIFE_EVENTS, RNG(100));
-		$events.append(`<p>${evt.result}</p>`);
+		$events.append(`<h5>Life Event ${i + 1}</h5>`);
+		const evt = GenUtil.getFromTable(LIFE_EVENTS, RNG(100));
+		$events.append(`${evt.result}<br>`);
 		if (evt.nextRoll) {
 			if (evt.nextRoll.title) {
 				const $wrp = $(`<div class="output-wrp-border"/>`);
-				$wrp.append(`<p><b>${evt.nextRoll.title}</b></p>`);
+				$wrp.append(`<h5>${evt.nextRoll.title}</h5>`);
 				$wrp.append(joinParaList(evt.nextRoll.result));
 				$events.append($wrp);
 			} else {
-				$events.append(`<p>${evt.nextRoll.result}</p>`);
+				$events.append(`${evt.nextRoll.result}<br>`);
 				if (evt.nextRoll.nextRoll) {
-					$events.append(`<p>${evt.nextRoll.nextRoll.result}</p>`);
+					$events.append(`${evt.nextRoll.nextRoll.result}<br>`);
 				}
 			}
 		}
@@ -707,3 +706,13 @@ function roll () {
 	sectClassTraining();
 	sectLifeEvents();
 }
+
+window.addEventListener("load", () => {
+	$(`#age`).on("change", function () {
+		if ($(this).val()) {
+			$(this).addClass("italic")
+		} else {
+			$(this).removeClass("italic")
+		}
+	});
+});

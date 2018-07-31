@@ -28,6 +28,7 @@ function currentPage () {
 
 	const current = $(`li[data-page="${currentPage}"]`);
 	current.addClass("active");
+	current.siblings().removeClass("active");
 	current.parent().closest("li").addClass("active");
 }
 
@@ -38,11 +39,18 @@ function navigation () {
 	A('rules', 'ruleOption', 'dropdown-toggle', 'dropdown', '#', 'button', 'true', 'false', "Rules <span class='caret'></span>");
 	UL('rules', 'ul_rules', 'dropdown-menu');
 	LI('ul_rules', 'quickreference.html', 'Quick Reference');
-	LI('ul_rules', 'variantrules.html', 'Variant Rules');
+	LI('ul_rules', 'variantrules.html', 'Variant & Optional Rules');
 	LIDivider('ul_rules');
 	LI('ul_rules', 'book.html', "Dungeon Master's Guide", "DMG");
 	LI('ul_rules', 'book.html', "Monster Manual", "MM");
 	LI('ul_rules', 'book.html', "Player's Handbook", "PHB");
+	LIDivider('ul_rules');
+	LI('ul_rules', 'book.html', "Mordenkainen's Tome of Foes", "MTF");
+	LI('ul_rules', 'book.html', "Sword Coast Adventurer's Guide", "SCAG");
+	LI('ul_rules', 'book.html', "Volo's Guide to Monsters", "VGM");
+	LI('ul_rules', 'book.html', "Xanathar's Guide to Everything", "XGE");
+	LIDivider('ul_rules');
+	LI('ul_rules', 'book.html', "Adventurers League", "AL");
 
 	LIDropdown('navbar', 'players', 'dropdown');
 	A('players', 'playerOption', 'dropdown-toggle', 'dropdown', '#', 'button', 'true', 'false', "Player Options <span class='caret'></span>");
@@ -61,6 +69,7 @@ function navigation () {
 	LI('ul_dms', 'adventures.html', 'Adventures');
 	LI('ul_dms', 'crcalculator.html', 'CR Calculator');
 	LI('ul_dms', 'cultsboons.html', 'Cults & Demonic Boons');
+	LI('ul_dms', 'dmscreen.html', 'DM Screen');
 	LISpecial('ul_dms', 'https://kobold.club', 'Encounter Builder', '_blank', 'We could literally never build something better than Kobold Fight Club');
 	LI('ul_dms', 'encountergen.html', 'Encounter Generator');
 	LI('ul_dms', 'lootgen.html', 'Loot Generator');
@@ -71,20 +80,23 @@ function navigation () {
 	A('references', 'references', 'dropdown-toggle', 'dropdown', '#', 'button', 'true', 'false', "References <span class='caret'></span>");
 	UL('references', 'ul_references', 'dropdown-menu');
 	LI('ul_references', 'bestiary.html', 'Bestiary');
-	LI('ul_references', 'conditions.html', 'Conditions');
+	LI('ul_references', 'conditionsdiseases.html', 'Conditions & Diseases');
 	LI('ul_references', 'deities.html', 'Deities');
 	LI('ul_references', 'items.html', 'Items');
 	LI('ul_references', 'rewards.html', 'Other Rewards');
 	LI('ul_references', 'psionics.html', 'Psionics');
 	LI('ul_references', 'spells.html', 'Spells');
 
-	LI('navbar', 'statgen.html', 'Statgen');
+	LI('navbar', 'statgen.html', 'Statgen', "rolled");
 
 	LIDropdown('navbar', 'utils', 'dropdown');
 	A('utils', 'utils', 'dropdown-toggle', 'dropdown', '#', 'button', 'true', 'false', "Utilities <span class='caret'></span>");
 	UL('utils', 'ul_utils', 'dropdown-menu');
+	LI('ul_utils', 'blacklist.html', 'Content Blacklist');
 	LI('ul_utils', 'converter.html', 'Stat Block to JSON');
 	LI('ul_utils', 'demo.html', 'Renderer Demo');
+	LI('ul_utils', 'roll20.html', 'Roll20 Script Help');
+	LI('ul_utils', 'makeshaped.html', 'Roll20 Shaped Sheet JS Builder');
 
 	LISwitcher('navbar', 'daynightMode', 'nightModeToggle', '#', 'styleSwitcher.toggleActiveStyleSheet(); return false;');
 

@@ -55,12 +55,6 @@ class FilterBox {
 		this.headers = {};
 		this.$disabledOverlay = $(`<div class="list-disabled-overlay"/>`);
 
-		// clean legacy cookies
-		// TODO remove this somewhere down the line
-		Cookies.remove(FilterBox._STORAGE_NAME);
-		Cookies.remove(FilterBox._STORAGE_NAME, {path: window.location.pathname});
-		// end clean legacy cookies
-
 		this.storedValues = StorageUtil.getForPage(FilterBox._STORAGE_NAME);
 		this.$rendered = [];
 		this.dropdownVisible = false;
@@ -72,7 +66,7 @@ class FilterBox {
 	 * Render the "Filters" button in the inputGroup
 	 */
 	render () {
-		const firstRender = this.$rendered.length === 0;
+		const firstRender = this.$rendered.length === 0 || History.initialLoad;
 		// save the current values to re-apply if we're re-rendering
 		const curValues = firstRender ? null : this.getValues();
 		// remove any previously rendered elements
@@ -81,10 +75,10 @@ class FilterBox {
 		this.$list = $(`#listcontainer`).find(`.list`);
 
 		const $filterButton = getFilterButton();
-		this.$miniView = getMiniView();
+		this.$miniView = $(`<div class="mini-view btn-group"/>`);
 		const $inputGroup = $(this.inputGroup);
 
-		const $outer = makeOuterList();
+		const $outer = $(`<ul class="${FilterBox.CLS_DROPDOWN_MENU} ${FilterBox.CLS_DROPDOWN_MENU_FILTER}"/>`);
 		const self = this;
 		const $hdrLine = $(`<li class="filter-item"/>`);
 		const $hdrLineInner = $(`<div class="h-wrap"/>`).appendTo($hdrLine);
@@ -118,9 +112,7 @@ class FilterBox {
 			addSaveHandler(this);
 		}
 
-		if (this.dropdownVisible) {
-			$filterButton.find("button").click();
-		}
+		if (this.dropdownVisible) $filterButton.find("button").click();
 
 		function getFilterButton () {
 			const $buttonWrapper = $(`<div id="filter-toggle-btn"/>`);
@@ -129,17 +121,6 @@ class FilterBox {
 			const $filterButton = $(`<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Filter <span class="caret"></span></button>`);
 			$buttonWrapper.append($filterButton);
 			return $buttonWrapper;
-		}
-
-		function getMiniView () {
-			return $(`<div class="mini-view btn-group"/>`);
-		}
-
-		function makeOuterList () {
-			const $outL = $("<ul/>");
-			$outL.addClass(FilterBox.CLS_DROPDOWN_MENU);
-			$outL.addClass(FilterBox.CLS_DROPDOWN_MENU_FILTER);
-			return $outL;
 		}
 
 		function makeOuterItem (self, filter, $miniView, namePrefix) {
@@ -151,15 +132,24 @@ class FilterBox {
 				}
 				return $parent;
 			} else if (filter instanceof RangeFilter) {
-				// TODO
-			} else if (filter instanceof AllSourcesFilter) {
-				// TODO
-			} else {
-				const $outI = $("<li/>");
-				$outI.addClass("filter-item");
+				const $outI = $(`<li class="filter-item"/>`);
 
 				self.headers[filter.header] = {outer: $outI, filter: filter};
-				const $grid = makePillGrid(filter.header);
+				const $wrpSlider = makeSliderWrapper(filter.header);
+
+				self.headers[filter.header].ele = $wrpSlider;
+				const $innerListHeader = makeSliderHeaderLine($wrpSlider);
+
+				$outI.append($innerListHeader);
+				$outI.append($wrpSlider);
+
+				return $outI;
+			} else if (filter instanceof GroupedFilter || filter instanceof Filter) {
+				const isGrouped = filter instanceof GroupedFilter;
+				const $outI = $(`<li class="filter-item"/>`);
+
+				self.headers[filter.header] = {outer: $outI, filter: filter};
+				const $grid = makePillGrid(isGrouped);
 				self.headers[filter.header].ele = $grid;
 				const $innerListHeader = makeHeaderLine($grid);
 
@@ -172,8 +162,7 @@ class FilterBox {
 			function makeHeaderLine ($grid) {
 				const minimalClass = filter.minimalUI ? "filter-minimal" : "";
 				const $line = $(`<div class="h-wrap ${minimalClass}"/>`);
-				const $label = $(`<div>${namePrefix ? `<span class="text-muted">${namePrefix}: </span>` : ""}${filter.header}</div>`);
-				$line.append($label);
+				const $label = $(`<div>${namePrefix ? `<span class="text-muted">${namePrefix}: </span>` : ""}${filter.header}</div>`).appendTo($line);
 
 				function makeAndOrBtn (defState, tooltip) {
 					const $btn = $(` <button class="btn btn-default btn-xs ${minimalClass}" style="width: 3em;" title="${tooltip}">${defState}</button>`)
@@ -195,45 +184,36 @@ class FilterBox {
 					return $btnAndOrRed.data("andor");
 				};
 
-				const $quickBtns = $(`<span class="btn-group quick-btns" style="margin-left: auto;"/>`);
-				const $all = $(`<button class="btn btn-default btn-xs ${minimalClass}">All</button>`);
-				$quickBtns.append($all);
-				const $clear = $(`<button class="btn btn-default btn-xs ${minimalClass}">Clear</button>`);
-				$quickBtns.append($clear);
-				const $none = $(`<button class="btn btn-default btn-xs ${minimalClass}">None</button>`);
-				$quickBtns.append($none);
-				const $default = $(`<button class="btn btn-default btn-xs ${minimalClass}">Default</button>`);
-				$quickBtns.append($default);
-				$line.append($quickBtns);
+				const $quickBtns = $(`<span class="btn-group quick-btns" style="margin-left: auto;"/>`).appendTo($line);
+				const $all = $(`<button class="btn btn-default btn-xs ${minimalClass}">All</button>`).appendTo($quickBtns);
+				const $clear = $(`<button class="btn btn-default btn-xs ${minimalClass}">Clear</button>`).appendTo($quickBtns);
+				const $none = $(`<button class="btn btn-default btn-xs ${minimalClass}">None</button>`).appendTo($quickBtns);
+				const $default = $(`<button class="btn btn-default btn-xs ${minimalClass}">Default</button>`).appendTo($quickBtns);
 
 				const $logicBtns = $(`<span class="btn-group andor-btns"></span>`);
 				$logicBtns.append($btnAndOrBlue).append($btnAndOrRed);
 				$line.append(`<div style="display: inline-block; width: 5px;">`).append($logicBtns);
 
-				const $summary = $(`<span class="summary" style="margin-left: auto;"/>`);
-				const $summaryInclude = $(`<span class="include" title="Hiding includes"/>`);
-				const $summarySpacer = $(`<span class="spacer"/>`);
-				const $summaryExclude = $(`<span class="exclude" title="Hidden excludes"/>`);
-				$summary.append($summaryInclude);
-				$summary.append($summarySpacer);
-				$summary.append($summaryExclude);
+				const $summary = $(`<span class="summary"/>`).appendTo($line);
+				const $summaryInclude = $(`<span class="include" title="Hiding includes"/>`).appendTo($summary);
+				const $summarySpacer = $(`<span class="spacer"/>`).appendTo($summary);
+				const $summaryExclude = $(`<span class="exclude" title="Hidden excludes"/>`).appendTo($summary);
 				$summary.hide();
-				$line.append($summary);
 
-				const $showHide = $(`<button class="btn btn-default btn-xs show-hide-button ${minimalClass}" style="margin-left: 12px;">Hide</button>`);
-				$line.append($showHide);
+				const $showHide = $(`<button class="btn btn-default btn-xs show-hide-button ${minimalClass}" style="margin-left: 5px;">Hide</button>`).appendTo($line);
 
 				$showHide.on(EVNT_CLICK, function () {
 					if ($grid.is(":hidden")) {
 						$showHide.text("Hide");
 						$grid.show();
 						$quickBtns.show();
+						$logicBtns.css("margin-left", "");
 						$summary.hide();
-						$showHide.css("margin-left", "12px");
 					} else {
 						$showHide.text("Show");
 						$grid.hide();
 						$quickBtns.hide();
+						$logicBtns.css("margin-left", "auto");
 						const counts = $grid.data("getCounts")();
 						if (counts.yes > 0 || counts.no > 0) {
 							if (counts.yes > 0) {
@@ -255,10 +235,10 @@ class FilterBox {
 							} else {
 								$summaryExclude.hide();
 							}
-							$showHide.css("margin-left", "12px");
+							$logicBtns.css("margin-left", "auto");
 							$summary.show();
 						} else {
-							$showHide.css("margin-left", "auto");
+							$logicBtns.css("margin-left", "auto");
 						}
 					}
 				});
@@ -288,9 +268,24 @@ class FilterBox {
 				return $line;
 			}
 
-			function makePillGrid () {
+			function makePillGrid (isGrouped) {
 				const $pills = [];
 				const $grid = $(`<div class="pill-grid"/>`);
+				const $subGrids = [];
+				let gridIndex = 0;
+				function addGroup (bump) {
+					if (bump) {
+						filter.numGroups++;
+						$grid.append(`<hr class="pill-grid-subs-divider">`);
+					}
+					$subGrids[gridIndex] = $(`<div class="pill-grid-sub"/>`).appendTo($grid);
+					if (gridIndex + 1 < filter.numGroups) $grid.append(`<hr class="pill-grid-subs-divider">`);
+					if (bump) gridIndex++;
+				}
+				if (isGrouped) {
+					$grid.addClass(`pill-grid-subs`);
+					for (; gridIndex < filter.numGroups; ++gridIndex) addGroup();
+				}
 
 				function cycleState ($pill, $miniPill, forward) {
 					const curIndex = FilterBox._PILL_STATES.indexOf($pill.attr("state"));
@@ -365,7 +360,11 @@ class FilterBox {
 					// add a class to mark any items that are default deselected (used to add visual difference)
 					tagDefaults($miniPill, iText);
 
-					$grid.append($pill);
+					if (isGrouped) {
+						const group = Number(item instanceof FilterItem && item.group != null ? item.group : filter.groupFn(iText));
+						while (group > $subGrids.length - 1) addGroup(true);
+						$subGrids[group].append($pill)
+					} else $grid.append($pill);
 					$miniView.append($miniPill);
 					$pills.push($pill);
 				}
@@ -460,6 +459,140 @@ class FilterBox {
 				);
 
 				return $grid;
+			}
+
+			function makeSliderHeaderLine ($wrpSlide) {
+				const $line = $(`<div class="h-wrap"/>`);
+				const $label = $(`<div>${namePrefix ? `<span class="text-muted">${namePrefix}: </span>` : ""}${filter.header}</div>`).appendTo($line);
+
+				const $quickBtns = $(`<span class="btn-group quick-btns" style="margin-left: auto;"/>`).appendTo($line);
+				const $reset = $(`<button class="btn btn-default btn-xs">Reset</button>`).appendTo($quickBtns);
+
+				const $summary = $(`<span class="summary" style="margin-left: auto;"/>`).appendTo($line);
+				const $summaryRange = $(`<span class="include" title="Selected Range"/>`).appendTo($summary);
+				$summary.hide();
+
+				const $showHide = $(`<button class="btn btn-default btn-xs show-hide-button" style="margin-left: 5px;">Hide</button>`).appendTo($line);
+
+				$reset.on(EVNT_CLICK, function () {
+					$wrpSlide.data("resetValues")();
+				});
+
+				$showHide.on(EVNT_CLICK, function () {
+					if ($wrpSlide.is(":hidden")) {
+						$showHide.text("Hide");
+						$wrpSlide.show();
+						$quickBtns.show();
+						$summary.hide();
+					} else {
+						$showHide.text("Show");
+						$wrpSlide.hide();
+						$quickBtns.hide();
+						const vals = $wrpSlide.data("getValues")();
+						$summaryRange.text(vals.min === filter.min && vals.max === filter.max ? "" : vals.min === filter.min ? `≤ ${vals.max}` : vals.max === filter.max ? `≥ ${vals.min}` : `${vals.min}-${vals.max}`);
+						$summary.show();
+					}
+				});
+
+				return $line;
+			}
+
+			function makeSliderWrapper () {
+				const $wrp = $(`<div class="pill-grid"/>`);
+
+				const $sld = $(`<div class="filter-slider"/>`).appendTo($wrp);
+				$sld.slider({
+					min: filter.min,
+					max: filter.max,
+					range: true,
+					values: [filter.min, filter.max]
+				}).slider("pips").slider("float");
+				filter.$slider = $sld;
+
+				const $miniPillMin = $(`<div class="mini-pill" state="ignore"/>`);
+				const $miniPillMax = $(`<div class="mini-pill" state="ignore"/>`);
+
+				function checkUpdateMiniPills () {
+					const [min, max] = $sld.slider("values");
+
+					if (min === max) {
+						$miniPillMin.attr("state", FilterBox._PILL_STATES[1]).text(`${filter.header} = ${min}`);
+						$miniPillMax.attr("state", FilterBox._PILL_STATES[0]);
+					} else {
+						if (min > filter.min) $miniPillMin.attr("state", FilterBox._PILL_STATES[1]).text(`${filter.header} ≥ ${min}`);
+						else $miniPillMin.attr("state", FilterBox._PILL_STATES[0]);
+
+						if (max < filter.max) $miniPillMax.attr("state", FilterBox._PILL_STATES[1]).text(`${filter.header} ≤ ${max}`);
+						else $miniPillMax.attr("state", FilterBox._PILL_STATES[0]);
+					}
+				}
+
+				$sld.slider().on("slidechange", checkUpdateMiniPills);
+
+				$miniPillMin.on(EVNT_CLICK, function () {
+					$miniPillMin.attr("state", FilterBox._PILL_STATES[0]);
+					const [min, max] = $sld.slider("values");
+					$sld.slider("values", [filter.min, max]);
+					self._fireValChangeEvent();
+				}).appendTo($miniView);
+				$miniPillMax.on(EVNT_CLICK, function () {
+					$miniPillMax.attr("state", FilterBox._PILL_STATES[0]);
+					const [min, max] = $sld.slider("values");
+					$sld.slider("values", [min, filter.max]);
+					self._fireValChangeEvent();
+				}).appendTo($miniView);
+
+				$wrp.data(
+					"resetValues",
+					function () {
+						$sld.slider("values", [filter.min, filter.max]);
+						checkUpdateMiniPills();
+					}
+				);
+
+				$wrp.data(
+					"getValues",
+					function () {
+						const out = {};
+						const [min, max] = $sld.slider("values");
+						out.min = min;
+						out.max = max;
+						return out;
+					}
+				);
+
+				$wrp.data(
+					"setValues",
+					function (toVal) {
+						const min = toVal.filter(it => it.startsWith("min")).map(it => it.slice(3));
+						const max = toVal.filter(it => it.startsWith("max")).map(it => it.slice(3));
+						$sld.slider(
+							"values",
+							[
+								min.length ? Math.max(min[0], filter.min) : filter.min,
+								max.length ? Math.min(max[0], filter.max) : filter.max
+							]
+						);
+						checkUpdateMiniPills();
+					}
+				);
+
+				// If re-render, use previous values. Otherwise, if there's stored values, stored values. Otherwise, default the pills
+				if (curValues) {
+					const min = curValues[filter.header].min;
+					const max = curValues[filter.header].max;
+					$sld.slider("values", [min, max]);
+					checkUpdateMiniPills();
+				} else if (self.storedValues && self.storedValues[filter.header]) {
+					const min = self.storedValues[filter.header].min || filter.min;
+					const max = self.storedValues[filter.header].max || filter.max;
+					$sld.slider("values", [min, max]);
+					checkUpdateMiniPills();
+				} else {
+					$wrp.data("resetValues")();
+				}
+
+				return $wrp;
 			}
 		}
 
@@ -590,6 +723,8 @@ class FilterBox {
 
 			History.setSuppressHistory(true);
 			window.location.hash = `#${link}${outSub.length ? `${HASH_PART_SEP}${outSub.join(HASH_PART_SEP)}` : ""}`;
+
+			this._fireValChangeEvent();
 		}
 	}
 
@@ -611,7 +746,12 @@ class FilterBox {
 			const vals = cur[name];
 			const outName = `${FilterBox._SUB_HASH_PREFIX}${name}`;
 
-			if (vals._totals.yes || vals._totals.no) {
+			if (vals.min != null && vals.max != null) {
+				out[outName] = [
+					`min${vals.min}`,
+					`max${vals.max}`
+				];
+			} else if (vals._totals.yes || vals._totals.no) {
 				out[outName] = [];
 				Object.keys(vals).forEach(vK => {
 					if (vK.startsWith("_")) return;
@@ -644,9 +784,13 @@ class FilterBox {
 	 */
 	_reset (header) {
 		const cur = this.headers[header];
-		cur.ele.find(".filter-pill").each(function () {
-			$(this).data("resetter")();
-		});
+		if (cur.filter instanceof RangeFilter) {
+			cur.ele.data("resetValues")();
+		} else {
+			cur.ele.find(".filter-pill").each(function () {
+				$(this).data("resetter")();
+			});
+		}
 	}
 
 	/**
@@ -668,6 +812,10 @@ class FilterBox {
 		this.$disabledOverlay.detach();
 	}
 
+	/**
+	 * If the currently selected item is hidden, load the first visible item
+	 * @param fromList the page data list
+	 */
 	static nextIfHidden (fromList) {
 		if (History.lastLoadedId && !History.initialLoad) {
 			const last = fromList[History.lastLoadedId];
@@ -712,6 +860,10 @@ class Filter {
 	 *   (OPTIONAL)
 	 *   deselFn: a function, defaults items as "do not match this" if `deselFn(item)` is true
 	 *
+	 *   (OPTIONAL)
+	 *   umbrellaItem: e.g. "Choose Any"; an item that should allow anything containing it to always be displayed when
+	 *     checking for other items in the filter
+	 *
 	 */
 	constructor (options) {
 		this.header = options.header;
@@ -721,6 +873,7 @@ class Filter {
 		this.deselFn = options.deselFn;
 		this.attrName = options.attrName;
 		this.minimalUI = options.minimalUI;
+		this.umbrellaItem = options.umbrellaItem;
 	}
 
 	/**
@@ -728,7 +881,22 @@ class Filter {
 	 * @param item the item to add
 	 */
 	addIfAbsent (item) {
-		if ($.inArray(item, this.items) === -1) this.items.push(item);
+		if (!item) return;
+		if (item instanceof Array) item.forEach(it => this.addIfAbsent(it));
+		else if (!this.items.find(it => Filter._checkMatches(it, item))) this.items.push(item);
+	}
+
+	static _checkMatches (item1, item2) {
+		return item1 instanceof FilterItem ? item1.item === (item2 instanceof FilterItem ? item2.item : item2) : item1 === (item2 instanceof FilterItem ? item2.item : item2)
+	}
+
+	/**
+	 * Remove an item if it exists in the filter
+	 * @param item the item to remove
+	 */
+	removeIfExists (item) {
+		const ix = this.items.findIndex(it => Filter._checkMatches(it, item));
+		if (~ix) this.items.splice(ix, 1);
 	}
 
 	/**
@@ -743,6 +911,19 @@ class Filter {
 		// TODO handle AND/OR
 		const map = valObj[this.header];
 		const totals = map._totals;
+
+		function toCheckVal (tc) {
+			if (tc instanceof FilterItem) return tc.item;
+			return tc;
+		}
+
+		const isUmbrella = () => {
+			return this.umbrellaItem &&
+				toCheck &&
+				toCheck instanceof Array ? toCheck.includes(this.umbrellaItem) : toCheck === this.umbrellaItem &&
+				(map[toCheckVal(this.umbrellaItem)] === 0 || map[toCheckVal(this.umbrellaItem)] === 1);
+		};
+
 		if (toCheck instanceof Array) {
 			let hide = false;
 			let display = false;
@@ -754,14 +935,14 @@ class Filter {
 				}
 
 				toCheck.forEach(tc => {
-					if (map[tc] === 1) { // if any are 1 (nlue) include if they match
+					if (map[toCheckVal(tc)] === 1 || isUmbrella()) { // if any are 1 (blue) include if they match
 						display = true;
 					}
 				});
 			} else {
 				let ttlYes = 0;
 				toCheck.forEach(tc => {
-					if (map[tc] === 1) {
+					if (map[toCheckVal(tc)] === 1) {
 						ttlYes++;
 					}
 				});
@@ -770,14 +951,14 @@ class Filter {
 
 			if (map._andOr.red === "OR") {
 				toCheck.forEach(tc => {
-					if (map[tc] === -1) { // if any are -1 (red) exclude if they match
+					if (map[toCheckVal(tc)] === -1) { // if any are -1 (red) exclude if they match
 						hide = true;
 					}
 				});
 			} else {
 				let ttlNo = 0;
 				toCheck.forEach(tc => {
-					if (map[tc] === -1) {
+					if (map[toCheckVal(tc)] === -1) {
 						ttlNo++;
 					}
 				});
@@ -786,7 +967,7 @@ class Filter {
 
 			return display && !hide;
 		} else {
-			return doCheck();
+			return doCheck.bind(this)();
 		}
 
 		function doCheck () {
@@ -794,13 +975,13 @@ class Filter {
 			let hide = false;
 			if (map._andOr.blue === "OR") {
 				if (totals.yes > 0) {
-					display = map[toCheck] === 1;
+					display = map[toCheckVal(toCheck)] === 1 || isUmbrella();
 				} else {
 					display = true;
 				}
 			} else {
 				if (totals.yes > 0) {
-					display = map[toCheck] === 1 && totals.yes === 1;
+					display = (map[toCheckVal(toCheck)] === 1 || isUmbrella()) && totals.yes === 1;
 				} else {
 					display = true;
 				}
@@ -808,10 +989,10 @@ class Filter {
 
 			if (map._andOr.red === "OR") {
 				if (totals.no > 0) {
-					hide = map[toCheck] === -1;
+					hide = map[toCheckVal(toCheck)] === -1;
 				}
 			} else {
-				hide = totals.no === 1 && map[toCheck] === -1;
+				hide = totals.no === 1 && map[toCheckVal(toCheck)] === -1;
 			}
 
 			return display && !hide;
@@ -824,19 +1005,71 @@ class FilterItem {
 	 * An alternative to string `Filter.items` with a change-handling function
 	 * @param item string
 	 * @param changeFn called when this item is clicked/etc; calls `changeFn(item)`
+	 * @param group the group this item belongs to, if it's part of a GroupedFilter
 	 */
-	constructor (item, changeFn) {
+	constructor (item, changeFn, group) {
 		this.item = item;
 		this.changeFn = changeFn;
+		this.group = group;
 	}
 }
 
 class RangeFilter extends Filter {
-	// TODO implement a filter displayed as a range of items on a slider
+	constructor (args) {
+		super(args);
+		this.min = null;
+		this.max = null;
+	}
+
+	addIfAbsent (number) {
+		if (this.min === null && this.max === null) this.min = this.max = number;
+		else {
+			const oMin = this.min;
+			const oMax = this.max;
+			this.min = Math.min(this.min, number);
+			this.max = Math.max(this.max, number);
+			if (this.$slider) {
+				const [lower, upper] = this.$slider.slider("values");
+
+				const updateMin = lower === oMin && this.min !== oMin;
+				const updateMax = upper === oMax && this.max !== oMax;
+
+				if (updateMin) this.$slider.slider("option", "min", this.min);
+				if (updateMax) this.$slider.slider("option", "max", this.max);
+
+				if (updateMin && updateMax) this.$slider.slider("values", [this.min, this.max]);
+				else if (updateMin) this.$slider.slider("values", [this.min, upper]);
+				else if (updateMax) this.$slider.slider("values", [lower, this.max]);
+			}
+		}
+	}
+
+	toDisplay (valObj, toCheck) {
+		const range = valObj[this.header];
+
+		// match everything if filter is set to complete range
+		if (toCheck == null) return range.min === this.min && range.max === this.max;
+
+		if (toCheck instanceof Array) return range.min <= Math.min(...toCheck) && range.max >= Math.max(...toCheck);
+		else return range.min <= toCheck && range.max >= toCheck;
+	}
 }
 
-class AllSourcesFilter extends Filter {
-	// TODO implement a filter with an "All Sources" button (toggled off by default)
+class GroupedFilter extends Filter {
+	/**
+	 * An extension of the basic filter, which enables visual grouping of elements.
+	 * @param options As with `Filter`, with two extra fields:
+	 *
+	 *   (OPTIONAL)
+	 *   groupFn: function which takes an item, and returns a number (from 0 to numGroups, inclusive)
+	 *     Either this function or a `group` on a FilterItem must be specified.
+	 *
+	 */
+	constructor (options) {
+		super(options);
+		this.numGroups = 1;
+		this.groupFn = options.groupFn;
+	}
 }
 
 class MultiFilter {
@@ -849,6 +1082,15 @@ class MultiFilter {
 		this.categoryName = categoryName;
 		this.filters = filters;
 		this.isMulti = true;
+		this.mode = "or";
+	}
+
+	setModeAnd () {
+		this.mode = "and";
+	}
+
+	setModeOr () {
+		this.mode = "or";
 	}
 
 	/**
@@ -865,17 +1107,23 @@ class MultiFilter {
 		const results = [];
 		for (let i = 0; i < this.filters.length; ++i) {
 			const f = this.filters[i];
-			// TODO use and/or flag?
-			const totals = valObj[f.header]._totals;
+			if (f instanceof RangeFilter) {
+				results.push(this.filters[i].toDisplay(valObj, toChecks[i]))
+			} else {
+				// TODO use and/or flag?
+				const totals = valObj[f.header]._totals;
 
-			if (totals.yes === 0 && totals.no === 0) results.push(null);
-			else {
-				results.push(this.filters[i].toDisplay(valObj, toChecks[i]));
+				if (totals.yes === 0 && totals.no === 0) results.push(null);
+				else {
+					results.push(this.filters[i].toDisplay(valObj, toChecks[i]));
+				}
 			}
 		}
 		const resultsFilt = results.filter(r => r !== null);
-		if (!resultsFilt.length) return true;
-		return resultsFilt.find(r => r);
+		if (this.mode === "or") {
+			if (!resultsFilt.length) return true;
+			return resultsFilt.find(r => r);
+		} else return resultsFilt.filter(it => it).length === resultsFilt.length;
 	}
 }
 

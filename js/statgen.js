@@ -6,7 +6,7 @@ let amount, count;
 let raceData;
 
 function loadRaceJson () {
-	DataUtil.loadJSON(RACE_JSON_URL, onJsonLoad)
+	DataUtil.loadJSON(RACE_JSON_URL).then(onJsonLoad)
 }
 
 window.onload = function load () {
@@ -15,32 +15,37 @@ window.onload = function load () {
 };
 
 function onJsonLoad (data) {
-	raceData = EntryRenderer.race.mergeSubraces(data.race);
+	BrewUtil.pAddBrewData()
+		.then((brew) => {
+			raceData = EntryRenderer.race.mergeSubraces(data.race);
+			if (brew.race) raceData = raceData.concat(brew.race);
 
-	$("#rollbutton").click(rollstats);
+			$("#rollbutton").click(rollstats);
 
-	const isCrypto = EntryRenderer.dice.isCrypto();
-	const titleStr = isCrypto ? "Numbers will be generated using Crypto.getRandomValues()" : "Numbers will be generated using Math.random()";
-	$(`#roller-mode`).html(`Cryptographically strong random generation: <span title="${titleStr}" class="crypto-${isCrypto}">${isCrypto ? `<span class="glyphicon glyphicon-lock"></span> enabled` : `<span class="glyphicon glyphicon-ban-circle"></span> not available`}</span>`);
+			const isCrypto = RollerUtil.isCrypto();
+			const titleStr = isCrypto ? "Numbers will be generated using Crypto.getRandomValues()" : "Numbers will be generated using Math.random()";
+			$(`#roller-mode`).html(`Cryptographically strong random generation: <span title="${titleStr}" class="crypto-${isCrypto}">${isCrypto ? `<span class="glyphicon glyphicon-lock"></span> enabled` : `<span class="glyphicon glyphicon-ban-circle"></span> not available`}</span>`);
 
-	$(function () {
-		$("#reset").click(function () {
-			$(".base").val(8);
-			$(".choose").prop("checked", false);
-			changeTotal();
-			changeBase()
-		});
-	});
+			$(function () {
+				$("#reset").click(function () {
+					$(".base").val(8);
+					$(".choose").prop("checked", false);
+					changeTotal();
+					changeBase()
+				});
+			});
 
-	$(".base").on("input", changeBase);
-	$("input.choose").on("change", choose);
+			$(".base").on("input", changeBase);
+			$("input.choose").on("change", choose);
 
-	const names = raceData.map(x => x.name).sort();
-	const options = names.map(name => `<option>${name}</option>`).join();
-	$("#race").append(`<option>None</option>`).append(options).change(changeRace).change();
+			const names = raceData.map(x => x.name).sort();
+			const options = names.map(name => `<option>${name}</option>`).join();
+			$("#race").append(`<option>None</option>`).append(`<option value="_CUSTOM">Custom</option>`).append(options).change(changeRace).change();
 
-	if (window.location.hash) window.onhashchange();
-	else window.location.hash = "#rolled";
+			if (window.location.hash) window.onhashchange();
+			else window.location.hash = "#rolled";
+		})
+		.catch(BrewUtil.purgeBrew);
 }
 
 const STATS_MIN = 8;
@@ -83,25 +88,42 @@ function choose () {
 }
 
 function changeRace () {
+	function handleStats (stats) {
+		$(".racial").val(0);
+		for (const key in stats) $(`#${key} .racial`).val(stats[key])
+
+		changeTotal();
+		$(".choose").hide().prop("checked", false);
+
+		if (!stats.choose) return;
+
+		const {from} = stats.choose[0];
+		amount = stats.choose[0].amount || 1;
+		count = stats.choose[0].count;
+
+		$("td.choose").text(`Choose ${count}`).show();
+		from.forEach(key => $(`#${key} .choose`).show())
+	}
+
 	const race = this.value;
-	const stats = race === "None"
-		? {}
-		: raceData.find(({name}) => name === race).ability;
-
-	$(".racial").val(0);
-	for (const key in stats) $(`#${key} .racial`).val(stats[key])
-
-	changeTotal();
-	$(".choose").hide().prop("checked", false);
-
-	if (!stats.choose) return;
-
-	const {from} = stats.choose[0];
-	amount = stats.choose[0].amount || 1;
-	count = stats.choose[0].count;
-
-	$("td.choose").text(`Choose ${count}`).show();
-	from.forEach(key => $(`#${key} .choose`).show())
+	if (race === "_CUSTOM") {
+		$(`#custom`).show();
+		const custom = $(`.custom`);
+		custom.off("input").on("input", () => {
+			const stats = {};
+			custom.each((i, e) => {
+				const val = Number($(e).val());
+				stats[$(e).attr("name")] = val || 0;
+			});
+			handleStats(stats);
+		})
+	} else {
+		$(`#custom`).hide();
+		const stats = race === "None"
+			? {}
+			: raceData.find(({name}) => name === race).ability;
+		handleStats(stats);
+	}
 }
 
 function changeTotal () {
