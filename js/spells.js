@@ -153,6 +153,20 @@ function getNormalisedRange (range) {
 			case RNG_UNLIMITED:
 				distance = 900000001;
 				break;
+			default: {
+				// it's homebrew?
+				const fromBrew = MiscUtil.getProperty(BrewUtil.homebrewMeta, "spellDistanceUnits", dist.type);
+				if (fromBrew) {
+					const ftPerUnit = fromBrew.feetPerUnit;
+					if (ftPerUnit != null) {
+						multiplier = INCHES_PER_FOOT * ftPerUnit;
+						distance = dist.amount;
+					} else {
+						distance = 910000000; // default to max distance, to have them displayed at the bottom
+					}
+				}
+				break;
+			}
 		}
 	}
 }
@@ -219,45 +233,40 @@ function getFilterAbilityCheck (ability) {
 
 function handleBrew (homebrew) {
 	addSpells(homebrew.spell);
+	return Promise.resolve();
 }
 
 function pPostLoad () {
 	return new Promise(resolve => {
 		BrewUtil.pAddBrewData()
 			.then(handleBrew)
+			.then(BrewUtil.pAddLocalBrewData)
 			.catch(BrewUtil.purgeBrew)
 			.then(() => {
 				BrewUtil.makeBrewButton("manage-brew");
 				BrewUtil.bind({list, filterBox, sourceFilter});
 				ListUtil.loadState();
-				const getFilterer = () => {
-					const slIds = ListUtil.getSublistedIds();
-					if (slIds.length) {
-						const slIdSet = new Set(slIds);
-						return slIdSet.has.bind(slIdSet);
-					} else {
-						const visibleIds = new Set(ListUtil.getVisibleIds());
-						return visibleIds.has.bind(visibleIds);
-					}
-				};
+
 				ListUtil.bindShowTableButton(
 					"btn-show-table",
 					"Spells",
 					spellList,
 					{
-						name: {name: "Name", transform: true, flex: 1},
-						source: {name: "Source", transform: (it) => `<span class="source${Parser.stringToCasedSlug(it)}" title="${Parser.sourceJsonToFull(it)}">${Parser.sourceJsonToAbv(it)}</span>`, flex: 1},
-						level: {name: "Level", transform: (it) => Parser.spLevelToFull(it), flex: 1},
-						time: {name: "Casting Time", transform: (it) => getTblTimeStr(it[0]), flex: 1},
-						school: {name: "School", transform: (it) => `<span class="school_${it}">${Parser.spSchoolAbvToFull(it)}</span>`, flex: 1},
-						range: {name: "Range", transform: (it) => Parser.spRangeToFull(it), flex: 1},
-						components: {name: "Components", transform: (it) => Parser.spComponentsToFull(it), flex: 1},
-						classes: {name: "Classes", transform: (it) => Parser.spMainClassesToFull(it), flex: 1},
+						name: {name: "Name", transform: true},
+						source: {name: "Source", transform: (it) => `<span class="source${Parser.stringToCasedSlug(it)}" title="${Parser.sourceJsonToFull(it)}">${Parser.sourceJsonToAbv(it)}</span>`},
+						level: {name: "Level", transform: (it) => Parser.spLevelToFull(it)},
+						time: {name: "Casting Time", transform: (it) => getTblTimeStr(it[0])},
+						school: {name: "School", transform: (it) => `<span class="school_${it}">${Parser.spSchoolAbvToFull(it)}</span>`},
+						range: {name: "Range", transform: (it) => Parser.spRangeToFull(it)},
+						components: {name: "Components", transform: (it) => Parser.spComponentsToFull(it)},
+						classes: {name: "Classes", transform: (it) => Parser.spMainClassesToFull(it)},
 						entries: {name: "Text", transform: (it) => EntryRenderer.getDefaultRenderer().renderEntry({type: "entries", entries: it}, 1), flex: 3},
 						entriesHigherLevel: {name: "At Higher Levels", transform: (it) => EntryRenderer.getDefaultRenderer().renderEntry({type: "entries", entries: (it || [])}, 1), flex: 2}
 					},
-					{generator: getFilterer},
-					(a, b) => SortUtil.ascSort(a.name, b.name) || SortUtil.ascSort(a.source, b.source));
+					{generator: ListUtil.basicFilterGenerator},
+					(a, b) => SortUtil.ascSort(a.name, b.name) || SortUtil.ascSort(a.source, b.source)
+				);
+
 				resolve();
 			});
 	})
@@ -265,7 +274,7 @@ function pPostLoad () {
 
 window.onload = function load () {
 	ExcludeUtil.initialise();
-	multisourceLoad(JSON_DIR, JSON_LIST_NAME, pageInit, addSpells, pPostLoad);
+	multisourceLoad(JSON_DIR, JSON_LIST_NAME, pPageInit, addSpells, pPostLoad);
 };
 
 let list;
@@ -284,7 +293,7 @@ const subclassFilter = new GroupedFilter({
 	header: "Subclass",
 	numGroups: 2
 });
-const classAndSubclassFilter = new MultiFilter("Classes", classFilter, subclassFilter);
+const classAndSubclassFilter = new MultiFilter({name: "Classes"}, classFilter, subclassFilter);
 const raceFilter = new Filter({header: "Race"});
 const metaFilter = new Filter({
 	header: "Components & Miscellaneous",
@@ -374,7 +383,7 @@ const filterBox = initFilterBox(
 	rangeFilter
 );
 
-function pageInit (loadedSources) {
+function pPageInit (loadedSources) {
 	tableDefault = $("#pagecontent").html();
 
 	sourceFilter.items = Object.keys(loadedSources).map(src => new FilterItem(src, loadSource(JSON_LIST_NAME, addSpells)));
@@ -437,7 +446,7 @@ function pageInit (loadedSources) {
 
 	// load homebrew class spell list addons
 	brewSpellClasses = {PHB: {}};
-	BrewUtil.pAddBrewData()
+	return BrewUtil.pAddBrewData()
 		.then((homebrew) => {
 			function handleSubclass (className, classSource = SRC_PHB, sc) {
 				const genSubclassSpell = (it, subSubclass) => {
@@ -752,7 +761,5 @@ function loadsub (sub) {
 	filterBox.setFromSubHashes(sub);
 	ListUtil.setFromSubHashes(sub, sublistFuncPreload);
 
-	const bookViewHash = sub.find(it => it.startsWith(spellBookView.hashKey));
-	if (bookViewHash && UrlUtil.unpackSubHash(bookViewHash)[spellBookView.hashKey][0] === "true") spellBookView.open();
-	else spellBookView.teardown();
+	spellBookView.handleSub(sub);
 }
