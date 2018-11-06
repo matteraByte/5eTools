@@ -18,7 +18,7 @@
 			],
 			"hp": {
 				"average": 75,
-				"formula": "10d10+20"
+				"formula": "10d10 + 20"
 			},
 			"speed": {
 				"walk": 15,
@@ -48,13 +48,13 @@
 				{
 					"name": "Bite",
 					"entries": [
-						"Melee Weapon Attack: {@hit 4} to hit, reach 5 ft., one creature grappled by the decapus. Hit: 7 ({@dice 2d4+2}) piercing damage."
+						"{@atk mw} {@hit 4} to hit, reach 5 ft., one creature {@condition grappled} by the decapus. {@h}7 ({@damage 2d4 + 2}) piercing damage."
 					]
 				},
 				{
 					"name": "Tentacles",
 					"entries": [
-						"Melee Weapon Attack: {@hit 4} to hit, reach 10 ft., one target. Hit: 24 ({@dice 9d4+2}) bludgeoning damage or 14 ({@dice 5d4+2}) bludgeoning damage if the decapus is grappling a creature other than the target or if the decapus is on the ground or floor. The target is also grappled (escape DC 14) unless the decapus is already grappling a creature. Until this grapple ends, the target is restrained."
+						"{@atk mw} {@hit 4} to hit, reach 10 ft., one target. {@h}24 ({@damage 9d4 + 2}) bludgeoning damage or 14 ({@damage 5d4 + 2}) bludgeoning damage if the decapus is grappling a creature other than the target or if the decapus is on the ground or floor. The target is also {@condition grappled} (escape DC 14) unless the decapus is already grappling a creature. Until this grapple ends, the target is {@condition restrained}."
 					]
 				}
 			],
@@ -62,6 +62,9 @@
 			"actionTags": [
 				"Multiattack",
 				"Tentacles"
+			],
+			"senseTags": [
+				"D"
 			]
 		},
 		{
@@ -82,7 +85,7 @@
 			],
 			"hp": {
 				"average": 26,
-				"formula": "4d6+12"
+				"formula": "4d6 + 12"
 			},
 			"speed": {
 				"walk": 30
@@ -97,7 +100,7 @@
 				"perception": "+4",
 				"stealth": "+2"
 			},
-			"senses": "darkvision 60 ft., tremorsense 30ft.",
+			"senses": "darkvision 60 ft., tremorsense 30 ft.",
 			"passive": 14,
 			"cr": "1/4",
 			"trait": [
@@ -112,7 +115,7 @@
 				{
 					"name": "Club",
 					"entries": [
-						"Melee Weapon Attack: {@hit 3} to hit, reach 5 ft., one target. Hit: 3 ({@dice 1d4+1}) bludgeoning damage."
+						"{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d4 + 1}) bludgeoning damage."
 					]
 				},
 				{
@@ -122,7 +125,125 @@
 					]
 				}
 			],
-			"page": 22
+			"page": 22,
+			"senseTags": [
+				"D",
+				"T"
+			]
+		},
+		{
+			"name": "Giant Slug",
+			"isNPC": true,
+			"size": "L",
+			"type": "monstrosity",
+			"source": "TTP",
+			"alignment": [
+				"U"
+			],
+			"ac": [
+				{
+					"ac": 13,
+					"from": [
+						"natural armor"
+					]
+				}
+			],
+			"hp": {
+				"average": 66,
+				"formula": "6d10 + 18"
+			},
+			"speed": {
+				"walk": 10,
+				"climb": 10
+			},
+			"str": 14,
+			"dex": 13,
+			"con": 16,
+			"int": 1,
+			"wis": 12,
+			"cha": 5,
+			"skill": {
+				"perception": "+3"
+			},
+			"senses": "darkvision 60 ft.",
+			"languages": "Abyssal, Aquan, Common",
+			"passive": 13,
+			"cr": "3",
+			"trait": [
+				{
+					"name": "Keen Smell",
+					"entries": [
+						"The slug has advantage on Wisdom ({@skill Perception}) checks that rely on smell."
+					]
+				},
+				{
+					"name": "Spider Climb",
+					"entries": [
+						"The slug can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check."
+					]
+				}
+			],
+			"action": [
+				{
+					"name": "Multiattack",
+					"entries": [
+						"The slug makes two attacks: one with its tentacles and one with its bite."
+					]
+				},
+				{
+					"name": "Tentacles",
+					"entries": [
+						"{@atk mw} {@hit 8} to hit, reach 10 ft., one creature. {@h}4 ({@damage 1d4 + 2}) poison damage, and the target must succeed on a DC 13 Constitution saving throw or be {@condition poisoned} for 1 minute. Until this poison ends, the target is {@condition paralyzed}. The target can repeat the saving throw at the end of each of its turns, ending the poison on itself on a success."
+					]
+				},
+				{
+					"name": "Bite",
+					"entries": [
+						"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}7 ({@damage 2d4 + 2}) piercing damage."
+					]
+				}
+			],
+			"reaction": [
+				{
+					"name": "Animate Tentacle",
+					"entries": [
+						"When the slug takes damage in this cave (Shrine of Umberlee), it can use its reaction to animate one of the tentacles of the kraken statue and cause it to make a melee weapon attack ({@hit 3} to hit) against one creature within 20 feet of the statue that the slug can see. The tentacle deals 8 ({@damage 1d8 + 4}) bludgeoning damage on a hit."
+					]
+				}
+			],
+			"spellcasting": [
+				{
+					"name": "Innate Spellcasting",
+					"headerEntries": [
+						"The slug's innate spellcasting ability is Wisdom (spell save DC 11, {@hit 3} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
+					],
+					"daily": {
+						"1e": [
+							"{@spell guiding bolt}",
+							"{@spell sanctuary}",
+							"{@spell spiritual weapon}"
+						]
+					},
+					"ability": "wis"
+				}
+			],
+			"page": 18,
+			"traitTags": [
+				"Keen Senses",
+				"Spider Climb"
+			],
+			"actionTags": [
+				"Multiattack",
+				"Tentacles"
+			],
+			"languageTags": [
+				"AB",
+				"AQ",
+				"C"
+			],
+			"senseTags": [
+				"D"
+			]
 		},
 		{
 			"source": "TTP",
@@ -143,7 +264,7 @@
 			],
 			"hp": {
 				"average": 13,
-				"formula": "3d6+3"
+				"formula": "3d6 + 3"
 			},
 			"speed": {
 				"walk": 30
@@ -185,7 +306,7 @@
 				{
 					"name": "Venomous Claws",
 					"entries": [
-						"Melee Weapon Attack: {@hit 4} to hit, reach 5 ft., one target. Hit: 4 ({@dice 1d4+2}) slashing damage plus 2 ({@dice 1d4}) poison damage, and the target must succeed on a DC 11 Constitution saving throw or be poisoned until the end of the target's next turn."
+						"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d4 + 2}) slashing damage plus 2 ({@damage 1d4}) poison damage, and the target must succeed on a DC 11 Constitution saving throw or be {@condition poisoned} until the end of the target's next turn."
 					]
 				}
 			],
@@ -193,6 +314,9 @@
 			"traitTags": [
 				"Turn Resistance",
 				"Undead Fortitude"
+			],
+			"senseTags": [
+				"D"
 			]
 		},
 		{
@@ -219,7 +343,7 @@
 			],
 			"hp": {
 				"average": 22,
-				"formula": "4d8+4"
+				"formula": "4d8 + 4"
 			},
 			"speed": {
 				"walk": 30
@@ -249,25 +373,25 @@
 				{
 					"name": "Claws",
 					"entries": [
-						"Melee Weapon Attack: {@hit 4} to hit, reach 5 ft., one target. Hit: 4 ({@dice 1d4+2}) slashing damage."
+						"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d4 + 2}) slashing damage."
 					]
 				},
 				{
 					"name": "Quarterstaff",
 					"entries": [
-						"Melee Weapon Attack: {@hit 4} to hit, reach 5 ft., one target. Hit: 5 ({@dice 1d6+2}) bludgeoning damage, or 6 ({@dice 1d8+2}) bludgeoning damage when used with two hands."
+						"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) bludgeoning damage, or 6 ({@damage 1d8 + 2}) bludgeoning damage when used with two hands."
 					]
 				},
 				{
 					"name": "Light Crossbow",
 					"entries": [
-						"Ranged Weapon Attack: {@hit 2} to hit, range 80/320 ft., one target. Hit: 4 ({@dice 1d8}) piercing piercing damage."
+						"{@atk rw} {@hit 2} to hit, range 80/320 ft., one target. {@h}4 ({@damage 1d8}) piercing damage."
 					]
 				},
 				{
 					"name": "Shell Defense",
 					"entries": [
-						"The tortle withdraws into its shell. Until it emerges, it gains a +4 bonus to AC and has advantage on Strength and Constitution saving throws. While in its shell, the tortle is prone, its speed is 0 and can't increase, it has disadvantage on Dexterity saving throws, it can't take reactions, and the only action it can take is a bonus action to emerge."
+						"The tortle withdraws into its shell. Until it emerges, it gains a +4 bonus to AC and has advantage on Strength and Constitution saving throws. While in its shell, the tortle is {@condition prone}, its speed is 0 and can't increase, it has disadvantage on Dexterity saving throws, it can't take reactions, and the only action it can take is a bonus action to emerge."
 					]
 				}
 			],
@@ -275,6 +399,10 @@
 			"soundClip": "https://media-waterdeep.cursecdn.com/file-attachments/0/712/tortle.mp3",
 			"traitTags": [
 				"Hold Breath"
+			],
+			"languageTags": [
+				"AQ",
+				"C"
 			]
 		},
 		{
@@ -301,7 +429,7 @@
 			],
 			"hp": {
 				"average": 33,
-				"formula": "6d8+6"
+				"formula": "6d8 + 6"
 			},
 			"speed": {
 				"walk": 30
@@ -366,19 +494,19 @@
 				{
 					"name": "Claws",
 					"entries": [
-						"Melee Weapon Attack: {@hit 4} to hit, reach 5 ft., one target. Hit: 4 ({@dice 1d4+2}) slashing damage."
+						"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d4 + 2}) slashing damage."
 					]
 				},
 				{
 					"name": "Quarterstaff",
 					"entries": [
-						"Melee Weapon Attack: {@hit 4} to hit, reach 5 ft., one target. Hit: 5 ({@dice 1d6+2}) bludgeoning damage, or 6 ({@dice 1d8+2}) bludgeoning damage when used with two hands."
+						"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) bludgeoning damage, or 6 ({@damage 1d8 + 2}) bludgeoning damage when used with two hands."
 					]
 				},
 				{
 					"name": "Shell Defense",
 					"entries": [
-						"The tortle withdraws into its shell. Until it emerges, it gains a +4 bonus to AC and has advantage on Strength and Constitution saving throws. While in its shell, the tortle is prone, its speed is 0 and can't increase, it has disadvantage on Dexterity saving throws, it can't take reactions, and the only action it can take is a bonus action to emerge."
+						"The tortle withdraws into its shell. Until it emerges, it gains a +4 bonus to AC and has advantage on Strength and Constitution saving throws. While in its shell, the tortle is {@condition prone}, its speed is 0 and can't increase, it has disadvantage on Dexterity saving throws, it can't take reactions, and the only action it can take is a bonus action to emerge."
 					]
 				}
 			],
@@ -386,112 +514,10 @@
 			"soundClip": "https://media-waterdeep.cursecdn.com/file-attachments/0/711/tortle-druid.mp3",
 			"traitTags": [
 				"Hold Breath"
-			]
-		},
-		{
-			"name": "Giant Slug",
-			"isNPC": true,
-			"size": "L",
-			"type": "monstrosity",
-			"source": "TTP",
-			"alignment": [
-				"U"
 			],
-			"ac": [
-				{
-					"ac": 13,
-					"from": [
-						"natural armor"
-					]
-				}
-			],
-			"hp": {
-				"average": 66,
-				"formula": "6d10+18"
-			},
-			"speed": {
-				"walk": 10,
-				"climb": 10
-			},
-			"str": 14,
-			"dex": 13,
-			"con": 16,
-			"int": 1,
-			"wis": 12,
-			"cha": 5,
-			"skill": {
-				"perception": "+3"
-			},
-			"senses": "darkvision 60 ft.",
-			"languages": "Abyssal, Aquan, Common",
-			"passive": 13,
-			"cr": "3",
-			"trait": [
-				{
-					"name": "Keen Smell",
-					"entries": [
-						"The slug has advantage on Wisdom (Perception) checks that rely on smell."
-					]
-				},
-				{
-					"name": "Spider Climb",
-					"entries": [
-						"The slug can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check."
-					]
-				}
-			],
-			"action": [
-				{
-					"name": "Multiattack",
-					"entries": [
-						"The slug makes two attacks: one with its tentacles and one with its bite."
-					]
-				},
-				{
-					"name": "Tentacles",
-					"entries": [
-						"Melee Weapon Attack: {@hit 8} to hit, reach 10 ft., one creature. Hit: 4 ({@dice 1d4+2}) poison damage, and the target must succeed on a DC 13 Constitution saving throw or be poisoned for 1 minute. Until this poison ends, the target is paralyzed. The target can repeat the saving throw at the end of each of its turns, ending the poison on itself on a success."
-					]
-				},
-				{
-					"name": "Bite",
-					"entries": [
-						"Melee Weapon Attack: {@hit 4} to hit, reach 5 ft., one target. Hit: 7 ({@dice 2d4+2}) piercing damage."
-					]
-				}
-			],
-			"reaction": [
-				{
-					"name": "Animate Tentacle",
-					"entries": [
-						"When the slug takes damage in this cave (Shrine of Umberlee), it can use its reaction to animate one of the tentacles of the kraken statue and cause it to make a melee weapon attack ({@hit 3} to hit) against one creature within 20 feet of the statue that the slug can see. The tentacle deals 8 ({@dice 1d8+4}) bludgeoning damage on a hit."
-					]
-				}
-			],
-			"spellcasting": [
-				{
-					"name": "Innate Spellcasting",
-					"headerEntries": [
-						"The slug's innate spellcasting ability is Wisdom (spell save DC 11, {@hit 3} to hit with spell attacks). It can innately cast the following spells, requiring no material components:"
-					],
-					"daily": {
-						"1e": [
-							"{@spell guiding bolt}",
-							"{@spell sanctuary}",
-							"{@spell spiritual weapon}"
-						]
-					},
-					"ability": "wis"
-				}
-			],
-			"page": 18,
-			"traitTags": [
-				"Keen Senses",
-				"Spider Climb"
-			],
-			"actionTags": [
-				"Multiattack",
-				"Tentacles"
+			"languageTags": [
+				"AQ",
+				"C"
 			]
 		}
 	]

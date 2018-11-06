@@ -4,12 +4,15 @@
 <head>
 	<!--5ETOOLS_VERSION-->
 	<meta charset="utf-8">
+	<meta name="description" content="">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>DM Screen - 5etools</title>
 
 	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<link rel="stylesheet" href="css/jquery-ui-slider-pips.css">
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="icon" href="favicon.png">
 
@@ -24,6 +27,10 @@
 
 		body.dm-screen-fullscreen nav {
 			display: none;
+		}
+
+		body.dm-screen-locked .panel-control-bar {
+			display: none !important;
 		}
 
 		.dm-screen {
@@ -95,9 +102,15 @@
 			font-family: 'Andada', serif;
 			font-variant: small-caps;
 			color: white;
-			cursor: default;
 			user-select: none;
 			background: #808080a0;
+			cursor: pointer;
+		}
+
+		.panel-control-title--bumped {
+			top: 20px;
+			border-top-right-radius: 5px;
+			opacity: 1;
 		}
 
 		.panel-control-addtab {
@@ -400,7 +413,7 @@
 			width: 100%;
 		}
 
-		label.panel-tab-search-checkbox {
+		.panel-tab-search-sub-wrp {
 			flex-shrink: 0;
 			padding: 5px;
 			margin-bottom: 0;
@@ -408,6 +421,30 @@
 			border: 1px solid #ccc;
 			height: 34px;
 			border-left: 0;
+			display: flex;
+		}
+
+		.panel-tab-search-sub-lbl {
+			display: flex;
+			align-items: center;
+			height: 100%;
+		}
+
+		.panel-tab-search-sub-lbl:not(:last-child) {
+			margin-right: 7px;
+		}
+
+		input.panel-tab-search-sub-ipt[type=radio] {
+			display: inline-block;
+			margin: 0 3px 0 0;
+		}
+
+		.panel-tab-search-sub-ipt-custom {
+			max-width: 50px;
+			border-radius: 0;
+			margin-right: -1px;
+			border-right-color: #e0e0e0;
+			border-left-color: #e0e0e0;
 		}
 
 		.panel-tab-list-item {
@@ -480,6 +517,7 @@
 		iframe {
 			width: 100%;
 			height: 100%;
+			background: #ffffff;
 		}
 
 		.panel-content-textarea {
@@ -513,6 +551,8 @@
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
+			font-weight: initial;
+			min-height: 30px;
 		}
 
 		.tab-body-row:first-of-type {
@@ -554,7 +594,7 @@
 
 		.dm-sidemenu-toggle {
 			position: absolute;
-			top: -38px;
+			top: -35px;
 			left: -7px;
 			width: 32px;
 			height: 32px;
@@ -591,6 +631,7 @@
 		}
 
 		.dm-sidemenu-row {
+			width: 100%;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
@@ -598,10 +639,18 @@
 		}
 
 		.dm-sidemenu-row-alt {
+			width: 100%;
 			display: flex;
 			justify-content: space-around;
 			align-items: center;
 			margin-bottom: 5px;
+		}
+
+		.dm-sidemenu-row-vert {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+			align-items: center;
 		}
 
 		.dm-sidemenu-row-divider {
@@ -616,6 +665,7 @@
 		}
 
 		.dm-sidemenu-row-label--cb-label {
+			font-weight: initial;
 			display: flex;
 			margin-bottom: 0;
 			justify-content: center;
@@ -780,6 +830,7 @@
 			width: 40px;
 		}
 
+		input.panel-tab-search-sub-ipt-custom[type=number]::-webkit-inner-spin-button,
 		.dm-init-row-rhs input[type=number]::-webkit-inner-spin-button,
 		.dm-init-row-rhs input[type=number]::-webkit-outer-spin-button {
 			-webkit-appearance: none;
@@ -788,7 +839,7 @@
 
 		.dm-init-wrp-controls {
 			flex: none;
-			height: 40px;
+			height: 38px;
 			padding: 3px;
 			border-top: 1px solid #ccc;
 			justify-content: space-evenly;
@@ -916,11 +967,15 @@
 <!--5ETOOLS_SCRIPT_ANCHOR-->
 <script type="text/javascript" src="lib/jquery.js"></script>
 <script type="text/javascript" src="lib/jquery.panzoom.js"></script>
+<script type="text/javascript" src="lib/jquery-ui.js"></script>
+<script type="text/javascript" src="lib/jquery-ui-slider-pip.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript" src="js/omnidexer.js"></script>
 <script type="text/javascript" src="js/omnisearch.js"></script>
 <script type="text/javascript" src="js/entryrender.js"></script>
+<script type="text/javascript" src="js/scalecreature.js"></script>
 <script type="text/javascript" src="js/dmscreen.js"></script>
+<script type="text/javascript" src="js/history.js"></script>
 <script type="text/javascript" src="lib/list.js"></script>
 <script type="text/javascript" src="lib/bootstrap.js"></script>
 <script type="text/javascript" src="lib/elasticlunr.js"></script>

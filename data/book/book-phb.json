@@ -272,7 +272,10 @@
 										]
 									}
 								]
-							]
+							],
+							"data": {
+								"tableIgnore": true
+							}
 						},
 						{
 							"type": "table",
@@ -294,7 +297,10 @@
 										]
 									}
 								]
-							]
+							],
+							"data": {
+								"tableIgnore": true
+							}
 						},
 						{
 							"type": "table",
@@ -316,7 +322,10 @@
 										]
 									}
 								]
-							]
+							],
+							"data": {
+								"tableIgnore": true
+							}
 						},
 						{
 							"type": "table",
@@ -338,7 +347,10 @@
 										]
 									}
 								]
-							]
+							],
+							"data": {
+								"tableIgnore": true
+							}
 						},
 						{
 							"type": "table",
@@ -360,7 +372,10 @@
 										]
 									}
 								]
-							]
+							],
+							"data": {
+								"tableIgnore": true
+							}
 						},
 						{
 							"type": "table",
@@ -382,7 +397,10 @@
 										]
 									}
 								]
-							]
+							],
+							"data": {
+								"tableIgnore": true
+							}
 						},
 						{
 							"type": "entries",
@@ -616,14 +634,13 @@
 							"entries": [
 								"The shading in the Character Advancement table shows the four tiers of play. The tiers don't have any rules associated with them; they are a general description of how the play experience changes as characters gain levels.",
 								"{@b In the first tier (levels 1-4),} characters are effectively apprentice adventurers. They are learning the features that define them as members of particular classes, including the major choices that flavor their class features as they advance (such as a wizard's Arcane Tradition or a fighter's Martial Archetype). The threats they face are relatively minor, usually posing a danger to local farmsteads or villages.",
-								"{@b In the second tier (levels 5-10),} characters come into their own. Many spellcasters gain access to 3rd-level spells at the start of this tier, crossing a new threshold of magical power with spells such as fireball and lightning bolt. At this tier, many weapon-using classes gain the ability to make multiple attacks in one round. These characters have become important, facing dangers that threaten cities and kingdoms.",
+								"{@b In the second tier (levels 5-10),} characters come into their own. Many spellcasters gain access to 3rd-level spells at the start of this tier, crossing a new threshold of magical power with spells such as {@spell fireball} and {@spell lightning bolt}. At this tier, many weapon-using classes gain the ability to make multiple attacks in one round. These characters have become important, facing dangers that threaten cities and kingdoms.",
 								"{@b In the third tier (levels 11-16),} characters have reached a level of power that sets them high above the ordinary populace and makes them special even among adventurers. At 11th level, many spellcasters gain access to 6th-level spells, some of which create effects previously impossible for player characters to achieve. Other characters gain features that allow them to make more attacks or do more impressive things with those attacks. These mighty adventurers often confront threats to whole regions and continents.",
 								"{@b At the fourth tier (levels 17-20),} characters achieve the pinnacle of their class features, becoming heroic (or villainous) archetypes in their own right. The fate of the world or even the fundamental order of the multiverse might hang in the balance during their adventures."
 							]
 						},
 						{
 							"type": "table",
-							"caption": "",
 							"colLabels": [
 								"Experience Points",
 								"Level",
@@ -898,7 +915,6 @@
 				"Twelve classes\u2014listed in the Classes table\u2014are found in almost every D&D world and define most typical adventurers.",
 				{
 					"type": "table",
-					"caption": "",
 					"colLabels": [
 						"Class",
 						"Description",
@@ -1079,90 +1095,90 @@
 										[
 											"Human",
 											"4'8\"",
-											"+2d10",
+											"+{@dice 2d10}",
 											"110 lb.",
-											"× (2d4) lb."
+											"× ({@dice 2d4}) lb."
 										],
 										[
 											"Dwarf, hill",
 											"3'8\"",
-											"+2d4",
+											"+{@dice 2d4}",
 											"115 lb.",
-											"× (2d6) lb."
+											"× ({@dice 2d6}) lb."
 										],
 										[
 											"Dwarf, mountain",
 											"4'",
-											"+2d4",
+											"+{@dice 2d4}",
 											"130 lb.",
-											"× (2d6) lb."
+											"× ({@dice 2d6}) lb."
 										],
 										[
 											"Elf, high",
 											"4'6\"",
-											"+2d10",
+											"+{@dice 2d10}",
 											"90 lb.",
-											"× (1d4) lb."
+											"× ({@dice 1d4}) lb."
 										],
 										[
 											"Elf, wood",
 											"4'6\"",
-											"+2d10",
+											"+{@dice 2d10}",
 											"100 lb.",
-											"× (1d4) lb."
+											"× ({@dice 1d4}) lb."
 										],
 										[
 											"Elf, drow",
 											"4'5\"",
-											"+2d6",
+											"+{@dice 2d6}",
 											"75 lb.",
-											"× (1d6) lb."
+											"× ({@dice 1d6}) lb."
 										],
 										[
 											"Halfling",
 											"2'7\"",
-											"+2d4",
+											"+{@dice 2d4}",
 											"35 lb.",
 											"× 1 lb"
 										],
 										[
 											"Dragonborn",
 											"5'6\"",
-											"+2d8",
+											"+{@dice 2d8}",
 											"175 lb.",
-											"× (2d6) lb."
+											"× ({@dice 2d6}) lb."
 										],
 										[
 											"Gnome",
 											"2' 11\"",
-											"+2d4",
+											"+{@dice 2d4}",
 											"35 lb.",
 											"× 1 lb."
 										],
 										[
 											"Half-elf",
 											"4'9\"",
-											"+2d8",
+											"+{@dice 2d8}",
 											"110 lb.",
-											"× (2d4) lb."
+											"× ({@dice 2d4}) lb."
 										],
 										[
 											"Half-orc",
 											"4'10\"",
-											"+2d10",
+											"+{@dice 2d10}",
 											"140 lb.",
-											"× (2d6) lb."
+											"× ({@dice 2d6}) lb."
 										],
 										[
 											"Tiefling",
 											"4 '9\"",
-											"+2d8",
+											"+{@dice 2d8}",
 											"110 lb.",
-											"× (2d4) lb."
+											"× ({@dice 2d4}) lb."
 										]
 									]
 								},
-								"For example, as a human, Tika has a height of 4 feet 8 inches plus 2d10 inches. Her player rolls 2d10 and gets a total of 12, so Tika stands 5 feet 8 inches tall. Then the player uses that same roll of 12 and multiplies it by 2d4 pounds. Her 2d4 roll is 3, so Tika weighs an extra 36 pounds (12 x 3) on top of her base 110 pounds, for a total of 146 pounds."
+								"For example, as a human, Tika has a height of 4 feet 8 inches plus 2d10 inches. Her player rolls 2d10 and gets a total of 12, so Tika stands 5 feet 8 inches tall. Then the player uses that same roll of 12 and multiplies it by 2d4 pounds. Her 2d4 roll is 3, so Tika weighs an extra 36 pounds (12 × 3) on top of her base 110 pounds, for a total of 146 pounds."
 							]
 						},
 						{
@@ -1502,51 +1518,51 @@
 							"rows": [
 								[
 									"Barbarian",
-									"2d4 × 10 gp"
+									"{@dice 2d4×10|2d4 × 10|Barbarian Starting Wealth} gp"
 								],
 								[
 									"Bard",
-									"5d4 × 10 gp"
+									"{@dice 5d4×10|5d4 × 10|Bard Starting Wealth} gp"
 								],
 								[
 									"Cleric",
-									"5d4 × 10 gp"
+									"{@dice 5d4×10|5d4 × 10|Cleric Starting Wealth} gp"
 								],
 								[
 									"Druid",
-									"2d4 × 10 gp"
+									"{@dice 2d4×10|2d4 × 10|Druid Starting Wealth} gp"
 								],
 								[
 									"Fighter",
-									"5d4 × 10 gp"
+									"{@dice 5d4×10|5d4 × 10|Fighter Starting Wealth} gp"
 								],
 								[
 									"Monk",
-									"5d4 gp"
+									"{@dice 5d4|5d4|Monk Starting Wealth} gp"
 								],
 								[
 									"Paladin",
-									"5d4 × 10 gp"
+									"{@dice 5d4×10|5d4 × 10|Paladin Starting Wealth} gp"
 								],
 								[
 									"Ranger",
-									"5d4 × 10 gp"
+									"{@dice 5d4×10|5d4 × 10|Ranger Starting Wealth} gp"
 								],
 								[
 									"Rogue",
-									"4d4 × 10 gp"
+									"{@dice 4d4×10|4d4 × 10|Rogue Starting Wealth} gp"
 								],
 								[
 									"Sorcerer",
-									"3d4 × 10 gp"
+									"{@dice 3d4×10|3d4 × 10|Sorcerer Starting Wealth} gp"
 								],
 								[
 									"Warlock",
-									"4d4 × 10 gp"
+									"{@dice 4d4×10|4d4 × 10|Warlock Starting Wealth} gp"
 								],
 								[
 									"Wizard",
-									"4d4 × 10 gp"
+									"{@dice 4d4×10|4d4 × 10|Wizard Starting Wealth} gp"
 								]
 							]
 						}
@@ -1710,7 +1726,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Padded",
+										"{@item padded armor|phb|Padded}",
 										"5 gp",
 										"11 + Dex modifier",
 										"\u2014",
@@ -1722,7 +1738,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Leather",
+										"{@item leather armor|phb|Leather}",
 										"10 gp",
 										"11 + Dex modifier",
 										"\u2014",
@@ -1734,7 +1750,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Studded leather",
+										"{@item studded leather armor|phb|Studded leather}",
 										"45 gp",
 										"12 + Dex modifier",
 										"\u2014",
@@ -1754,7 +1770,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Hide",
+										"{@item hide armor|phb|Hide}",
 										"10 gp",
 										"12 + Dex modifier (max 2)",
 										"\u2014",
@@ -1766,7 +1782,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Chain shirt",
+										"{@item Chain shirt|phb}",
 										"50 gp",
 										"13 + Dex modifier (max 2)",
 										"\u2014",
@@ -1778,7 +1794,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Scale mail",
+										"{@item Scale mail|phb}",
 										"50 gp",
 										"14 + Dex modifier (max 2)",
 										"\u2014",
@@ -1790,7 +1806,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Breastplate",
+										"{@item Breastplate|phb}",
 										"400 gp",
 										"14 + Dex modifier (max 2)",
 										"\u2014",
@@ -1802,7 +1818,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Half plate",
+										"{@item half plate armor|phb|Half plate}",
 										"750 gp",
 										"15 + Dex modifier (max 2)",
 										"\u2014",
@@ -1822,7 +1838,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Ring mail",
+										"{@item Ring mail|phb}",
 										"30 gp",
 										"14",
 										"\u2014",
@@ -1834,7 +1850,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Chain mail",
+										"{@item Chain mail|phb}",
 										"75 gp",
 										"16",
 										"Str 13",
@@ -1846,7 +1862,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Splint",
+										"{@item splint armor|phb|Splint}",
 										"200 gp",
 										"17",
 										"Str 15",
@@ -1858,7 +1874,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Plate",
+										"{@item plate armor|phb|Plate}",
 										"1,500 gp",
 										"18",
 										"Str 15",
@@ -1878,7 +1894,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Shield",
+										"{@item Shield|phb}",
 										"10 gp",
 										"+2",
 										"\u2014",
@@ -2165,7 +2181,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Club",
+										"{@item Club|phb}",
 										"1 sp",
 										"1d4 bludgeoning",
 										"2 lb.",
@@ -2176,7 +2192,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Dagger",
+										"{@item Dagger|phb}",
 										"2 gp",
 										"1d4 piercing",
 										"1 lb.",
@@ -2187,7 +2203,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Greatclub",
+										"{@item Greatclub|phb}",
 										"2 sp",
 										"1d8 bludgeoning",
 										"10 lb.",
@@ -2198,7 +2214,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Handaxe",
+										"{@item Handaxe|phb}",
 										"5 gp",
 										"1d6 slashing",
 										"2 lb.",
@@ -2209,7 +2225,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Javelin",
+										"{@item Javelin|phb}",
 										"5 sp",
 										"1d6 piercing",
 										"2 lb.",
@@ -2220,7 +2236,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Light hammer",
+										"{@item Light hammer|phb}",
 										"2 gp",
 										"1d4 bludgeoning",
 										"2 lb.",
@@ -2231,7 +2247,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Mace",
+										"{@item Mace|phb}",
 										"5 gp",
 										"1d6 bludgeoning",
 										"4 lb.",
@@ -2242,7 +2258,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Quarterstaff",
+										"{@item Quarterstaff|phb}",
 										"2 sp",
 										"1d6 bludgeoning",
 										"4 lb.",
@@ -2253,7 +2269,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Sickle",
+										"{@item Sickle|phb}",
 										"1 gp",
 										"1d4 slashing",
 										"2 lb.",
@@ -2264,7 +2280,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Spear",
+										"{@item Spear|phb}",
 										"1 gp",
 										"1d6 piercing",
 										"3 lb.",
@@ -2282,7 +2298,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Crossbow, light",
+										"{@item light crossbow|phb|Crossbow, light}",
 										"25 gp",
 										"1d8 piercing",
 										"5 lb.",
@@ -2293,7 +2309,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Dart",
+										"{@item Dart|phb}",
 										"5 cp",
 										"1d4 piercing",
 										"1/4 lb.",
@@ -2304,7 +2320,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Shortbow",
+										"{@item Shortbow|phb}",
 										"25 gp",
 										"1d6 piercing",
 										"2 lb.",
@@ -2315,7 +2331,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Sling",
+										"{@item Sling|phb}",
 										"1 sp",
 										"1d4 bludgeoning",
 										"\u2014",
@@ -2333,7 +2349,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Battleaxe",
+										"{@item Battleaxe|phb}",
 										"10 gp",
 										"1d8 slashing",
 										"4 lb.",
@@ -2344,7 +2360,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Flail",
+										"{@item Flail|phb}",
 										"10 gp",
 										"1d8 bludgeoning",
 										"2 lb.",
@@ -2355,7 +2371,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Glaive",
+										"{@item Glaive|phb}",
 										"20 gp",
 										"1d10 slashing",
 										"6 lb.",
@@ -2366,7 +2382,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Greataxe",
+										"{@item Greataxe|phb}",
 										"30 gp",
 										"1d12 slashing",
 										"7 lb.",
@@ -2377,7 +2393,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Greatsword",
+										"{@item Greatsword|phb}",
 										"50 gp",
 										"2d6 slashing",
 										"6 lb.",
@@ -2388,7 +2404,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Halberd",
+										"{@item Halberd|phb}",
 										"20 gp",
 										"1d10 slashing",
 										"6 lb.",
@@ -2399,7 +2415,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Lance",
+										"{@item Lance|phb}",
 										"10 gp",
 										"1d12 piercing",
 										"6 lb.",
@@ -2410,7 +2426,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Longsword",
+										"{@item Longsword|phb}",
 										"15 gp",
 										"1d8 slashing",
 										"3 lb.",
@@ -2421,7 +2437,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Maul",
+										"{@item Maul|phb}",
 										"10 gp",
 										"2d6 bludgeoning",
 										"10 lb.",
@@ -2432,7 +2448,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Morningstar",
+										"{@item Morningstar|phb}",
 										"15 gp",
 										"1d8 piercing",
 										"4 lb.",
@@ -2443,7 +2459,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Pike",
+										"{@item Pike|phb}",
 										"5 gp",
 										"1d10 piercing",
 										"18 lb.",
@@ -2454,7 +2470,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Rapier",
+										"{@item Rapier|phb}",
 										"25 gp",
 										"1d8 piercing",
 										"2 lb.",
@@ -2465,7 +2481,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Scimitar",
+										"{@item Scimitar|phb}",
 										"25 gp",
 										"1d6 slashing",
 										"3 lb.",
@@ -2476,7 +2492,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Shortsword",
+										"{@item Shortsword|phb}",
 										"10 gp",
 										"1d6 piercing",
 										"2 lb.",
@@ -2487,7 +2503,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Trident",
+										"{@item Trident|phb}",
 										"5 gp",
 										"1d6 piercing",
 										"4 lb.",
@@ -2498,7 +2514,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"War pick",
+										"{@item War pick|phb}",
 										"5 gp",
 										"1d8 piercing",
 										"2 lb.",
@@ -2509,7 +2525,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Warhammer",
+										"{@item Warhammer|phb}",
 										"15 gp",
 										"1d8 bludgeoning",
 										"2 lb.",
@@ -2520,7 +2536,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Whip",
+										"{@item Whip|phb}",
 										"2 gp",
 										"1d4 slashing",
 										"3 lb.",
@@ -2538,7 +2554,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Blowgun",
+										"{@item Blowgun|phb}",
 										"10 gp",
 										"1 piercing",
 										"1 lb.",
@@ -2549,7 +2565,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Crossbow, hand",
+										"{@item hand crossbow|phb|Crossbow, hand}",
 										"75 gp",
 										"1d6 piercing",
 										"3 lb.",
@@ -2560,7 +2576,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Crossbow, heavy",
+										"{@item heavy crossbow|phb|Crossbow, heavy}",
 										"50 gp",
 										"1d10 piercing",
 										"18 lb.",
@@ -2571,7 +2587,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Longbow",
+										"{@item Longbow|phb}",
 										"50 gp",
 										"1d8 piercing",
 										"2 lb.",
@@ -2582,7 +2598,7 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
-										"Net",
+										"{@item Net|phb}",
 										"1 gp",
 										"\u2014",
 										"3 lb.",
@@ -3100,7 +3116,7 @@
 									"25 lb."
 								],
 								[
-									"Ink (1 ounce bottle)",
+									"Ink (1-ounce bottle)",
 									"10 gp",
 									"\u2014"
 								],
@@ -3744,49 +3760,49 @@
 								"The starting equipment you get from your class includes a collection of useful adventuring gear, put together in a pack. The contents of these packs are listed here. If you are buying your starting equipment, you can purchase a pack for the price shown, which might be cheaper than buying the items individually.",
 								{
 									"type": "entries",
-									"name": "Burglar's Pack (16gp)",
+									"name": "Burglar's Pack (16 gp)",
 									"entries": [
 										" Includes a backpack, a bag of 1,000 ball bearings, 10 feet of string, a bell, 5 candles, a crowbar, a hammer, 10 pitons, a hooded lantern, 2 flasks of oil, 5 days of rations, a tinderbox, and a waterskin. The pack also has 50 feet of hempen rope strapped to the side of it."
 									]
 								},
 								{
 									"type": "entries",
-									"name": "Diplomat's Pack (39gp)",
+									"name": "Diplomat's Pack (39 gp)",
 									"entries": [
 										"Includes a chest, 2 cases for maps and scrolls, a set of fine clothes, a bottle of ink, an ink pen, a lamp, 2 flasks of oil, 5 sheets of paper, a vial of perfume, sealing wax, and soap."
 									]
 								},
 								{
 									"type": "entries",
-									"name": "Dungeoneer's Pack (12gp)",
+									"name": "Dungeoneer's Pack (12 gp)",
 									"entries": [
 										" Includes a backpack, a crowbar, a hammer, 10 pitons, 10 torches, a tinderbox, 10 days of rations, and a waterskin. The pack also has 50 feet of hempen rope strapped to the side of it."
 									]
 								},
 								{
 									"type": "entries",
-									"name": "Entertainer's Pack (40gp)",
+									"name": "Entertainer's Pack (40 gp)",
 									"entries": [
 										"Includes a backpack, a bedroll, 2 costumes, 5 candles, 5 days of rations, a waterskin, and a disguise kit."
 									]
 								},
 								{
 									"type": "entries",
-									"name": "Explorer's Pack (10gp)",
+									"name": "Explorer's Pack (10 gp)",
 									"entries": [
 										"Includes a backpack, a bedroll, a mess kit, a tinderbox, 10 torches, 10 days of rations, and a waterskin. The pack also has 50 feet of hempen rope strapped to the side of it."
 									]
 								},
 								{
 									"type": "entries",
-									"name": "Priest's Pack (19gp)",
+									"name": "Priest's Pack (19 gp)",
 									"entries": [
 										"Includes a backpack, a blanket, 10 candles, a tinderbox, an alms box, 2 blocks of incense, a censer, vestments, 2 days of rations, and a waterskin."
 									]
 								},
 								{
 									"type": "entries",
-									"name": "Scholar's Pack (40gp)",
+									"name": "Scholar's Pack (40 gp)",
 									"entries": [
 										"Includes a backpack, a book of lore, a bottle of ink, an ink pen, 10 sheets of parchment, a little bag of sand, and a small knife."
 									]
@@ -3879,7 +3895,6 @@
 						},
 						{
 							"type": "table",
-							"caption": "",
 							"colLabels": [
 								"Item",
 								"Cost",
@@ -4077,8 +4092,26 @@
 									"type": "row",
 									"style": "row-indent-first",
 									"row": [
+										"Dragonchess set",
+										"1 gp",
+										"1/2 lb."
+									]
+								},
+								{
+									"type": "row",
+									"style": "row-indent-first",
+									"row": [
 										"Playing card set",
 										"5 sp",
+										"\u2014"
+									]
+								},
+								{
+									"type": "row",
+									"style": "row-indent-first",
+									"row": [
+										"Three-Dragon Ante set",
+										"1 gp",
 										"\u2014"
 									]
 								},
@@ -4934,7 +4967,7 @@
 							"name": "Spellcasting Services",
 							"entries": [
 								"People who are able to cast spells don't fall into the category of ordinary hirelings. It might be possible to find someone willing to cast a spell in exchange for coin or favors, but it is rarely easy and no established pay rates exist. As a rule, the higher the level of the desired spell, the harder it is to find someone who can cast it and the more it costs.",
-								"Hiring someone to cast a relatively common spell of 1st or 2nd level, such as cure wounds or identify, is easy enough in a city or town, and might cost 10 to 50 gold pieces (plus the cost of any expensive material components). Finding someone able and willing to cast a higher-level spell might involve traveling to a large city, perhaps one with a university or prominent temple. Once found, the spellcaster might ask for a service instead of payment\u2014the kind of service that only adventurers can provide, such as retrieving a rare item from a dangerous locale or traversing a monster infested wilderness to deliver something important to a distant settlement."
+								"Hiring someone to cast a relatively common spell of {@filter 1st|spells|level=1} or {@filter 2nd|spells|level=2} level, such as {@spell cure wounds} or {@spell identify}, is easy enough in a city or town, and might cost 10 to 50 gold pieces (plus the cost of any expensive material components). Finding someone able and willing to cast a higher-level spell might involve traveling to a large city, perhaps one with a university or prominent temple. Once found, the spellcaster might ask for a service instead of payment\u2014the kind of service that only adventurers can provide, such as retrieving a rare item from a dangerous locale or traversing a monster infested wilderness to deliver something important to a distant settlement."
 							]
 						}
 					]
@@ -4943,421 +4976,7 @@
 					"type": "section",
 					"name": "Trinkets",
 					"entries": [
-						"When you make your character, you can roll once on the Trinkets table to gain a trinket, a simple item lightly touched by mystery. The DM might also use this table. It can help stock a room in a dungeon or fill a creature's pockets.",
-						{
-							"type": "table",
-							"caption": "Trinkets",
-							"colLabels": [
-								"d100",
-								"Trinket"
-							],
-							"colStyles": [
-								"col-xs-2 text-align-center",
-								"col-xs-10"
-							],
-							"rows": [
-								[
-									"01",
-									"A mummified goblin hand"
-								],
-								[
-									"02",
-									"A piece of crystal that faintly glows in the moonlight"
-								],
-								[
-									"03",
-									"A gold coin minted in an unknown land"
-								],
-								[
-									"04",
-									"A diary written in a language you don't know"
-								],
-								[
-									"05",
-									"A brass ring that never tarnishes"
-								],
-								[
-									"06",
-									"An old chess piece made from glass"
-								],
-								[
-									"07",
-									"A pair of knucklebone dice, each with a skull symbol on the side that would normally show six pips"
-								],
-								[
-									"08",
-									"A small idol depicting a nightmarish creature that gives you unsettling dreams when you sleep near it"
-								],
-								[
-									"09",
-									"A rope necklace from which dangles four mummified elf fingers"
-								],
-								[
-									"10",
-									"The deed for a parcel of land in a realm unknown to you"
-								],
-								[
-									"11",
-									"A 1-ounce block made from an unknown material"
-								],
-								[
-									"12",
-									"A small cloth doll skewered with needles"
-								],
-								[
-									"13",
-									"A tooth from an unknown beast"
-								],
-								[
-									"14",
-									"An enormous scale, perhaps from a dragon"
-								],
-								[
-									"15",
-									"A bright green feather"
-								],
-								[
-									"16",
-									"An old divination card bearing your likeness"
-								],
-								[
-									"17",
-									"A glass orb filled with moving smoke"
-								],
-								[
-									"18",
-									"A 1-pound egg with a bright red shell"
-								],
-								[
-									"19",
-									"A pipe that blows bubbles"
-								],
-								[
-									"20",
-									"A glass jar containing a weird bit of flesh floating in pickling fluid"
-								],
-								[
-									"21",
-									"A tiny gnome-crafted music box that plays a song you dimly remember from your childhood"
-								],
-								[
-									"22",
-									"A small wooden statuette of a smug halfling"
-								],
-								[
-									"23",
-									"A brass orb etched with strange runes"
-								],
-								[
-									"24",
-									"A multicolored stone disk"
-								],
-								[
-									"25",
-									"A tiny silver icon of a raven"
-								],
-								[
-									"26",
-									"A bag containing forty-seven humanoid teeth, one of which is rotten"
-								],
-								[
-									"27",
-									"A shard of obsidian that always feels warm to the touch"
-								],
-								[
-									"28",
-									"A dragon's bony talon hanging from a plain leather necklace"
-								],
-								[
-									"29",
-									"A pair of old socks"
-								],
-								[
-									"30",
-									"A blank book whose pages refuse to hold ink, chalk, graphite, or any other substance or marking"
-								],
-								[
-									"31",
-									"A silver badge in the shape of a five-pointed star"
-								],
-								[
-									"32",
-									"A knife that belonged to a relative"
-								],
-								[
-									"33",
-									"A glass vial filled with nail clippings"
-								],
-								[
-									"34",
-									"A rectangular metal device with two tiny metal cups on one end that throws sparks when wet"
-								],
-								[
-									"35",
-									"A white, sequined glove sized for a human"
-								],
-								[
-									"36",
-									"A vest with one hundred tiny pockets"
-								],
-								[
-									"37",
-									"A small, weightless stone block"
-								],
-								[
-									"38",
-									"A tiny sketch portrait of a goblin"
-								],
-								[
-									"39",
-									"An empty glass vial that smells of perfume when opened"
-								],
-								[
-									"40",
-									"A gemstone that looks like a lump of coal when examined by anyone but you"
-								],
-								[
-									"41",
-									"A scrap of cloth from an old banner"
-								],
-								[
-									"42",
-									"A rank insignia from a lost legionnaire"
-								],
-								[
-									"43",
-									"A tiny silver bell without a clapper"
-								],
-								[
-									"44",
-									"A mechanical canary inside a gnomish lamp"
-								],
-								[
-									"45",
-									"A tiny chest carved to look like it has numerous feet on the bottom"
-								],
-								[
-									"46",
-									"A dead {@creature sprite} inside a clear glass bottle"
-								],
-								[
-									"47",
-									"A metal can that has no opening but sounds as if it is filled with liquid, sand, spiders, or broken glass (your choice)"
-								],
-								[
-									"48",
-									"A glass orb filled with water, in which swims a clockwork goldfish"
-								],
-								[
-									"49",
-									"A silver spoon with an 'M' engraved on the handle"
-								],
-								[
-									"50",
-									"A whistle made from gold-colored wood"
-								],
-								[
-									"51",
-									"A dead scarab beetle the size of your hand"
-								],
-								[
-									"52",
-									"Two toy soldiers, one with a missing head "
-								],
-								[
-									"53",
-									"A small box filled with different-sized buttons"
-								],
-								[
-									"54",
-									"A candle that cant be lit"
-								],
-								[
-									"55",
-									"A tiny cage with no door"
-								],
-								[
-									"56",
-									"An old key"
-								],
-								[
-									"57",
-									"An indecipherable treasure map"
-								],
-								[
-									"58",
-									"A hilt from a broken sword"
-								],
-								[
-									"59",
-									"A rabbit's foot"
-								],
-								[
-									"60",
-									"A glass eye"
-								],
-								[
-									"61",
-									"A cameo carved in the likeness of a hideous person"
-								],
-								[
-									"62",
-									"A silver skull the size of a coin"
-								],
-								[
-									"63",
-									"An alabaster mask"
-								],
-								[
-									"64",
-									"A pyramid of sticky black incense that smells very bad"
-								],
-								[
-									"65",
-									"A nightcap that, when worn, gives you pleasant dreams"
-								],
-								[
-									"66",
-									"A single caltrop made from bone"
-								],
-								[
-									"67",
-									"A gold monocle frame without the lens"
-								],
-								[
-									"68",
-									"A 1-inch cube, each side painted a different color"
-								],
-								[
-									"69",
-									"A crystal knob from a door"
-								],
-								[
-									"70",
-									"A small packet filled with pink dust"
-								],
-								[
-									"71",
-									"A fragment of a beautiful song, written as musical notes on two pieces of parchment"
-								],
-								[
-									"72",
-									"A silver teardrop earring made from a real teardrop"
-								],
-								[
-									"73",
-									"The shell of an egg painted with scenes of human misery in disturbing detail"
-								],
-								[
-									"74",
-									"A fan that, when unfolded, shows a sleeping cat"
-								],
-								[
-									"75",
-									"A set of bone pipes"
-								],
-								[
-									"76",
-									"A four-leaf clover pressed inside a book discussing manners and etiquette"
-								],
-								[
-									"77",
-									"A sheet of parchment upon which is drawn a complex mechanical contraption"
-								],
-								[
-									"78",
-									"An ornate scabbard that fits no blade you have found so far"
-								],
-								[
-									"79",
-									"An invitation to a party where a murder happened"
-								],
-								[
-									"80",
-									"A bronze pentacle with an etching of a rat's head in its center"
-								],
-								[
-									"81",
-									"A purple handkerchief embroidered with the name of a powerful {@creature archmage}"
-								],
-								[
-									"82",
-									"Half of a floorplan for a temple, castle, or some other structure"
-								],
-								[
-									"83",
-									"A bit of folded cloth that, when unfolded, turns into a stylish cap"
-								],
-								[
-									"84",
-									"A receipt of deposit at a bank in a far-flung city"
-								],
-								[
-									"85",
-									"A diary with seven missing pages"
-								],
-								[
-									"86",
-									"An empty silver snuffbox bearing an inscription on the surface that says \"dreams\""
-								],
-								[
-									"87",
-									"An iron holy symbol devoted to an unknown god"
-								],
-								[
-									"88",
-									"A book that tells the story of a legendary hero's rise and fall, with the last chapter missing"
-								],
-								[
-									"89",
-									"A vial of dragon blood"
-								],
-								[
-									"90",
-									"An ancient arrow of elven design"
-								],
-								[
-									"91",
-									"A needle that never bends"
-								],
-								[
-									"92",
-									"An ornate brooch of dwarven design"
-								],
-								[
-									"93",
-									"An empty wine bottle bearing a pretty label that says, \"The Wizard of Wines Winery, Red Dragon Crush, 331422-W\""
-								],
-								[
-									"94",
-									"A mosaic tile with a multicolored, glazed surface"
-								],
-								[
-									"95",
-									"A {@condition petrified} mouse"
-								],
-								[
-									"96",
-									"A black pirate flag adorned with a dragon's skull and crossbones"
-								],
-								[
-									"97",
-									"A tiny mechanical crab or spider that moves about when it's not being observed"
-								],
-								[
-									"98",
-									"A glass jar containing lard with a label that reads, \"Griffon Grease\""
-								],
-								[
-									"99",
-									"A wooden box with a ceramic bottom that holds a living worm with a head on each end of it's body"
-								],
-								[
-									"100",
-									"A metal urn containing the ashes of a hero"
-								]
-							]
-						}
+						"When you make your character, you can roll once on the {@item Trinket (PHB)|phb|Trinkets} table to gain a trinket, a simple item lightly touched by mystery. The DM might also use this table. It can help stock a room in a dungeon or fill a creature's pockets."
 					]
 				}
 			]
@@ -5382,7 +5001,7 @@
 							"type": "entries",
 							"name": "Prerequisites",
 							"entries": [
-								"To qualify for a new class, you must meet the ability score. prerequisites for both your current class and your new one, as shown in the Multiclassing Prerequisites table. For example, a barbarian who decides to multiclass into the druid class must have both Strength and Wisdom scores of 13 or higher. Without the full training that a beginning character receives, you must be a quick study in your new class. having a natural aptitude that is reflected by higher-than-average ability scores.",
+								"To qualify for a new class, you must meet the ability score prerequisites for both your current class and your new one, as shown in the Multiclassing Prerequisites table. For example, a barbarian who decides to multiclass into the druid class must have both Strength and Wisdom scores of 13 or higher. Without the full training that a beginning character receives, you must be a quick study in your new class. having a natural aptitude that is reflected by higher-than-average ability scores.",
 								{
 									"type": "table",
 									"caption": "Multiclassing Prerequisites",
@@ -5459,7 +5078,7 @@
 							"name": "Hit Points and Hit Dice",
 							"entries": [
 								"You gain the hit points from your new class as described for levels after 1st. You gain the 1st-level hit points for a class only when you are a 1st-level character.",
-								"You add together the Hit Dice granted by all your classes to form your pool of Hit Dice. if the Hit Dice are the same die type, you can simply pool them together. For example, both the fighter and the paladin have a d10. so if you are a paladin 5/fighter 5, you have ten d10 Hit Dice. If your classes give you Hit Dice of different types, keep track of them separately. If you area paladin 5/cleric 5, for example, you have five d10 Hit Dice and five d8 Hit Dice."
+								"You add together the Hit Dice granted by all your classes to form your pool of Hit Dice. if the Hit Dice are the same die type, you can simply pool them together. For example, both the fighter and the paladin have a d10. so if you are a paladin 5/fighter 5, you have ten d10 Hit Dice. If your classes give you Hit Dice of different types, keep track of them separately. If you are a paladin 5/cleric 5, for example, you have five d10 Hit Dice and five d8 Hit Dice."
 							]
 						},
 						{
@@ -5596,7 +5215,7 @@
 										},
 										{
 											"type": "table",
-											"caption": "",
+											"caption": "Multiclass Spellcaster: Spell Slots per Spell Level",
 											"colLabels": [
 												"Lvl.",
 												"1st",
@@ -5748,7 +5367,7 @@
 													3,
 													3,
 													3,
-													3,
+													2,
 													1,
 													"\u2014",
 													"\u2014",
@@ -5760,7 +5379,7 @@
 													3,
 													3,
 													3,
-													3,
+													2,
 													1,
 													"\u2014",
 													"\u2014",
@@ -5772,7 +5391,7 @@
 													3,
 													3,
 													3,
-													3,
+													2,
 													1,
 													1,
 													"\u2014",
@@ -5784,7 +5403,7 @@
 													3,
 													3,
 													3,
-													3,
+													2,
 													1,
 													1,
 													"\u2014",
@@ -5796,7 +5415,7 @@
 													3,
 													3,
 													3,
-													3,
+													2,
 													1,
 													1,
 													1,
@@ -5808,7 +5427,7 @@
 													3,
 													3,
 													3,
-													3,
+													2,
 													1,
 													1,
 													1,
@@ -5820,7 +5439,7 @@
 													3,
 													3,
 													3,
-													3,
+													2,
 													1,
 													1,
 													1,
@@ -6096,23 +5715,23 @@
 									"rows": [
 										[
 											"Strength",
-											"Athletics"
+											"{@skill Athletics}"
 										],
 										[
 											"Dexterity",
-											"Acrobatics, Sleight of Hand, Stealth"
+											"{@skill Acrobatics}, {@skill Sleight of Hand}, {@skill Stealth}"
 										],
 										[
 											"Intelligence",
-											"Arcana, History, Investigation, Nature, Religion"
+											"{@skill Arcana}, {@skill History}, {@skill Investigation}, {@skill Nature}, {@skill Religion}"
 										],
 										[
 											"Wisdom",
-											"Animal Handling, Insight, Medicine, Perception, Survival"
+											"{@skill Animal Handling}, {@skill Insight}, {@skill Medicine}, {@skill Perception}, {@skill Survival}"
 										],
 										[
 											"Charisma",
-											"Deception, Intimidation, Performance, Persuasion"
+											"{@skill Deception}, {@skill Intimidation}, {@skill Performance}, {@skill Persuasion}"
 										]
 									]
 								},
@@ -6337,6 +5956,10 @@
 								},
 								{
 									"type": "inset",
+									"data": {
+										"quickref": 3,
+										"allowRefDupe": true
+									},
 									"name": "Hiding",
 									"entries": [
 										"When you try to hide, make a Dexterity (Stealth) check. Until you are discovered or you stop hiding, that check's total is contested by the Wisdom (Perception) check of any creature that actively searches for signs of your presence.",
@@ -6904,7 +6527,7 @@
 									"name": "Falling",
 									"entries": [
 										"A fall from a great height is one of the most common hazards facing an adventurer.",
-										"At the end of a fall, a creature takes 1d6 bludgeoning damage for every 10 feet it fell, to a maximum of 20d6. The creature lands prone, unless it avoids taking damage from the fall."
+										"At the end of a fall, a creature takes {@dice 1d6} bludgeoning damage for every 10 feet it fell, to a maximum of {@dice 20d6}. The creature lands {@condition prone}, unless it avoids taking damage from the fall."
 									]
 								},
 								{
@@ -6926,10 +6549,15 @@
 										"quickref": 3
 									},
 									"name": "Vision and Light",
+									"alias": [
+										"Blindsight",
+										"Darkvision",
+										"Truesight"
+									],
 									"entries": [
 										"The most fundamental tasks of adventuring\u2014noticing danger, finding hidden objects, hitting an enemy in combat, and targeting a spell, to name just a few\u2014rely heavily on a character's ability to see. Darkness and other effects that obscure vision can prove a significant hindrance.",
 										"A given area might be lightly or heavily obscured. In a {@b lightly obscured} area, such as dim light, patchy fog, or moderate foliage, creatures have disadvantage on Wisdom (Perception) checks that rely on sight.",
-										"{@b A heavily obscured} area\u2014such as darkness, opaque fog, or dense foliage\u2014blocks vision entirely. A creature in a heavily obscured area effectively suffers from the blinded condition (see the appendix). A heavily obscured area doesn't blind you, but you are effectively blinded when you try to see something obscured by it.",
+										"{@b A heavily obscured} area\u2014such as darkness, opaque fog, or dense foliage\u2014blocks vision entirely. A creature in a heavily obscured area effectively suffers from the {@condition blinded} condition (see the appendix). A heavily obscured area doesn't blind you, but you are effectively blinded when you try to see something obscured by it.",
 										"The presence or absence of light in an environment creates three categories of illumination: bright light, dim light, and darkness.",
 										"{@b Bright light} lets most creatures see normally. Even gloomy days provide bright light, as do torches, lanterns, fires, and other sources of illumination within a specific radius.",
 										"{@b Dim light}, also called shadows, creates a lightly obscured area. An area of dim light is usually a boundary between a source of bright light, such as a torch, and surrounding darkness. The soft light of twilight and dawn also counts as dim light. A particularly brilliant full moon might bathe the land in dim light.",
@@ -7296,7 +6924,40 @@
 										"You can communicate however you are able, through brief utterances and gestures, as you take your turn.",
 										"You can also interact with one object or feature of the environment for free, during either your move or your action. For example, you could open a door during your move as you stride toward a foe, or you could draw your weapon as part of the same action you use to attack.",
 										"If you want to interact with a second object, you need to use your action. Some magic items and other special objects always require an action to use, as stated in their descriptions.",
-										"The DM might require you to use an action for any of these activities when it needs special care or when it presents an unusual obstacle. For instance, the DM could reasonably expect you to use an action to open a stuck door or turn a crank to lower a drawbridge."
+										"The DM might require you to use an action for any of these activities when it needs special care or when it presents an unusual obstacle. For instance, the DM could reasonably expect you to use an action to open a stuck door or turn a crank to lower a drawbridge.",
+										{
+											"type": "inset",
+											"name": "Interacting with Objects Around You",
+											"entries": [
+												"Here are a few examples of the sorts of thing you can do in tandem with your movement and action:",
+												{
+													"type": "list",
+													"items": [
+														"draw or sheathe a sword",
+														"open or close a door",
+														"withdraw a potion from your backpack",
+														"pick up a dropped axe",
+														"take a bauble from a table",
+														"remove a ring from your finger",
+														"stuff some food into your mouth",
+														"plant a banner in the ground",
+														"fish a few coins from your belt pouch",
+														"drink all the ale in a flagon",
+														"throw a lever or a switch",
+														"pull a torch from a sconce",
+														"take a book from a shelf you can reach",
+														"extinguish a small flame",
+														"don a mask",
+														"pull the hood of your cloak up and over your head",
+														"put your ear to a door",
+														"kick a small stone",
+														"turn a key in a lock",
+														"tap the floor with a 10-foot pole",
+														"hand an item to another character"
+													]
+												}
+											]
+										}
 									]
 								}
 							]
@@ -7307,39 +6968,6 @@
 							"entries": [
 								"Certain special abilities, spells, and situations allow you to take a special action called a reaction. A reaction is an instant response to a trigger of some kind, which can occur on your turn or on someone else's. The opportunity attack, described later in this chapter, is the most common type of reaction.",
 								"When you take a reaction, you can't take another one until the start of your next turn. If the reaction interrupts another creature's turn, that creature can continue its turn right after the reaction."
-							]
-						},
-						{
-							"type": "inset",
-							"name": "Interacting with Objects Around You",
-							"entries": [
-								"Here are a few examples of the sorts of thing you can do in tandem with your movement and action:",
-								{
-									"type": "list",
-									"items": [
-										"draw or sheathe a sword",
-										"open or close a door",
-										"withdraw a potion from your backpack",
-										"pick up a dropped axe",
-										"take a bauble from a table",
-										"remove a ring from your finger",
-										"stuff some food into your mouth",
-										"plant a banner in the ground",
-										"fish a few coins from your belt pouch",
-										"drink all the ale in a flagon",
-										"throw a lever or a switch",
-										"pull a torch from a sconce",
-										"take a book from a shelf you can reach",
-										"extinguish a small flame",
-										"don a mask",
-										"pull the hood of your cloak up and over your head",
-										"put your ear to a door",
-										"kick a small stone",
-										"turn a key in a lock",
-										"tap the floor with a 10-foot pole",
-										"hand an item to another character"
-									]
-								}
 							]
 						}
 					]
@@ -7937,10 +7565,15 @@
 								"Some creatures and objects are exceedingly difficult or unusually easy to hurt with certain types of damage.",
 								"If a creature or an object has {@b resistance} to a damage type, damage of that type is halved against it. If a creature or an object has {@b vulnerability} to a damage type, damage of that type is doubled against it.",
 								"Resistance and then vulnerability are applied after all other modifiers to damage. For example, a creature has resistance to bludgeoning damage and is hit by an attack that deals 25 bludgeoning damage. The creature is also within a magical aura that reduces all damage by 5. The 25 damage is first reduced by 5 and then halved, so the creature takes 10 damage.",
-								"Describing the Effects of Damage",
-								"Dungeon Masters describe hit point loss in different ways.",
-								"When your current hit point total is half or more of your hit point maximum, you typically show no signs of injury. When you drop below half your hit point maximum, you show signs of injury. When you drop below half of your hit point maximum, you show signs of wear, such as cuts and bruises. An attack that reduces you to 0 hit points strikes you directly, leaving a bleeding injury or other trauma, or it simply knocks you unconscious.",
-								"Multiple instances of resistance or vulnerability that affect the same damage type count as only one instance. For example, if a creature has resistance to fire damage as well as resistance to all nonmagical damage, the damage of a nonmagical fire is reduced by half against the creature, not reduced by three-quarters."
+								"Multiple instances of resistance or vulnerability that affect the same damage type count as only one instance. For example, if a creature has resistance to fire damage as well as resistance to all nonmagical damage, the damage of a nonmagical fire is reduced by half against the creature, not reduced by three-quarters.",
+								{
+									"type": "entries",
+									"name": "Describing the Effects of Damage",
+									"entries": [
+										"Dungeon Masters describe hit point loss in different ways.",
+										"When your current hit point total is half or more of your hit point maximum, you typically show no signs of injury. When you drop below half your hit point maximum, you show signs of injury. When you drop below half of your hit point maximum, you show signs of wear, such as cuts and bruises. An attack that reduces you to 0 hit points strikes you directly, leaving a bleeding injury or other trauma, or it simply knocks you unconscious."
+									]
+								}
 							]
 						},
 						{
@@ -8445,7 +8078,7 @@
 							"type": "link",
 							"href": {
 								"type": "internal",
-								"path": "conditions.html"
+								"path": "conditionsdiseases.html"
 							},
 							"text": "conditions"
 						},
@@ -9112,181 +8745,186 @@
 									"name": "Deities of Eberron",
 									"entries": [
 										{
-											"type": "table",
-											"caption": "",
-											"colLabels": [
-												"The Sovereign Host",
-												"Alignment",
-												"Suggested Domains",
-												"Symbol"
-											],
-											"colStyles": [
-												"col-xs-3",
-												"col-xs-1 text-align-center",
-												"col-xs-3",
-												"col-xs-5"
-											],
-											"rows": [
-												[
-													"Arawai, goddess of fertility",
-													"NG",
-													"Life, Nature",
-													"Sheaf of wheat tied with green ribbon"
-												],
-												[
-													"Aureon, god of law and knowledge",
-													"LN",
-													"Knowledge",
-													"Open tome"
-												],
-												[
-													"Balinor, god of beasts and the hunt",
-													"N",
-													"Life, Nature",
-													"Pair of antlers"
-												],
-												[
-													"Boldrei, goddess of community and home",
-													"LG",
-													"Life",
-													"Fire in a stone hearth"
-												],
-												[
-													"Dol Arrah, goddess of sunlight and honor",
-													"LG",
-													"Light, War",
-													"Rising sun"
-												],
-												[
-													"Dol Dorn, god of strength at arms",
-													"CG",
-													"War",
-													"Longsword crossed over a shield"
-												],
-												[
-													"Kol Korran, god of trade and wealth",
-													"N",
-													"Trickery",
-													"Nine-sided gold coin"
-												],
-												[
-													"Olladra, goddess of good fortune",
-													"NG",
-													"Life, Trickery",
-													"Domino"
-												],
-												[
-													"Onatar, god of craft",
-													"NG",
-													"Knowledge",
-													"Crossed hammer and tongs"
-												]
-											]
-										},
-										{
-											"type": "table",
-											"colLabels": [
-												"The Dark Six",
-												"Alignment",
-												"Suggested Domains",
-												"Symbol"
-											],
-											"colStyles": [
-												"col-xs-3",
-												"col-xs-1 text-align-center",
-												"col-xs-3",
-												"col-xs-5"
-											],
-											"rows": [
-												[
-													"The Devourer, god of nature's wrath",
-													"NE",
-													"Tempest",
-													"Bundle of five sharpened bones"
-												],
-												[
-													"The Fury, goddess of wrath and madness",
-													"NE",
-													"War",
-													"Winged wyrm with woman's head and upper body"
-												],
-												[
-													"The Keeper, god of greed and death",
-													"NE",
-													"Death",
-													"Dragonshard stone in the shape of a fang"
-												],
-												[
-													"The Mockery, god of violence and treachery",
-													"NE",
-													"War",
-													"Five blood-spattered tools"
-												],
-												[
-													"The Shadow, god of dark magic",
-													"CE",
-													"Knowledge",
-													"Obsidian tower"
-												],
-												[
-													"The Traveler, deity of chaos and change",
-													"CN",
-													"Knowledge, Trickery",
-													"Four crossed, rune-inscribed bones"
-												]
-											]
-										},
-										{
-											"type": "table",
-											"colLabels": [
-												"Other Faiths of Eberron",
-												"Alignment",
-												"Suggested Domains",
-												"Symbol"
-											],
-											"colStyles": [
-												"col-xs-3",
-												"col-xs-1 text-align-center",
-												"col-xs-3",
-												"col-xs-5"
-											],
-											"rows": [
-												[
-													"The Silver Flame, deity of protection and good",
-													"LG",
-													"Life, Light, War",
-													"Flame drawn on silver or molded from silver"
-												],
-												[
-													"The Blood of Vol, philosophy of immortality and undeath",
-													"LN",
-													"Death, Life",
-													"Stylized dragon skull on red teardrop gem"
-												],
-												[
-													"Cults of the Dragon Below, deities of madness",
-													"NE",
-													"Trickery",
-													"Varies"
-												],
-												[
-													"The Path of Light, philosophy of light and self-improvement",
-													"LN",
-													"Life, Light",
-													"Brilliant crystal"
-												],
-												[
-													"The Undying Court, elven ancestors",
-													"NG",
-													"Knowledge, Life",
-													"Varies"
-												],
-												[
-													"The Spirits of the Past, elven ancestors",
-													"CG",
-													"War",
-													"Varies"
-												]
+											"type": "tableGroup",
+											"name": "Deities of Eberron",
+											"tables": [
+												{
+													"type": "table",
+													"colLabels": [
+														"The Sovereign Host",
+														"Alignment",
+														"Suggested Domains",
+														"Symbol"
+													],
+													"colStyles": [
+														"col-xs-3",
+														"col-xs-1 text-align-center",
+														"col-xs-3",
+														"col-xs-5"
+													],
+													"rows": [
+														[
+															"Arawai, goddess of fertility",
+															"NG",
+															"Life, Nature",
+															"Sheaf of wheat tied with green ribbon"
+														],
+														[
+															"Aureon, god of law and knowledge",
+															"LN",
+															"Knowledge",
+															"Open tome"
+														],
+														[
+															"Balinor, god of beasts and the hunt",
+															"N",
+															"Life, Nature",
+															"Pair of antlers"
+														],
+														[
+															"Boldrei, goddess of community and home",
+															"LG",
+															"Life",
+															"Fire in a stone hearth"
+														],
+														[
+															"Dol Arrah, goddess of sunlight and honor",
+															"LG",
+															"Light, War",
+															"Rising sun"
+														],
+														[
+															"Dol Dorn, god of strength at arms",
+															"CG",
+															"War",
+															"Longsword crossed over a shield"
+														],
+														[
+															"Kol Korran, god of trade and wealth",
+															"N",
+															"Trickery",
+															"Nine-sided gold coin"
+														],
+														[
+															"Olladra, goddess of good fortune",
+															"NG",
+															"Life, Trickery",
+															"Domino"
+														],
+														[
+															"Onatar, god of craft",
+															"NG",
+															"Knowledge",
+															"Crossed hammer and tongs"
+														]
+													]
+												},
+												{
+													"type": "table",
+													"colLabels": [
+														"The Dark Six",
+														"Alignment",
+														"Suggested Domains",
+														"Symbol"
+													],
+													"colStyles": [
+														"col-xs-3",
+														"col-xs-1 text-align-center",
+														"col-xs-3",
+														"col-xs-5"
+													],
+													"rows": [
+														[
+															"The Devourer, god of nature's wrath",
+															"NE",
+															"Tempest",
+															"Bundle of five sharpened bones"
+														],
+														[
+															"The Fury, goddess of wrath and madness",
+															"NE",
+															"War",
+															"Winged wyrm with woman's head and upper body"
+														],
+														[
+															"The Keeper, god of greed and death",
+															"NE",
+															"Death",
+															"Dragonshard stone in the shape of a fang"
+														],
+														[
+															"The Mockery, god of violence and treachery",
+															"NE",
+															"War",
+															"Five blood-spattered tools"
+														],
+														[
+															"The Shadow, god of dark magic",
+															"CE",
+															"Knowledge",
+															"Obsidian tower"
+														],
+														[
+															"The Traveler, deity of chaos and change",
+															"CN",
+															"Knowledge, Trickery",
+															"Four crossed, rune-inscribed bones"
+														]
+													]
+												},
+												{
+													"type": "table",
+													"colLabels": [
+														"Other Faiths of Eberron",
+														"Alignment",
+														"Suggested Domains",
+														"Symbol"
+													],
+													"colStyles": [
+														"col-xs-3",
+														"col-xs-1 text-align-center",
+														"col-xs-3",
+														"col-xs-5"
+													],
+													"rows": [
+														[
+															"The Silver Flame, deity of protection and good",
+															"LG",
+															"Life, Light, War",
+															"Flame drawn on silver or molded from silver"
+														],
+														[
+															"The Blood of Vol, philosophy of immortality and undeath",
+															"LN",
+															"Death, Life",
+															"Stylized dragon skull on red teardrop gem"
+														],
+														[
+															"Cults of the Dragon Below, deities of madness",
+															"NE",
+															"Trickery",
+															"Varies"
+														],
+														[
+															"The Path of Light, philosophy of light and self-improvement",
+															"LN",
+															"Life, Light",
+															"Brilliant crystal"
+														],
+														[
+															"The Undying Court, elven ancestors",
+															"NG",
+															"Knowledge, Life",
+															"Varies"
+														],
+														[
+															"The Spirits of the Past, elven ancestors",
+															"CG",
+															"War",
+															"Varies"
+														]
+													]
+												}
 											]
 										}
 									]
@@ -10034,7 +9672,7 @@
 									"type": "entries",
 									"name": "Spells",
 									"entries": [
-										"A number of spells allow direct or indirect access to other planes of existence. Plane shift and gate can transport adventurers directly to any other plane of existence, with different degrees of precision. Etherealness allows adventurers to enter the Ethereal Plane and travel from there to any of the planes it touches\u2014the Shadowfell, the Feywild, or the Elemental Planes. And the astral projection spell lets adventurers project themselves into the Astral Plane and travel to the Outer Planes."
+										"A number of spells allow direct or indirect access to other planes of existence. Plane shift and gate can transport adventurers directly to any other plane of existence, with different degrees of precision. Etherealness allows adventurers to enter the Ethereal Plane and travel from there to any of the planes it touches\u2014the Shadowfell, the Feywild, or the Elemental Planes. And the {@spell astral projection} spell lets adventurers project themselves into the Astral Plane and travel to the Outer Planes."
 									]
 								},
 								{

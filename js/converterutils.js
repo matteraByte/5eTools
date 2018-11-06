@@ -1,6 +1,17 @@
 "use strict";
 
-class ConverterUtils {
+/*
+ * Various utilities to assist in statblock parse/conversion. Formatted as a Node module, to allow external use.
+ *
+ * In all cases, the first argument, `m`, is a monster statblock.
+ * Additionally, `cbMan` is a callback which should accept up to two arguments representing part of the statblock which
+ * require manual consideration/tagging, and an error message, respectively.
+ * Where available, `cbErr` accepts the same arguments, and may be called when an error occurs (the parser encounters
+ * something too far from acceptable to be solved with manual conversion; for instance, in the case of completely junk
+ * data, or common errors which should be corrected prior to running the parser).
+ */
+
+class AcConvert {
 	static tryPostProcessAc (m, cbMan, cbErr) {
 		let nuAc = [];
 		const basic = /^(\d+)( \((.*?)\))?$/.exec(m.ac.trim());
@@ -24,6 +35,7 @@ class ConverterUtils {
 					switch (pLow) {
 						// unhandled/other
 						case "unarmored defense":
+						case "suave defense":
 						case "armor scraps":
 						case "barding scraps":
 						case "patchwork armor":
@@ -137,11 +149,28 @@ class ConverterUtils {
 
 						// magic items
 						case "dwarven plate":
-							from.push("{@item dwarven plate|dmg}");
+							from.push("{@item dwarven plate}");
 							break;
-
+						case "elven chain":
+							from.push("{@item elven chain}");
+							break;
+						case "glamoured studded leather":
+							from.push("{@item glamoured studded leather}");
+							break;
 						case "bracers of defense":
 							from.push("{@item bracers of defense}");
+							break;
+						case "badge of the watch":
+							from.push("{@item Badge of the Watch|wdh}");
+							break;
+						case "ring of protection":
+							from.push("{@item ring of protection}");
+							break;
+						case "robe of the archmagi":
+							from.push("{@item robe of the archmagi}");
+							break;
+						case "staff of power":
+							from.push("{@item staff of power}");
 							break;
 
 						// TODO general auto-detect for enchanted versions of items
@@ -162,6 +191,12 @@ class ConverterUtils {
 							break;
 						case "studded leather armor +1":
 							from.push("{@item studded leather armor +1|dmg|+1 studded leather armor}");
+							break;
+						case "+2 leather armor":
+							from.push("{@item leather armor +2|dmg|+2 leather armor}");
+							break;
+						case "+3 leather armor":
+							from.push("{@item leather armor +3|dmg|+3 leather armor}");
 							break;
 
 						default: {
@@ -208,6 +243,74 @@ class ConverterUtils {
 	}
 }
 
+class TagAttack {
+	static tryTagAttacks (m, cbMan) {
+		const handleProp = (prop) => {
+			if (m[prop]) {
+				m[prop].forEach(it => {
+					if (it.entries) {
+						const str = JSON.stringify(it.entries, null, "\t");
+						const out = str.replace(/([\t ]")((?:(?:[A-Z][a-z]*|or) )*Attack:) /g, (...m) => {
+							if (TagAttack.MAP[m[2]]) {
+								return `${m[1]}${TagAttack.MAP[m[2]]} `;
+							} else {
+								cbMan(m[2]);
+								return m[0];
+							}
+						});
+						it.entries = JSON.parse(out);
+					}
+				})
+			}
+		};
+
+		handleProp("action");
+		handleProp("reaction");
+		handleProp("trait");
+		handleProp("legendary");
+		handleProp("variant");
+	}
+}
+TagAttack.MAP = {
+	"Melee Weapon Attack:": "{@atk mw}",
+	"Ranged Weapon Attack:": "{@atk rw}",
+	"Melee Attack:": "{@atk m}",
+	"Ranged Attack:": "{@atk r}",
+	"Area Attack:": "{@atk a}",
+	"Area Weapon Attack:": "{@atk aw}",
+	"Melee Spell Attack:": "{@atk ms}",
+	"Melee or Ranged Weapon Attack:": "{@atk mw,rw}",
+	"Ranged Spell Attack:": "{@atk rs}",
+	"Melee or Ranged Spell Attack:": "{@atk ms,rs}",
+	"Melee or Ranged Attack:": "{@atk m,r}"
+};
+
+class TagHit {
+	static tryTagHits (m) {
+		const handleProp = (prop) => {
+			if (m[prop]) {
+				m[prop].forEach(it => {
+					if (it.entries) {
+						const str = JSON.stringify(it.entries, null, "\t");
+						const out = str.replace(/Hit: /g, "{@h}");
+						it.entries = JSON.parse(out);
+					}
+				})
+			}
+		};
+
+		handleProp("action");
+		handleProp("reaction");
+		handleProp("trait");
+		handleProp("legendary");
+		handleProp("variant");
+	}
+}
+
 if (typeof module !== "undefined") {
-	module.exports = ConverterUtils;
+	module.exports = {
+		AcConvert,
+		TagAttack,
+		TagHit
+	};
 }

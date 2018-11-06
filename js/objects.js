@@ -4,6 +4,7 @@ const JSON_URL = "data/objects.json";
 
 window.onload = function load () {
 	ExcludeUtil.initialise();
+	SortUtil.initHandleFilterButtonClicks();
 	DataUtil.loadJSON(JSON_URL).then(onJsonLoad);
 };
 
@@ -37,6 +38,7 @@ function onJsonLoad (data) {
 			ListUtil.loadState();
 
 			History.init(true);
+			ExcludeUtil.checkShowAllExcluded(objectsList, $(`#pagecontent`));
 		});
 }
 
@@ -63,7 +65,7 @@ function addObjects (data) {
 				<a id="${obI}" href="#${UrlUtil.autoEncodeHash(obj)}" title="${obj.name}">
 					<span class="name col-xs-8">${obj.name}</span>
 					<span class="size col-xs-2">${Parser.sizeAbvToFull(obj.size)}</span>
-					<span class="source col-xs-2 source${abvSource}" title="${Parser.sourceJsonToFull(obj.source)}">${abvSource}</span>
+					<span class="source col-xs-2 ${Parser.sourceJsonToColor(obj.source)}" title="${Parser.sourceJsonToFull(obj.source)}">${abvSource}</span>
 				</a>
 			</li>
 		`;
@@ -88,9 +90,9 @@ function getSublistItem (obj, pinId) {
 	return `
 		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
 			<a href="#${UrlUtil.autoEncodeHash(obj)}" title="${obj.name}">
-				<span class="name col-xs-9">${obj.name}</span>		
-				<span class="ability col-xs-3">${Parser.sizeAbvToFull(obj.size)}</span>		
-				<span class="id hidden">${pinId}</span>				
+				<span class="name col-xs-9">${obj.name}</span>
+				<span class="ability col-xs-3">${Parser.sizeAbvToFull(obj.size)}</span>
+				<span class="id hidden">${pinId}</span>
 			</a>
 		</li>
 	`;
@@ -125,7 +127,7 @@ function loadhash (jsonIndex) {
 	`);
 
 	const imgLink = obj.tokenURL || UrlUtil.link(`img/objects/${obj.name.replace(/"/g, "")}.png`);
-	$("th.name").append(`
+	$(`#float-token`).empty().append(`
 		<a href="${imgLink}" target="_blank">
 			<img src="${imgLink}" class="token" onerror="imgError(this)">
 		</a>`
@@ -135,6 +137,6 @@ function loadhash (jsonIndex) {
 }
 
 function imgError (x) {
-	$(x).closest("th").find(`span.stats-source`).css("margin-right", "0");
+	$(`.rnd-name`).find(`span.stats-source`).css("margin-right", "0");
 	$(x).remove();
 }

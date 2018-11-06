@@ -698,32 +698,6 @@
 			"id": "AL",
 			"contents": [
 				{
-					"name": "Adventurers League Player's Guide",
-					"headers": [
-						"How to Use This Guide",
-						"What You Need to Play",
-						"Character Creation",
-						"The Adventure Logsheet",
-						"Downtime and Lifestyle",
-						"Character Advancement",
-						"Additional Player Resources"
-					]
-				},
-				{
-					"name": "Adventurers League Dungeon Masters Guide",
-					"headers": [
-						"Storyline Sessions",
-						"D&D Adventurers League Play",
-						"Being a Dungeon Master",
-						"Playing the Dungeon Master",
-						"Additional DM Resources"
-					]
-				},
-				{
-					"name": "FAQ",
-					"headers": []
-				},
-				{
 					"name": "Faction Guide",
 					"headers": [
 						"Faction Advancement and Benefits",
@@ -731,9 +705,21 @@
 						"Harpers",
 						"Order of the Gauntlet",
 						"Emerald Enclave",
-						"Lord's Alliance",
+						"Lords' Alliance",
 						"Zhentarim"
 					]
+				},
+				{
+					"name": "Further Information"
+				}
+			]
+		},
+		{
+			"name": "Dungeon Master's Screen",
+			"id": "Screen",
+			"contents": [
+				{
+					"name": "Tables"
 				}
 			]
 		}

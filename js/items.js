@@ -7,16 +7,21 @@ window.onload = function load () {
 	}, {}, true);
 };
 
-function rarityValue (rarity) { // Ordered by most frequently occurring rarities in the JSON
-	if (rarity === "Rare") return 3;
-	if (rarity === "None") return 0;
-	if (rarity === "Uncommon") return 2;
-	if (rarity === "Very Rare") return 4;
-	if (rarity === "Legendary") return 5;
-	if (rarity === "Artifact") return 6;
-	if (rarity === "Unknown") return 7;
-	if (rarity === "Common") return 1;
-	return 0;
+function rarityValue (rarity) {
+	switch (rarity) {
+		case "None": return 0;
+		case "Common": return 1;
+		case "Uncommon": return 2;
+		case "Rare": return 3;
+		case "Very Rare": return 4;
+		case "Legendary": return 5;
+		case "Artifact": return 6;
+		case "Other": return 7;
+		case "Varies": return 8;
+		case "Unknown (Magic)": return 9;
+		case "Unknown": return 10;
+		default: return 11;
+	}
 }
 
 function sortItems (a, b, o) {
@@ -39,69 +44,62 @@ function sortItems (a, b, o) {
 	} else return 0;
 }
 
-function deselectFilter (deselectProperty, ...deselectValues) {
-	return function (val) {
-		if (window.location.hash.length && !window.location.hash.startsWith(`#${HASH_BLANK}`)) {
-			const curItem = History.getSelectedListElement();
-			if (!curItem) return deselNoHash();
-
-			const itemProperty = itemList[curItem.attr("id")][deselectProperty];
-			if (deselectValues.includes(itemProperty)) {
-				return deselNoHash();
-			} else {
-				return deselectValues.includes(val) && itemProperty !== val;
-			}
-		} else {
-			return deselNoHash();
-		}
-
-		function deselNoHash () {
-			return deselectValues.includes(val);
-		}
-	}
-}
-
 let mundanelist;
 let magiclist;
 const sourceFilter = getSourceFilter();
-const typeFilter = new Filter({header: "Type", deselFn: deselectFilter("type", "$", "Futuristic", "Modern", "Renaissance")});
+const DEFAULT_HIDDEN_TYPES = new Set(["$", "Futuristic", "Modern", "Renaissance"]);
+const typeFilter = new Filter({header: "Type", deselFn: (it) => DEFAULT_HIDDEN_TYPES.has(it)});
 const tierFilter = new Filter({header: "Tier", items: ["None", "Minor", "Major"]});
 const propertyFilter = new Filter({header: "Property", displayFn: StrUtil.uppercaseFirst});
+const costFilter = new RangeFilter({header: "Cost", min: 0, max: 100, allowGreater: true, suffix: "gp"});
+const attachedSpellsFilter = new Filter({header: "Attached Spells", displayFn: (it) => it.split("|")[0].toTitleCase()});
 let filterBox;
 function populateTablesAndFilters (data) {
 	const rarityFilter = new Filter({
 		header: "Rarity",
-		items: ["None", "Common", "Uncommon", "Rare", "Very Rare", "Legendary", "Artifact", "Unknown"]
+		items: ["None", "Common", "Uncommon", "Rare", "Very Rare", "Legendary", "Artifact", "Unknown", "Other"]
 	});
 	const attunementFilter = new Filter({header: "Attunement", items: ["Yes", "By...", "Optional", "No"]});
 	const categoryFilter = new Filter({
 		header: "Category",
 		items: ["Basic", "Generic Variant", "Specific Variant", "Other"],
-		deselFn: deselectFilter("category", "Specific Variant")
+		deselFn: (it) => it === "Specific Variant"
 	});
-	const miscFilter = new Filter({header: "Miscellaneous", items: ["Cursed", "Magic", "Mundane", "Sentient"]});
+	const miscFilter = new Filter({header: "Miscellaneous", items: ["Charges", "Cursed", "Magic", "Mundane", "Sentient"]});
 
-	filterBox = initFilterBox(sourceFilter, typeFilter, tierFilter, rarityFilter, propertyFilter, attunementFilter, categoryFilter, miscFilter);
+	filterBox = initFilterBox(sourceFilter, typeFilter, tierFilter, rarityFilter, propertyFilter, attunementFilter, categoryFilter, costFilter, miscFilter, attachedSpellsFilter);
 
 	const mundaneOptions = {
 		valueNames: ["name", "type", "cost", "weight", "source"],
 		listClass: "mundane",
-		sortClass: "none"
+		sortClass: "none",
+		sortFunction: sortItems
 	};
 	mundanelist = ListUtil.search(mundaneOptions);
 	const magicOptions = {
 		valueNames: ["name", "type", "weight", "rarity", "source"],
 		listClass: "magic",
-		sortClass: "none"
+		sortClass: "none",
+		sortFunction: sortItems
 	};
 	magiclist = ListUtil.search(magicOptions);
 
 	const mundaneWrapper = $(`.ele-mundane`);
 	const magicWrapper = $(`.ele-magic`);
+	$(`.side-label--mundane`).click(() => {
+		filterBox.setFromValues({"Miscellaneous": ["mundane"]});
+		handleFilterChange();
+	});
+	$(`.side-label--magic`).click(() => {
+		filterBox.setFromValues({"Miscellaneous": ["magic"]});
+		handleFilterChange();
+	});
+	mundanelist.__listVisible = true;
 	mundanelist.on("updated", () => {
 		hideListIfEmpty(mundanelist, mundaneWrapper);
 		filterBox.setCount(mundanelist.visibleItems.length + magiclist.visibleItems.length, mundanelist.items.length + magiclist.items.length);
 	});
+	magiclist.__listVisible = true;
 	magiclist.on("updated", () => {
 		hideListIfEmpty(magiclist, magicWrapper);
 		filterBox.setCount(mundanelist.visibleItems.length + magiclist.visibleItems.length, mundanelist.items.length + magiclist.items.length);
@@ -115,22 +113,33 @@ function populateTablesAndFilters (data) {
 
 	function hideListIfEmpty (list, $eles) {
 		if (list.visibleItems.length === 0) {
-			$eles.hide();
-		} else {
+			if (list.__listVisible) {
+				list.__listVisible = false;
+				$eles.hide();
+			}
+		} else if (!list.__listVisible) {
+			list.__listVisible = true;
 			$eles.show();
 		}
 	}
 
-	$("#filtertools-mundane").find("button.sort").off("click").on("click", function (evt) {
+	$("#filtertools-mundane").find("button.sort").on("click", function (evt) {
 		evt.stopPropagation();
-		$(this).data("sortby", $(this).data("sortby") === "asc" ? "desc" : "asc");
-		mundanelist.sort($(this).data("sort"), {order: $(this).data("sortby"), sortFunction: sortItems});
+		const $this = $(this);
+		const direction = $this.data("sortby") === "asc" ? "desc" : "asc";
+		$this.data("sortby", direction);
+		SortUtil.handleFilterButtonClick.call(this, "#filtertools-mundane", $this, direction);
+		mundanelist.sort($this.data("sort"), {order: $this.data("sortby"), sortFunction: sortItems});
 	});
 
 	$("#filtertools-magic").find("button.sort").on("click", function (evt) {
 		evt.stopPropagation();
-		$(this).data("sortby", $(this).data("sortby") === "asc" ? "desc" : "asc");
-		magiclist.sort($(this).data("sort"), {order: $(this).data("sortby"), sortFunction: sortItems});
+		const $this = $(this);
+		const direction = $this.data("sortby") === "asc" ? "desc" : "asc";
+
+		$this.data("sortby", direction);
+		SortUtil.handleFilterButtonClick.call(this, "#filtertools-magic", $this, direction);
+		magiclist.sort($this.data("sort"), {order: $this.data("sortby"), sortFunction: sortItems});
 	});
 
 	$("#itemcontainer").find("h3").not(":has(input)").click(function () {
@@ -175,6 +184,7 @@ function populateTablesAndFilters (data) {
 			ListUtil.loadState();
 
 			History.init(true);
+			ExcludeUtil.checkShowAllExcluded(itemList, $(`#pagecontent`));
 		});
 }
 
@@ -198,7 +208,7 @@ function addItems (data) {
 		const curitem = itemList[itI];
 		if (ExcludeUtil.isExcluded(curitem.name, "item", curitem.source)) continue;
 		if (curitem.noDisplay) continue;
-		if (!curitem._isEnhanced) EntryRenderer.item.enhanceItem(curitem);
+		EntryRenderer.item.enhanceItem(curitem);
 
 		const name = curitem.name;
 		const rarity = curitem.rarity;
@@ -216,17 +226,19 @@ function addItems (data) {
 		if (curitem.curse) curitem._fMisc.push("Cursed");
 		const isMundane = rarity === "None" || rarity === "Unknown" || category === "Basic";
 		curitem._fMisc.push(isMundane ? "Mundane" : "Magic");
+		if (curitem.charges) curitem._fMisc.push("Charges");
+		curitem._fCost = Parser.coinValueToNumber(curitem.value);
 
 		if (isMundane) {
 			liList["mundane"] += `
 			<li class="row" ${FLTR_ID}=${itI} onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id="${itI}" href="#${UrlUtil.autoEncodeHash(curitem)}" title="${name}">
 					<span class="name col-xs-3">${name}</span>
-					<span class="type col-xs-4 col-xs-4-3">${curitem.typeText}</span>
-					<span class="col-xs-1 col-xs-1-5 text-align-center">${curitem.value || "\u2014"}</span>
+					<span class="type col-xs-4 col-xs-4-3">${curitem.typeListText}</span>
+					<span class="col-xs-1 col-xs-1-5 text-align-center">${curitem.value ? curitem.value.replace(/ +/g, "\u00A0") : "\u2014"}</span>
 					<span class="col-xs-1 col-xs-1-5 text-align-center">${Parser.itemWeightToFull(curitem) || "\u2014"}</span>
-					<span class="source col-xs-1 col-xs-1-7 source${sourceAbv}" title="${sourceFull}">${sourceAbv}</span>
-					<span class="cost hidden">${Parser.coinValueToNumber(curitem.value)}</span>
+					<span class="source col-xs-1 col-xs-1-7 ${Parser.sourceJsonToColor(curitem.source)}" title="${sourceFull}">${sourceAbv}</span>
+					<span class="cost hidden">${curitem._fCost}</span>
 					<span class="weight hidden">${Parser.weightValueToNumber(curitem.weight)}</span>
 				</a>
 			</li>`;
@@ -235,10 +247,10 @@ function addItems (data) {
 			<li class="row" ${FLTR_ID}=${itI} onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id="${itI}" href="#${UrlUtil.autoEncodeHash(curitem)}" title="${name}">
 					<span class="name col-xs-3 col-xs-3-5">${name}</span>
-					<span class="type col-xs-3 col-xs-3-3">${curitem.typeText}</span>
+					<span class="type col-xs-3 col-xs-3-3">${curitem.typeListText}</span>
 					<span class="col-xs-1 col-xs-1-5 text-align-center">${Parser.itemWeightToFull(curitem) || "\u2014"}</span>
 					<span class="rarity col-xs-2">${rarity}</span>
-					<span class="source col-xs-1 col-xs-1-7 source${sourceAbv}" title="${sourceFull}">${sourceAbv}</span>
+					<span class="source col-xs-1 col-xs-1-7 ${Parser.sourceJsonToColor(curitem.source)}" title="${sourceFull}">${sourceAbv}</span>
 					<span class="weight hidden">${Parser.weightValueToNumber(curitem.weight)}</span>
 				</a>
 			</li>`;
@@ -249,6 +261,7 @@ function addItems (data) {
 		curitem.procType.forEach(t => typeFilter.addIfAbsent(t));
 		tierTags.forEach(tt => tierFilter.addIfAbsent(tt));
 		curitem._fProperties.forEach(p => propertyFilter.addIfAbsent(p));
+		attachedSpellsFilter.addIfAbsent(curitem.attachedSpells);
 	}
 	const lastSearch = ListUtil.getSearchTermAndReset(mundanelist, magiclist);
 	// populate table
@@ -260,6 +273,7 @@ function addItems (data) {
 	// sort filters
 	sourceFilter.items.sort(SortUtil.ascSort);
 	typeFilter.items.sort(SortUtil.ascSort);
+	attachedSpellsFilter.items.sort(SortUtil.ascSortLower);
 
 	mundanelist.reIndex();
 	magiclist.reIndex();
@@ -267,8 +281,8 @@ function addItems (data) {
 		mundanelist.search(lastSearch);
 		magiclist.search(lastSearch);
 	}
-	mundanelist.sort("name");
-	magiclist.sort("name");
+	mundanelist.sort("name", {order: "desc"});
+	magiclist.sort("name", {order: "desc"});
 	filterBox.render();
 	handleFilterChange();
 
@@ -298,7 +312,9 @@ function handleFilterChange () {
 			i._fProperties,
 			i.attunementCategory,
 			i.category,
-			i._fMisc
+			i._fCost,
+			i._fMisc,
+			i.attachedSpells
 		);
 	}
 	mundanelist.filter(listFilter);
@@ -326,10 +342,10 @@ function getSublistItem (item, pinId, addCount) {
 		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
 			<a href="#${UrlUtil.autoEncodeHash(item)}" title="${item.name}">
 				<span class="name col-xs-6">${item.name}</span>
-				<span class="weight text-align-center col-xs-2">${item.weight ? `${item.weight} lb${item.weight > 1 ? "s" : ""}.` : "\u2014"}</span>		
-				<span class="price text-align-center col-xs-2">${item.value || "\u2014"}</span>
-				<span class="count text-align-center col-xs-2">${addCount || 1}</span>		
-				<span class="cost hidden">${Parser.coinValueToNumber(item.value)}</span>
+				<span class="weight text-align-center col-xs-2">${item.weight ? `${item.weight} lb${item.weight > 1 ? "s" : ""}.` : "\u2014"}</span>
+				<span class="price text-align-center col-xs-2">${item.value ? item.value.replace(/ +/g, "\u00A0") : "\u2014"}</span>
+				<span class="count text-align-center col-xs-2">${addCount || 1}</span>
+				<span class="cost hidden">${item._fCost}</span>
 				<span class="id hidden">${pinId}</span>
 			</a>
 		</li>
@@ -357,7 +373,7 @@ function loadhash (id) {
 		</tr>
 		<tr id="text"><td class="divider" colspan="6"><div></div></td></tr>
 		${EntryRenderer.utils.getPageTr(item)}
-		${EntryRenderer.utils.getBorderTr()}	
+		${EntryRenderer.utils.getBorderTr()}
 	`);
 	$content.append($toAppend);
 
@@ -376,9 +392,9 @@ function loadhash (id) {
 
 	$content.find("td span#value").html(item.value ? item.value + (item.weight ? ", " : "") : "");
 	$content.find("td span#weight").html(item.weight ? item.weight + (Number(item.weight) === 1 ? " lb." : " lbs.") + (item.weightNote ? ` ${item.weightNote}` : "") : "");
-	$content.find("td span#rarity").html((item.tier ? ", " + item.tier : "") + (item.rarity && item.rarity !== "None" ? ", " + item.rarity : ""));
+	$content.find("td span#rarity").html((item.tier ? ", " + item.tier : "") + (item.rarity && EntryRenderer.item.doRenderRarity(item.rarity) ? ", " + item.rarity : ""));
 	$content.find("td span#attunement").html(item.reqAttune ? item.reqAttune : "");
-	$content.find("td span#type").html(item.typeText);
+	$content.find("td span#type").html(item.typeText === "Other" ? "" : item.typeText);
 
 	const [damage, damageType, propertiesTxt] = EntryRenderer.item.getDamageAndPropertiesText(item);
 	$content.find("span#damage").html(damage);
@@ -386,9 +402,11 @@ function loadhash (id) {
 	$content.find("span#properties").html(propertiesTxt);
 
 	$content.find("tr.text").remove();
-	const entryList = {type: "entries", entries: item.entries};
 	const renderStack = [];
-	renderer.recursiveEntryRender(entryList, renderStack, 1);
+	if (item.entries && item.entries.length) {
+		const entryList = {type: "entries", entries: item.entries};
+		renderer.recursiveEntryRender(entryList, renderStack, 1);
+	}
 
 	// tools, artisan tools, instruments, gaming sets
 	if (type === "T" || type === "AT" || type === "INS" || type === "GS") {
@@ -406,12 +424,16 @@ function loadhash (id) {
 		renderer.recursiveEntryRender(additionEntriesList, renderStack, 1);
 	}
 
-	$content.find("tr#text").after(`
-		<tr class="text">
-			<td colspan="6" class="text1">
-				${renderStack.join("").split(item.name.toLowerCase()).join("<i>" + item.name.toLowerCase() + "</i>").split(item.name.toLowerCase().uppercaseFirst()).join("<i>" + item.name.toLowerCase().uppercaseFirst() + "</i>")}
-			</td>
-		</tr>`);
+	const renderedText = renderStack.join("").split(item.name.toLowerCase()).join(`<i>${item.name.toLowerCase()}</i>`).split(item.name.toLowerCase().uppercaseFirst()).join(`<i>${item.name.toLowerCase().uppercaseFirst()}</i>`);
+	if (renderedText && renderedText.trim()) {
+		$content.find("tr#text").show().after(`
+			<tr class="text">
+				<td colspan="6" class="text1">
+					${renderedText}
+				</td>
+			</tr>
+		`);
+	} else $content.find("tr#text").hide();
 
 	ListUtil.updateSelected();
 }

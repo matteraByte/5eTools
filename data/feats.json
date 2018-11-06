@@ -334,7 +334,7 @@
 					"type": "list",
 					"items": [
 						"When you roll fire damage for a spell you cast, you can reroll any roll of 1 on the fire damage dice, but you must use the new roll, even if it is another 1.",
-						"Whenever you cast a spell that deals fire damage, you can cause flames to wreathe you until the end of your next turn. The flames don't harm you or your possessions, and they shed bright light out to 30 feet and dim light for an additional 30 feet. While the flames are present, any creature within 5 feet of you that hits you with a melee attack takes 1d4 fire damage."
+						"Whenever you cast a spell that deals fire damage, you can cause flames to wreathe you until the end of your next turn. The flames don't harm you or your possessions, and they shed bright light out to 30 feet and dim light for an additional 30 feet. While the flames are present, any creature within 5 feet of you that hits you with a melee attack takes {@dice 1d4} fire damage."
 					]
 				}
 			],
@@ -1254,7 +1254,7 @@
 					"items": [
 						"You ignore the loading quality of crossbows with which you are proficient.",
 						"Being within 5 feet of a hostile creature doesn't impose disadvantage on your ranged attack rolls.",
-						"When you use the Attack action and attack with a one-handed weapon, you can use a bonus action to attack with a hand crossbow you are holding."
+						"When you use the Attack action and attack with a one-handed weapon, you can use a bonus action to attack with a {@item hand crossbow|phb} you are holding."
 					]
 				}
 			]
@@ -1859,8 +1859,8 @@
 				{
 					"type": "list",
 					"items": [
-						"When you use a healer's kit to stabilize a dying creature, that creature also regains 1 hit point.",
-						"As an action, you can spend one use of a healer's kit to tend to a creature and restore {@dice 1d6+4} hit points to it, plus additional hit points equal to the creature's maximum number of Hit Dice. The creature can't regain hit points from this feat again until it finishes a short or long rest."
+						"When you use a {@item healer's kit|phb} to stabilize a dying creature, that creature also regains 1 hit point.",
+						"As an action, you can spend one use of a {@item healer's kit|phb} to tend to a creature and restore {@dice 1d6+4} hit points to it, plus additional hit points equal to the creature's maximum number of Hit Dice. The creature can't regain hit points from this feat again until it finishes a short or long rest."
 					]
 				}
 			]
@@ -2042,8 +2042,8 @@
 				{
 					"type": "list",
 					"items": [
-						"You learn two maneuvers of your choice from among those available to the {@class fighter|phb|Battle Master|Battle Master|phb|Martial Archetype 3} archetype in the fighter class. If a maneuver you use requires your target to make a saving throw to resist the maneuver's effects, the saving throw DC equals 8 + your proficiency bonus + your Strength or Dexterity modifier (your choice).",
-						"You gain one superiority dice, which is a d6 (this die is added to any superiority dice you have from another source). This die is used to fuel your maneuvers. A superiority die is expended when you use it. You regain your expended superiority dice when you finish a short or long rest."
+						"You learn two {@filter maneuvers|optionalfeatures|feature type=MAB} of your choice from among those available to the {@class fighter|phb|Battle Master|Battle Master|phb|Martial Archetype 3} archetype in the fighter class. If a maneuver you use requires your target to make a saving throw to resist the maneuver's effects, the saving throw DC equals 8 + your proficiency bonus + your Strength or Dexterity modifier (your choice).",
+						"You gain one superiority die, which is a d6 (this die is added to any superiority dice you have from another source). This die is used to fuel your maneuvers. A superiority die is expended when you use it. You regain your expended superiority dice when you finish a short or long rest."
 					]
 				}
 			]
@@ -2173,8 +2173,8 @@
 				{
 					"type": "list",
 					"items": [
-						"When you take the Attack action and attack with only a glaive, halberd, or quarterstaff, you can use a bonus action to make a melee attack with the opposite end of the weapon; this attack uses the same ability modifier as the main attack. The weapon's damage die for this attack is a d4, and the attack deals bludgeoning damage.",
-						"While you are wielding a glaive, halberd, pike, or quarterstaff, other creatures provoke an opportunity attack from you when they enter your reach."
+						"When you take the Attack action and attack with only a {@item glaive|phb}, {@item halberd|phb}, or {@item quarterstaff|phb}, you can use a bonus action to make a melee attack with the opposite end of the weapon; this attack uses the same ability modifier as the main attack. The weapon's damage die for this attack is a d4, and the attack deals bludgeoning damage.",
+						"While you are wielding a {@item glaive|phb}, {@item halberd|phb}, {@item pike|phb}, or {@item quarterstaff|phb}, other creatures provoke an opportunity attack from you when they enter your reach."
 					]
 				}
 			]
@@ -2276,7 +2276,7 @@
 			"source": "PHB",
 			"page": 170,
 			"entries": [
-				"You use shields not just for protection but also for offense. You gain the following benefits while you are wielding a shield:",
+				"You use shields not just for protection but also for offense. You gain the following benefits while you are wielding a {@item shield|phb}:",
 				{
 					"type": "list",
 					"items": [
@@ -2292,7 +2292,7 @@
 			"source": "PHB",
 			"page": 170,
 			"entries": [
-				"You gain proficiency in any combination of three skills or tools of your choice."
+				"You gain proficiency in any combination of three {@book skills|phb|7|skills} or {@filter tools|items|type=tool;artisan tool} of your choice."
 			]
 		},
 		{
@@ -2336,7 +2336,7 @@
 					"items": [
 						"When you cast a spell that requires you to make an attack roll, the spell's range is doubled.",
 						"Your ranged spell attacks ignore half cover and three-quarters cover.",
-						"You learn one cantrip that requires an attack roll. Choose the cantrip from the bard, cleric, druid, sorcerer, warlock, or wizard spell list. Your spellcasting ability for this cantrip depends on the spell list you chose from: Charisma for bard, sorcerer, or warlock; Wisdom for cleric or druid; or Intelligence for wizard."
+						"You learn one cantrip that requires an attack roll. Choose the cantrip from the {@filter bard|spells|level=0|class=bard|spell attack=m;r;o}, {@filter cleric|spells|level=0|class=cleric|spell attack=m;r;o}, {@filter druid|spells|level=0|class=druid|spell attack=m;r;o}, {@filter sorcerer|spells|level=0|class=sorcerer|spell attack=m;r;o}, {@filter warlock|spells|level=0|class=warlock|spell attack=m;r;o}, or {@filter wizard|spells|level=0|class=wizard|spell attack=m;r;o} spell list. Your spellcasting ability for this cantrip depends on the spell list you chose from: Charisma for bard, sorcerer, or warlock; Wisdom for cleric or druid; or Intelligence for wizard."
 					]
 				}
 			]
@@ -2416,7 +2416,7 @@
 					"type": "list",
 					"items": [
 						"You have advantage on Constitution saving throws that you make to maintain your concentration on a spell when you take damage.",
-						"You can perform the somatic components of spells even when you have weapons or a shield in one or both hands.",
+						"You can perform the somatic components of spells even when you have weapons or a {@item shield|phb} in one or both hands.",
 						"When a hostile creature's movement provokes an opportunity attack from you, you can use your reaction to cast a spell at the creature, rather than making an opportunity attack. The spell must have a casting time of 1 action and must target only that creature."
 					]
 				}
@@ -2699,7 +2699,7 @@
 				{
 					"type": "list",
 					"items": [
-						"Immediately after you take damage, you can use a reaction to magically become invisible until the end of your next turn or until you attack, deal damage, or force someone to make a saving throw. Once you use this ability, you can't do so again until you finish a short or long rest."
+						"Immediately after you take damage, you can use a reaction to magically become {@condition invisible} until the end of your next turn or until you attack, deal damage, or force someone to make a saving throw. Once you use this ability, you can't do so again until you finish a short or long rest."
 					]
 				}
 			],
@@ -2770,7 +2770,7 @@
 					"type": "list",
 					"items": [
 						"When you roll fire damage for a spell you cast, you can reroll any roll of 1 on the fire damage dice, but you must use the new roll, even if it is another 1.",
-						"Whenever you cast a spell that deals fire damage, you can cause flames to wreathe you until the end of your next turn. The flames don't harm you or your possessions, and they shed bright light out to 30 feet and dim light for an additional 30 feet. While the flames are present, any creature within 5 feet of you that hits you with a melee attack takes 1d4 fire damage."
+						"Whenever you cast a spell that deals fire damage, you can cause flames to wreathe you until the end of your next turn. The flames don't harm you or your possessions, and they shed bright light out to 30 feet and dim light for an additional 30 feet. While the flames are present, any creature within 5 feet of you that hits you with a melee attack takes {@dice 1d4} fire damage."
 					]
 				}
 			],
@@ -2936,7 +2936,7 @@
 					"items": [
 						"Increase your walking speed by 5 feet.",
 						"You gain proficiency in the {@skill Acrobatics} or {@skill Athletics} skill (your choice).",
-						"You have advantage on any Strength ({@skill Athletics}) or Dexterity ({@skill Acrobatics}) check you make to escape from being {@condition grappled}."
+						"You have advantage on any Strength (Athletics) or Dexterity (Acrobatics) check you make to escape from being {@condition grappled}."
 					]
 				}
 			],

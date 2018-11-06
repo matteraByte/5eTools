@@ -1448,11 +1448,11 @@
 				"Chrysoberyl (transparent yellow-green to pale green)",
 				"Coral (opaque crimson)",
 				"Garnet (transparent red, brown-green, or violet)",
-				"Jade (translucent light green, deep green , or white)",
+				"Jade (translucent light green, deep green, or white)",
 				"Jet (opaque deep black)",
 				"Pearl (opaque lustrous white, yellow, or pink)",
 				"Spinel (transparent red, red-brown, or deep green)",
-				"Tourmaline (transparent pale green , blue, brown , or red)"
+				"Tourmaline (transparent pale green, blue, brown , or red)"
 			]
 		},
 		{
@@ -1656,7 +1656,7 @@
 				{
 					"min": 23,
 					"max": 29,
-					"item": "Potion of Resistance"
+					"item": "{@item Potion of Resistance}"
 				},
 				{
 					"min": 30,
@@ -2423,14 +2423,35 @@
 					"max": 14,
 					"item": "Figurine of Wondrous Power",
 					"table": [
-						"{@item Figurine of Wondrous Power, Bronze Griffon|dmg}",
-						"{@item Figurine of Wondrous Power, Ebony Fly|dmg}",
-						"{@item Figurine of Wondrous Power, Golden Lions|dmg}",
-						"{@item Figurine of Wondrous Power, Ivory Goats|dmg}",
-						"{@item Figurine of Wondrous Power, Marble Elephant|dmg}",
-						"{@item Figurine of Wondrous Power, Onyx Dog|dmg}",
-						"{@item Figurine of Wondrous Power, Onyx Dog|dmg}",
-						"{@item Figurine of Wondrous Power, Serpentine Owl|dmg}"
+						{
+							"min": 1,
+							"item": "{@item Figurine of Wondrous Power, Bronze Griffon|dmg}"
+						},
+						{
+							"min": 2,
+							"item": "{@item Figurine of Wondrous Power, Ebony Fly|dmg}"
+						},
+						{
+							"min": 3,
+							"item": "{@item Figurine of Wondrous Power, Golden Lions|dmg}"
+						},
+						{
+							"min": 4,
+							"item": "{@item Figurine of Wondrous Power, Ivory Goats|dmg}"
+						},
+						{
+							"min": 5,
+							"item": "{@item Figurine of Wondrous Power, Marble Elephant|dmg}"
+						},
+						{
+							"min": 6,
+							"max": 7,
+							"item": "{@item Figurine of Wondrous Power, Onyx Dog|dmg}"
+						},
+						{
+							"min": 8,
+							"item": "{@item Figurine of Wondrous Power, Serpentine Owl|dmg}"
+						}
 					]
 				},
 				{
@@ -2706,7 +2727,7 @@
 				{
 					"min": 69,
 					"max": 69,
-					"item": "Ring of Resistance"
+					"item": "{@item Ring of Resistance}"
 				},
 				{
 					"min": 70,
@@ -2884,7 +2905,7 @@
 				{
 					"min": 13,
 					"max": 14,
-					"item": "Carpet of Flying"
+					"item": "{@item Carpet of Flying}"
 				},
 				{
 					"min": 15,
@@ -3242,7 +3263,7 @@
 				{
 					"min": 16,
 					"max": 20,
-					"item": "Sword of Answering"
+					"item": "{@item Sword of Answering}"
 				},
 				{
 					"min": 21,
@@ -3369,18 +3390,41 @@
 					"max": 76,
 					"item": "Magic armor",
 					"table": [
-						"{@item Half Plate Armor +2|dmg}",
-						"{@item Half Plate Armor +2|dmg}",
-						"{@item Plate Armor +2|dmg}",
-						"{@item Plate Armor +2|dmg}",
-						"{@item Studded Leather Armor +3|dmg}",
-						"{@item Studded Leather Armor +3|dmg}",
-						"{@item Breastplate +3|dmg}",
-						"{@item Breastplate +3|dmg}",
-						"{@item Splint Armor +3|dmg}",
-						"{@item Splint Armor +3|dmg}",
-						"{@item Half Plate Armor +3|dmg}",
-						"{@item Plate Armor +3|dmg}"
+						{
+							"min": 1,
+							"max": 2,
+							"item": "{@item Half Plate Armor +2|dmg}"
+						},
+						{
+							"min": 3,
+							"max": 4,
+							"item": "{@item Plate Armor +2|dmg}"
+						},
+						{
+							"min": 5,
+							"max": 6,
+							"item": "{@item Studded Leather Armor +3|dmg}"
+						},
+						{
+							"min": 7,
+							"max": 8,
+							"item": "{@item Breastplate +3|dmg}"
+						},
+						{
+							"min": 9,
+							"max": 10,
+							"item": "{@item Splint Armor +3|dmg}"
+						},
+						{
+							"min": 11,
+							"max": 11,
+							"item": "{@item Half Plate Armor +3|dmg}"
+						},
+						{
+							"min": 12,
+							"max": 12,
+							"item": "{@item Plate Armor +3|dmg}"
+						}
 					]
 				},
 				{

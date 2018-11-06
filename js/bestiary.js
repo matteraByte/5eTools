@@ -4,6 +4,7 @@ const JSON_DIR = "data/bestiary/";
 const META_URL = "meta.json";
 const FLUFF_INDEX = "fluff-index.json";
 const JSON_LIST_NAME = "monster";
+const ECGEN_BASE_PLAYERS = 4; // assume a party size of four
 const renderer = EntryRenderer.getDefaultRenderer();
 
 window.PROF_MODE_BONUS = "bonus";
@@ -13,6 +14,7 @@ window.PROF_DICE_MODE = PROF_MODE_BONUS;
 function imgError (x) {
 	$(x).closest("th").css("padding-right", "0.2em");
 	$(x).remove();
+	$(`.mon__wrp_hp`).css("max-width", "none");
 }
 
 function getAllImmRest (toParse, key) {
@@ -35,6 +37,7 @@ function basename (str, sep) {
 }
 
 const meta = {};
+const languages = {};
 
 function pLoadMeta () {
 	return new Promise(resolve => {
@@ -47,6 +50,8 @@ function pLoadMeta () {
 						"regionalEffects": data.legendaryGroup[i].regionalEffects
 					};
 				}
+				Object.keys(data.language).forEach(k => languages[k] = data.language[k]);
+				languageFilter.items = Object.keys(languages).sort((a, b) => SortUtil.ascSortLower(languages[a], languages[b]));
 				resolve();
 			});
 	});
@@ -98,9 +103,16 @@ function pPostLoad () {
 
 window.onload = function load () {
 	ExcludeUtil.initialise();
+	SortUtil.initHandleFilterButtonClicks();
+	encounterBuilder.initUi();
 	pLoadMeta()
 		.then(pLoadFluffIndex)
-		.then(multisourceLoad.bind(null, JSON_DIR, JSON_LIST_NAME, pPageInit, addMonsters, pPostLoad));
+		.then(multisourceLoad.bind(null, JSON_DIR, JSON_LIST_NAME, pPageInit, addMonsters, pPostLoad))
+		.then(() => {
+			if (History.lastLoadedId == null) History._freshLoad();
+			ExcludeUtil.checkShowAllExcluded(monsters, $(`#pagecontent`));
+			encounterBuilder.initState();
+		});
 };
 
 let list;
@@ -155,6 +167,26 @@ const alignmentFilter = new Filter({
 	header: "Alignment",
 	items: ["L", "NX", "C", "G", "NY", "E", "N", "U", "A"],
 	displayFn: Parser.alignmentAbvToFull
+});
+const languageFilter = new Filter({
+	header: "Languages",
+	displayFn: (k) => languages[k],
+	umbrellaItem: ["X", "XX"]
+});
+const senseFilter = new Filter({
+	header: "Senses",
+	displayFn: (it) => Parser.monSenseTagToFull(it).toTitleCase(),
+	items: ["B", "D", "SD", "T", "U"]
+});
+const skillFilter = new Filter({
+	header: "Skills",
+	displayFn: (it) => it.toTitleCase(),
+	items: ["acrobatics", "animal handling", "arcana", "athletics", "deception", "history", "insight", "intimidation", "investigation", "medicine", "nature", "perception", "performance", "persuasion", "religion", "sleight of hand", "stealth", "survival"]
+});
+const saveFilter = new Filter({
+	header: "Saves",
+	displayFn: Parser.attAbvToFull,
+	items: ["str", "dex", "con", "int", "wis", "cha"]
 });
 const environmentFilter = new Filter({
 	header: "Environment",
@@ -258,18 +290,23 @@ const filterBox = initFilterBox(
 	sizeFilter,
 	speedFilter,
 	alignmentFilter,
+	saveFilter,
+	skillFilter,
+	senseFilter,
+	languageFilter,
 	acFilter,
 	averageHpFilter,
 	abilityScoreFilter
 );
 
 function pPageInit (loadedSources) {
-	sourceFilter.items = Object.keys(loadedSources).map(src => new FilterItem(src, loadSource(JSON_LIST_NAME, addMonsters)));
+	sourceFilter.items = Object.keys(loadedSources).map(src => new FilterItem({item: src, changeFn: loadSource(JSON_LIST_NAME, addMonsters)}));
 	sourceFilter.items.sort(SortUtil.ascSort);
 
 	list = ListUtil.search({
-		valueNames: ["name", "source", "type", "cr", "group"],
-		listClass: "monsters"
+		valueNames: ["name", "source", "type", "cr", "group", "alias"],
+		listClass: "monsters",
+		sortFunction: sortMonsters
 	});
 	list.on("updated", () => {
 		filterBox.setCount(list.visibleItems.length, list.items.length);
@@ -284,40 +321,80 @@ function pPageInit (loadedSources) {
 	// sorting headers
 	$("#filtertools").find("button.sort").on(EVNT_CLICK, function () {
 		const $this = $(this);
-		$this.data("sortby", $this.data("sortby") === "asc" ? "desc" : "asc");
+		let direction = $this.data("sortby") === "desc" ? "asc" : "desc";
+
+		$this.data("sortby", direction);
+		$this.find('span').addClass($this.data("sortby") === "desc" ? "caret" : "caret caret--reverse");
 		list.sort($this.data("sort"), {order: $this.data("sortby"), sortFunction: sortMonsters});
 	});
 
 	const subList = ListUtil.initSublist({
-		valueNames: ["name", "source", "type", "cr", "count", "id"],
+		valueNames: ["name", "source", "type", "cr", "count", "id", "uid"],
 		listClass: "submonsters",
 		sortFunction: sortMonsters,
-		onUpdate: onSublistChange
+		onUpdate: onSublistChange,
+		uidHandler: (mon, uid) => ScaleCreature.scale(mon, Number(uid.split("_").last())),
+		uidUnpacker: (uid) => ({scaled: Number(uid.split("_").last()), uid})
 	});
-	ListUtil.bindAddButton();
-	ListUtil.bindSubtractButton();
+	const baseHandlerOptions = {shiftCount: 5};
+	function addHandlerGenerator () {
+		return (evt, proxyEvt) => {
+			evt = proxyEvt || evt;
+			if (lastRendered.isScaled) {
+				if (evt.shiftKey) ListUtil.doSublistAdd(History.lastLoadedId, true, 5, getScaledData());
+				else ListUtil.doSublistAdd(History.lastLoadedId, true, 1, getScaledData());
+			} else ListUtil._genericAddButtonHandler(evt, baseHandlerOptions);
+		};
+	}
+	function subtractHandlerGenerator () {
+		return (evt, proxyEvt) => {
+			evt = proxyEvt || evt;
+			if (lastRendered.isScaled) {
+				if (evt.shiftKey) ListUtil.doSublistSubtract(History.lastLoadedId, 5, getScaledData());
+				else ListUtil.doSublistSubtract(History.lastLoadedId, 1, getScaledData());
+			} else ListUtil._genericSubtractButtonHandler(evt, baseHandlerOptions);
+		};
+	}
+	ListUtil.bindAddButton(addHandlerGenerator, baseHandlerOptions);
+	ListUtil.bindSubtractButton(subtractHandlerGenerator, baseHandlerOptions);
 	ListUtil.initGenericAddable();
 
 	// print view
 	printBookView = new BookModeView("bookview", $(`#btn-printbook`), "If you wish to view multiple creatures, please first make a list",
 		($tbl) => {
-			const toShow = ListUtil.getSublistedIds().map(id => monsters[id]).sort((a, b) => SortUtil.ascSort(a.name, b.name));
-			let numShown = 0;
-			const stack = [];
-			stack.push(`<tr class="printbook-bestiary"><td>`);
-			const renderCreature = (mon) => {
-				stack.push(`<table class="printbook-bestiary-entry"><tbody>`);
-				stack.push(EntryRenderer.monster.getCompactRenderedString(mon, renderer));
-				stack.push(`</tbody></table>`);
-			};
-			toShow.forEach(mon => renderCreature(mon));
-			if (!toShow.length && History.lastLoadedId != null) {
-				renderCreature(monsters[History.lastLoadedId]);
-			}
-			stack.push(`</td></tr>`);
-			numShown += toShow.length;
-			$tbl.append(stack.join(""));
-			return numShown;
+			return new Promise(resolve => {
+				const promises = ListUtil._genericPinKeyMapper();
+
+				Promise.all(promises).then(toShow => {
+					toShow.sort((a, b) => SortUtil.ascSort(a._displayName || a.name, b._displayName || b.name));
+
+					let numShown = 0;
+
+					const stack = [];
+
+					const renderCreature = (mon) => {
+						stack.push(`<table class="printbook-bestiary-entry"><tbody>`);
+						stack.push(EntryRenderer.monster.getCompactRenderedString(mon, renderer));
+						if (mon.legendaryGroup) {
+							const thisGroup = meta[mon.legendaryGroup];
+							stack.push(EntryRenderer.monster.getCompactRenderedStringSection(thisGroup, renderer, "Lair Actions", "lairActions", 0));
+							stack.push(EntryRenderer.monster.getCompactRenderedStringSection(thisGroup, renderer, "Regional Effects", "regionalEffects", 0));
+						}
+						stack.push(`</tbody></table>`);
+					};
+
+					stack.push(`<tr class="printbook-bestiary"><td>`);
+					toShow.forEach(mon => renderCreature(mon));
+					if (!toShow.length && History.lastLoadedId != null) {
+						renderCreature(monsters[History.lastLoadedId]);
+					}
+					stack.push(`</td></tr>`);
+
+					numShown += toShow.length;
+					$tbl.append(stack.join(""));
+					resolve(numShown);
+				});
+			});
 		}, true
 	);
 
@@ -346,17 +423,70 @@ function pPageInit (loadedSources) {
 	return Promise.resolve();
 }
 
+function calculateListEncounterXp (playerCount) {
+	const data = ListUtil.sublist.items.map(it => {
+		const mon = monsters[Number(it._values.id)];
+		if (mon.cr) {
+			return {
+				cr: Parser.crToNumber($(it.elm).find(".cr").text()),
+				count: Number($(it.elm).find(".count").text())
+			}
+		}
+	}).filter(it => it.cr !== 100).sort((a, b) => SortUtil.ascSort(b.cr, a.cr));
+
+	return calculateEncounterXp(data, playerCount);
+}
+
+/**
+ * @param data an array of {cr: n, count: m} objects
+ * @param playerCount number of players in the party
+ */
+function calculateEncounterXp (data, playerCount = ECGEN_BASE_PLAYERS) {
+	data = data.filter(it => it.cr !== 100).sort((a, b) => SortUtil.ascSort(b.cr, a.cr));
+
+	let baseXp = 0;
+	let relevantCount = 0;
+	if (!data.length) return {baseXp: 0, relevantCount: 0, adjustedXp: 0};
+
+	// "When making this calculation, don't count any monsters whose challenge rating is significantly below the average
+	// challenge rating of the other monsters in the group unless you think the weak monsters significantly contribute
+	// to the difficulty of the encounter." -- DMG, p. 82
+	//   -> a shamelessly vague definition, so define it as: do a moving average of the CRs in largest-first order,
+	//      stopping when the next CR is below half the current average; use the current average as the cutoff point.
+	const crCutoff = (() => {
+		let avg = null;
+		let relevantCount = null;
+		for (const it of data) {
+			if (avg == null) {
+				avg = it.cr;
+				relevantCount = it.count;
+			} else if (it.cr < avg / 2) {
+				break;
+			} else {
+				avg = ((avg *= relevantCount) + (it.cr * it.count)) / (relevantCount + it.count);
+				relevantCount += it.count;
+			}
+		}
+		return avg;
+	})();
+
+	data.forEach(it => {
+		if (it.cr >= crCutoff) relevantCount += it.count;
+		baseXp += Parser.crToXpNumber(Parser.numberToCr(it.cr)) * it.count;
+	});
+
+	const playerAdjustedXpMult = Parser.numMonstersToXpMult(relevantCount, playerCount);
+
+	const adjustedXp = playerAdjustedXpMult * baseXp;
+	return {baseXp, relevantCount, adjustedXp, meta: {crCutoff, playerCount, playerAdjustedXpMult}};
+}
+
 function onSublistChange () {
 	const $totalCr = $(`#totalcr`);
-	let baseXp = 0;
-	let totalCount = 0;
-	ListUtil.sublist.items.forEach(it => {
-		const mon = monsters[Number(it._values.id)];
-		const count = Number($(it.elm).find(".count").text());
-		totalCount += count;
-		if (mon.cr) baseXp += Parser.crToXpNumber(mon.cr) * count;
-	});
-	$totalCr.html(`${baseXp.toLocaleString()} XP (Enc: ${(Parser.numMonstersToXpMult(totalCount) * baseXp).toLocaleString()} XP)`);
+	const xp = calculateListEncounterXp(encounterBuilder.lastPlayerCount);
+	$totalCr.html(`${xp.baseXp.toLocaleString()} XP (<span class="help" title="Adjusted Encounter XP">Enc</span>: ${(xp.adjustedXp).toLocaleString()} XP)`);
+	if (encounterBuilder.isActive()) encounterBuilder.updateDifficulty();
+	else encounterBuilder.doSaveState();
 }
 
 function handleFilterChange () {
@@ -365,7 +495,7 @@ function handleFilterChange () {
 		const m = monsters[$(item.elm).attr(FLTR_ID)];
 		return filterBox.toDisplay(
 			f,
-			m.source,
+			m._fSources,
 			m._pCr,
 			m._pTypes.type,
 			m._pTypes.tags,
@@ -382,6 +512,10 @@ function handleFilterChange () {
 			m.size,
 			m._fSpeed,
 			m._fAlign,
+			m._fSave,
+			m._fSkill,
+			m.senseTags,
+			m.languageTags,
 			m._fAc,
 			m._fHp,
 			[
@@ -395,10 +529,25 @@ function handleFilterChange () {
 		);
 	});
 	onFilterChangeMulti(monsters);
+	encounterBuilder.resetCache();
 }
 
 let monsters = [];
 let mI = 0;
+const lastRendered = {mon: null, isScaled: false};
+function getScaledData () {
+	const last = lastRendered.mon;
+	return {scaled: last._isScaledCr, uid: getUid(last.name, last.source, last._isScaledCr)};
+}
+
+function getUid (name, source, scaledCr) {
+	return `${name}_${source}_${scaledCr}`.toLowerCase();
+}
+
+function _initParsed (mon) {
+	mon._pTypes = Parser.monTypeToFullObj(mon.type); // store the parsed type
+	mon._pCr = mon.cr === undefined ? "Unknown" : (mon.cr.cr || mon.cr);
+}
 
 const _NEUT_ALIGNS = ["NX", "NY"];
 function addMonsters (data) {
@@ -411,9 +560,9 @@ function addMonsters (data) {
 	// build the table
 	for (; mI < monsters.length; mI++) {
 		const mon = monsters[mI];
+		EntryRenderer.monster.mergeCopy(monsters, mon);
 		if (ExcludeUtil.isExcluded(mon.name, "monster", mon.source)) continue;
-		mon._pTypes = Parser.monTypeToFullObj(mon.type); // store the parsed type
-		mon._pCr = mon.cr === undefined ? "Unknown" : (mon.cr.cr || mon.cr);
+		_initParsed(mon);
 		mon._fSpeed = Object.keys(mon.speed).filter(k => mon.speed[k]);
 		if (mon.speed.canHover) mon._fSpeed.push("hover");
 		mon._fAc = mon.ac.map(it => it.ac || it);
@@ -425,27 +574,31 @@ function addMonsters (data) {
 		else if (tempAlign.includes("N") && !tempAlign.includes("L") && !tempAlign.includes("C")) tempAlign.push("NX");
 		else if (tempAlign.length === 1 && tempAlign.includes("N")) Array.prototype.push.apply(tempAlign, _NEUT_ALIGNS);
 		mon._fAlign = tempAlign;
-		mon.environment = mon.environment || [];
 		mon._fVuln = mon.vulnerable ? getAllImmRest(mon.vulnerable, "vulnerable") : [];
 		mon._fRes = mon.resist ? getAllImmRest(mon.resist, "resist") : [];
 		mon._fImm = mon.immune ? getAllImmRest(mon.immune, "immune") : [];
 		mon._fCondImm = mon.conditionImmune ? getAllImmRest(mon.conditionImmune, "conditionImmune") : [];
+		mon._fSave = mon.save ? Object.keys(mon.save) : [];
+		mon._fSkill = mon.skill ? Object.keys(mon.skill) : [];
+		mon._fSources = ListUtil.getCompleteSources(mon);
 
 		const abvSource = Parser.sourceJsonToAbv(mon.source);
 
 		textStack +=
 			`<li class="row" ${FLTR_ID}="${mI}" onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id=${mI} href="#${UrlUtil.autoEncodeHash(mon)}" title="${mon.name}">
-					<span class="name col-xs-4 col-xs-4-2">${mon.name}</span>
-					<span title="${Parser.sourceJsonToFull(mon.source)}${EntryRenderer.utils.getSourceSubText(mon)}" class="col-xs-2 source source${abvSource}">${abvSource}</span>
+					${EncounterBuilder.getButtons(mI)}
+					<span class="ecgen__name name col-xs-4 col-xs-4-2">${mon.name}</span>
+					<span title="${Parser.sourceJsonToFull(mon.source)}${EntryRenderer.utils.getSourceSubText(mon)}" class="col-xs-2 source ${Parser.sourceJsonToColor(mon.source)}">${abvSource}</span>
 					<span class="type col-xs-4 col-xs-4-1">${mon._pTypes.asText.uppercaseFirst()}</span>
 					<span class="col-xs-1 col-xs-1-7 text-align-center cr">${mon._pCr}</span>
 					${mon.group ? `<span class="group hidden">${mon.group}</span>` : ""}
+					<span class="alias hidden">${(mon.alias || []).map(it => `"${it}"`).join(",")}</span>
 				</a>
 			</li>`;
 
 		// populate filters
-		sourceFilter.addIfAbsent(new FilterItem(mon.source, () => {}));
+		sourceFilter.addIfAbsent(mon._fSources);
 		crFilter.addIfAbsent(mon._pCr);
 		strengthFilter.addIfAbsent(mon.str);
 		dexterityFilter.addIfAbsent(mon.dex);
@@ -461,10 +614,12 @@ function addMonsters (data) {
 		if (mon.type.swarmSize) mon._fMisc.push("Swarm");
 		if (mon.spellcasting) mon._fMisc.push("Spellcaster");
 		if (mon.isNPC) mon._fMisc.push("Named NPC");
-		if (mon.legendaryGroup) {
+		if (mon.legendaryGroup && meta[mon.legendaryGroup]) {
 			if (meta[mon.legendaryGroup].lairActions) mon._fMisc.push("Lair Actions");
 			if (meta[mon.legendaryGroup].regionalEffects) mon._fMisc.push("Regional Effects");
 		}
+		traitFilter.addIfAbsent(mon.traitTags);
+		actionReactionFilter.addIfAbsent(mon.actionTags);
 	}
 	const lastSearch = ListUtil.getSearchTermAndReset(list);
 	table.append(textStack);
@@ -483,10 +638,18 @@ function addMonsters (data) {
 
 	ListUtil.setOptions({
 		itemList: monsters,
-		getSublistRow: getSublistItem,
+		getSublistRow: pGetSublistItem,
 		primaryLists: [list]
 	});
-	EntryRenderer.hover.bindPopoutButton(monsters);
+
+	function popoutHandlerGenerator (toList, $btnPop) {
+		return (evt) => {
+			if (lastRendered.mon != null && lastRendered.isScaled) EntryRenderer.hover.doPopoutPreloaded($btnPop, lastRendered.mon, evt.clientX);
+			else if (History.lastLoadedId !== null) EntryRenderer.hover.doPopout($btnPop, toList, History.lastLoadedId, evt.clientX);
+		};
+	}
+
+	EntryRenderer.hover.bindPopoutButton(monsters, popoutHandlerGenerator);
 	UrlUtil.bindLinkExportButton(filterBox);
 	ListUtil.bindDownloadButton();
 	ListUtil.bindUploadButton(sublistFuncPreload);
@@ -518,18 +681,39 @@ function sublistFuncPreload (json, funcOnload) {
 	}
 }
 
-function getSublistItem (mon, pinId, addCount) {
-	return `
-		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
-			<a href="#${UrlUtil.autoEncodeHash(mon)}" title="${mon.name}">
-				<span class="name col-xs-4">${mon.name}</span>
-				<span class="type col-xs-3">${mon._pTypes.asText.uppercaseFirst()}</span>
-				<span class="cr col-xs-3 text-align-center">${mon._pCr}</span>		
-				<span class="count col-xs-2 text-align-center">${addCount || 1}</span>		
-				<span class="id hidden">${pinId}</span>				
-			</a>
-		</li>
-	`;
+function pGetSublistItem (mon, pinId, addCount, data = {}) {
+	return new Promise(resolve => {
+		const pMon = data.scaled ? ScaleCreature.scale(mon, data.scaled) : Promise.resolve(mon);
+
+		pMon.then(mon => {
+			const subHash = data.scaled ? `${HASH_PART_SEP}${MON_HASH_SCALED}${HASH_SUB_KV_SEP}${data.scaled}` : "";
+			_initParsed(mon);
+
+			resolve(`
+				<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
+					<a href="#${UrlUtil.autoEncodeHash(mon)}${subHash}" title="${mon._displayName || mon.name}" draggable="false">
+						${EncounterBuilder.getButtons(pinId, true)}
+						<span class="name ecgen__name--sub col-xs-5">${mon._displayName || mon.name}</span>
+						<span class="type col-xs-3 ecgen__hidden">${mon._pTypes.asText.uppercaseFirst()}</span>
+						
+						<span class="type col-xs-1 col-xs-1-5 help--hover ecgen__visible" onmouseover="EncounterBuilder.doStatblockMouseOver(event, this, ${pinId}, ${mon._isScaledCr})">Statblock</span>
+						<span class="type col-xs-1 col-xs-1-5 ecgen__visible help--hover" ${EncounterBuilder.getTokenMouseOver(mon)}>Token</span>
+						
+						<span class="cr col-xs-2 text-align-center ${mon._pCr !== "Unknown" ? "ecgen__hidden" : ""}">${mon._pCr}</span>
+						${mon._pCr !== "Unknown" ? `
+							<span class="col-xs-2 text-align-center ecgen__visible">
+								<input value="${mon._pCr}" onchange="encounterBuilder.doCrChange(this, ${pinId}, ${mon._isScaledCr})" class="ecgen__cr_input">
+							</span>
+						` : ""}
+						
+						<span class="count col-xs-2 text-align-center">${addCount || 1}</span>
+						<span class="id hidden">${data.uid ? "" : pinId}</span>
+						<span class="uid hidden">${data.uid || ""}</span>
+					</a>
+				</li>
+			`);
+		});
+	});
 }
 
 // sorting for form filtering
@@ -564,6 +748,8 @@ function loadhash (id) {
 }
 
 function renderStatblock (mon, isScaled) {
+	lastRendered.mon = mon;
+	lastRendered.isScaled = isScaled;
 	renderer.setFirstSection(true);
 
 	const $content = $("#pagecontent").empty();
@@ -578,20 +764,20 @@ function renderStatblock (mon, isScaled) {
 		$content.append(`
 		${EntryRenderer.utils.getBorderTr()}
 		<tr><th class="name" colspan="6">Name <span class="source" title="Source book">SRC</span></th></tr>
-		<tr><td id="sizetypealignment" colspan="6"><span id="size">Size</span> <span id="type">type</span>, <span id="alignment">alignment</span></td></tr>
+		<tr><td id="sizetypealignment" colspan="6"><span id="size">${Parser.sizeAbvToFull(mon.size)}</span> <span id="type">type</span>, <span id="alignment">alignment</span></td></tr>
 		<tr><td class="divider" colspan="6"><div></div></td></tr>
 		<tr><td colspan="6"><strong>Armor Class</strong> <span id="ac">## (source)</span></td></tr>
-		<tr><td colspan="6"><strong>Hit Points</strong> <span id="hp">hp</span></td></tr>
+		<tr><td colspan="6"><div class="mon__wrp_hp"><strong>Hit Points</strong> <span id="hp">hp</span></div></td></tr>
 		<tr><td colspan="6"><strong>Speed</strong> <span id="speed">30 ft.</span></td></tr>
 		<tr><td class="divider" colspan="6"><div></div></td></tr>
 		<tr id="abilitynames"><th>STR</th><th>DEX</th><th>CON</th><th>INT</th><th>WIS</th><th>CHA</th></tr>
 		<tr id="abilityscores">
-			<td id="str">${EntryRenderer.getDefaultRenderer().renderEntry(`{@dice 1d20${Parser.getAbilityModifier(mon.str)}|${mon.str} (${Parser.getAbilityModifier(mon.str)})|Strength}`)}</td>
-			<td id="dex">${EntryRenderer.getDefaultRenderer().renderEntry(`{@dice 1d20${Parser.getAbilityModifier(mon.dex)}|${mon.dex} (${Parser.getAbilityModifier(mon.dex)})|Dexterity}`)}</td>
-			<td id="con">${EntryRenderer.getDefaultRenderer().renderEntry(`{@dice 1d20${Parser.getAbilityModifier(mon.con)}|${mon.con} (${Parser.getAbilityModifier(mon.con)})|Constitution}`)}</td>
-			<td id="int">${EntryRenderer.getDefaultRenderer().renderEntry(`{@dice 1d20${Parser.getAbilityModifier(mon.int)}|${mon.int} (${Parser.getAbilityModifier(mon.int)})|Intelligence}`)}</td>
-			<td id="wis">${EntryRenderer.getDefaultRenderer().renderEntry(`{@dice 1d20${Parser.getAbilityModifier(mon.wis)}|${mon.wis} (${Parser.getAbilityModifier(mon.wis)})|Wisdom}`)}</td>
-			<td id="cha">${EntryRenderer.getDefaultRenderer().renderEntry(`{@dice 1d20${Parser.getAbilityModifier(mon.cha)}|${mon.cha} (${Parser.getAbilityModifier(mon.cha)})|Charisma}`)}</td>
+			<td id="str">${EntryRenderer.getDefaultRenderer().renderEntry(`{@d20 ${Parser.getAbilityModifier(mon.str)}|${mon.str} (${Parser.getAbilityModifier(mon.str)})|Strength}`)}</td>
+			<td id="dex">${EntryRenderer.getDefaultRenderer().renderEntry(`{@d20 ${Parser.getAbilityModifier(mon.dex)}|${mon.dex} (${Parser.getAbilityModifier(mon.dex)})|Dexterity}`)}</td>
+			<td id="con">${EntryRenderer.getDefaultRenderer().renderEntry(`{@d20 ${Parser.getAbilityModifier(mon.con)}|${mon.con} (${Parser.getAbilityModifier(mon.con)})|Constitution}`)}</td>
+			<td id="int">${EntryRenderer.getDefaultRenderer().renderEntry(`{@d20 ${Parser.getAbilityModifier(mon.int)}|${mon.int} (${Parser.getAbilityModifier(mon.int)})|Intelligence}`)}</td>
+			<td id="wis">${EntryRenderer.getDefaultRenderer().renderEntry(`{@d20 ${Parser.getAbilityModifier(mon.wis)}|${mon.wis} (${Parser.getAbilityModifier(mon.wis)})|Wisdom}`)}</td>
+			<td id="cha">${EntryRenderer.getDefaultRenderer().renderEntry(`{@d20 ${Parser.getAbilityModifier(mon.cha)}|${mon.cha} (${Parser.getAbilityModifier(mon.cha)})|Charisma}`)}</td>
 		</tr>
 		<tr><td class="divider" colspan="6"><div></div></td></tr>
 		<tr><td colspan="6"><strong>Saving Throws</strong> <span id="saves">Str +0</span></td></tr>
@@ -602,11 +788,14 @@ function renderStatblock (mon, isScaled) {
 		<tr><td colspan="6"><strong>Condition Immunities</strong> <span id="conimm">exhaustion</span></td></tr>
 		<tr><td colspan="6"><strong>Senses</strong> <span id="senses">darkvision 30 ft.</span> passive Perception <span id="pp">10</span></td></tr>
 		<tr><td colspan="6"><strong>Languages</strong> <span id="languages">Common</span></td></tr>
-		<tr><td colspan="6"><strong>Challenge</strong>
+		<tr><td colspan="6" style="position: relative;"><strong>Challenge</strong>
 			<span id="cr">1 (450 XP)</span>
-			<span id="btn-scale-cr" title="Scale Creature By CR (Highly Experimental)" class="bestiary__btn-scale-cr btn btn-xs btn-default">
-				<span class="glyphicon ${isScaled ? "glyphicon-refresh" : "glyphicon-signal"}"></span>
+			<span id="btn-scale-cr" title="Scale Creature By CR (Highly Experimental)" class="mon__btn-scale-cr btn btn-xs btn-default">
+				<span class="glyphicon glyphicon-signal"></span>
 			</span>
+			${isScaled ? `<span id="btn-reset-cr" title="Reset CR Scaling" class="mon__btn-reset-cr btn btn-xs btn-default">
+				<span class="glyphicon glyphicon-refresh"></span>
+			</span>` : ""}
 		</td></tr>
 		<tr id="traits"><td class="divider" colspan="6"><div></div></td></tr>
 		<tr class="trait"><td colspan="6"><span class="name">Trait.</span> <span class="content">Content.</span></td></tr>
@@ -626,10 +815,9 @@ function renderStatblock (mon, isScaled) {
 		`);
 
 		let renderStack = [];
-		let entryList = {};
 		const displayName = mon._displayName || mon.name;
-		let source = Parser.sourceJsonToAbv(mon.source);
-		let sourceFull = Parser.sourceJsonToFull(mon.source);
+		const source = Parser.sourceJsonToAbv(mon.source);
+		const sourceFull = Parser.sourceJsonToFull(mon.source);
 		const type = mon._pTypes.asText;
 
 		function getPronunciationButton () {
@@ -642,19 +830,17 @@ function renderStatblock (mon, isScaled) {
 			</span>`;
 		}
 
-		const imgLink = mon.tokenURL || UrlUtil.link(`img/${source}/${mon.name.replace(/"/g, "")}.png`);
+		const imgLink = EntryRenderer.monster.getTokenUrl(mon);
 		$content.find("th.name").html(
 			`<span class="stats-name copyable" onclick="EntryRenderer.utils._handleNameClick(this, '${mon.source.escapeQuotes()}')">${displayName}</span>
 			${mon.soundClip ? getPronunciationButton() : ""}
-		<span class="stats-source source${source}" title="${sourceFull}${EntryRenderer.utils.getSourceSubText(mon)}">${source}</span>
+		<span class="stats-source ${Parser.sourceJsonToColor(mon.source)}" title="${sourceFull}${EntryRenderer.utils.getSourceSubText(mon)}">${source}</span>
 		<a href="${imgLink}" target="_blank">
 			<img src="${imgLink}" class="token" onerror="imgError(this)">
 		</a>`
 		);
 
 		// TODO most of this could be rolled into the string template above
-		$content.find("td span#size").html(Parser.sizeAbvToFull(mon.size));
-
 		$content.find("td span#type").html(type);
 
 		$content.find("td span#alignment").html(Parser.alignmentListToFull(mon.alignment).toLowerCase());
@@ -677,7 +863,7 @@ function renderStatblock (mon, isScaled) {
 		var skills = mon.skill;
 		if (skills) {
 			$content.find("td span#skills").parent().show();
-			$content.find("td span#skills").html(EntryRenderer.monster.getSkillsString(mon));
+			$content.find("td span#skills").html(EntryRenderer.monster.getSkillsString(renderer, mon));
 		} else {
 			$content.find("td span#skills").parent().hide();
 		}
@@ -735,21 +921,18 @@ function renderStatblock (mon, isScaled) {
 		const $btnScaleCr = $content.find("#btn-scale-cr");
 		if (Parser.crToNumber(mon.cr.cr || mon.cr) === 100) $btnScaleCr.hide();
 		else $btnScaleCr.show();
-		$btnScaleCr.off("click").click(() => {
-			const $inner = $btnScaleCr.find(`span`);
-			if ($inner.hasClass("glyphicon-signal")) {
-				const targetCr = prompt("Please enter the desired Challenge Rating");
-				if (!targetCr || !targetCr.trim()) return;
-				if (targetCr && targetCr.trim() && /^\d+(\/\d+)?$/.exec(targetCr) && Parser.crToNumber(targetCr) >= 0 && Parser.crToNumber(targetCr) <= 30) {
-					const scaled = ScaleCreature.scale(monsters[History.lastLoadedId], Parser.crToNumber(targetCr));
-					renderStatblock(scaled, true);
-				} else {
-					alert(`Please enter a valid Challenge Rating, between 0 and 30 (fractions may be written as e.g. "1/8").`);
-				}
-			} else {
-				renderStatblock(monsters[History.lastLoadedId]);
-			}
+		$btnScaleCr.off("click").click((evt) => {
+			evt.stopPropagation();
+			const mon = monsters[History.lastLoadedId];
+			const lastCr = lastRendered.mon ? lastRendered.mon.cr.cr || lastRendered.mon.cr : mon.cr.cr || mon.cr;
+			EntryRenderer.monster.getCrScaleTarget($btnScaleCr, lastCr, (targetCr) => {
+				if (targetCr === Parser.crToNumber(mon.cr)) renderStatblock(mon);
+				else History.setSubhash(MON_HASH_SCALED, targetCr);
+			});
 		});
+
+		const $btnResetScaleCr = $content.find("#btn-reset-cr");
+		$btnResetScaleCr.click(() => History.setSubhash(MON_HASH_SCALED, null));
 
 		$content.find("tr.trait").remove();
 
@@ -783,7 +966,8 @@ function renderStatblock (mon, isScaled) {
 		const srcCpy = {
 			source: mon.source,
 			sourceSub: mon.sourceSub,
-			page: mon.page
+			page: mon.page,
+			otherSources: mon.otherSources
 		};
 		const additional = mon.additionalSources ? JSON.parse(JSON.stringify(mon.additionalSources)) : [];
 		if (mon.variant && mon.variant.length > 1) {
@@ -797,7 +981,13 @@ function renderStatblock (mon, isScaled) {
 			})
 		}
 		srcCpy.additionalSources = additional;
-		$content.find(`#source`).append(EntryRenderer.utils.getPageTr(srcCpy));
+		const $trSource = $content.find(`#source`);
+		const $tdSource = $(EntryRenderer.utils.getPageTr(srcCpy));
+		$trSource.append($tdSource);
+		if (mon.environment && mon.environment.length) {
+			$tdSource.attr("colspan", 4);
+			$trSource.append(`<td colspan="2" class="text-align-right mr-2"><i>Environment: ${mon.environment.sort(SortUtil.ascSortLower).map(it => it.toTitleCase()).join(", ")}</i></td>`)
+		}
 
 		const legendary = mon.legendary;
 		$content.find("tr#legendaries").hide();
@@ -814,25 +1004,30 @@ function renderStatblock (mon, isScaled) {
 		$content.find("tr#regionaleffects").hide();
 		if (legendaryGroup) {
 			const thisGroup = meta[legendaryGroup];
-			if (thisGroup.lairActions) renderSection("lairaction", "legendary", thisGroup.lairActions, 0);
-			if (thisGroup.regionalEffects) renderSection("regionaleffect", "legendary", thisGroup.regionalEffects, 0);
+			if (thisGroup.lairActions) renderSection("lairaction", "legendary", thisGroup.lairActions, -1);
+			if (thisGroup.regionalEffects) renderSection("regionaleffect", "legendary", thisGroup.regionalEffects, -1);
 		}
 
 		function renderSection (sectionTrClass, sectionTdClass, sectionEntries, sectionLevel) {
 			let pluralSectionTrClass = sectionTrClass === `legendary` ? `legendaries` : `${sectionTrClass}s`;
 			$content.find(`tr#${pluralSectionTrClass}`).show();
-			entryList = {type: "entries", entries: sectionEntries};
 			renderStack = [];
-			sectionEntries.forEach(e => {
-				if (e.name && e.name.includes("Recharge")) {
-					e = $.extend({}, e);
-					e.name = e.name.replace(/\((Recharge )(.*?)\)$/gi, (...m) => {
-						return `(${m[1]}{@dice 1d6|${m[2]}})`;
-					});
-				}
-				if (e.rendered) renderStack.push(e.rendered);
-				else renderer.recursiveEntryRender(e, renderStack, sectionLevel + 1);
-			});
+			if (sectionTrClass === "legendary") {
+				const cpy = MiscUtil.copy(sectionEntries).map(it => {
+					if (it.name && it.entries) {
+						it.name = `${it.name}.`;
+						it.type = it.type || "item";
+					}
+					return it;
+				});
+				const toRender = {type: "list", style: "list-hang-notitle", items: cpy};
+				renderer.recursiveEntryRender(toRender, renderStack, sectionLevel);
+			} else {
+				sectionEntries.forEach(e => {
+					if (e.rendered) renderStack.push(e.rendered);
+					else renderer.recursiveEntryRender(e, renderStack, sectionLevel + 1);
+				});
+			}
 			$content.find(`tr#${pluralSectionTrClass}`).after(`<tr class='${sectionTrClass}'><td colspan='6' class='${sectionTdClass}'>${renderStack.join("")}</td></tr>`);
 		}
 
@@ -842,49 +1037,6 @@ function renderStatblock (mon, isScaled) {
 		});
 
 		const isProfDiceMode = PROF_DICE_MODE === PROF_MODE_DICE;
-		if (mon.skill) {
-			$content.find("#skills").each(makeSkillRoller);
-		}
-
-		function makeSkillRoller () {
-			const $this = $(this);
-
-			const re = /,\s*(?![^()]*\))/g; // Don't split commas within parentheses
-			const skills = $this.html().split(re).map(s => s.trim());
-			const out = [];
-
-			skills.map(s => {
-				if (!s || !s.trim()) return;
-
-				const re = /([-+])?\d+|(?:[^-+]|\n(?![-+]))+/g; // Split before and after each bonus
-				const spl = s.match(re);
-
-				const skillName = spl[0].trim();
-
-				var skillString = "";
-				spl.map(b => {
-					const re = /([-+])?\d+/;
-
-					if (b.match(re)) {
-						const bonus = Number(b);
-						const pBonusStr = `${bonus >= 0 ? "+" : ""}${bonus}`;
-						skillString += renderSkillOrSaveRoller(skillName, pBonusStr, false);
-					} else {
-						skillString += b;
-					}
-				});
-
-				out.push(skillString);
-			});
-
-			$this.html(out.join(", "));
-		}
-
-		function renderSkillOrSaveRoller (itemName, profBonusString, isSave) {
-			itemName = itemName.replace(/plus one of the following:/g, "").replace(/^or\s*/, "");
-			return EntryRenderer.getDefaultRenderer().renderEntry(`{@dice 1d20${profBonusString}|${profBonusString}|${itemName}${isSave ? " save" : ""}`);
-		}
-
 		// inline rollers
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// add proficiency dice stuff for attack rolls, since those _generally_ have proficiency
@@ -904,13 +1056,13 @@ function renderStatblock (mon, isScaled) {
 				let pB = expectedPB;
 				let fromAbility;
 				let ability;
-				if ($(this).parent().prop("id") === "saves") {
+				if ($(this).parent().attr("data-mon-save")) {
 					const title = $(this).attr("title");
 					ability = title.split(" ")[0].trim().toLowerCase().substring(0, 3);
 					fromAbility = Parser.getAbilityModNumber(mon[ability]);
 					pB = bonus - fromAbility;
 					expert = (pB === expectedPB * 2) ? 2 : 1;
-				} else if ($(this).parent().prop("id") === "skills") {
+				} else if ($(this).parent().attr("data-mon-skill")) {
 					const title = $(this).attr("title");
 					ability = Parser.skillToAbilityAbv(title.toLowerCase().trim());
 					fromAbility = Parser.getAbilityModNumber(mon[ability]);
@@ -925,16 +1077,13 @@ function renderStatblock (mon, isScaled) {
 
 						$(this).attr("data-roll-prof-bonus", $(this).text());
 						$(this).attr("data-roll-prof-dice", profDiceString);
-						const parsed = EntryRenderer.dice._parse(profDiceString);
-						const entFormat = parsed.dice.map(d => ({number: d.num, faces: d.faces}));
-						entFormat.unshift({number: 1, faces: 20});
 
-						// here be (metallic) dragons
+						// here be (chromatic) dragons
 						const cached = $(this).attr("onclick");
 						const nu = `
 							(function(it) {
 								if (PROF_DICE_MODE === PROF_MODE_DICE) {
-									EntryRenderer.dice.rollerClick(it, '{"type":"dice","rollable":true,"toRoll":${JSON.stringify(entFormat)}}'${$(this).prop("title") ? `, '${$(this).prop("title")}'` : ""})
+									EntryRenderer.dice.rollerClick(event, it, '{"type":"dice","rollable":true,"toRoll":"1d20+${profDiceString}"}'${$(this).prop("title") ? `, '${$(this).prop("title")}'` : ""})
 								} else {
 									${cached.replace(/this/g, "it")}
 								}
@@ -963,7 +1112,7 @@ function renderStatblock (mon, isScaled) {
 					const withoutPB = dc - expectedPB;
 					const profDiceString = `1d${(expectedPB * 2)}${withoutPB >= 0 ? "+" : ""}${withoutPB}`;
 
-					return `DC <span class="dc-roller" mode="${isProfDiceMode ? "dice" : ""}" onclick="dcRollerClick(this, '${profDiceString}')" data-roll-prof-bonus="${capture}" data-roll-prof-dice="${profDiceString}">${isProfDiceMode ? profDiceString : capture}</span>`;
+					return `DC <span class="dc-roller" mode="${isProfDiceMode ? "dice" : ""}" onmousedown="event.preventDefault()" onclick="dcRollerClick(event, this, '${profDiceString}')" data-roll-prof-bonus="${capture}" data-roll-prof-dice="${profDiceString}">${isProfDiceMode ? profDiceString : capture}</span>`;
 				} else {
 					return match; // if there was no proficiency bonus to work with, fall back on this
 				}
@@ -991,30 +1140,52 @@ function renderStatblock (mon, isScaled) {
 				return;
 			}
 
-			if (fluff._copy) {
-				const cpy = data.monster.find(it => fluff._copy.name === it.name && fluff._copy.source === it.source);
-				// preserve these
-				const name = fluff.name;
-				const src = fluff.source;
-				const images = fluff.images;
-				Object.assign(fluff, cpy);
-				fluff.name = name;
-				fluff.source = src;
-				if (images) fluff.images = images;
-				delete fluff._copy;
+			function handleRecursive (fluff) {
+				const cachedAppendCopy = fluff._appendCopy; // prevent _copy from overwriting this
+
+				if (fluff._copy) {
+					const cpy = data.monster.find(it => fluff._copy.name === it.name && fluff._copy.source === it.source);
+					// preserve these
+					const name = fluff.name;
+					const src = fluff.source;
+					const images = fluff.images;
+
+					// remove this
+					delete fluff._copy;
+
+					Object.assign(fluff, cpy);
+					fluff.name = name;
+					fluff.source = src;
+					if (images) fluff.images = images;
+
+					handleRecursive(fluff);
+				}
+
+				if (cachedAppendCopy) {
+					const cpy = data.monster.find(it => cachedAppendCopy.name === it.name && cachedAppendCopy.source === it.source);
+					if (cpy.images) {
+						if (!fluff.images) fluff.images = cpy.images;
+						else fluff.images = fluff.images.concat(cpy.images);
+					}
+					if (cpy.entries) {
+						if (!fluff.entries) fluff.entries = cpy.entries;
+						else {
+							if (cpy.entries.type !== "section") {
+								fluff.entries = fluff.entries.concat({type: "section", entries: cpy.entries})
+							} else fluff.entries = fluff.entries.concat(cpy.entries);
+						}
+					}
+					delete fluff._appendCopy;
+
+					fluff._copy = cpy._copy;
+					fluff._appendCopy = cpy._appendCopy;
+
+					handleRecursive(fluff);
+				}
 			}
 
-			if (fluff._appendCopy) {
-				const cpy = data.monster.find(it => fluff._appendCopy.name === it.name && fluff._appendCopy.source === it.source);
-				if (cpy.images) {
-					if (!fluff.images) fluff.images = cpy.images;
-					else fluff.images = fluff.images.concat(cpy.images);
-				}
-				if (cpy.entries) {
-					if (!fluff.entries) fluff.entries = cpy.entries;
-					else fluff.entries = fluff.entries.concat(cpy.entries);
-				}
-				delete fluff._appendCopy;
+			if (fluff._copy || fluff._appendCopy) {
+				handleRecursive(fluff);
 			}
 
 			if (showImages) {
@@ -1026,6 +1197,7 @@ function renderStatblock (mon, isScaled) {
 			} else {
 				if (fluff.entries) {
 					const depth = fluff.type === "section" ? -1 : 2;
+					if (fluff.type !== "section") renderer.setFirstSection(false);
 					$td.append(renderer.renderEntry({type: fluff.type, entries: fluff.entries}, depth));
 				} else {
 					$td.append(HTML_NO_INFO);
@@ -1072,16 +1244,13 @@ function handleUnknownHash (link, sub) {
 	}
 }
 
-function dcRollerClick (ele, exp) {
-	const parsed = EntryRenderer.dice._parse(exp);
-	const entFormat = parsed.dice.map(d => ({number: d.num, faces: d.faces}));
-	entFormat[0].modifier = parsed.mod;
+function dcRollerClick (event, ele, exp) {
 	const it = {
 		type: "dice",
 		rollable: true,
-		toRoll: entFormat
+		toRoll: exp
 	};
-	EntryRenderer.dice.rollerClick(ele, JSON.stringify(it));
+	EntryRenderer.dice.rollerClick(event, ele, JSON.stringify(it));
 }
 
 function loadsub (sub) {
@@ -1089,4 +1258,603 @@ function loadsub (sub) {
 	ListUtil.setFromSubHashes(sub, sublistFuncPreload);
 
 	printBookView.handleSub(sub);
+
+	const scaledHash = sub.find(it => it.startsWith(MON_HASH_SCALED));
+	if (scaledHash) {
+		const scaleTo = Number(UrlUtil.unpackSubHash(scaledHash)[MON_HASH_SCALED][0]);
+		const scaleToStr = Parser.numberToCr(scaleTo);
+		const mon = monsters[History.lastLoadedId];
+		if (Parser.isValidCr(scaleToStr) && scaleTo !== Parser.crToNumber(lastRendered.mon.cr)) {
+			ScaleCreature.scale(mon, scaleTo).then(scaled => renderStatblock(scaled, true));
+		}
+	}
+
+	encounterBuilder.handleSubhash(sub);
 }
+
+class EncounterBuilder {
+	constructor () {
+		this.stateInit = false;
+		this._cache = null;
+		this._lastPlayerCount = null;
+	}
+
+	initUi () {
+		// bind an event handler to prevent sublist link clicks when the encounter generator is active
+		$(document).on("click", ".ecgen_active #sublistcontainer .list a", (evt) => {
+			if (!evt.ctrlKey && !evt.shiftKey) {
+				evt.preventDefault();
+			}
+		});
+
+		$(`#btn-encounterbuild`).click(() => History.setSubhash(EncounterBuilder.HASH_KEY, true));
+		$(`#btn-encounterstatblock`).click(() => History.setSubhash(EncounterBuilder.HASH_KEY, null));
+
+		const $btnGen = $(`.ecgen_rng`).click((evt) => {
+			evt.preventDefault();
+			this.doGenerateEncounter($btnGen.data("mode"))
+		});
+
+		$(`.ecgen_rng_easy`).click((evt) => {
+			evt.preventDefault();
+			this.doGenerateEncounter("easy");
+			$btnGen.data("mode", "easy").text("Random Easy");
+		});
+		$(`.ecgen_rng_medium`).click((evt) => {
+			evt.preventDefault();
+			this.doGenerateEncounter("medium");
+			$btnGen.data("mode", "medium").text("Random Medium");
+		});
+		$(`.ecgen_rng_hard`).click((evt) => {
+			evt.preventDefault();
+			this.doGenerateEncounter("hard");
+			$btnGen.data("mode", "hard").text("Random Hard");
+		});
+		$(`.ecgen_rng_deadly`).click((evt) => {
+			evt.preventDefault();
+			this.doGenerateEncounter("deadly");
+			$btnGen.data("mode", "deadly").text("Random Deadly");
+		});
+
+		$(`.ecgen__add_players`).click(() => this.addPlayerRow(false));
+
+		const $btnSvUrl = $(`.ecgen__sv_url`).click(() => {
+			const encounterPart = UrlUtil.packSubHash(EncounterUtil.SUB_HASH_PREFIX, [JSON.stringify(this.getSaveableState())], true);
+			const parts = [location.href, encounterPart];
+			copyText(parts.join(HASH_PART_SEP));
+			showCopiedEffect($btnSvUrl);
+		});
+		$(`.ecgen__sv_file`).click(() => DataUtil.userDownload(`encounter`, this.getSaveableState()));
+		$(`.ecgen__ld_file`).click(() => {
+			DataUtil.userUpload((json) => {
+				this.doLoadState(json);
+			});
+		});
+		$(`.ecgen__reset`).click(() => confirm("Are you sure?") && encounterBuilder.reset());
+	}
+
+	initState () {
+		EncounterUtil.pGetSavedState().then(savedState => {
+			if (savedState) this.doLoadState(savedState, true);
+			else this.addInitialPlayerRows();
+			this.stateInit = true;
+		});
+	}
+
+	addInitialPlayerRows (first) {
+		this.addPlayerRow(first, true, ECGEN_BASE_PLAYERS);
+	}
+
+	reset (doAddRows = true, playersOnly) {
+		if (!playersOnly) ListUtil.doSublistRemoveAll();
+
+		this.removeAllPlayerRows();
+		if (doAddRows) this.addInitialPlayerRows();
+	}
+
+	doLoadState (savedState, playersOnly) {
+		this.reset(false, playersOnly);
+		try {
+			if (savedState.p.length) {
+				savedState.p.forEach(({count, level}, i) => this.addPlayerRow(!i, false, count, level));
+			} else this.addInitialPlayerRows(false);
+
+			if (savedState.l && !playersOnly) {
+				ListUtil.doJsonLoad(savedState.l, false, sublistFuncPreload);
+			}
+			this.updateDifficulty();
+		} catch (e) {
+			this.reset();
+		}
+	}
+
+	getSaveableState () {
+		return {
+			p: EncounterBuilder.getParty(),
+			l: ListUtil._getExportableSublist()
+		};
+	}
+
+	doSaveState () {
+		if (this.stateInit) EncounterUtil.pDoSaveState(this.getSaveableState());
+	}
+
+	generateCache () {
+		// create a map of {XP: [monster list]}
+		if (this._cache == null) {
+			this._cache = (() => {
+				const out = {};
+				list.visibleItems.map(it => monsters[Number(it.elm.getAttribute("filterid"))]).filter(m => !m.isNPC).forEach(m => {
+					const mXp = Parser.crToXpNumber(m.cr.cr || m.cr);
+					if (mXp) (out[mXp] = out[mXp] || []).push(m);
+				});
+				return out;
+			})();
+		}
+	}
+
+	resetCache () {
+		this._cache = null;
+	}
+
+	doGenerateEncounter (difficulty) {
+		const TIERS = ["easy", "medium", "hard", "deadly", "yikes"];
+
+		const xp = this.calculateXp();
+		xp.party.yikes = xp.party.deadly * 1.1;
+
+		const ixLow = TIERS.indexOf(difficulty);
+		if (!~ixLow) throw new Error(`Unhandled difficulty level: "${difficulty}"`);
+		const budget = xp.party[TIERS[ixLow + 1]] - 1;
+
+		this.generateCache();
+
+		const generateClosestEncounter = () => {
+			const _xps = Object.keys(this._cache).map(it => Number(it)).sort(SortUtil.ascSort).reverse();
+			/*
+			Sorted array of:
+			{
+				cr: "1/2",
+				xp: 50,
+				crNum: 0.5
+			}
+			 */
+			const _meta = Object.entries(Parser.XP_CHART_ALT).map(([cr, xp]) => ({cr, xp, crNum: Parser.crToNumber(cr)}))
+				.sort((a, b) => SortUtil.ascSort(b.crNum, a.crNum));
+			const getXps = (budget) => _xps.filter(it => it <= budget);
+
+			const calcNextBudget = (encounter) => {
+				const data = encounter.map(it => ({cr: Parser.crToNumber(it.mon.cr.cr || it.mon.cr), count: it.count}));
+				if (!data.length) return budget;
+
+				const curr = calculateEncounterXp(data, xp.party.count);
+				const budgetRemaining = budget - curr.adjustedXp;
+
+				const meta = _meta.filter(it => it.xp <= budgetRemaining);
+				for (const m of meta) {
+					if (m.crNum >= curr.meta.crCutoff) {
+						const nextMult = Parser.numMonstersToXpMult(curr.relevantCount + 1, xp.party.count);
+						return Math.floor((budget - (nextMult * curr.baseXp)) / nextMult);
+					}
+				}
+				return budgetRemaining;
+			};
+
+			const addToEncounter = (encounter, xp) => {
+				const existing = encounter.filter(it => it.xp === xp);
+				if (existing.length && RollerUtil.roll(100) < 85) { // 85% chance to add another copy of an existing monster
+					RollerUtil.rollOnArray(existing).count++;
+				} else {
+					const rolled = RollerUtil.rollOnArray(this._cache[xp]);
+					// add to an existing group, if present
+					const existing = encounter.find(it => it.mon.source === rolled.source && it.mon.name === rolled.name);
+					if (existing) existing.count++;
+					else {
+						encounter.push({
+							xp: xp,
+							mon: rolled,
+							count: 1
+						});
+					}
+				}
+			};
+
+			let skipCount = 0;
+			const doSkip = (xps, encounter, xp) => {
+				// if there are existing entries at this XP, don't skip
+				const existing = encounter.filter(it => it.xp === xp);
+				if (existing.length) return false;
+
+				// skip 70% of the time by default, less 13% chance per item skipped
+				if (xps.length > 1) {
+					const isSkip = RollerUtil.roll(100) < (70 - (13 * skipCount));
+					if (isSkip) {
+						skipCount++;
+						const maxSkip = xps.length - 1;
+						// flip coins; so long as we get heads, keep skipping
+						for (let i = 0; i < maxSkip; ++i) {
+							if (RollerUtil.roll(2) === 0) {
+								return i;
+							}
+						}
+						return maxSkip - 1;
+					} else return 0;
+				} else return false;
+			};
+
+			const doInitialSkip = (xps) => {
+				// 50% of the time, skip the first 0-1/3rd of available CRs
+				if (xps.length > 4 && RollerUtil.roll(2) === 1) {
+					const skips = RollerUtil.roll(Math.ceil(xps.length / 3));
+					return xps.slice(skips);
+				} else return xps;
+			};
+
+			const doFind = (budget) => {
+				const enc = [];
+				const xps = doInitialSkip(getXps(budget));
+
+				let nextBudget = budget;
+				let skips = 0;
+				let steps = 0;
+				while (xps.length) {
+					if (steps++ > 100) break;
+
+					if (skips) {
+						skips--;
+						xps.shift();
+						continue;
+					}
+
+					const xp = xps[0];
+
+					if (xp > nextBudget) {
+						xps.shift();
+						continue;
+					}
+
+					skips = doSkip(xps, enc, xp);
+					if (skips) {
+						skips--;
+						xps.shift();
+						continue;
+					}
+
+					addToEncounter(enc, xp);
+
+					nextBudget = calcNextBudget(enc);
+				}
+
+				return enc;
+			};
+
+			return doFind(budget);
+		};
+
+		const closestSolution = generateClosestEncounter();
+
+		if (closestSolution) {
+			const toLoad = {items: []};
+			const sources = new Set();
+			closestSolution.forEach(it => {
+				toLoad.items.push({h: UrlUtil.autoEncodeHash(it.mon), c: String(it.count)});
+				sources.add(it.mon.source);
+			});
+			toLoad.sources = [...sources];
+			this._loadSublist(toLoad);
+		} else {
+			ListUtil.doSublistRemoveAll();
+			this.updateDifficulty();
+		}
+	}
+
+	_loadSublist (toLoad) {
+		ListUtil.doJsonLoad(toLoad, false, (json, funcOnload) => {
+			sublistFuncPreload(json, () => {
+				funcOnload();
+				this.updateDifficulty();
+			});
+		});
+	}
+
+	addPlayerRow (first = true, doUpdate = true, count, level) {
+		$(`.ecgen__wrp_add_players`).before(EncounterBuilder.getPlayerRow(first, count, level));
+		if (doUpdate) this.updateDifficulty();
+	}
+
+	removeAllPlayerRows () {
+		$(`.ecgen__player_group`).remove();
+	}
+
+	isActive () {
+		return History.getSubHash(EncounterBuilder.HASH_KEY) === "true";
+	}
+
+	show () {
+		$(`body`).addClass("ecgen_active");
+		this.updateDifficulty();
+	}
+
+	hide () {
+		$(`body`).removeClass("ecgen_active");
+	}
+
+	handleClick (evt, ix, add) {
+		evt.stopPropagation();
+		if (!evt.ctrlKey) evt.preventDefault();
+
+		if (add) ListUtil.doSublistAdd(ix, true, evt.shiftKey ? 5 : 1, lastRendered.isScaled ? getScaledData() : undefined);
+		else ListUtil.doSublistSubtract(ix, evt.shiftKey ? 5 : 1, lastRendered.isScaled ? getScaledData() : undefined);
+	}
+
+	handleShuffleClick (evt, ix) {
+		evt.stopPropagation();
+		if (!evt.ctrlKey) evt.preventDefault();
+
+		const mon = monsters[ix];
+		const xp = Parser.crToXpNumber(mon.cr.cr || mon.cr);
+		if (!xp) return; // if Unknown/etc
+
+		const curr = ListUtil._getExportableSublist();
+		const hash = UrlUtil.autoEncodeHash(mon);
+		const itemToSwitch = curr.items.find(it => it.h === hash);
+
+		this.generateCache();
+		const availMons = this._cache[xp];
+		if (availMons.length !== 1) {
+			// note that this process does not remove any old sources
+
+			let reroll = mon;
+			let rolledHash = hash;
+			while (rolledHash === hash) {
+				reroll = RollerUtil.rollOnArray(availMons);
+				rolledHash = UrlUtil.autoEncodeHash(reroll);
+			}
+			itemToSwitch.h = rolledHash;
+			if (!curr.sources.includes(reroll.source)) {
+				curr.sources.push(reroll.source);
+			}
+
+			// do a pass to merge any duplicates
+			outer: for (let i = 0; i < curr.items.length; ++i) {
+				const item = curr.items[i];
+				for (let j = i - 1; j >= 0; --j) {
+					const prevItem = curr.items[j];
+
+					if (item.h === prevItem.h) {
+						prevItem.c = String(Number(prevItem.c) + Number(item.c));
+						curr.items.splice(i, 1);
+						continue outer;
+					}
+				}
+			}
+
+			this._loadSublist(curr);
+		} // else can't reroll
+	}
+
+	handleContext (evt) {
+		evt.stopPropagation();
+	}
+
+	handleSubhash () {
+		// loading state from the URL is instead handled as part of EncounterUtil.pGetSavedState
+		if (History.getSubHash(EncounterBuilder.HASH_KEY) === "true") this.show();
+		else this.hide();
+	}
+
+	removePlayerRow (ele) {
+		const $ele = $(ele);
+		$ele.closest(`.ecgen__player_group`).remove();
+		this.updateDifficulty();
+	}
+
+	updateDifficulty () {
+		const xp = this.calculateXp();
+
+		const $elEasy = $(`.ecgen__easy`).removeClass("bold").text(`Easy: ${xp.party.easy.toLocaleString()} XP`);
+		const $elmed = $(`.ecgen__medium`).removeClass("bold").text(`Medium: ${xp.party.medium.toLocaleString()} XP`);
+		const $elHard = $(`.ecgen__hard`).removeClass("bold").text(`Hard: ${xp.party.hard.toLocaleString()} XP`);
+		const $elDeadly = $(`.ecgen__deadly`).removeClass("bold").text(`Deadly: ${xp.party.deadly.toLocaleString()} XP`);
+
+		$(`.ecgen__daily_budget`).removeClass("bold").text(`Daily Budget: ${xp.party.daily.toLocaleString()} XP`);
+
+		let difficulty = "Trivial";
+		if (xp.encounter.adjustedXp >= xp.party.deadly) {
+			difficulty = "Deadly";
+			$elDeadly.addClass("bold");
+		} else if (xp.encounter.adjustedXp >= xp.party.hard) {
+			difficulty = "Hard";
+			$elHard.addClass("bold");
+		} else if (xp.encounter.adjustedXp >= xp.party.medium) {
+			difficulty = "Medium";
+			$elmed.addClass("bold");
+		} else if (xp.encounter.adjustedXp >= xp.party.easy) {
+			difficulty = "Easy";
+			$elEasy.addClass("bold");
+		}
+
+		if (xp.encounter.relevantCount) {
+			$(`.ecgen__req_creatures`).show();
+			$(`.ecgen__rating`).text(`Difficulty: ${difficulty}`);
+			$(`.ecgen__raw_total`).text(`Total XP: ${xp.encounter.baseXp.toLocaleString()}`);
+			$(`.ecgen__raw_per_player`).text(`(${Math.floor(xp.encounter.baseXp / xp.party.count).toLocaleString()} per player)`);
+			const infoHover = EntryRenderer.hover.bindOnMouseHoverEntry(
+				{
+					entries: [
+						`{@b Adjusted by a ${xp.encounter.meta.playerAdjustedXpMult}× multiplier, based on a minimum challenge rating threshold of ${`${xp.encounter.meta.crCutoff.toFixed(2)}`.replace(/[,.]?0+$/, "")}*&dagger;, and a party size of ${xp.encounter.meta.playerCount} players.}`,
+						`{@note * Calculated as a cumulative moving average of the challenge rating(s) in largest-first order, stopping when a challenge rating is found which is less than half of the current average, or all challenge ratings have been included in the average (whichever occurs first).}`,
+						`<hr>`,
+						{
+							type: "quote",
+							entries: [
+								`&dagger; [...] don't count any monsters whose challenge rating is significantly below the average challenge rating of the other monsters in the group [...]`
+							],
+							"by": "{@book Dungeon Master's Guide, page 82|DMG|3|4 Modify Total XP for Multiple Monsters}"
+						}
+					]
+				},
+				true
+			);
+			$(`.ecgen__adjusted_total_info`).off("mouseover").on("mouseover", function (event) {
+				infoHover(event, this);
+			});
+			$(`.ecgen__adjusted_total`).text(`Adjusted XP: ${xp.encounter.adjustedXp.toLocaleString()}`);
+			$(`.ecgen__adjusted_per_player`).text(`(${Math.floor(xp.encounter.adjustedXp / xp.party.count).toLocaleString()} per player)`);
+		} else {
+			$(`.ecgen__req_creatures`).hide();
+		}
+
+		this.doSaveState();
+	}
+
+	static getParty () {
+		return $(`.ecgen__player_group`).map((i, e) => {
+			const $e = $(e);
+			return {
+				count: Number($e.find(`.ecgen__player_group__count`).val()),
+				level: Number($e.find(`.ecgen__player_group__level`).val())
+			}
+		}).get();
+	}
+
+	get lastPlayerCount () {
+		return this._lastPlayerCount;
+	}
+
+	calculateXp () {
+		const party = EncounterBuilder.getParty();
+		party.forEach(group => {
+			group.easy = LEVEL_TO_XP_EASY[group.level] * group.count;
+			group.medium = LEVEL_TO_XP_MEDIUM[group.level] * group.count;
+			group.hard = LEVEL_TO_XP_HARD[group.level] * group.count;
+			group.deadly = LEVEL_TO_XP_DEADLY[group.level] * group.count;
+			group.daily = LEVEL_TO_XP_DAILY[group.level] * group.count;
+		});
+		const totals = party.reduce((a, b) => {
+			Object.keys(a).forEach(k => a[k] = a[k] + b[k]);
+			return a;
+		}, {
+			count: 0,
+			level: 0,
+			easy: 0,
+			medium: 0,
+			hard: 0,
+			deadly: 0,
+			daily: 0
+		});
+		const encounter = calculateListEncounterXp(totals.count);
+		this._lastPlayerCount = totals.count;
+		return {party: totals, encounter: encounter};
+	}
+
+	static async doStatblockMouseOver (evt, ele, ixMon, scaledTo) {
+		const mon = monsters[ixMon];
+		if (scaledTo != null) {
+			const scaled = await ScaleCreature.scale(mon, scaledTo);
+			EntryRenderer.hover.mouseOverPreloaded(evt, ele, scaled, UrlUtil.PG_BESTIARY, mon.source, UrlUtil.autoEncodeHash(mon));
+		} else {
+			EntryRenderer.hover.mouseOver(evt, ele, UrlUtil.PG_BESTIARY, mon.source, UrlUtil.autoEncodeHash(mon));
+		}
+	}
+
+	static getTokenMouseOver (mon) {
+		return EntryRenderer.hover.createOnMouseHoverEntry(
+			{
+				name: `Token \u2014 ${mon.name}`,
+				type: "image",
+				href: {
+					type: "external",
+					url: EntryRenderer.monster.getTokenUrl(mon)
+				}
+			},
+			true
+		);
+	}
+
+	doCrChange (ele, ixMon, scaledTo) {
+		const $iptCr = $(ele);
+		const mon = monsters[ixMon];
+		const baseCr = mon.cr.cr || mon.cr;
+		const baseCrNum = Parser.crToNumber(baseCr);
+		const targetCr = $iptCr.val();
+
+		if (Parser.isValidCr(targetCr)) {
+			const targetCrNum = Parser.crToNumber(targetCr);
+
+			if (targetCrNum === scaledTo) return;
+
+			const state = ListUtil._getExportableSublist();
+			const toFindHash = UrlUtil.autoEncodeHash(mon);
+
+			const toFindUid = !(scaledTo == null || baseCrNum === scaledTo) ? getUid(mon.name, mon.source, scaledTo) : null;
+			const ixCurrItem = state.items.findIndex(it => {
+				if (scaledTo == null || scaledTo === baseCrNum) return it.uid == null && it.h === toFindHash;
+				else return it.uid === toFindUid;
+			});
+			if (!~ixCurrItem) throw new Error(`Could not find previously sublisted item! 🐛`);
+
+			const toFindNxtUid = baseCrNum !== targetCrNum ? getUid(mon.name, mon.source, targetCrNum) : null;
+			const nextItem = state.items.find(it => {
+				if (targetCrNum === baseCrNum) return it.uid == null && it.h === toFindHash;
+				else return it.uid === toFindNxtUid;
+			});
+			// if there's an existing item with a matching UID (or lack of), merge into it
+			if (nextItem) {
+				const curr = state.items[ixCurrItem];
+				nextItem.c = `${Number(nextItem.c || 1) + Number(curr.c || 1)}`;
+				state.items.splice(ixCurrItem, 1);
+			} else state.items[ixCurrItem].uid = getUid(mon.name, mon.source, targetCrNum);
+
+			this._loadSublist(state);
+		} else {
+			alert(`"${$iptCr.val()}" is not a valid Challenge Rating! Please enter a valid CR (0-30). For fractions, "1/X" should be used.`);
+			$iptCr.val(Parser.numberToCr(scaledTo || baseCr));
+		}
+	}
+
+	static getPlayerRow (isFirst, count, level) {
+		return `
+			<div class="row mb-2 ecgen__player_group">
+				<div class="col-xs-3">
+					<select class="ecgen__player_group__count" onchange="encounterBuilder.updateDifficulty()">
+					${[...new Array(12)].map((_, i) => `<option ${(count === i + 1) ? "selected" : ""}>${i + 1}</option>`).join("")}
+					</select>
+				</div>
+				<div class="col-xs-3">
+					<select class="ecgen__player_group__level" onchange="encounterBuilder.updateDifficulty()" >
+						${[...new Array(20)].map((_, i) => `<option ${(level === i + 1) ? "selected" : ""}>${i + 1}</option>`).join("")}
+					</select>
+				</div>
+				${!isFirst ? `
+				<div class="col-xs-3 flex" style="margin-left: -20px; align-items: center;">
+					<button class="btn btn-danger btn-xs ecgen__del_players" onclick="encounterBuilder.removePlayerRow(this)">
+						<span class="glyphicon glyphicon-remove" title="Remove Player Group"></span>
+					</button>
+				</div>
+				` : ""}
+			</div>
+		`;
+	}
+
+	static getButtons (monId, isSublist) {
+		return `
+			<span class="ecgen__visible ${isSublist ? "col-xs-1 col-xs-1-5" : "col-xs-1"} no-wrap" onclick="event.preventDefault()">
+				<span title="Add (SHIFT for 5)" class="btn btn-success btn-xs ecgen__btn_list" onclick="encounterBuilder.handleClick(event, ${monId}, 1)" oncontextmenu="encounterBuilder.handleContext(event)">
+					<span class="glyphicon glyphicon-plus"></span>
+				</span>
+				<span title="Subtract (SHIFT for 5)" class="btn btn-danger btn-xs ecgen__btn_list" onclick="encounterBuilder.handleClick(event, ${monId}, 0)" oncontextmenu="encounterBuilder.handleContext(event)">
+					<span class="glyphicon glyphicon-minus"></span>
+				</span>
+				${isSublist ? `
+				<span title="Randomize Monster" class="btn btn-default btn-xs ecgen__btn_list" onclick="encounterBuilder.handleShuffleClick(event, ${monId}, this)" oncontextmenu="encounterBuilder.handleContext(event)">
+					<span class="glyphicon glyphicon-random" style="right: 1px"></span>
+				</span>
+				` : ""}
+			</span>
+		`;
+	}
+}
+EncounterBuilder.HASH_KEY = "encounterbuilder";
+
+const encounterBuilder = new EncounterBuilder();

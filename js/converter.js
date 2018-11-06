@@ -56,6 +56,11 @@ String.prototype.indexOf_handleColon = String.prototype.indexOf_handleColon ||
 
 // Tries to parse immunities, resistances, and vulnerabilities
 function tryParseSpecialDamage (strDamage, damageType) {
+	// handle the case where a comma is mistakenly used instead of a semicolon
+	if (strDamage.toLowerCase().includes(", bludgeoning, piercing, and slashing from")) {
+		strDamage = strDamage.replace(/, (bludgeoning, piercing, and slashing from)/gi, "; $1")
+	}
+
 	const splSemi = strDamage.toLowerCase().split(";");
 	const newDamage = [];
 	try {
@@ -86,17 +91,28 @@ function tryParseSpellcasting (trait, isMarkdown) {
 	let spellcasting = [];
 
 	function parseSpellcasting (trait) {
+		const splitter = new RegExp(/,\s?(?![^(]*\))/, "g"); // split on commas not within parentheses
+
 		function getParsedSpells (thisLine) {
 			let spellPart = thisLine.substring(thisLine.indexOf(": ") + 2).trim();
 			if (isMarkdown) {
+				const cleanPart = (part) => {
+					part = part.trim();
+					while (part.startsWith("*") && part.endsWith("*")) {
+						part = part.replace(/^\*(.*)\*$/, "$1");
+					}
+					return part;
+				};
+
+				const cleanedInner = spellPart.split(splitter).map(it => cleanPart(it)).filter(it => it);
+				spellPart = cleanedInner.join(", ");
+
 				while (spellPart.startsWith("*") && spellPart.endsWith("*")) {
 					spellPart = spellPart.replace(/^\*(.*)\*$/, "$1");
 				}
 			}
 			return spellPart.split(splitter).map(i => parseSpell(i));
 		}
-
-		const splitter = new RegExp(/,\s?(?![^(]*\))/, "g"); // split on commas not within parentheses
 
 		let name = trait.name;
 		let spellcastingEntry = {"name": name, "headerEntries": [parseToHit(trait.entries[0])]};
@@ -139,6 +155,7 @@ function tryParseSpellcasting (trait, isMarkdown) {
 				if (!spellcastingEntry.spells) spellcastingEntry.spells = {};
 				let slots = thisLine.includes(" slot") ? parseInt(thisLine.substr(11, 1)) : 0;
 				spellcastingEntry.spells[property] = {"slots": slots, "spells": value};
+				if (!spellcastingEntry.spells[property]) delete spellcastingEntry.spells[property];
 			} else {
 				if (doneHeader) {
 					if (!spellcastingEntry.footerEntries) spellcastingEntry.footerEntries = [];
@@ -250,7 +267,7 @@ function loadparser (data) {
 	let hasAppended = false;
 
 	const $iptPage = $(`#page_in`);
-	const getPage = () => Number($iptPage.val() || 0);
+	const getPage = () => $iptPage.val() ? Number($iptPage.val()) : undefined;
 
 	// custom sources
 	const $srcSel = $(`#source`);
@@ -286,16 +303,21 @@ function loadparser (data) {
 			const out = {
 				monster: JSON.parse(`[${output}]`)
 			};
-			DataUtil.userDownload(`converter-output.json`, out);
+			DataUtil.userDownload(`converter-output`, out);
 		} else {
 			alert("Nothing to download!");
 		}
 	});
 
+	$(`#editable`).click(() => {
+		if (confirm(`Edits will be overwritten as you parse new statblocks. Enable anyway?`)) $(`#jsonoutput`).attr("readonly", false);
+	});
+
 	// init editor
 	const editor = ace.edit("statblock");
 	editor.setOptions({
-		wrap: true
+		wrap: true,
+		showPrintMargin: false
 	});
 
 	function catchErrors (toRun) {
@@ -341,9 +363,7 @@ function loadparser (data) {
 	}
 
 	function getCleanName (line) {
-		return line.toLowerCase().replace(/\b\w/g, function (l) {
-			return l.toUpperCase()
-		});
+		return $(`#titlecase`).prop("checked") ? line.toLowerCase().toTitleCase() : line;
 	}
 
 	function setCleanSizeTypeAlignment (stats, line) {
@@ -363,7 +383,7 @@ function loadparser (data) {
 		else {
 			stats.hp = {
 				average: Number(m[1]),
-				formula: m[2]
+				formula: m[2].replace(/\s+/g, "").replace(/([^0-9d])/gi, " $1 ")
 			};
 		}
 	}
@@ -490,10 +510,17 @@ function loadparser (data) {
 	}
 
 	function setCleanSenses (stats, line) {
-		stats.senses = line.toLowerCase().split_handleColon("senses")[1].split("passive perception")[0].trim();
-		if (!stats.senses.indexOf("passive perception")) stats.senses = "";
-		if (stats.senses[stats.senses.length - 1] === ",") stats.senses = stats.senses.substring(0, stats.senses.length - 1);
-		stats.passive = tryConvertNumber(line.toLowerCase().split("passive perception")[1].trim());
+		const senses = line.toLowerCase().split_handleColon("senses")[1].trim();
+		const tempSenses = [];
+		senses.split(",").forEach(s => {
+			s = s.trim();
+			if (s) {
+				if (s.includes("passive perception")) stats.passive = tryConvertNumber(s.split("passive perception")[1].trim());
+				else tempSenses.push(s.trim());
+			}
+		});
+		if (tempSenses.length) stats.senses = tempSenses.join(", ");
+		else delete stats.senses;
 	}
 
 	function setCleanLanguages (stats, line) {
@@ -512,6 +539,24 @@ function loadparser (data) {
 	}
 
 	function doConvertDiceTags (trait) {
+		function doTagDice (str) {
+			// untag dice
+			str = str.replace(/{@(?:dice|damage) ([^}]*)}/gi, "$1");
+
+			// retag + format dice
+			str = str.replace(/((\s*[-+]\s*)?(([1-9]\d*)?d([1-9]\d*)(\s*?[-+×x]\s*?\d+)?))+/gi, (...m) => {
+				const expanded = m[0].replace(/([^0-9d])/gi, " $1 ");
+				return `{@dice ${expanded}}`;
+			});
+
+			// tag damage
+			str = str.replace(/(\d+)( \({@dice )([-+0-9d ]*)(}\) [a-z]+( or [a-z]+)? damage)/ig, (...m) => {
+				return m[0].replace(/{@dice /gi, "{@damage ");
+			});
+
+			return str;
+		}
+
 		if (trait.entries) {
 			trait.entries = trait.entries.filter(it => it.trim()).map(e => {
 				if (typeof e !== "string") return e;
@@ -522,12 +567,7 @@ function loadparser (data) {
 					return `{@hit ${cleanMatch}}`
 				});
 
-				// replace e.g. "2d4+2"
-				e = e.replace(/\d+d\d+(\s?([-+])\s?\d+\s?)?/g, function (match) {
-					return `{@dice ${match}}`;
-				});
-
-				return e;
+				return doTagDice(e);
 			});
 		}
 	}
@@ -776,20 +816,21 @@ function loadparser (data) {
 	}
 
 	function doPostProcessing (stats) {
-		ConverterUtils.tryPostProcessAc(
+		function showWarning (text) {
+			$(`#lastWarnings`).append(`<div>Warning: ${text}</div>`);
+		}
+
+		AcConvert.tryPostProcessAc(
 			stats,
-			(ac) => {
-				$(`#lastWarnings`).append(`<div>Warning: AC requires manual conversion '${ac}'</div>`)
-			},
-			(ac) => {
-				$(`#lastWarnings`).append(`<div>Warning: failed to auto-parse AC '${ac}'</div>`)
-			}
+			(ac) => showWarning(`AC "${ac}" requires manual conversion`),
+			(ac) => showWarning(`Failed to parse AC "${ac}"`)
 		);
+		TagAttack.tryTagAttacks(stats, (atk) => showWarning(`Manual attack tagging required for "${atk}"`));
+		TagHit.tryTagHits(stats);
 	}
 
 	function cleanOutput (out) {
-		return out.replace(/([1-9]\d*)?d([1-9]\d*)(\s?)([+-])(\s?)(\d+)?/g, "$1d$2$4$6")
-			.replace(/\u2014/g, "\\u2014")
+		return out.replace(/\u2014/g, "\\u2014")
 			.replace(/\u2013/g, "\\u2014")
 			.replace(/’/g, "'")
 			.replace(/[“”]/g, "\\\"");
@@ -799,10 +840,10 @@ function loadparser (data) {
 		const $outArea = $("textarea#jsonoutput");
 		if (append) {
 			const oldVal = $outArea.text();
-			$outArea.text(`${out},\n${oldVal}`);
+			$outArea.val(`${out},\n${oldVal}`);
 			hasAppended = true;
 		} else {
-			$outArea.text(out);
+			$outArea.val(out);
 			hasAppended = false;
 		}
 	}

@@ -3,12 +3,15 @@
 <head>
 	<!--5ETOOLS_VERSION-->
 	<meta charset="utf-8">
+	<meta name="description" content="">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>Make Shaped JS - 5etools</title>
 
 	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<link rel="stylesheet" href="css/jquery-ui-slider-pips.css">
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="icon" href="favicon.png">
 
@@ -92,7 +95,7 @@
 			<div class="shaped-wrp-controls">
 				<div class="mb-2">
 					<p class="shaped-help">
-						If you use the <a href="https://github.com/mlenser/roll20-character-sheets/tree/master/5eShaped" target="_blank">5e Shaped character sheet</a> on Roll20 with its <a href="https://github.com/mlenser/roll20-api-scripts/tree/master/5eShapedScript" target="_blank">companion script</a>, this page will allow you to generate a supplementary script file that will load additional monsters and spells from the 5eTools data set for use with the <span class="code">!shaped-import-monster</span> and <span class="code">!shaped-import-spell</span> commands. Select the sources that you wish to include, click the "Prepare JS" button and then, once the data has populated into the text box below, click the "Copy JS" button to copy it to the clipboard. You should then paste it into a new API script file in your Roll20 campaign. See the <a href="https://bitbucket.org/mlenser/5eshapedscript/wiki/Home" target="_blank">script documentation</a> for more details on how to import spells and monsters into your game once you've loaded the additional data.
+						If you use the <a href="https://github.com/mlenser/roll20-character-sheets/tree/master/5eShaped" target="_blank">5e Shaped character sheet</a> on Roll20 with its <a href="https://github.com/mlenser/roll20-api-scripts/tree/master/5eShapedScript" target="_blank">companion script</a>, this page will allow you to generate a supplementary script file that will load additional monsters and spells from the 5etools data set for use with the <span class="code">!shaped-import-monster</span> and <span class="code">!shaped-import-spell</span> commands. Select the sources that you wish to include, click the "Prepare JS" button and then, once the data has populated into the text box below, click the "Copy JS" button to copy it to the clipboard. You should then paste it into a new API script file in your Roll20 campaign. See the <a href="https://bitbucket.org/mlenser/5eshapedscript/wiki/Home" target="_blank">script documentation</a> for more details on how to import spells and monsters into your game once you've loaded the additional data.
 					</p>
 					<p>
 						<strong>Important Note:</strong> Please do not paste links to this tool on public forums - especially not on the Roll20 forums.
@@ -102,7 +105,7 @@
 					<div class="btn btn-primary" id="copyJS" disabled="disabled">Copy JS</div>
 				</div>
 				<div class="mb-2 shaped-wrp-output">
-					<textarea id="shapedJS"></textarea>
+					<textarea id="shapedJS" class="form-control"></textarea>
 				</div>
 			</div>
 		</div>
@@ -112,10 +115,13 @@
 
 </footer>    <!--5ETOOLS_SCRIPT_ANCHOR-->
 <script type="text/javascript" src="lib/jquery.js"></script>
+<script type="text/javascript" src="lib/jquery-ui.js"></script>
+<script type="text/javascript" src="lib/jquery-ui-slider-pip.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript" src="js/genutils.js"></script>
 <script type="text/javascript" src="js/omnidexer.js"></script>
 <script type="text/javascript" src="js/entryrender.js"></script>
+<script type="text/javascript" src="js/scalecreature.js"></script>
 <script type="text/javascript" src="js/makeshaped.js"></script>
 <script type="text/javascript" src="lib/list.js"></script>
 <script type="text/javascript" src="lib/bootstrap.js"></script>

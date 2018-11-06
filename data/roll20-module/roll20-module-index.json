@@ -1,0 +1,89 @@
+{
+	"map": [
+		{
+			"id": "CoS",
+			"name": "Curse of Strahd",
+			"size": 20046943
+		},
+		{
+			"id": "HotDQ",
+			"name": "Hoard of the Dragon Queen",
+			"size": 9879353
+		},
+		{
+			"id": "LMoP",
+			"name": "Lost Mine of Phandelver",
+			"size": 3213307
+		},
+		{
+			"id": "PotA",
+			"name": "Princes of the Apocalypse",
+			"size": 20393290
+		},
+		{
+			"id": "Rkm",
+			"name": "Rrakkma",
+			"size": 1510031
+		},
+		{
+			"id": "RoT",
+			"name": "The Rise of Tiamat",
+			"size": 10607141
+		},
+		{
+			"id": "SKT",
+			"name": "Storm King's Thunder",
+			"size": 21198966
+		},
+		{
+			"id": "TftYP-AtG",
+			"name": "Tales from the Yawning Portal: Against the Giants",
+			"size": 7481431
+		},
+		{
+			"id": "TftYP-DiT",
+			"name": "Tales from the Yawning Portal: Dead in Thay",
+			"size": 10951749
+		},
+		{
+			"id": "TftYP-TFoF",
+			"name": "Tales from the Yawning Portal: The Forge of Fury",
+			"size": 2315232
+		},
+		{
+			"id": "TftYP-THSoT",
+			"name": "Tales from the Yawning Portal: The Hidden Shrine of Tamoachan",
+			"size": 2345467
+		},
+		{
+			"id": "TftYP-ToH",
+			"name": "Tales from the Yawning Portal: Tomb of Horrors",
+			"size": 1556535
+		},
+		{
+			"id": "TftYP-TSC",
+			"name": "Tales from the Yawning Portal: The Sunless Citadel",
+			"size": 2388530
+		},
+		{
+			"id": "TftYP-WPM",
+			"name": "Tales from the Yawning Portal: White Plume Mountain",
+			"size": 1641764
+		},
+		{
+			"id": "ToA",
+			"name": "Tomb of Annihilation",
+			"size": 26807323
+		},
+		{
+			"id": "WDMM-pre",
+			"name": "Waterdeep: Dungeon of the Mad Mage (Preview)",
+			"size": 2388920
+		},
+		{
+			"id": "WDH",
+			"name": "Waterdeep: Dragon Heist",
+			"size": 21294259
+		}
+	]
+}

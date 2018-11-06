@@ -4,6 +4,7 @@ let list;
 
 window.onload = function load () {
 	ExcludeUtil.initialise();
+	SortUtil.initHandleFilterButtonClicks();
 	DataUtil.loadJSON(JSON_URL).then(onJsonLoad);
 };
 
@@ -55,6 +56,7 @@ function onJsonLoad (data) {
 			RollerUtil.addListRollButton();
 
 			History.init(true);
+			ExcludeUtil.checkShowAllExcluded(featList, $(`#pagecontent`));
 		});
 }
 
@@ -82,7 +84,7 @@ function addFeats (data) {
 		let prereqText = EntryRenderer.feat.getPrerequisiteText(curfeat.prerequisite, true);
 		if (!prereqText) prereqText = STR_NONE;
 		const CLS_COL_1 = "name col-xs-3 col-xs-3-8";
-		const CLS_COL_2 = `source col-xs-1 col-xs-1-7 source${curfeat.source}`;
+		const CLS_COL_2 = `source col-xs-1 col-xs-1-7 ${Parser.sourceJsonToColor(curfeat.source)}`;
 		const CLS_COL_3 = "ability " + (ability.asText === STR_NONE ? "list-entry-none " : "") + "col-xs-3 col-xs-3-5";
 		const CLS_COL_4 = "prerequisite " + (prereqText === STR_NONE ? "list-entry-none " : "") + "col-xs-3";
 
@@ -149,10 +151,10 @@ function getSublistItem (feat, pinId) {
 	return `
 		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
 			<a href="#${UrlUtil.autoEncodeHash(feat)}" title="${feat.name}">
-				<span class="name col-xs-4">${feat.name}</span>		
-				<span class="ability col-xs-4 ${feat._slAbility === STR_NONE ? "list-entry-none" : ""}">${feat._slAbility}</span>		
-				<span class="prerequisite col-xs-4 ${feat._slPrereq === STR_NONE ? "list-entry-none" : ""}">${feat._slPrereq}</span>		
-				<span class="id hidden">${pinId}</span>				
+				<span class="name col-xs-4">${feat.name}</span>
+				<span class="ability col-xs-4 ${feat._slAbility === STR_NONE ? "list-entry-none" : ""}">${feat._slAbility}</span>
+				<span class="prerequisite col-xs-4 ${feat._slPrereq === STR_NONE ? "list-entry-none" : ""}">${feat._slPrereq}</span>
+				<span class="id hidden">${pinId}</span>
 			</a>
 		</li>
 	`;

@@ -238,237 +238,6 @@
 							}
 						]
 					]
-				},
-				{
-					"subclasses": [
-						{
-							"name": "Arcane Trickster",
-							"source": "PHB"
-						}
-					],
-					"colLabels": [
-						"{@filter Cantrips Known|spells|level=0|subclass=Arcane Trickster}",
-						"Spells Known"
-					],
-					"rows": [
-						[
-							0,
-							0
-						],
-						[
-							0,
-							0
-						],
-						[
-							3,
-							3
-						],
-						[
-							3,
-							4
-						],
-						[
-							3,
-							4
-						],
-						[
-							3,
-							4
-						],
-						[
-							3,
-							5
-						],
-						[
-							3,
-							6
-						],
-						[
-							3,
-							6
-						],
-						[
-							4,
-							7
-						],
-						[
-							4,
-							8
-						],
-						[
-							4,
-							8
-						],
-						[
-							4,
-							9
-						],
-						[
-							4,
-							10
-						],
-						[
-							4,
-							10
-						],
-						[
-							4,
-							11
-						],
-						[
-							4,
-							11
-						],
-						[
-							4,
-							11
-						],
-						[
-							4,
-							12
-						],
-						[
-							4,
-							13
-						]
-					]
-				},
-				{
-					"title": "Spell Slots per Spell Level",
-					"subclasses": [
-						{
-							"name": "Arcane Trickster",
-							"source": "PHB"
-						}
-					],
-					"colLabels": [
-						"{@filter 1st|spells|level=1|subclass=Arcane Trickster}",
-						"{@filter 2nd|spells|level=2|subclass=Arcane Trickster}",
-						"{@filter 3rd|spells|level=3|subclass=Arcane Trickster}",
-						"{@filter 4th|spells|level=4|subclass=Arcane Trickster}"
-					],
-					"rows": [
-						[
-							0,
-							0,
-							0,
-							0
-						],
-						[
-							0,
-							0,
-							0,
-							0
-						],
-						[
-							2,
-							0,
-							0,
-							0
-						],
-						[
-							3,
-							0,
-							0,
-							0
-						],
-						[
-							3,
-							0,
-							0,
-							0
-						],
-						[
-							3,
-							0,
-							0,
-							0
-						],
-						[
-							4,
-							2,
-							0,
-							0
-						],
-						[
-							4,
-							2,
-							0,
-							0
-						],
-						[
-							4,
-							2,
-							0,
-							0
-						],
-						[
-							4,
-							3,
-							0,
-							0
-						],
-						[
-							4,
-							3,
-							0,
-							0
-						],
-						[
-							4,
-							3,
-							0,
-							0
-						],
-						[
-							4,
-							3,
-							2,
-							0
-						],
-						[
-							4,
-							3,
-							2,
-							0
-						],
-						[
-							4,
-							3,
-							2,
-							0
-						],
-						[
-							4,
-							3,
-							3,
-							0
-						],
-						[
-							4,
-							3,
-							3,
-							0
-						],
-						[
-							4,
-							3,
-							3,
-							0
-						],
-						[
-							4,
-							3,
-							3,
-							1
-						],
-						[
-							4,
-							3,
-							3,
-							1
-						]
-					]
 				}
 			],
 			"startingProficiencies": {
@@ -510,7 +279,36 @@
 					"(a) a {@item burglar's pack|phb}, (b) a {@item dungeoneer's pack|phb}, or (c) an {@item explorer's pack|phb}",
 					"{@item Leather armor|phb}, two {@item dagger|phb|daggers}, and {@item thieves' tools|phb}"
 				],
-				"goldAlternative": "4d4 × 10"
+				"goldAlternative": "{@dice 4d4×10|4d4 × 10|Starting Gold}"
+			},
+			"multiclassing": {
+				"requirements": {
+					"dex": 13
+				},
+				"proficienciesGained": {
+					"armor": [
+						"light"
+					],
+					"skills": {
+						"choose": 1,
+						"from": [
+							"Acrobatics",
+							"Athletics",
+							"Deception",
+							"Insight",
+							"Intimidation",
+							"Investigation",
+							"Perception",
+							"Performance",
+							"Persuasion",
+							"Sleight of Hand",
+							"Stealth"
+						]
+					},
+					"tools": [
+						"thieves' tools"
+					]
+				}
 			},
 			"classFeatures": [
 				[
@@ -524,7 +322,7 @@
 					{
 						"name": "Sneak Attack",
 						"entries": [
-							"Beginning at 1st level, you know how to strike subtly and exploit a foe's distraction. Once per turn, you can deal an extra 1d6 damage to one creature you hit with an attack if you have advantage on the attack roll. The attack must use a finesse or a ranged weapon.",
+							"Beginning at 1st level, you know how to strike subtly and exploit a foe's distraction. Once per turn, you can deal an extra {@dice 1d6} damage to one creature you hit with an attack if you have advantage on the attack roll. The attack must use a finesse or a ranged weapon.",
 							"You don't need advantage on the attack roll if another enemy of the target is within 5 feet of it, that enemy isn't {@condition incapacitated}, and you don't have disadvantage on the attack roll.",
 							"The amount of the extra damage increases as you gain levels in this class, as shown in the Sneak Attack column of the Rogue table."
 						]
@@ -541,7 +339,7 @@
 					{
 						"name": "Cunning Action",
 						"entries": [
-							"Starting at 2nd level, your quick thinking and agility allow you to move and act quickly. You can take a bonus action on each of your turns in combat. This action can be used only to take the Dash, Disengage, or Hide action."
+							"Starting at 2nd level, your quick thinking and agility allow you to move and act quickly. You can take a bonus action on each of your turns in combat. This action can be used only to take the {@action Dash}, {@action Disengage}, or {@action Hide} action."
 						]
 					}
 				],
@@ -559,7 +357,7 @@
 						"name": "Ability Score Improvement",
 						"entries": [
 							"When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
-							"If your DM allows the use of feats, you may instead take a feat."
+							"If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
 						]
 					}
 				],
@@ -592,7 +390,7 @@
 						"name": "Ability Score Improvement",
 						"entries": [
 							"When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
-							"If your DM allows the use of feats, you may instead take a feat."
+							"If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
 						]
 					}
 				],
@@ -610,7 +408,7 @@
 						"name": "Ability Score Improvement",
 						"entries": [
 							"When you reach 10th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
-							"If your DM allows the use of feats, you may instead take a feat."
+							"If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
 						]
 					}
 				],
@@ -618,7 +416,7 @@
 					{
 						"name": "Reliable Talent",
 						"entries": [
-							"By 11th level, you have refined your chosen skills until they approach perfection. Whenever you make an ability check that lets you add your proficiency bonus, you can treat a d20 roll of 9 or lower as a 10."
+							"By 11th level, you have refined your chosen skills until they approach perfection. Whenever you make an ability check that lets you add your proficiency bonus, you can treat a {@dice d20} roll of 9 or lower as a 10."
 						]
 					}
 				],
@@ -627,7 +425,7 @@
 						"name": "Ability Score Improvement",
 						"entries": [
 							"When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
-							"If your DM allows the use of feats, you may instead take a feat."
+							"If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
 						]
 					}
 				],
@@ -661,7 +459,7 @@
 						"name": "Ability Score Improvement",
 						"entries": [
 							"When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
-							"If your DM allows the use of feats, you may instead take a feat."
+							"If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
 						]
 					}
 				],
@@ -687,7 +485,7 @@
 						"name": "Ability Score Improvement",
 						"entries": [
 							"When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
-							"If your DM allows the use of feats, you may instead take a feat."
+							"If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
 						]
 					}
 				],
@@ -695,7 +493,7 @@
 					{
 						"name": "Stroke of Luck",
 						"entries": [
-							"At 20th level, you have an uncanny knack for succeeding when you need to. If your attack misses a target within range, you can turn the miss into a hit. Alternatively, if you fail an ability check, you can treat the d20 roll as a 20.",
+							"At 20th level, you have an uncanny knack for succeeding when you need to. If your attack misses a target within range, you can turn the miss into a hit. Alternatively, if you fail an ability check, you can treat the {@dice d20} roll as a 20.",
 							"Once you use this feature, you can't use it again until you finish a short or long rest."
 						]
 					}
@@ -705,6 +503,239 @@
 			"subclasses": [
 				{
 					"name": "Arcane Trickster",
+					"subclassTableGroups": [
+						{
+							"subclasses": [
+								{
+									"name": "Arcane Trickster",
+									"source": "PHB"
+								}
+							],
+							"colLabels": [
+								"{@filter Cantrips Known|spells|level=0|subclass=Arcane Trickster}",
+								"{@filter Spells Known|spells|subclass=Arcane Trickster}"
+							],
+							"rows": [
+								[
+									0,
+									0
+								],
+								[
+									0,
+									0
+								],
+								[
+									3,
+									3
+								],
+								[
+									3,
+									4
+								],
+								[
+									3,
+									4
+								],
+								[
+									3,
+									4
+								],
+								[
+									3,
+									5
+								],
+								[
+									3,
+									6
+								],
+								[
+									3,
+									6
+								],
+								[
+									4,
+									7
+								],
+								[
+									4,
+									8
+								],
+								[
+									4,
+									8
+								],
+								[
+									4,
+									9
+								],
+								[
+									4,
+									10
+								],
+								[
+									4,
+									10
+								],
+								[
+									4,
+									11
+								],
+								[
+									4,
+									11
+								],
+								[
+									4,
+									11
+								],
+								[
+									4,
+									12
+								],
+								[
+									4,
+									13
+								]
+							]
+						},
+						{
+							"title": "Spell Slots per Spell Level",
+							"subclasses": [
+								{
+									"name": "Arcane Trickster",
+									"source": "PHB"
+								}
+							],
+							"colLabels": [
+								"{@filter 1st|spells|level=1|subclass=Arcane Trickster}",
+								"{@filter 2nd|spells|level=2|subclass=Arcane Trickster}",
+								"{@filter 3rd|spells|level=3|subclass=Arcane Trickster}",
+								"{@filter 4th|spells|level=4|subclass=Arcane Trickster}"
+							],
+							"rows": [
+								[
+									0,
+									0,
+									0,
+									0
+								],
+								[
+									0,
+									0,
+									0,
+									0
+								],
+								[
+									2,
+									0,
+									0,
+									0
+								],
+								[
+									3,
+									0,
+									0,
+									0
+								],
+								[
+									3,
+									0,
+									0,
+									0
+								],
+								[
+									3,
+									0,
+									0,
+									0
+								],
+								[
+									4,
+									2,
+									0,
+									0
+								],
+								[
+									4,
+									2,
+									0,
+									0
+								],
+								[
+									4,
+									2,
+									0,
+									0
+								],
+								[
+									4,
+									3,
+									0,
+									0
+								],
+								[
+									4,
+									3,
+									0,
+									0
+								],
+								[
+									4,
+									3,
+									0,
+									0
+								],
+								[
+									4,
+									3,
+									2,
+									0
+								],
+								[
+									4,
+									3,
+									2,
+									0
+								],
+								[
+									4,
+									3,
+									2,
+									0
+								],
+								[
+									4,
+									3,
+									3,
+									0
+								],
+								[
+									4,
+									3,
+									3,
+									0
+								],
+								[
+									4,
+									3,
+									3,
+									0
+								],
+								[
+									4,
+									3,
+									3,
+									1
+								],
+								[
+									4,
+									3,
+									3,
+									1
+								]
+							]
+						}
+					],
 					"subclassFeatures": [
 						[
 							{
@@ -732,7 +763,7 @@
 										"type": "entries",
 										"name": "Spellcasting",
 										"entries": [
-											"When you reach 3rd level, you gain the ability to cast spells. See chapter 10 for the general rules of spellcasting and chapter 11 for the wizard spell list.",
+											"When you reach 3rd level, you gain the ability to cast spells. See {@book chapter 10|PHB|10} for the general rules of spellcasting and chapter 11 for the {@filter wizard spell list|spells|class=wizard}.",
 											{
 												"type": "entries",
 												"entries": [
@@ -940,7 +971,7 @@
 										"type": "entries",
 										"name": "Master of Tactics",
 										"entries": [
-											"Starting at 3rd level, you can use the Help action as a bonus action. Additionally, when you use the Help action to aid an ally in attacking a creature, the target of that attack can be within 30 feet of you, rather than 5 feet of you, if the target can see or hear you."
+											"Starting at 3rd level, you can use the {@action Help} action as a bonus action. Additionally, when you use the {@action Help} action to aid an ally in attacking a creature, the target of that attack can be within 30 feet of you, rather than 5 feet of you, if the target can see or hear you."
 										]
 									}
 								]
@@ -1066,7 +1097,7 @@
 										"type": "entries",
 										"name": "Eye for Weakness",
 										"entries": [
-											"At 17th level, you learn to exploit a creature's weaknesses by carefully studying its tactics and movement. While your Insightful Fighting feature applies to a creature, your Sneak Attack damage against that creature increases by 2d6."
+											"At 17th level, you learn to exploit a creature's weaknesses by carefully studying its tactics and movement. While your Insightful Fighting feature applies to a creature, your Sneak Attack damage against that creature increases by {@dice 2d6}."
 										]
 									}
 								]
@@ -1125,7 +1156,7 @@
 										"type": "entries",
 										"name": "Elegant Maneuver",
 										"entries": [
-											"Starting at 13th level, you can use a bonus action on your turn to gain advantage on the next Dexterity (Acrobatics) or Strength (Athletics) check you make during the same turn."
+											"Starting at 13th level, you can use a bonus action on your turn to gain advantage on the next Dexterity ({@skill Acrobatics}) or Strength ({@skill Athletics}) check you make during the same turn."
 										]
 									}
 								]
@@ -1160,7 +1191,7 @@
 										"type": "entries",
 										"name": "Fast Hands",
 										"entries": [
-											"Starting at 3rd level, you can use the bonus action granted by your Cunning Action to make a Dexterity (Sleight of Hand) check, use your thieves' tools to disarm a trap or open a lock, or take the Use an Object action."
+											"Starting at 3rd level, you can use the bonus action granted by your Cunning Action to make a Dexterity ({@skill Sleight of Hand}) check, use your thieves' tools to disarm a trap or open a lock, or take the {@action Use an Object} action."
 										]
 									},
 									{
@@ -1181,7 +1212,7 @@
 										"type": "entries",
 										"name": "Supreme Sneak",
 										"entries": [
-											"Starting at 9th level, you have advantage on a Dexterity (Stealth) check if you move no more than half your speed on the same turn."
+											"Starting at 9th level, you have advantage on a Dexterity ({@skill Stealth}) check if you move no more than half your speed on the same turn."
 										]
 									}
 								]
@@ -1229,7 +1260,7 @@
 										"type": "entries",
 										"name": "Survivalist",
 										"entries": [
-											"When you choose this archetype at 3rd level, you gain proficiency in the Nature and Survival skills. Your proficiency bonus is doubled for any ability check you make that uses either of those proficiencies."
+											"When you choose this archetype at 3rd level, you gain proficiency in the {@skill Nature} and {@skill Survival} skills. Your proficiency bonus is doubled for any ability check you make that uses either of those proficiencies."
 										]
 									},
 									{
@@ -1276,7 +1307,7 @@
 										"type": "entries",
 										"name": "Sudden Strike",
 										"entries": [
-											"Starting at 17th level, you can strike with deadly speed. If you take the Attack action on your turn, you can make one additional attack as a bonus action. This attack can benefit from your Sneak Attack even if you have already used it this turn, but only if the attack is the only one you make against the target this turn."
+											"Starting at 17th level, you can strike with deadly speed. If you take the {@action Attack} action on your turn, you can make one additional attack as a bonus action. This attack can benefit from your Sneak Attack even if you have already used it this turn, but only if the attack is the only one you make against the target this turn."
 										]
 									}
 								]
@@ -1298,7 +1329,7 @@
 										"type": "entries",
 										"name": "Ear for Deceit",
 										"entries": [
-											"When you choose this archetype at 3rd level, you develop a talent for picking out lies. Whenever you make a Wisdom (Insight) check to determine whether a creature is lying, treat a roll of 7 or lower on the d20 as an 8."
+											"When you choose this archetype at 3rd level, you develop a talent for picking out lies. Whenever you make a Wisdom (Insight) check to determine whether a creature is lying, treat a roll of 7 or lower on the {@dice d20} as an 8."
 										]
 									},
 									{
@@ -1326,7 +1357,7 @@
 										"type": "entries",
 										"name": "Steady Eye",
 										"entries": [
-											"Starting at 9th level, you have advantage on any Wisdom (Perception) or Intelligence (Investigation) check if you move no more than half your speed on the same turn."
+											"Starting at 9th level, you have advantage on any Wisdom ({@skill Perception}) or Intelligence ({@skill Investigation}) check if you move no more than half your speed on the same turn."
 										]
 									}
 								]
@@ -1353,7 +1384,7 @@
 										"type": "entries",
 										"name": "Eye for Weakness",
 										"entries": [
-											"At 17th level, you learn to exploit a creature's weaknesses by carefully studying its tactics and movement. While your Insightful Fighting feature applies to a creature, your Sneak Attack damage against that creature increases by 3d6."
+											"At 17th level, you learn to exploit a creature's weaknesses by carefully studying its tactics and movement. While your Insightful Fighting feature applies to a creature, your Sneak Attack damage against that creature increases by {@dice 3d6}."
 										]
 									}
 								]
@@ -1383,7 +1414,7 @@
 										"type": "entries",
 										"name": "Master of Tactics",
 										"entries": [
-											"Starting at 3rd level, you can use the Help action as a bonus action. Additionally, when you use the Help action to aid an ally in attacking a creature, the target of that attack can be within 30 feet of you, rather than within 5 feet of you, if the target can see or hear you."
+											"Starting at 3rd level, you can use the {@action Help} action as a bonus action. Additionally, when you use the {@action Help} action to aid an ally in attacking a creature, the target of that attack can be within 30 feet of you, rather than within 5 feet of you, if the target can see or hear you."
 										]
 									}
 								]
@@ -1462,7 +1493,7 @@
 										"type": "entries",
 										"name": "Survivalist",
 										"entries": [
-											"When you choose this archetype at 3rd level, you gain proficiency in the Nature and Survival skills if you don't already have it. Your proficiency bonus is doubled for any ability check you make that uses either of those proficiencies."
+											"When you choose this archetype at 3rd level, you gain proficiency in the {@skill Nature} and {@skill Survival} skills if you don't already have it. Your proficiency bonus is doubled for any ability check you make that uses either of those proficiencies."
 										]
 									}
 								]
@@ -1502,7 +1533,7 @@
 										"type": "entries",
 										"name": "Sudden Strike",
 										"entries": [
-											"Starting at 17th level, you can strike with deadly speed. If you take the Attack action on your turn, you can make one additional attack as a bonus action. This attack can benefit from your Sneak Attack even if you have already used it this turn, but you can't use your Sneak Attack against the same target more than once in a turn."
+											"Starting at 17th level, you can strike with deadly speed. If you take the {@action Attack} action on your turn, you can make one additional attack as a bonus action. This attack can benefit from your Sneak Attack even if you have already used it this turn, but you can't use your Sneak Attack against the same target more than once in a turn."
 										]
 									}
 								]
@@ -1561,7 +1592,7 @@
 										"type": "entries",
 										"name": "Elegant Maneuver",
 										"entries": [
-											"Starting at 13th level, you can use a bonus action on your turn to gain advantage on the next Dexterity (Acrobatics) or Strength (Athletics) check you make during the same turn."
+											"Starting at 13th level, you can use a bonus action on your turn to gain advantage on the next Dexterity ({@skill Acrobatics}) or Strength ({@skill Athletics}) check you make during the same turn."
 										]
 									}
 								]

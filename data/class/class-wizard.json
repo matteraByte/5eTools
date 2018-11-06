@@ -344,7 +344,12 @@
 					"(a) a {@item scholar's pack|phb} or (b) an {@item explorer's pack|phb}",
 					"A {@item spellbook|phb}"
 				],
-				"goldAlternative": "4d4 × 10"
+				"goldAlternative": "{@dice 4d4×10|4d4 × 10|Starting Gold}"
+			},
+			"multiclassing": {
+				"requirements": {
+					"int": 13
+				}
 			},
 			"classFeatures": [
 				[
@@ -359,7 +364,7 @@
 					{
 						"name": "Spellcasting",
 						"entries": [
-							"As a student of arcane magic, you have a spellbook containing spells that show the first glimmerings of your true power. See chapter 10 for the general rules of spellcasting and chapter 11 for the wizard spell list.",
+							"As a student of arcane magic, you have a spellbook containing spells that show the first glimmerings of your true power. See {@book chapter 10|PHB|10} for the general rules of spellcasting and chapter 11 for the {@filter wizard spell list|spells|class=wizard}.",
 							{
 								"type": "entries",
 								"name": "Cantrips",
@@ -492,7 +497,7 @@
 						"name": "Ability Score Improvement",
 						"entries": [
 							"When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
-							"If your DM allows the use of feats, you may instead take a feat."
+							"If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
 						]
 					}
 				],
@@ -512,7 +517,7 @@
 						"name": "Ability Score Improvement",
 						"entries": [
 							"When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
-							"If your DM allows the use of feats, you may instead take a feat."
+							"If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
 						]
 					}
 				],
@@ -532,7 +537,7 @@
 						"name": "Ability Score Improvement",
 						"entries": [
 							"When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
-							"If your DM allows the use of feats, you may instead take a feat."
+							"If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
 						]
 					}
 				],
@@ -552,7 +557,7 @@
 						"name": "Ability Score Improvement",
 						"entries": [
 							"When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
-							"If your DM allows the use of feats, you may instead take a feat."
+							"If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
 						]
 					}
 				],
@@ -571,7 +576,7 @@
 						"name": "Ability Score Improvement",
 						"entries": [
 							"When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
-							"If your DM allows the use of feats, you may instead take a feat."
+							"If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
 						]
 					}
 				],
@@ -945,7 +950,7 @@
 										"name": "Arcane Ward",
 										"entries": [
 											"Starting at 2nd level, you can weave magic around yourself for protection. When you cast an {@filter abjuration spell of 1st level or higher|spells|school=A|level=!0}, you can simultaneously use a strand of the spell's magic to create a magical ward on yourself that lasts until you finish a long rest. The ward has hit points equal to twice your wizard level + your Intelligence modifier. Whenever you take damage, the ward takes the damage instead. If this damage reduces the ward to 0 hit points, you take any remaining damage.",
-											"While the ward has 0 hit points, it can't absorb damage, but its magic remains. Whenever you cast an {@filter abjuration spell of 1st level or higher|spells|school=A|level=!0} , the ward regains a number of hit points equal to twice the level of the spell.",
+											"While the ward has 0 hit points, it can't absorb damage, but its magic remains. Whenever you cast an {@filter abjuration spell of 1st level or higher|spells|school=A|level=!0}, the ward regains a number of hit points equal to twice the level of the spell.",
 											"Once you create the ward, you can't create it again until you finish a long rest."
 										]
 									}
@@ -1017,7 +1022,7 @@
 										"name": "Training in War and Song (Bladesinging)",
 										"entries": [
 											"When you adopt this tradition at 2nd level, you gain proficiency with light armor, and you gain proficiency with one type of one-handed melee weapon of your choice.",
-											"You also gain proficiency in the Performance skill if you don't already have it."
+											"You also gain proficiency in the {@skill Performance} skill if you don't already have it."
 										]
 									},
 									{
@@ -1032,7 +1037,7 @@
 												"items": [
 													"You gain a bonus to your AC equal to your Intelligence modifier (minimum of +1).",
 													"Your walking speed increases by 10 feet.",
-													"You have advantage on Dexterity (Acrobatics) checks.",
+													"You have advantage on Dexterity ({@skill Acrobatics}) checks.",
 													"You gain a bonus to any Constitution saving throws you make to maintain concentration on a spell. The bonus equals your Intelligence modifier (minimum of +1)."
 												]
 											},
@@ -1078,7 +1083,7 @@
 										"type": "entries",
 										"name": "Extra Attack",
 										"entries": [
-											"Starting at 6th level, you can attack twice, instead of once, whenever you take the Attack action on your turn."
+											"Starting at 6th level, you can attack twice, instead of once, whenever you take the {@action Attack} action on your turn."
 										]
 									}
 								]
@@ -1203,7 +1208,7 @@
 										"type": "entries",
 										"name": "Portent",
 										"entries": [
-											"Starting at 2nd level when you choose this school, glimpses of the future begin to press in on your awareness. When you finish a long rest, roll two d20s and record the numbers rolled. You can replace any attack roll, saving throw, or ability check made by you or a creature that you can see with one of these foretelling rolls. You must choose to do so before the roll, and you can replace a roll in this way only once per turn.",
+											"Starting at 2nd level when you choose this school, glimpses of the future begin to press in on your awareness. When you finish a long rest, roll two {@dice d20}s and record the numbers rolled. You can replace any attack roll, saving throw, or ability check made by you or a creature that you can see with one of these foretelling rolls. You must choose to do so before the roll, and you can replace a roll in this way only once per turn.",
 											"Each foretelling roll can be used only once. When you finish a long rest, you lose any unused foretelling rolls."
 										]
 									}
@@ -1291,7 +1296,7 @@
 										"type": "entries",
 										"name": "Greater Portent",
 										"entries": [
-											"Starting at 14th level, the visions in your dreams intensify and paint a more accurate picture in your mind of what is to come. You roll three d20s for your Portent feature, rather than two."
+											"Starting at 14th level, the visions in your dreams intensify and paint a more accurate picture in your mind of what is to come. You roll three {@dice d20}s for your Portent feature, rather than two."
 										]
 									}
 								]
@@ -1432,7 +1437,7 @@
 										"name": "Overchannel",
 										"entries": [
 											"Starting at 14th level, you can increase the power of your simpler spells. When you cast a wizard spell of 1st through 5th-level that deals damage, you can deal maximum damage with that spell.",
-											"The first time you do so, you suffer no adverse effect. If you use this feature again before you finish a long rest, you take 2d12 necrotic damage for each level of the spell, immediately after you cast it. Each time you use this feature again before finishing a long rest, the necrotic damage per spell level increases by 1d12. This damage ignores resistance and immunity."
+											"The first time you do so, you suffer no adverse effect. If you use this feature again before you finish a long rest, you take {@dice 2d12} necrotic damage for each level of the spell, immediately after you cast it. Each time you use this feature again before finishing a long rest, the necrotic damage per spell level increases by {@dice 1d12}. This damage ignores resistance and immunity."
 										]
 									}
 								]
@@ -1861,7 +1866,7 @@
 														"type": "entries",
 														"name": "Restore Youth",
 														"entries": [
-															"You touch the transmuter's stone to a willing creature, and that creature's apparent age is reduced by 3d10 years, to a minimum of 13 years. This effect doesn't extend the creature's lifespan."
+															"You touch the transmuter's stone to a willing creature, and that creature's apparent age is reduced by {@dice 3d10} years, to a minimum of 13 years. This effect doesn't extend the creature's lifespan."
 														]
 													}
 												]
@@ -1966,7 +1971,7 @@
 										"type": "entries",
 										"name": "Lore Master",
 										"entries": [
-											"Starting at 2nd level, you become a compendium of knowledge on a vast array of topics. Your proficiency bonus is doubled for any ability check you make that uses the Arcana, History, Nature, or Religion skill if you are proficient in that skill.",
+											"Starting at 2nd level, you become a compendium of knowledge on a vast array of topics. Your proficiency bonus is doubled for any ability check you make that uses the {@skill Arcana}, {@skill History}, {@skill Nature}, or {@skill Religion} skill if you are proficient in that skill.",
 											"In addition, your analytical abilities are so well-honed that your initiative in combat can be driven by mental agility, rather than physical agility. When you roll initiative, it is either an Intelligence check or a Dexterity check for you (your choice)."
 										]
 									},
@@ -1997,7 +2002,7 @@
 										"name": "Alchemical Casting",
 										"entries": [
 											"At 6th level, you learn to augment spells in a variety of ways. When you cast a spell with a spell slot, you can expend one additional spell slot to augment its effects for this casting, mixing the raw stuff of magic into your spell to amplify it. The effect depends on the spell slot you expend.",
-											"An additional 1st-level spell slot can increase the spell's raw force. If you roll damage for the spell when you cast it, increase the damage against every target by 2d10 force damage. If the spell can deal damage on more than one turn, it deals this extra force damage only on the turn you cast the spell.",
+											"An additional 1st-level spell slot can increase the spell's raw force. If you roll damage for the spell when you cast it, increase the damage against every target by {@dice 2d10} force damage. If the spell can deal damage on more than one turn, it deals this extra force damage only on the turn you cast the spell.",
 											"An additional 2nd-level spell slot can increase the spell's range. If the spell's range is at least 30 feet, it becomes 1 mile.",
 											"An additional 3rd-level spell slot can increase the spell's potency. Increase the spell's save DC by 2."
 										]
@@ -2483,7 +2488,7 @@
 										"entries": [
 											"At 6th level, you learn to channel magic through your arcanomechanical armor to augment spells in a variety of ways. When you cast a spell while wearing that armor and attuned to it, you can expend one additional spell slot of 1st or 2nd level to alter the spell. The effect depends on the spell slot you expend.",
 											"A 1st-level slot allows you to manipulate the spell's energy. When you cast a spell that deals acid, cold, fire, lightning, or thunder damage, you can substitute that damage type for another one from that list.",
-											"A 2nd-level slot increases the spell's raw force. If you roll damage for the spell when you cast it, increase that damage by 2d10 force damage against one of the spell's targets (your choice) this turn."
+											"A 2nd-level slot increases the spell's raw force. If you roll damage for the spell when you cast it, increase that damage by {@dice 2d10} force damage against one of the spell's targets (your choice) this turn."
 										]
 									}
 								]
@@ -2518,6 +2523,101 @@
 					],
 					"source": "UAThreeSubclasses",
 					"shortName": "Invention (UA)"
+				},
+				{
+					"name": "School of Psionics (Livestream)",
+					"subclassFeatures": [
+						[
+							{
+								"name": "School of Psionics (Livestream)",
+								"entries": [
+									"The School of Psionics emphasizes the power of the mind, granting its practitioners the ability to read minds and transform the energy of their thoughts into tangible, physical force.",
+									"Known as psions, members of this school are rare and usually meet in secretive enclaves that delve into the mysteries of aberrations and other bizarre creatures.",
+									{
+										"type": "entries",
+										"name": "ESP",
+										"entries": [
+											"At 2nd level, you gain the ability to contact other creatures' minds. You can cast {@spell detect thoughts} using this ability. When you cast that spell, whether with thisa bility or from some other ability, it has the following modifications:",
+											{
+												"type": "list",
+												"items": [
+													"The spell does not require concentration.",
+													"The benefits that require you to use an action instead require the use of a bonus action.",
+													"If you use the option to probe deeper and the target fails its Wisdom saving throw, it is vulnerable to psychic damage you inflict until the end of your next turn."
+												]
+											},
+											"Once you cast {@spell detect thoughts} using this ability, you can't use it again until you complete a short or long rest."
+										]
+									},
+									{
+										"type": "entries",
+										"name": "Telepath",
+										"entries": [
+											"Starting at 2nd level, you gain telepathy with a range of 30 feet.",
+											"When you select spells, you can choose spells from the psionic spell list, even if they do not appear on your class list."
+										]
+									}
+								]
+							}
+						],
+						[
+							{
+								"entries": [
+									{
+										"type": "entries",
+										"name": "Telekinetic Mind",
+										"entries": [
+											"Starting at 6th level, you gain the ability to transform your thoughts into tangible force. You can cast {@spell telekinesis} using this ability. When you cast that spell, whether with this ability or from some other ability, it has the following modifications:",
+											{
+												"type": "list",
+												"items": [
+													"The spell does not require concentration.",
+													"The benefits that require you to use an action instead require the use of a bonus action.",
+													"The spell's duration is 1 minute, and you cannot choose a new target after selecting your initial one. This restriction no longer applies once you reach 9th level."
+												]
+											},
+											"Once you cast {@spell telekinesis} using this ability, you can't use it again until you complete a short or long rest."
+										]
+									}
+								]
+							}
+						],
+						[
+							{
+								"entries": [
+									{
+										"type": "entries",
+										"name": "Superior ESP",
+										"entries": [
+											"At 10th level, your proficiency with the detect thoughts spell grows. You gain the following additional benefits when you cast the spell:",
+											{
+												"type": "list",
+												"items": [
+													"The spell now targets a number of creatures equal to your Intelligence modifier (minimum 1).",
+													"If you use the option to probe deeper and the target fails its Wisdom saving throw, you can choose to charm it instead of making it vulnerable to psychic damage. It makes another Wisdom saving throw at the end of its turn, ending this effect with a successful save or if it takes damage from you or your allies."
+												]
+											}
+										]
+									}
+								]
+							}
+						],
+						[
+							{
+								"entries": [
+									{
+										"type": "entries",
+										"name": "Improved Telekinesis",
+										"entries": [
+											"At 14th level, you master the full potential of your mind to project physical force into the world. When you cast {@spell telekinesis} and each time you select a new target for the spell, you can instead choose a number of targets up to your Intelligence bonus (minimum 1)."
+										]
+									}
+								]
+							}
+						]
+					],
+					"source": "Stream",
+					"shortName": "Psionics (Stream)"
 				}
 			],
 			"fluff": [

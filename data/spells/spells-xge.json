@@ -116,7 +116,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 2nd level or higher, the extra damage increases by {@dice 1d6} for each slot level above 1st."
+						"When you cast this spell using a spell slot of 2nd level or higher, the extra damage increases by {@scaledice 1d6|1-9|1d6} for each slot level above 1st."
 					]
 				}
 			],
@@ -183,7 +183,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 3rd level or higher, the damage increases by {@dice 1d8} for each slot level above 2nd."
+						"When you cast this spell using a spell slot of 3rd level or higher, the damage increases by {@scaledice 3d8|2-9|1d8} for each slot level above 2nd."
 					]
 				}
 			],
@@ -254,6 +254,9 @@
 					"source": "EEPC",
 					"page": 15
 				}
+			],
+			"conditionInflict": [
+				"charmed"
 			]
 		},
 		{
@@ -321,6 +324,9 @@
 					"source": "EEPC",
 					"page": 15
 				}
+			],
+			"conditionInflict": [
+				"restrained"
 			]
 		},
 		{
@@ -369,7 +375,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 2nd level or higher, the maximum weight of objects that you can target with this spell increases by 5 pounds, and the damage increases by {@dice 1d8}, for each slot level above 1st."
+						"When you cast this spell using a spell slot of 2nd level or higher, the maximum weight of objects that you can target with this spell increases by 5 pounds, and the damage increases by {@scaledice 3d8|1-9|1d8}, for each slot level above 1st."
 					]
 				}
 			],
@@ -446,7 +452,10 @@
 					]
 				}
 			],
-			"page": 151
+			"page": 151,
+			"conditionInflict": [
+				"unconscious"
+			]
 		},
 		{
 			"name": "Cause Fear",
@@ -506,6 +515,9 @@
 			"page": 151,
 			"savingThrow": [
 				"wisdom"
+			],
+			"conditionInflict": [
+				"frightened"
 			]
 		},
 		{
@@ -637,7 +649,7 @@
 				]
 			},
 			"entries": [
-				"You hurl an undulating, warbling mass of chaotic energy at one creature in range. Make a ranged spell attack against the target. On a hit, the target takes {@dice 2d8} + {@dice 1d6} damage. Choose one of the {@dice d8}s. The number rolled on that die determines the attack's damage type, as shown below.",
+				"You hurl an undulating, warbling mass of chaotic energy at one creature in range. Make a ranged spell attack against the target. On a hit, the target takes {@dice 2d8 + 1d6} damage. Choose one of the {@dice d8}s. The number rolled on that die determines the attack's damage type, as shown below.",
 				{
 					"type": "table",
 					"caption": "Chaos Bolt",
@@ -732,7 +744,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 2nd level or higher, each target takes {@dice 1d6} extra damage of the type rolled for each slot level above 1st."
+						"When you cast this spell using a spell slot of 2nd level or higher, each target takes {@scaledice 2d8+1d6|1-9|1d6} extra damage of the type rolled for each slot level above 1st."
 					]
 				}
 			],
@@ -833,6 +845,9 @@
 			"page": 151,
 			"savingThrow": [
 				"wisdom"
+			],
+			"conditionInflict": [
+				"charmed"
 			]
 		},
 		{
@@ -986,6 +1001,9 @@
 					"source": "EEPC",
 					"page": 16
 				}
+			],
+			"conditionInflict": [
+				"prone"
 			]
 		},
 		{
@@ -1219,7 +1237,7 @@
 				]
 			},
 			"entries": [
-				"Threads of dark power leap from your fingers to pierce up to five Small or Medium corpses you can see within range. Each corpse immediately stands up and becomes undead. You decide whether it is a zombie or a skeleton (the statistics for zombies and skeletons are in the Monster Manual), and it gains a bonus to its attack and damage rolls equal to your spellcasting ability modifier.",
+				"Threads of dark power leap from your fingers to pierce up to five Small or Medium corpses you can see within range. Each corpse immediately stands up and becomes undead. You decide whether it is a {@creature zombie} or a {@creature skeleton} (the statistics for {@creature zombie|mm|zombies} and {@creature skeleton|mm|skeletons} are in the Monster Manual), and it gains a bonus to its attack and damage rolls equal to your spellcasting ability modifier.",
 				"You can use a bonus action to mentally command the creatures you make with this spell, issuing the same command to all of them. To receive the command, a creature must be within 60 feet of you. You decide what action the creatures will take and where they will move during their next turn, or you can issue a general command, such as to guard a chamber or passageway against your foes. If you issue no commands, the creatures do nothing except defend themselves against hostile creatures. Once given an order, the creatures continue to follow it until their task is complete.",
 				"The creatures are under your control until the spell ends, after which they become inanimate once more."
 			],
@@ -1347,7 +1365,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 3rd level or higher, the damage increases by {@dice 1d6} for each slot level above 2nd."
+						"When you cast this spell using a spell slot of 3rd level or higher, the damage increases by {@scaledice 3d6|2-9|1d6} for each slot level above 2nd."
 					]
 				}
 			],
@@ -1502,7 +1520,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 3rd level or higher, the damage increases by {@dice 1d8} for each slot level above 2nd."
+						"When you cast this spell using a spell slot of 3rd level or higher, the damage increases by {@scaledice 1d8|2-9|1d8} for each slot level above 2nd."
 					]
 				}
 			],
@@ -1575,7 +1593,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 2nd level or higher, the damage increases by {@dice 1d6} for each slot level above 1st."
+						"When you cast this spell using a spell slot of 2nd level or higher, the damage increases by {@scaledice 1d6|1-9|1d6} for each slot level above 1st."
 					]
 				}
 			],
@@ -1591,6 +1609,9 @@
 					"source": "EEPC",
 					"page": 17
 				}
+			],
+			"conditionInflict": [
+				"prone"
 			]
 		},
 		{
@@ -1866,7 +1887,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 6th level or higher, the damage increases by {@dice 1d8} for each slot level above 5th."
+						"When you cast this spell using a spell slot of 6th level or higher, the damage increases by {@scaledice 4d8;2d8|5-9|1d8} for each slot level above 5th."
 					]
 				}
 			],
@@ -1876,7 +1897,8 @@
 			],
 			"savingThrow": [
 				"dexterity"
-			]
+			],
+			"isHeal": true
 		},
 		{
 			"name": "Erupting Earth",
@@ -1930,7 +1952,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 4th level or higher, the damage increases by {@dice 1d12} for each slot level above 3rd."
+						"When you cast this spell using a spell slot of 4th level or higher, the damage increases by {@scaledice 3d12|3-9|1d12} for each slot level above 3rd."
 					]
 				}
 			],
@@ -2392,11 +2414,12 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 3rd level or higher, the healing increases by {@dice 1d6} for each slot level above 2nd."
+						"When you cast this spell using a spell slot of 3rd level or higher, the healing increases by {@scaledice 1d6|2-9|1d6} for each slot level above 2nd."
 					]
 				}
 			],
-			"page": 157
+			"page": 157,
+			"isHeal": true
 		},
 		{
 			"name": "Holy Weapon",
@@ -2451,6 +2474,9 @@
 			],
 			"savingThrow": [
 				"constitution"
+			],
+			"conditionInflict": [
+				"blinded"
 			]
 		},
 		{
@@ -2504,7 +2530,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 2nd level or higher, the cold damage increases by {@dice 1d6} for each slot level above 1st."
+						"When you cast this spell using a spell slot of 2nd level or higher, the cold damage increases by {@scaledice 2d6|1-9|1d6} for each slot level above 1st."
 					]
 				}
 			],
@@ -2586,6 +2612,9 @@
 			],
 			"opposedCheck": [
 				"intelligence"
+			],
+			"conditionInflict": [
+				"frightened"
 			]
 		},
 		{
@@ -3017,6 +3046,10 @@
 					"source": "EEPC",
 					"page": 19
 				}
+			],
+			"conditionInflict": [
+				"prone",
+				"stunned"
 			]
 		},
 		{
@@ -3191,14 +3224,15 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 4th level or higher, the damage increases by {@dice 1d8} for each slot level above 3rd."
+						"When you cast this spell using a spell slot of 4th level or higher, the damage increases by {@scaledice 4d8|3-9|1d8} for each slot level above 3rd."
 					]
 				}
 			],
 			"page": 160,
 			"damageInflict": [
 				"necrotic"
-			]
+			],
+			"isHeal": true
 		},
 		{
 			"name": "Maddening Darkness",
@@ -3501,6 +3535,9 @@
 					"source": "EEPC",
 					"page": 20
 				}
+			],
+			"conditionInflict": [
+				"restrained"
 			]
 		},
 		{
@@ -3745,7 +3782,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 3rd level or higher, the damage increases by {@dice 1d8} for each slot level above 2nd."
+						"When you cast this spell using a spell slot of 3rd level or higher, the damage increases by {@scaledice 3d8|2-9|1d8} for each slot level above 2nd."
 					]
 				}
 			],
@@ -4092,6 +4129,9 @@
 			],
 			"savingThrow": [
 				"intelligence"
+			],
+			"conditionInflict": [
+				"stunned"
 			]
 		},
 		{
@@ -4163,6 +4203,9 @@
 					"source": "EEPC",
 					"page": 21
 				}
+			],
+			"conditionInflict": [
+				"blinded"
 			]
 		},
 		{
@@ -4271,7 +4314,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a 3rd- or 4th-level spell slot, the damage increases to {@dice 3d8}. When you cast it using a 5th- or 6th-level spell slot, the damage increases to {@dice 4d8}. When you cast it using a spell slot of 7th level or higher, the damage increases to {@dice 5d8}."
+						"When you cast this spell using a 3rd- or 4th-level spell slot, the damage increases to {@scaledice 2d8|2-9|3d8}. When you cast it using a 5th- or 6th-level spell slot, the damage increases to {@scaledice 2d8|2-9|4d8}. When you cast it using a spell slot of 7th level or higher, the damage increases to {@scaledice 2d8|2-9|5d8}."
 					]
 				}
 			],
@@ -4471,6 +4514,9 @@
 			],
 			"savingThrow": [
 				"constitution"
+			],
+			"conditionInflict": [
+				"exhaustion"
 			]
 		},
 		{
@@ -4650,6 +4696,9 @@
 			],
 			"opposedCheck": [
 				"intelligence"
+			],
+			"conditionInflict": [
+				"restrained"
 			]
 		},
 		{
@@ -4700,7 +4749,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 3rd level or higher, the damage increases by {@dice 1d6} for each slot level above 2nd."
+						"When you cast this spell using a spell slot of 3rd level or higher, the damage increases by {@scaledice 3d6|2-9|1d6} for each slot level above 2nd."
 					]
 				}
 			],
@@ -4796,9 +4845,10 @@
 						"You can use an action to name a place the humanoid saw in life, which creates an invisible sensor somewhere in that place if it is on the plane of existence you're currently on. The sensor remains for as long as you concentrate, up to 10 minutes (as if you were concentrating on a spell). You receive visual and auditory information from the sensor as if you were in its space using your senses."
 					]
 				},
-				"A creature that can see the sensor (such as one using see invisibility or truesight) sees a translucent image of the tormented humanoid whose soul you caged."
+				"A creature that can see the sensor (such as one using {@spell see invisibility} or truesight) sees a translucent image of the tormented humanoid whose soul you caged."
 			],
-			"page": 165
+			"page": 165,
+			"isHeal": true
 		},
 		{
 			"name": "Steel Wind Strike",
@@ -4905,7 +4955,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 5th level or higher, the damage for each of its effects increases by {@dice 1d6} for each slot level above 4th."
+						"When you cast this spell using a spell slot of 5th level or higher, the damage for each of its effects increases by {@scaledice 2d6;4d6|4-9|1d6} for each slot level above 4th."
 					]
 				}
 			],
@@ -5214,7 +5264,8 @@
 			"savingThrow": [
 				"charisma"
 			],
-			"permanentEffects": true
+			"permanentEffects": true,
+			"isHeal": true
 		},
 		{
 			"name": "Tenser's Transformation",
@@ -5277,6 +5328,9 @@
 			],
 			"savingThrow": [
 				"constitution"
+			],
+			"conditionInflict": [
+				"exhaustion"
 			]
 		},
 		{
@@ -5330,7 +5384,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 4th level or higher, the damage increases by {@dice 1d10} for each slot level above 3rd."
+						"When you cast this spell using a spell slot of 4th level or higher, the damage increases by {@scaledice 3d10|3-9|1d10} for each slot level above 3rd."
 					]
 				}
 			],
@@ -5470,6 +5524,9 @@
 					"source": "EEPC",
 					"page": 22
 				}
+			],
+			"conditionInflict": [
+				"prone"
 			]
 		},
 		{
@@ -5664,6 +5721,9 @@
 					"source": "EEPC",
 					"page": 22
 				}
+			],
+			"conditionInflict": [
+				"restrained"
 			]
 		},
 		{
@@ -5714,7 +5774,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 5th level or higher, the initial damage increases by {@dice 2d4} for each slot level above 4th."
+						"When you cast this spell using a spell slot of 5th level or higher, the initial damage increases by {@scaledice 10d4|4-9|2d4} for each slot level above 4th."
 					]
 				}
 			],
@@ -5792,7 +5852,7 @@
 					"type": "entries",
 					"name": "At Higher Levels",
 					"entries": [
-						"When you cast this spell using a spell slot of 6th level or higher, the damage increases by {@dice 1d8} for each slot level above 5th."
+						"When you cast this spell using a spell slot of 6th level or higher, the damage increases by {@scaledice 4d8|5-9|1d8} for each slot level above 5th."
 					]
 				}
 			],
@@ -5805,6 +5865,9 @@
 			],
 			"spellAttack": [
 				"R"
+			],
+			"conditionInflict": [
+				"blinded"
 			]
 		},
 		{
@@ -5857,6 +5920,9 @@
 					"source": "EEPC",
 					"page": 23
 				}
+			],
+			"conditionInflict": [
+				"blinded"
 			]
 		},
 		{
@@ -6067,6 +6133,10 @@
 					"source": "EEPC",
 					"page": 23
 				}
+			],
+			"conditionInflict": [
+				"prone",
+				"restrained"
 			]
 		},
 		{
@@ -6120,7 +6190,7 @@
 			"entries": [
 				"A whirlwind howls down to a point that you can see on the ground within range. The whirlwind is a 10-foot-radius, 30-foot-high cylinder centered on that point. Until the spell ends, you can use your action to move the whirlwind up to 30 feet in any direction along the ground. The whirlwind sucks up any Medium or smaller objects that aren't secured to anything and that aren't worn or carried by anyone.",
 				"A creature must make a Dexterity saving throw the first time on a turn that it enters the whirlwind or that the whirlwind enters its space, including when the whirlwind first appears. A creature takes {@dice 10d6} bludgeoning damage on a failed save, or half as much damage on a successful one. In addition, a Large or smaller creature that fails the save must succeed on a Strength saving throw or become {@condition restrained} in the whirlwind until the spell ends. When a creature starts its turn {@condition restrained} by the whirlwind, the creature is pulled 5 feet higher inside it, unless the creature is at the top. A {@condition restrained} creature moves with the whirlwind and falls when the spell ends, unless the creature has some means to stay aloft.",
-				"A {@condition restrained} creature can use an action to make a Strength or Dexterity check against your spell save DC. If successful, the creature is no longer {@condition restrained} by the whirlwind and is hurled {@dice 3d6} × 10 feet away from it in a random direction."
+				"A {@condition restrained} creature can use an action to make a Strength or Dexterity check against your spell save DC. If successful, the creature is no longer {@condition restrained} by the whirlwind and is hurled {@dice 3d6 × 10} feet away from it in a random direction."
 			],
 			"page": 171,
 			"damageInflict": [
@@ -6139,6 +6209,9 @@
 					"source": "EEPC",
 					"page": 24
 				}
+			],
+			"conditionInflict": [
+				"restrained"
 			]
 		},
 		{
@@ -6278,6 +6351,10 @@
 			],
 			"spellAttack": [
 				"R"
+			],
+			"conditionInflict": [
+				"prone",
+				"restrained"
 			]
 		},
 		{

@@ -28,6 +28,8 @@ class ShapedConverter {
 			];
 
 			this._inputPromise = DataUtil.multiLoadJSON(sources, null, data => {
+				ShapedConverter.bestiaryIndex = data[0];
+
 				SOURCE_INFO.bestiary.fileIndex = data[0];
 				SOURCE_INFO.spells.fileIndex = data[1];
 				const inputs = {};
@@ -120,17 +122,29 @@ class ShapedConverter {
 
 			let jsonPromise;
 			if (sources.length) {
-				jsonPromise = DataUtil.multiLoadJSON(sources, null, (data) => {
-					data.forEach((dataItem, index) => {
-						const key = sources[index].key;
-						if (dataItem.spell) {
-							inputs[key].spellInput = dataItem.spell;
-						}
-						if (dataItem.monster) {
-							inputs[key].monsterInput = dataItem.monster;
-						}
-					});
-				});
+				const originalSources = MiscUtil.copy(sources);
+				jsonPromise = DataUtil.multiLoadJSON(
+					originalSources,
+					null,
+					(data) => {
+						data.forEach((dataItem, index) => {
+							const key = sources[index].key;
+							if (dataItem.spell) inputs[key].spellInput = dataItem.spell;
+							if (dataItem.monster) inputs[key].monsterInput = dataItem.monster;
+							if (sources[index].doNotConvert) inputs[key].doNotConvert = true;
+						});
+					},
+					(src) => {
+						// WARNING: this will break if there are dependencies in anything besides bestiary files
+						const out = {
+							key: src,
+							url: `${ShapedConverter.SOURCE_INFO.bestiary.dir}${ShapedConverter.bestiaryIndex[src]}`,
+							doNotConvert: true
+						};
+						sources.push(out);
+						return out;
+					}
+				);
 			} else {
 				jsonPromise = Promise.resolve();
 			}
@@ -164,7 +178,8 @@ class ShapedConverter {
 				'headerEntries',
 				'headerWill',
 				'name',
-				'footerEntries'
+				'footerEntries',
+				'ability'
 			].includes(k))
 			.map(useInfo => {
 				const spellDetails = spellcasting[useInfo];
@@ -233,6 +248,9 @@ class ShapedConverter {
 			.replace(/{@filter ([^|]+)[^}]+}/g, '$1')
 			.replace(/{@hit (\d+)}/g, '+$1')
 			.replace(/{@chance (\d+)[^}]+}/g, '$1 percent')
+			.replace(/{@recharge(?: (\d))?}/g, (m, lower) => `(Recharge ${lower ? `${Number(lower)}\u2013` : ""}6)`)
+			.replace(/{(@atk [A-Za-z,]+})/g, (m, p1) => EntryRenderer.attackTagToFull(p1))
+			.replace(/{@h}/g, "Hit: ")
 			.replace(/{@\w+ ((?:[^|}]+\|?){0,3})}/g, (m, p1) => {
 				const parts = p1.split('|');
 				return parts.length === 3 ? parts[2] : parts[0];
@@ -241,7 +259,7 @@ class ShapedConverter {
 	}
 
 	static makeTraitAction (name) {
-		const nameMatch = name.match(/([^(]+)(?:\(([^)]+)\))?/);
+		const nameMatch = this.fixLinks(name).match(/([^(]+)(?:\(([^)]+)\))?/);
 		if (nameMatch && nameMatch[2]) {
 			const rechargeMatch = nameMatch[2].match(/^(?:(.*), )?(\d(?: minute[s]?)?\/(?:Day|Turn|Rest|Hour|Week|Month|Night|Long Rest|Short Rest)|Recharge \d(?:\u20136)?|Recharge[s]? [^),]+)(?:, ([^)]+))?$/i);
 			if (rechargeMatch) {
@@ -297,7 +315,11 @@ class ShapedConverter {
 
 	static processSpecialList (action, entries) {
 		action.text = this.fixLinks(entries[0]);
-		return entries.slice(1).reduce((result, entry) => {
+		let slice = entries.slice(1);
+		if (slice.length === 1 && slice[0].type === "list") {
+			slice = slice[0].items.map(it => it.type === "item" ? `${it.name}. ${it.entries ? it.entries.join("\n") : it.entry}` : it);
+		}
+		return slice.reduce((result, entry) => {
 			const match = entry.match(/^(?:\d+\. )?([A-Z][a-z]+(?: [A-Z][a-z]+)*). (.*)$/);
 			if (match) {
 				result.push({
@@ -451,7 +473,7 @@ class ShapedConverter {
 		const addVariant = (name, text, output, forceActions) => {
 			const newTraitAction = this.makeTraitAction(name);
 			newTraitAction.name = 'Variant: ' + newTraitAction.name;
-			const isAttack = text.match(/{@hit|Attack:/);
+			const isAttack = text.match(/{@hit|Attack:|{@atk/);
 			newTraitAction.text = this.fixLinks(text);
 			if ((newTraitAction.recharge && !text.match(/bonus action/)) || forceActions || isAttack) {
 				actions.push(newTraitAction);
@@ -473,10 +495,9 @@ class ShapedConverter {
 				const baseName = variant.name;
 				if (variant.entries.every(entry => isString(entry) || entry.type !== 'entries')) {
 					const text = variant.entries.map(entry => {
-						if (isString(entry)) {
-							return entry;
-						}
-						return entry.items.map(item => `${item.name} ${item.entry}`).join('\n');
+						if (isString(entry)) return entry;
+						else if (entry.type === "table") return this.processTable(entry);
+						else return entry.items.map(item => `${item.name} ${item.entry}`).join('\n');
 					}).join('\n');
 					addVariant(baseName, text, output);
 				} else if (variant.entries.find(entry => entry.type === 'entries')) {
@@ -561,6 +582,7 @@ class ShapedConverter {
 	}
 
 	static processSpellComponents (components, newSpell) {
+		components = components || {};
 		const shapedComponents = {};
 		if (components.v) shapedComponents.verbal = true;
 		if (components.s) shapedComponents.somatic = true;
@@ -602,36 +624,11 @@ class ShapedConverter {
 	}
 
 	static processSpellEntries (entries, newSpell) {
-		const cellProc = cell => {
-			if (isString(cell)) {
-				return cell;
-			} else if (cell.roll) {
-				return cell.roll.exact || `${this.padInteger(cell.roll.min)}\\u2013${this.padInteger(cell.roll.max)}`;
-			}
-		};
-
 		const entryMapper = entry => {
 			if (isString(entry)) {
 				return entry;
 			} else if (entry.type === 'table') {
-				const rows = [entry.colLabels];
-				rows.push.apply(rows, entry.rows);
-
-				const formattedRows = rows.map(row => `| ${row.map(cellProc).join(' | ')} |`);
-				const styleToColDefinition = style => {
-					if (style.includes('text-align-center')) {
-						return ':----:';
-					} else if (style.includes('text-align-right')) {
-						return '----:';
-					}
-					return ':----';
-				};
-				const colDefinitions = entry.colStyles ? entry.colStyles.map(styleToColDefinition) : entry.colLabels.map(() => ':----');
-				const divider = `|${colDefinitions.join('|')}|`;
-				formattedRows.splice(1, 0, divider);
-
-				const title = entry.caption ? `##### ${entry.caption}\n` : '';
-				return `${title}${formattedRows.join('\n')}`;
+				return this.processTable(entry);
 			} else if (entry.type === 'list') {
 				return entry.items.map(item => `- ${item}`).join('\n');
 			} else if (entry.type === 'homebrew') {
@@ -650,6 +647,35 @@ class ShapedConverter {
 		}
 
 		newSpell.description = this.fixLinks(entriesToProc.map(entryMapper).join('\n'));
+	}
+
+	static processTable (entry) {
+		const cellProc = cell => {
+			if (isString(cell)) {
+				return cell;
+			} else if (cell.roll) {
+				return cell.roll.exact || `${this.padInteger(cell.roll.min)}\\u2013${this.padInteger(cell.roll.max)}`;
+			}
+		};
+
+		const rows = [entry.colLabels];
+		rows.push.apply(rows, entry.rows);
+
+		const formattedRows = rows.map(row => `| ${row.map(cellProc).join(' | ')} |`);
+		const styleToColDefinition = style => {
+			if (style.includes('text-align-center')) {
+				return ':----:';
+			} else if (style.includes('text-align-right')) {
+				return '----:';
+			}
+			return ':----';
+		};
+		const colDefinitions = entry.colStyles ? entry.colStyles.map(styleToColDefinition) : entry.colLabels.map(() => ':----');
+		const divider = `|${colDefinitions.join('|')}|`;
+		formattedRows.splice(1, 0, divider);
+
+		const title = entry.caption ? `##### ${entry.caption}\n` : '';
+		return `${title}${formattedRows.join('\n')}`;
 	}
 
 	static addExtraSpellData (newSpell, data) {
@@ -878,7 +904,13 @@ class ShapedConverter {
 		const legendaryGroup = inputs._legendaryGroup;
 
 		const toProcess = Object.values(inputs)
-			.filter(input => !input.converted && (isObject(input.monsterInput) || isObject(input.spellInput)));
+			.filter(input => !input.converted && (isObject(input.monsterInput) || isObject(input.spellInput)) && !input.doNotConvert);
+
+		let monsterList = [];
+		Object.values(inputs).forEach(data => {
+			if (data.monsterInput) monsterList = monsterList.concat(data.monsterInput);
+		});
+		monsterList.forEach(m => EntryRenderer.monster.mergeCopy(monsterList, m));
 
 		toProcess.forEach(data => {
 			if (data.monsterInput) {
@@ -1066,6 +1098,9 @@ function rebuildShapedSources () {
 		});
 	}).catch(e => {
 		alert(`${e}\n${e.stack}`);
+		setTimeout(() => {
+			throw e;
+		}, 0);
 	});
 }
 
@@ -1078,6 +1113,9 @@ window.onload = function load () {
 			})
 			.catch(e => {
 				alert(`${e}\n${e.stack}`);
+				setTimeout(() => {
+					throw e;
+				}, 0);
 			});
 	};
 
@@ -1104,7 +1142,12 @@ window.onload = function load () {
 				$('#shapedJS').val(js);
 				$('#copyJS').removeAttr('disabled');
 			})
-			.catch(e => alert(`${e}\n${e.stack}`));
+			.catch(e => {
+				alert(`${e}\n${e.stack}`);
+				setTimeout(() => {
+					throw e;
+				}, 0);
+			});
 	});
 	$('#copyJS').on('click', () => {
 		const shapedJS = $('#shapedJS');

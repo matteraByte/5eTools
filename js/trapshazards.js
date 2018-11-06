@@ -4,6 +4,7 @@ const JSON_URL = "data/trapshazards.json";
 
 window.onload = function load () {
 	ExcludeUtil.initialise();
+	SortUtil.initHandleFilterButtonClicks();
 	DataUtil.loadJSON(JSON_URL).then(onJsonLoad);
 };
 
@@ -24,10 +25,15 @@ function onJsonLoad (data) {
 			"MAG",
 			"SMPL",
 			"CMPX",
-			"HAZ"
+			"HAZ",
+			"WTH",
+			"ENV",
+			"WLD",
+			"GEN"
 		],
-		displayFn: Parser.trapTypeToFull
+		displayFn: Parser.trapHazTypeToFull
 	});
+	typeFilter.items.sort((a, b) => SortUtil.ascSortLower(Parser.trapHazTypeToFull(a), Parser.trapHazTypeToFull(b)));
 	filterBox = initFilterBox(
 		sourceFilter,
 		typeFilter
@@ -62,6 +68,7 @@ function onJsonLoad (data) {
 			RollerUtil.addListRollButton();
 
 			History.init(true);
+			ExcludeUtil.checkShowAllExcluded(trapsAndHazardsList, $(`#pagecontent`));
 		});
 }
 
@@ -78,23 +85,23 @@ function addTrapsHazards (data) {
 
 	if (data.trap && data.trap.length) trapsAndHazardsList = trapsAndHazardsList.concat(data.trap);
 	if (data.hazard && data.hazard.length) {
-		data.hazard.forEach(h => h.trapType = "HAZ");
+		data.hazard.forEach(h => h.trapHazType = h.trapHazType || "HAZ");
 		trapsAndHazardsList = trapsAndHazardsList.concat(data.hazard);
 	}
 
 	let tempString = "";
 	for (; thI < trapsAndHazardsList.length; thI++) {
 		const it = trapsAndHazardsList[thI];
-		if (it.trapType === "HAZ" && ExcludeUtil.isExcluded(it.name, "hazard", it.source)) continue;
-		else if (it.trapType !== "HAZ" && ExcludeUtil.isExcluded(it.name, "trap", it.source)) continue;
+		if (!EntryRenderer.traphazard.isTrap(it.trapHazType) && ExcludeUtil.isExcluded(it.name, "hazard", it.source)) continue;
+		else if (EntryRenderer.traphazard.isTrap(it.trapHazType) && ExcludeUtil.isExcluded(it.name, "trap", it.source)) continue;
 		const abvSource = Parser.sourceJsonToAbv(it.source);
 
 		tempString += `
 			<li class="row" ${FLTR_ID}="${thI}" onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id="${thI}" href="#${UrlUtil.autoEncodeHash(it)}" title="${it.name}">
 					<span class="name col-xs-6">${it.name}</span>
-					<span class="trapType col-xs-4">${Parser.trapTypeToFull(it.trapType)}</span>
-					<span class="source col-xs-2 source${abvSource}" title="${Parser.sourceJsonToFull(it.source)}">${abvSource}</span>
+					<span class="trapType col-xs-4">${Parser.trapHazTypeToFull(it.trapHazType)}</span>
+					<span class="source col-xs-2 ${Parser.sourceJsonToColor(abvSource)}" title="${Parser.sourceJsonToFull(it.source)}">${abvSource}</span>
 				</a>
 			</li>
 		`;
@@ -134,7 +141,7 @@ function handleFilterChange () {
 		return filterBox.toDisplay(
 			f,
 			it.source,
-			it.trapType
+			it.trapHazType
 		);
 	});
 	FilterBox.nextIfHidden(trapsAndHazardsList);
@@ -144,9 +151,9 @@ function getSublistItem (it, pinId) {
 	return `
 		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
 			<a href="#${UrlUtil.autoEncodeHash(it)}" title="${it.name}">
-				<span class="name col-xs-8">${it.name}</span>		
-				<span class="type col-xs-4">${Parser.trapTypeToFull(it.trapType)}</span>		
-				<span class="id hidden">${pinId}</span>				
+				<span class="name col-xs-8">${it.name}</span>
+				<span class="type col-xs-4">${Parser.trapHazTypeToFull(it.trapHazType)}</span>
+				<span class="id hidden">${pinId}</span>
 			</a>
 		</li>
 	`;
@@ -163,11 +170,12 @@ function loadhash (jsonIndex) {
 
 	const simplePart = EntryRenderer.traphazard.getSimplePart(renderer, it);
 	const complexPart = EntryRenderer.traphazard.getComplexPart(renderer, it);
+	const subtitle = EntryRenderer.traphazard.getSubtitle(it);
 	const $content = $(`#pagecontent`).empty();
 	$content.append(`
 		${EntryRenderer.utils.getBorderTr()}
 		${EntryRenderer.utils.getNameTr(it)}
-		<tr class="text"><td colspan="6"><i>${EntryRenderer.traphazard.getSubtitle(it)}</i></td>
+		${subtitle ? `<tr class="text"><td colspan="6"><i>${EntryRenderer.traphazard.getSubtitle(it)}</i></td>` : ""}
 		<tr class="text"><td colspan="6">${renderStack.join("")}${simplePart || ""}${complexPart || ""}</td></tr>
 		${EntryRenderer.utils.getPageTr(it)}
 		${EntryRenderer.utils.getBorderTr()}

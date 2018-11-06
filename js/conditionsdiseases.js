@@ -3,6 +3,7 @@ const JSON_URL = "data/conditionsdiseases.json";
 const entryRenderer = EntryRenderer.getDefaultRenderer();
 
 window.onload = function load () {
+	SortUtil.initHandleFilterButtonClicks();
 	DataUtil.loadJSON(JSON_URL).then(onJsonLoad);
 };
 
@@ -87,7 +88,7 @@ function addConditions (data) {
 				<a id='${cdI}' href='#${UrlUtil.autoEncodeHash(it)}' title="${it.name}">
 					<span class="type col-xs-3 text-align-center">${conditionDiseaseTypeToFull(it._type)}</span>
 					<span class='name col-xs-7'>${it.name}</span>
-					<span class='source col-xs-2 source${it.source}' title="${Parser.sourceJsonToFull(it.source)}">${Parser.sourceJsonToAbv(it.source)}</span>
+					<span class='source col-xs-2 ${Parser.sourceJsonToColor(it.source)}' title="${Parser.sourceJsonToFull(it.source)}">${Parser.sourceJsonToAbv(it.source)}</span>
 				</a>
 			</li>`;
 
@@ -122,8 +123,8 @@ function getSublistItem (cond, pinId) {
 	return `
 		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
 			<a href="#${UrlUtil.autoEncodeHash(cond)}">
-				<span class="name col-xs-12">${cond.name}</span>		
-				<span class="id hidden">${pinId}</span>				
+				<span class="name col-xs-12">${cond.name}</span>
+				<span class="id hidden">${pinId}</span>
 			</a>
 		</li>
 	`;

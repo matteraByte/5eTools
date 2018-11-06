@@ -14,7 +14,7 @@
 			],
 			"hp": {
 				"average": 22,
-				"formula": "3d8+9"
+				"formula": "3d8 + 9"
 			},
 			"speed": {
 				"walk": 20
@@ -56,13 +56,16 @@
 				{
 					"name": "Slam",
 					"entries": [
-						"Melee Weapon Attack: {@hit 3} to hit, reach 5 ft., one target. Hit: 4 ({@dice 1d6+1}) bludgeoning damage."
+						"{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d6 + 1}) bludgeoning damage."
 					]
 				}
 			],
 			"page": 31,
 			"traitTags": [
 				"Undead Fortitude"
+			],
+			"senseTags": [
+				"D"
 			]
 		},
 		{
@@ -143,11 +146,17 @@
 				{
 					"name": "Quarterstaff",
 					"entries": [
-						"Melee Weapon Attack: {@hit 1} to hit, reach 5 ft., one target. Hit: 3 ({@dice 1d8-1}) bludgeoning damage."
+						"{@atk mw} {@hit 1} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d8 - 1}) bludgeoning damage."
 					]
 				}
 			],
-			"page": 57
+			"page": 57,
+			"languageTags": [
+				"C",
+				"DR",
+				"D",
+				"E"
+			]
 		},
 		{
 			"name": "Mormesk the Wraith",
@@ -164,7 +173,7 @@
 			],
 			"hp": {
 				"average": 45,
-				"formula": "6d8+18"
+				"formula": "6d8 + 18"
 			},
 			"speed": {
 				"walk": 0,
@@ -218,7 +227,7 @@
 				{
 					"name": "Sunlight Sensitivity",
 					"entries": [
-						"While in sunlight, the wraith has disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight."
+						"While in sunlight, the wraith has disadvantage on attack rolls and on Wisdom ({@skill Perception}) checks that rely on sight."
 					]
 				}
 			],
@@ -226,7 +235,7 @@
 				{
 					"name": "Life Drain",
 					"entries": [
-						"Melee Weapon Attack: {@hit 5} to hit, reach 5 ft., one creature. Hit: 16 ({@dice 3d8+3}) necrotic damage, and the target must succeed on a DC 13 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken. If this attack reduces the target's hit point maximum to 0, the target dies. This reduction to the target's hit point maximum lasts until the target finishes a long rest."
+						"{@atk mw} {@hit 5} to hit, reach 5 ft., one creature. {@h}16 ({@damage 3d8 + 3}) necrotic damage, and the target must succeed on a DC 13 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken. If this attack reduces the target's hit point maximum to 0, the target dies. This reduction to the target's hit point maximum lasts until the target finishes a long rest."
 					]
 				}
 			],
@@ -234,6 +243,13 @@
 			"traitTags": [
 				"Incorporeal Movement",
 				"Sunlight Sensitivity"
+			],
+			"languageTags": [
+				"C",
+				"I"
+			],
+			"senseTags": [
+				"D"
 			]
 		},
 		{
@@ -295,7 +311,7 @@
 				{
 					"name": "Fey Ancestry",
 					"entries": [
-						"Nezznar has advantage on saving throws against being charmed, and magic can't put him to sleep."
+						"Nezznar has advantage on saving throws against being {@condition charmed}, and magic can't put him to sleep."
 					]
 				},
 				{
@@ -357,7 +373,7 @@
 				{
 					"name": "Spider Staff",
 					"entries": [
-						"Melee Weapon Attack: {@hit 1} to hit, reach 5 ft., one target. Hit: 2 ({@dice 1d6-1}) bludgeoning damage plus 3 ({@dice 1d6}) poison damage."
+						"{@atk mw} {@hit 1} to hit, reach 5 ft., one target. {@h}2 ({@damage 1d6 - 1}) bludgeoning damage plus 3 ({@damage 1d6}) poison damage."
 					]
 				}
 			],
@@ -365,6 +381,13 @@
 			"traitTags": [
 				"Fey Ancestry",
 				"Sunlight Sensitivity"
+			],
+			"languageTags": [
+				"E",
+				"U"
+			],
+			"senseTags": [
+				"SD"
 			]
 		},
 		{
@@ -391,7 +414,7 @@
 			],
 			"hp": {
 				"average": 16,
-				"formula": "3d8+3"
+				"formula": "3d8 + 3"
 			},
 			"speed": {
 				"walk": 30
@@ -418,13 +441,16 @@
 				{
 					"name": "Shortsword",
 					"entries": [
-						"Melee Weapon Attack: {@hit 4} to hit, reach 5 ft., one target. Hit: 5 ({@dice 1d6+2}) piercing damage."
+						"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
 					]
 				}
 			],
 			"page": 61,
 			"actionTags": [
 				"Multiattack"
+			],
+			"languageTags": [
+				"C"
 			]
 		},
 		{
@@ -452,7 +478,7 @@
 			],
 			"hp": {
 				"average": 27,
-				"formula": "5d8+5"
+				"formula": "5d8 + 5"
 			},
 			"speed": {
 				"walk": 30
@@ -483,13 +509,13 @@
 				{
 					"name": "Longsword",
 					"entries": [
-						"Melee Weapon Attack: {@hit 3} to hit, reach 5 ft., one target. Hit: 5 ({@dice 1d8+1}) slashing damage."
+						"{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d8 + 1}) slashing damage."
 					]
 				},
 				{
 					"name": "Heavy Crossbow",
 					"entries": [
-						"Ranged Weapon Attack: {@hit 2} to hit, range 100/400 ft., one target. Hit: 5 ({@dice 1d10}) piercing damage."
+						"{@atk rw} {@hit 2} to hit, range 100/400 ft., one target. {@h}5 ({@damage 1d10}) piercing damage."
 					]
 				}
 			],
@@ -505,6 +531,9 @@
 			"actionTags": [
 				"Multiattack",
 				"Parry"
+			],
+			"languageTags": [
+				"C"
 			]
 		}
 	]

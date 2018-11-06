@@ -29,7 +29,11 @@ function _onIndexLoad (src2UrlMap, jsonDir, dataProp, pPageInit, addFn, pOptiona
 		// collect a list of sources to load
 		const sources = Object.keys(src2UrlMap);
 		const defaultSel = sources.filter(s => defaultSourceSelFn(s));
-		const userSel = [...new Set((FilterBox.getSelectedSources() || []).concat((ListUtil.getSelectedSources() || [])))];
+		const hashSourceRaw = History.getHashSource();
+		const hashSource = hashSourceRaw ? Object.keys(src2UrlMap).find(it => it.toLowerCase() === hashSourceRaw.toLowerCase()) : null;
+		const userSel = [...new Set(
+			(FilterBox.getSelectedSources() || []).concat(ListUtil.getSelectedSources() || []).concat(hashSource ? [hashSource] : [])
+		)];
 
 		const allSources = [];
 
@@ -87,7 +91,8 @@ function _onIndexLoad (src2UrlMap, jsonDir, dataProp, pPageInit, addFn, pOptiona
 						const p = pOptional ? pOptional().then(finalise) : finalise;
 						p.then(resolve);
 					});
-				}
+				},
+				(src) => ({src: src, url: jsonDir + src2UrlMap[src]})
 			);
 		} else {
 			initPromise.then(() => {
@@ -102,8 +107,27 @@ function loadSource (jsonListName, dataFn) {
 		const toLoad = loadedSources[src] || loadedSources[Object.keys(loadedSources).find(k => k.toLowerCase() === src)];
 		if (!toLoad.loaded && val === "yes") {
 			DataUtil.loadJSON(toLoad.url).then(function (data) {
-				dataFn(data[jsonListName]);
-				toLoad.loaded = true;
+				const dependencies = MiscUtil.getProperty(data, "_meta", "dependencies");
+				if (dependencies && dependencies.length) {
+					const dependencyUrls = dependencies.map(d => loadedSources[d]);
+
+					Promise.all(dependencyUrls.map(dep => DataUtil.loadJSON(dep.url))).then(depDatas => {
+						depDatas.forEach((data, i) => {
+							if (!dependencyUrls[i].loaded) {
+								dataFn(data[jsonListName]);
+							}
+						});
+
+						const depList = depDatas.reduce((a, b) => ({[jsonListName]: a[jsonListName].concat(b[jsonListName])}), ({[jsonListName]: []}))[jsonListName];
+						const mergeFn = DataUtil.dependencyMergers[UrlUtil.getCurrentPage()];
+						data[jsonListName].forEach(it => mergeFn(depList, it));
+						dataFn(data[jsonListName]);
+						toLoad.loaded = true;
+					});
+				} else {
+					dataFn(data[jsonListName]);
+					toLoad.loaded = true;
+				}
 			});
 		}
 	}

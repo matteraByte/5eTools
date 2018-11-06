@@ -3,10 +3,9 @@ const JSON_URL = "data/variantrules.json";
 
 window.onload = function load () {
 	ExcludeUtil.initialise();
+	SortUtil.initHandleFilterButtonClicks();
 	DataUtil.loadJSON(JSON_URL).then(onJsonLoad);
 };
-
-let tableDefault;
 
 const entryRenderer = EntryRenderer.getDefaultRenderer();
 
@@ -19,8 +18,6 @@ function onJsonLoad (data) {
 		valueNames: ['name', 'source', 'search'],
 		listClass: "variantRules"
 	});
-
-	tableDefault = $("#pagecontent").html();
 
 	filterBox = initFilterBox(sourceFilter);
 
@@ -51,6 +48,7 @@ function onJsonLoad (data) {
 			BrewUtil.bind({list, filterBox, sourceFilter});
 
 			History.init(true);
+			ExcludeUtil.checkShowAllExcluded(rulesList, $(`#pagecontent`));
 		});
 }
 
@@ -81,7 +79,7 @@ function addVariantRules (data) {
 			<li class="row" ${FLTR_ID}="${rlI}" onclick="ListUtil.toggleSelected(event, this)">
 				<a id="${rlI}" href="#${UrlUtil.autoEncodeHash(curRule)}" title="${curRule.name}">
 					<span class="name col-xs-10">${curRule.name}</span>
-					<span class="source col-xs-2 source${Parser.sourceJsonToAbv(curRule.source)}" title="${Parser.sourceJsonToFull(curRule.source)}">${Parser.sourceJsonToAbv(curRule.source)}</span>
+					<span class="source col-xs-2 ${Parser.sourceJsonToColor(curRule.source)}" title="${Parser.sourceJsonToFull(curRule.source)}">${Parser.sourceJsonToAbv(curRule.source)}</span>
 					<span class="search hidden">${searchStack.join(",")}</span>
 				</a>
 			</li>`;
@@ -130,18 +128,27 @@ function handleFilterChange () {
 }
 
 function loadhash (id) {
-	entryRenderer.setFirstSection(true);
-
-	// reset details pane to initial HTML
-	$("#pagecontent").html(tableDefault);
-
 	const curRule = rulesList[id];
 
-	// build text list and display
-	$("tr.text").remove();
+	entryRenderer.setFirstSection(true);
 	const textStack = [];
+	entryRenderer.resetHeaderIndex();
 	entryRenderer.recursiveEntryRender(curRule, textStack);
-	$("tr#text").after("<tr class='text'><td colspan='6'>" + textStack.join("") + "</td></tr>");
+	$("#pagecontent").html(`
+		${EntryRenderer.utils.getBorderTr()}
+		<tr class="text"><td colspan="6">${textStack.join("")}</td></tr>
+		${EntryRenderer.utils.getPageTr(curRule)}
+		${EntryRenderer.utils.getBorderTr()}
+	`);
+
+	loadsub([]);
 
 	ListUtil.updateSelected();
+}
+
+function loadsub (sub) {
+	if (!sub.length) return;
+
+	const $title = $(`.entry-title[data-title-index="${sub[0]}"]`);
+	if ($title.length) $title[0].scrollIntoView();
 }

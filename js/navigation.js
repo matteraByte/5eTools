@@ -40,6 +40,7 @@ function navigation () {
 	UL('rules', 'ul_rules', 'dropdown-menu');
 	LI('ul_rules', 'quickreference.html', 'Quick Reference');
 	LI('ul_rules', 'variantrules.html', 'Variant & Optional Rules');
+	LI('ul_rules', 'tables.html', 'Tables');
 	LIDivider('ul_rules');
 	LI('ul_rules', 'book.html', "Dungeon Master's Guide", "DMG");
 	LI('ul_rules', 'book.html', "Monster Manual", "MM");
@@ -51,14 +52,16 @@ function navigation () {
 	LI('ul_rules', 'book.html', "Xanathar's Guide to Everything", "XGE");
 	LIDivider('ul_rules');
 	LI('ul_rules', 'book.html', "Adventurers League", "AL");
+	LIDivider('ul_rules');
+	LI('ul_rules', 'books.html', "View All/Homebrew");
 
 	LIDropdown('navbar', 'players', 'dropdown');
 	A('players', 'playerOption', 'dropdown-toggle', 'dropdown', '#', 'button', 'true', 'false', "Player Options <span class='caret'></span>");
 	UL('players', 'ul_players', 'dropdown-menu');
 	LI('ul_players', 'classes.html', 'Classes');
+	LI('ul_players', 'optionalfeatures.html', 'Class Feature Options');
 	LI('ul_players', 'backgrounds.html', 'Backgrounds');
 	LI('ul_players', 'feats.html', 'Feats');
-	LI('ul_players', 'invocations.html', 'Invocations');
 	LI('ul_players', 'races.html', 'Races');
 	LI('ul_players', 'lifegen.html', 'This Is Your Life');
 	LI('ul_players', 'names.html', 'Names');
@@ -70,7 +73,6 @@ function navigation () {
 	LI('ul_dms', 'crcalculator.html', 'CR Calculator');
 	LI('ul_dms', 'cultsboons.html', 'Cults & Demonic Boons');
 	LI('ul_dms', 'dmscreen.html', 'DM Screen');
-	LISpecial('ul_dms', 'https://kobold.club', 'Encounter Builder', '_blank', 'We could literally never build something better than Kobold Fight Club');
 	LI('ul_dms', 'encountergen.html', 'Encounter Generator');
 	LI('ul_dms', 'lootgen.html', 'Loot Generator');
 	LI('ul_dms', 'objects.html', 'Objects');
@@ -93,10 +95,13 @@ function navigation () {
 	A('utils', 'utils', 'dropdown-toggle', 'dropdown', '#', 'button', 'true', 'false', "Utilities <span class='caret'></span>");
 	UL('utils', 'ul_utils', 'dropdown-menu');
 	LI('ul_utils', 'blacklist.html', 'Content Blacklist');
+	LI('ul_utils', 'managebrew.html', 'Manage All Homebrew');
 	LI('ul_utils', 'converter.html', 'Stat Block to JSON');
 	LI('ul_utils', 'demo.html', 'Renderer Demo');
 	LI('ul_utils', 'roll20.html', 'Roll20 Script Help');
 	LI('ul_utils', 'makeshaped.html', 'Roll20 Shaped Sheet JS Builder');
+	LIDivider('ul_utils');
+	LI('ul_utils', 'donate.html', 'Donate');
 
 	LISwitcher('navbar', 'daynightMode', 'nightModeToggle', '#', 'styleSwitcher.toggleActiveStyleSheet(); return false;');
 

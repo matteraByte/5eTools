@@ -5,15 +5,24 @@ const renderer = EntryRenderer.getDefaultRenderer();
 
 window.onload = function load () {
 	ExcludeUtil.initialise();
+	SortUtil.initHandleFilterButtonClicks();
 	DataUtil.loadJSON(JSON_URL).then(onJsonLoad);
 };
 
 let list;
 const sourceFilter = getSourceFilter();
-let filterBox = initFilterBox(sourceFilter);
+const skillFilter = new Filter({header: "Skill Proficiencies", displayFn: StrUtil.toTitleCase});
+const toolFilter = new Filter({header: "Tool Proficiencies", displayFn: StrUtil.toTitleCase});
+const languageFilter = new Filter({header: "Language Proficiencies", displayFn: StrUtil.toTitleCase});
+let filterBox = initFilterBox(
+	sourceFilter,
+	skillFilter,
+	toolFilter,
+	languageFilter
+);
 function onJsonLoad (data) {
 	list = ListUtil.search({
-		valueNames: ['name', 'source'],
+		valueNames: ["name", "source", "skills"],
 		listClass: "backgrounds"
 	});
 
@@ -27,7 +36,7 @@ function onJsonLoad (data) {
 	);
 
 	const subList = ListUtil.initSublist({
-		valueNames: ["name", "id"],
+		valueNames: ["name", "skills", "id"],
 		listClass: "subbackgrounds",
 		getSublistRow: getSublistItem
 	});
@@ -45,6 +54,7 @@ function onJsonLoad (data) {
 			RollerUtil.addListRollButton();
 
 			History.init(true);
+			ExcludeUtil.checkShowAllExcluded(bgList, $(`#pagecontent`));
 		});
 }
 
@@ -66,23 +76,34 @@ function addBackgrounds (data) {
 		const bg = bgList[bgI];
 		if (ExcludeUtil.isExcluded(bg.name, "background", bg.source)) continue;
 
+		const skillDisplay = EntryRenderer.background.getSkillSummary(bg.skillProficiencies, true, bg._fSkills = []);
+		EntryRenderer.background.getToolSummary(bg.toolProficiencies, true, bg._fTools = []);
+		EntryRenderer.background.getLanguageSummary(bg.languageProficiencies, true, bg._fLangs = []);
+
 		// populate table
 		tempString +=
 			`<li class="row" ${FLTR_ID}="${bgI}" onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
-				<a id='${bgI}' href="#${UrlUtil.autoEncodeHash(bg)}" title="${bg.name}">
-					<span class='name col-xs-10'>${bg.name.replace("Variant ", "")}</span>
-					<span class='source col-xs-2 source${bg.source}' title="${Parser.sourceJsonToFull(bg.source)}">${Parser.sourceJsonToAbv(bg.source)}</span>
+				<a id="${bgI}" href="#${UrlUtil.autoEncodeHash(bg)}" title="${bg.name}">
+					<span class="name col-xs-4">${bg.name.replace("Variant ", "")}</span>
+					<span class="skills col-xs-6">${skillDisplay}</span>
+					<span class="source col-xs-2 ${Parser.sourceJsonToColor(bg.source)}" title="${Parser.sourceJsonToFull(bg.source)}">${Parser.sourceJsonToAbv(bg.source)}</span>
 				</a>
 			</li>`;
 
 		// populate filters
 		sourceFilter.addIfAbsent(bg.source);
+		skillFilter.addIfAbsent(bg._fSkills);
+		toolFilter.addIfAbsent(bg._fTools);
+		languageFilter.addIfAbsent(bg._fLangs);
 	}
 	const lastSearch = ListUtil.getSearchTermAndReset(list);
 	bgTable.append(tempString);
 
 	// sort filters
 	sourceFilter.items.sort(SortUtil.ascSort);
+	skillFilter.items.sort(SortUtil.ascSort);
+	toolFilter.items.sort(SortUtil.ascSort);
+	languageFilter.items.sort(SortUtil.ascSort);
 
 	list.reIndex();
 	if (lastSearch) list.search(lastSearch);
@@ -106,7 +127,13 @@ function handleFilterChange () {
 	const f = filterBox.getValues();
 	list.filter(function (item) {
 		const bg = bgList[$(item.elm).attr(FLTR_ID)];
-		return filterBox.toDisplay(f, bg.source);
+		return filterBox.toDisplay(
+			f,
+			bg.source,
+			bg._fSkills,
+			bg._fTools,
+			bg._fLangs
+		);
 	});
 	FilterBox.nextIfHidden(bgList);
 }
@@ -115,8 +142,9 @@ function getSublistItem (bg, pinId) {
 	return `
 		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
 			<a href="#${UrlUtil.autoEncodeHash(bg)}" title="${bg.name}">
-				<span class="name col-xs-12">${bg.name}</span>		
-				<span class="id hidden">${pinId}</span>				
+				<span class="name col-xs-4">${bg.name}</span>
+				<span class="name col-xs-8">${EntryRenderer.background.getSkillSummary(bg.skillProficiencies || [], true)}</span>
+				<span class="id hidden">${pinId}</span>
 			</a>
 		</li>
 	`;
@@ -130,13 +158,13 @@ function loadhash (id) {
 	function buildStatsTab () {
 		const renderStack = [];
 		const entryList = {type: "entries", entries: bg.entries};
-		renderer.recursiveEntryRender(entryList, renderStack, 1);
+		renderer.recursiveEntryRender(entryList, renderStack);
 
 		$pgContent.append(`
 			${EntryRenderer.utils.getBorderTr()}
 			${EntryRenderer.utils.getNameTr(bg)}
 			<tr><td class="divider" colspan="6"><div></div></td></tr>
-			<tr class='trait'><td colspan='6'>${renderStack.join("")}</td></tr>
+			<tr class="text"><td colspan="6">${renderStack.join("")}</td></tr>
 			${EntryRenderer.utils.getPageTr(bg)}
 			${EntryRenderer.utils.getBorderTr()}
 		`);
