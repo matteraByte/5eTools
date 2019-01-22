@@ -16,7 +16,6 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="icon" href="favicon.png">
 
-	<script type="text/javascript" src="lib/js-cookie.js"></script>
 	<script type="text/javascript" src="js/styleswitch.js"></script>
 	<script type="text/javascript" src="js/navigation.js"></script>
 </head>
@@ -39,12 +38,12 @@
 		<div class="view-col" id="listcontainer" style="flex: 4;">
 			<div class="input-group" id="filter-search-input-group">
 				<input type="search" id="search" class="search form-control" placeholder="Find table...">
-				<span class="input-group-btn"><button class="btn btn-default" type="button" id="reset">Reset</button></span>
+				<span class="input-group-btn"><button class="btn btn-default" id="reset">Reset</button></span>
 			</div>
 
 			<div id="filtertools" class="sortlabel btn-group">
-				<button class="col-xs-10 sort btn btn-default btn-xs" type="button" data-sort="sort-name">Name <span class="caret_wrp"></span></button>
-				<button class="col-xs-2 sort btn btn-default btn-xs" type="button" data-sort="source">Source <span class="caret_wrp"></span></button>
+				<button class="col-10 sort btn btn-default btn-xs" data-sort="sort-name">Name <span class="caret_wrp"></span></button>
+				<button class="col-2 sort btn btn-default btn-xs" data-sort="source">Source <span class="caret_wrp"></span></button>
 			</div>
 
 			<ul class="list tablesdata"></ul>
@@ -53,7 +52,7 @@
 		<div id="contentwrapper" class="view-col" style="flex: 6;">
 			<div id="sublistcontainer" class="sublist">
 				<div id="sublistsort" class="sortlabel btn-group">
-					<button class="col-xs-12 sort btn btn-default btn-xs" data-sort="name">Name</button>
+					<button class="col-12 sort btn btn-default btn-xs" data-sort="name">Name</button>
 				</div>
 				<ul class="list subtablesdata">
 					<!-- populate with JS -->
@@ -82,6 +81,7 @@
 <script type="text/javascript" src="lib/jquery-ui.js"></script>
 <script type="text/javascript" src="lib/jquery-ui-slider-pip.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript" src="lib/localforage.js"></script>
 <script type="text/javascript" src="js/omnidexer.js"></script>
 <script type="text/javascript" src="js/omnisearch.js"></script>
 <script type="text/javascript" src="js/filter.js"></script>
@@ -90,7 +90,6 @@
 <script type="text/javascript" src="js/history.js"></script>
 <script type="text/javascript" src="js/tables.js"></script>
 <script type="text/javascript" src="lib/list.js"></script>
-<script type="text/javascript" src="lib/bootstrap.js"></script>
 <script type="text/javascript" src="lib/elasticlunr.js"></script>
 </body>
 

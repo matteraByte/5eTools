@@ -71,15 +71,35 @@ if (fs.existsSync("./img")) {
 			});
 		});
 
+	const IGNORED_PREFIXES = [
+		".",
+		"_"
+	];
+
+	const IGNORED_EXTENSIONS = [
+		".git",
+		".gitignore",
+		".png",
+		".txt"
+	];
+
+	const IGNORED_DIRS = new Set([
+		"adventure",
+		"deities",
+		"variantrules",
+		"rules",
+		"objects",
+		"bestiary",
+		"roll20",
+		"book",
+		"items",
+		"races"
+	]);
+
 	fs.readdirSync("./img")
-		.filter(file => !file.endsWith(".git"))
-		.filter(file => !file.endsWith(".gitignore"))
-		.filter(file => !file.endsWith(".png"))
-		.filter(file => !file.endsWith(".txt"))
-		.filter(file => !file.startsWith("."))
-		.filter(file => !file.startsWith("_"))
+		.filter(file => !(IGNORED_PREFIXES.some(it => file.startsWith(it) || IGNORED_EXTENSIONS.some(it => file.endsWith(it)))))
 		.forEach(dir => {
-			if (dir !== "adventure" && dir !== "deities" && dir !== "variantrules" && dir !== "rules" && dir !== "objects" && dir !== "bestiary" && dir !== "roll20" && dir !== "book") {
+			if (!IGNORED_DIRS.has(dir)) {
 				fs.readdirSync(`./img/${dir}`).forEach(file => {
 					existing.push(`${dir.replace("(", "").replace(")", "")}/${file}`);
 				})
@@ -88,10 +108,10 @@ if (fs.existsSync("./img")) {
 
 	results = [];
 	expected.forEach(function (i) {
-		if (existing.indexOf(i) === -1) results.push(`${i} is missing`);
+		if (existing.indexOf(i) === -1) results.push(`[MISSING] ${i}`);
 	});
 	existing.forEach(function (i) {
-		if (expected.indexOf(i) === -1) results.push(`${i} is extra`);
+		if (expected.indexOf(i) === -1) results.push(`[  EXTRA] ${i}`);
 	});
 	Object.keys(expectedDirs).forEach(k => results.push(`Directory ${k} doesn't exist!`));
 	results.sort(function (a, b) {

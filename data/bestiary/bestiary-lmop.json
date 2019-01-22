@@ -66,11 +66,13 @@
 			],
 			"senseTags": [
 				"D"
+			],
+			"languageTags": [
+				"CS"
 			]
 		},
 		{
 			"name": "Evil Mage",
-			"isNPC": true,
 			"size": "M",
 			"type": {
 				"type": "humanoid",

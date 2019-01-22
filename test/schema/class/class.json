@@ -1,6 +1,6 @@
 {
 	"$schema": "http://json-schema.org/draft-06/schema#",
-	"version": "1.1.1",
+	"version": "1.2.2",
 
 	"title": "ClassArray",
 	"type": "object",
@@ -160,6 +160,9 @@
 				},
 				"shortName": {
 					"type": "string"
+				},
+				"page": {
+					"type": "integer"
 				},
 				"subclassFeatures": {
 					"type": "array",
@@ -346,11 +349,22 @@
 				"fluff": {
 					"type": "array",
 					"items": {
-						"items": {"$ref": "/Entry"}
+						"type": "object",
+						"properties": {
+							"entries": {
+								"type": "array",
+								"items": {"$ref": "/Entry"}
+							},
+							"page": {
+								"type": "integer"
+							},
+							"source": {
+								"type": "string"
+							}
+						},
+						"required": ["entries", "page", "source"],
+						"additionalProperties": false
 					}
-				},
-				"fluffPage": {
-					"type": "integer"
 				},
 				"classSpells": {
 					"description": "Homebrew use only",
@@ -361,13 +375,7 @@
 			"required": [
 				"name",
 				"source",
-				"hd",
-				"proficiency",
-				"startingProficiencies",
-				"startingEquipment",
-				"classFeatures",
-				"subclassTitle",
-				"subclasses"
+				"classFeatures"
 			],
 			"additionalProperties": false
 		},

@@ -1,9 +1,15 @@
 {
 	"_meta": {
-		"dependencies": [
-			"MM",
-			"VGM"
-		]
+		"dependencies": {
+			"monster": [
+				"MM"
+			]
+		},
+		"otherSources": {
+			"monster": {
+				"VGM": "WDMM"
+			}
+		}
 	},
 	"monster": [
 		{
@@ -11,13 +17,14 @@
 			"_copy": {
 				"name": "Bandit Captain",
 				"source": "MM",
-				"replacers": [
-					{
+				"_mod": {
+					"*": {
+						"mode": "replaceTxt",
 						"replace": "the captain",
 						"with": "Embric",
 						"flags": "i"
 					}
-				]
+				}
 			},
 			"isNPC": true,
 			"type": {
@@ -51,6 +58,10 @@
 			"languages": "Common, Primordial",
 			"senseTags": [
 				"D"
+			],
+			"languageTags": [
+				"C",
+				"P"
 			]
 		},
 		{
@@ -58,24 +69,21 @@
 			"_copy": {
 				"name": "Priest",
 				"source": "MM",
-				"replacers": [
-					{
+				"_mod": {
+					"*": {
+						"mode": "replaceTxt",
 						"replace": "the priest",
 						"with": "Avi",
 						"flags": "i"
-					}
-				],
-				"arrayModifiers": {
+					},
 					"trait": {
-						"mode": "prepend",
-						"data": [
-							{
-								"name": "Control Water",
-								"entries": [
-									"At will, Avi can control the flow and shape of water in a 5-foot cube, or cause the water to freeze for up to 1 hour."
-								]
-							}
-						]
+						"mode": "prependArr",
+						"items": {
+							"name": "Control Water",
+							"entries": [
+								"At will, Avi can control the flow and shape of water in a 5-foot cube, or cause the water to freeze for up to 1 hour."
+							]
+						}
 					}
 				}
 			},
@@ -4181,7 +4189,7 @@
 				{
 					"name": "Spellcasting",
 					"headerEntries": [
-						"Grum'sahr is a 1st-level spellcaster. His spellcasting ability is Intelligence. He has the following wizard spells prepared:"
+						"Grum'shar is a 1st-level spellcaster. His spellcasting ability is Intelligence. He has the following wizard spells prepared:"
 					],
 					"spells": {
 						"0": {
@@ -4656,7 +4664,7 @@
 				{
 					"name": "Rapier",
 					"entries": [
-						"{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d6 + 4}) piercing damage."
+						"{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d8 + 4}) piercing damage."
 					]
 				},
 				{
@@ -5376,7 +5384,7 @@
 				{
 					"name": "Extra Damage",
 					"entries": [
-						"As long as Hrabbaz has more than half his hit points left he deals and extra 3 ({@dice 1d6}) damage on all hits."
+						"As long as Hrabbaz has more than half his hit points left he deals an extra 3 ({@dice 1d6}) damage on all hits."
 					]
 				}
 			],
@@ -6586,6 +6594,9 @@
 			],
 			"senseTags": [
 				"D"
+			],
+			"languageTags": [
+				"CS"
 			]
 		},
 		{
@@ -7237,7 +7248,7 @@
 				{
 					"name": "Rod of Rulership",
 					"entries": [
-						"Victoro can use an action to present the rod and command obedience from each creature of his choice that he can see within 120 feet of him. Each target must succeed on a DC 15 Wisdom saving throw or be {@condition charmed} for 8 hours by Victorio. While {@condition charmed} in this way, the creature regards Victorio as its trusted leader. If harmed by VIctorio or his companions, or commanded to do something contrary to its nature, a target ceases to be {@condition charmed} in this way. The rod can't be used again until the next dawn."
+						"Victoro can use an action to present the rod and command obedience from each creature of his choice that he can see within 120 feet of him. Each target must succeed on a DC 15 Wisdom saving throw or be {@condition charmed} for 8 hours by Victoro. While {@condition charmed} in this way, the creature regards Victoro as its trusted leader. If harmed by Victoro or his companions, or commanded to do something contrary to its nature, a target ceases to be {@condition charmed} in this way. The rod can't be used again until the next dawn."
 					]
 				}
 			],

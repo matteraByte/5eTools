@@ -2,8 +2,8 @@
 
 const JSON_URL = "data/trapshazards.json";
 
-window.onload = function load () {
-	ExcludeUtil.initialise();
+window.onload = async function load () {
+	await ExcludeUtil.pInitialise();
 	SortUtil.initHandleFilterButtonClicks();
 	DataUtil.loadJSON(JSON_URL).then(onJsonLoad);
 };
@@ -11,9 +11,9 @@ window.onload = function load () {
 const sourceFilter = getSourceFilter();
 let filterBox;
 let list;
-function onJsonLoad (data) {
+async function onJsonLoad (data) {
 	list = ListUtil.search({
-		valueNames: ["name", "trapType", "source"],
+		valueNames: ["name", "trapType", "source", "uniqueid"],
 		listClass: "trapshazards",
 		sortFunction: SortUtil.listSort
 	});
@@ -34,7 +34,7 @@ function onJsonLoad (data) {
 		displayFn: Parser.trapHazTypeToFull
 	});
 	typeFilter.items.sort((a, b) => SortUtil.ascSortLower(Parser.trapHazTypeToFull(a), Parser.trapHazTypeToFull(b)));
-	filterBox = initFilterBox(
+	filterBox = await pInitFilterBox(
 		sourceFilter,
 		typeFilter
 	);
@@ -59,13 +59,15 @@ function onJsonLoad (data) {
 	addTrapsHazards(data);
 	BrewUtil.pAddBrewData()
 		.then(handleBrew)
+		.then(() => BrewUtil.bind({list}))
 		.then(BrewUtil.pAddLocalBrewData)
-		.catch(BrewUtil.purgeBrew)
-		.then(() => {
+		.catch(BrewUtil.pPurgeBrew)
+		.then(async () => {
 			BrewUtil.makeBrewButton("manage-brew");
-			BrewUtil.bind({list, filterBox, sourceFilter});
-			ListUtil.loadState();
+			BrewUtil.bind({filterBox, sourceFilter});
+			await ListUtil.pLoadState();
 			RollerUtil.addListRollButton();
+			ListUtil.addListShowHide();
 
 			History.init(true);
 			ExcludeUtil.checkShowAllExcluded(trapsAndHazardsList, $(`#pagecontent`));
@@ -99,9 +101,11 @@ function addTrapsHazards (data) {
 		tempString += `
 			<li class="row" ${FLTR_ID}="${thI}" onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id="${thI}" href="#${UrlUtil.autoEncodeHash(it)}" title="${it.name}">
-					<span class="name col-xs-6">${it.name}</span>
-					<span class="trapType col-xs-4">${Parser.trapHazTypeToFull(it.trapHazType)}</span>
-					<span class="source col-xs-2 ${Parser.sourceJsonToColor(abvSource)}" title="${Parser.sourceJsonToFull(it.source)}">${abvSource}</span>
+					<span class="name col-6">${it.name}</span>
+					<span class="trapType col-4">${Parser.trapHazTypeToFull(it.trapHazType)}</span>
+					<span class="source col-2 text-align-center ${Parser.sourceJsonToColor(abvSource)}" title="${Parser.sourceJsonToFull(it.source)}">${abvSource}</span>
+					
+					<span class="uniqueid hidden">${it.uniqueId ? it.uniqueId : thI}</span>
 				</a>
 			</li>
 		`;
@@ -151,8 +155,8 @@ function getSublistItem (it, pinId) {
 	return `
 		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
 			<a href="#${UrlUtil.autoEncodeHash(it)}" title="${it.name}">
-				<span class="name col-xs-8">${it.name}</span>
-				<span class="type col-xs-4">${Parser.trapHazTypeToFull(it.trapHazType)}</span>
+				<span class="name col-8">${it.name}</span>
+				<span class="type col-4">${Parser.trapHazTypeToFull(it.trapHazType)}</span>
 				<span class="id hidden">${pinId}</span>
 			</a>
 		</li>

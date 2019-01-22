@@ -1,28 +1,31 @@
 "use strict";
+
 const JSON_URL = "data/backgrounds.json";
 const JSON_FLUFF_URL = "data/fluff-backgrounds.json";
 const renderer = EntryRenderer.getDefaultRenderer();
-
-window.onload = function load () {
-	ExcludeUtil.initialise();
-	SortUtil.initHandleFilterButtonClicks();
-	DataUtil.loadJSON(JSON_URL).then(onJsonLoad);
-};
 
 let list;
 const sourceFilter = getSourceFilter();
 const skillFilter = new Filter({header: "Skill Proficiencies", displayFn: StrUtil.toTitleCase});
 const toolFilter = new Filter({header: "Tool Proficiencies", displayFn: StrUtil.toTitleCase});
 const languageFilter = new Filter({header: "Language Proficiencies", displayFn: StrUtil.toTitleCase});
-let filterBox = initFilterBox(
-	sourceFilter,
-	skillFilter,
-	toolFilter,
-	languageFilter
-);
+let filterBox;
+
+window.onload = async function load () {
+	filterBox = await pInitFilterBox(
+		sourceFilter,
+		skillFilter,
+		toolFilter,
+		languageFilter
+	);
+	await ExcludeUtil.pInitialise();
+	SortUtil.initHandleFilterButtonClicks();
+	onJsonLoad(await DataUtil.loadJSON(JSON_URL));
+};
+
 function onJsonLoad (data) {
 	list = ListUtil.search({
-		valueNames: ["name", "source", "skills"],
+		valueNames: ["name", "source", "skills", "uniqueid"],
 		listClass: "backgrounds"
 	});
 
@@ -45,13 +48,15 @@ function onJsonLoad (data) {
 	addBackgrounds(data);
 	BrewUtil.pAddBrewData()
 		.then(handleBrew)
+		.then(() => BrewUtil.bind({list}))
 		.then(BrewUtil.pAddLocalBrewData)
-		.catch(BrewUtil.purgeBrew)
-		.then(() => {
+		.catch(BrewUtil.pPurgeBrew)
+		.then(async () => {
 			BrewUtil.makeBrewButton("manage-brew");
-			BrewUtil.bind({list, filterBox, sourceFilter});
-			ListUtil.loadState();
+			BrewUtil.bind({filterBox, sourceFilter});
+			await ListUtil.pLoadState();
 			RollerUtil.addListRollButton();
+			ListUtil.addListShowHide();
 
 			History.init(true);
 			ExcludeUtil.checkShowAllExcluded(bgList, $(`#pagecontent`));
@@ -84,9 +89,11 @@ function addBackgrounds (data) {
 		tempString +=
 			`<li class="row" ${FLTR_ID}="${bgI}" onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id="${bgI}" href="#${UrlUtil.autoEncodeHash(bg)}" title="${bg.name}">
-					<span class="name col-xs-4">${bg.name.replace("Variant ", "")}</span>
-					<span class="skills col-xs-6">${skillDisplay}</span>
-					<span class="source col-xs-2 ${Parser.sourceJsonToColor(bg.source)}" title="${Parser.sourceJsonToFull(bg.source)}">${Parser.sourceJsonToAbv(bg.source)}</span>
+					<span class="name col-4">${bg.name.replace("Variant ", "")}</span>
+					<span class="skills col-6">${skillDisplay}</span>
+					<span class="source col-2 text-align-center ${Parser.sourceJsonToColor(bg.source)}" title="${Parser.sourceJsonToFull(bg.source)}">${Parser.sourceJsonToAbv(bg.source)}</span>
+					
+					<span class="uniqueid hidden">${bg.uniqueId ? bg.uniqueId : bgI}</span>
 				</a>
 			</li>`;
 
@@ -142,8 +149,8 @@ function getSublistItem (bg, pinId) {
 	return `
 		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
 			<a href="#${UrlUtil.autoEncodeHash(bg)}" title="${bg.name}">
-				<span class="name col-xs-4">${bg.name}</span>
-				<span class="name col-xs-8">${EntryRenderer.background.getSkillSummary(bg.skillProficiencies || [], true)}</span>
+				<span class="name col-4">${bg.name}</span>
+				<span class="name col-8">${EntryRenderer.background.getSkillSummary(bg.skillProficiencies || [], true)}</span>
 				<span class="id hidden">${pinId}</span>
 			</a>
 		</li>

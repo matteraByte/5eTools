@@ -2,8 +2,8 @@
 
 const STR_REPRINTED = "reprinted";
 
-window.onload = function load () {
-	ExcludeUtil.initialise();
+window.onload = async function load () {
+	await ExcludeUtil.pInitialise();
 	SortUtil.initHandleFilterButtonClicks();
 	DataUtil.deity.loadJSON().then(onJsonLoad);
 };
@@ -57,9 +57,9 @@ function unpackAlignment (g) {
 }
 
 let filterBox;
-function onJsonLoad (data) {
+async function onJsonLoad (data) {
 	list = ListUtil.search({
-		valueNames: ["name", "pantheon", "alignment", "domains", "symbol", "source"],
+		valueNames: ["name", "pantheon", "alignment", "domains", "symbol", "source", "uniqueid"],
 		listClass: "deities",
 		sortFunction: SortUtil.listSort
 	});
@@ -71,7 +71,7 @@ function onJsonLoad (data) {
 	});
 	const domainFilter = new Filter({
 		header: "Domain",
-		items: ["Arcana", "Death", "Forge", "Grave", "Knowledge", "Life", "Light", "Nature", STR_NONE, "Tempest", "Trickery", "War"]
+		items: ["Arcana", "Death", "Forge", "Grave", "Knowledge", "Life", "Light", "Nature", STR_NONE, "Order", "Tempest", "Trickery", "War"]
 	});
 	const miscFilter = new Filter({
 		header: "Miscellaneous",
@@ -80,7 +80,7 @@ function onJsonLoad (data) {
 		deselFn: (it) => { return it === STR_REPRINTED }
 	});
 
-	filterBox = initFilterBox(sourceFilter, alignmentFilter, pantheonFilter, categoryFilter, domainFilter, miscFilter);
+	filterBox = await pInitFilterBox(sourceFilter, alignmentFilter, pantheonFilter, categoryFilter, domainFilter, miscFilter);
 
 	list.on("updated", () => {
 		filterBox.setCount(list.visibleItems.length, list.items.length);
@@ -101,14 +101,15 @@ function onJsonLoad (data) {
 	addDeities(data);
 	BrewUtil.pAddBrewData()
 		.then(handleBrew)
+		.then(() => BrewUtil.bind({list}))
 		.then(BrewUtil.pAddLocalBrewData)
-		.catch(BrewUtil.purgeBrew)
-		.then(() => {
+		.catch(BrewUtil.pPurgeBrew)
+		.then(async () => {
 			BrewUtil.makeBrewButton("manage-brew");
-			BrewUtil.bind({list, filterBox, sourceFilter});
-			ListUtil.loadState();
+			BrewUtil.bind({filterBox, sourceFilter});
+			await ListUtil.pLoadState();
 			RollerUtil.addListRollButton();
-			addListShowHide();
+			ListUtil.addListShowHide();
 
 			History.init(true);
 			ExcludeUtil.checkShowAllExcluded(deitiesList, $(`#pagecontent`));
@@ -143,11 +144,13 @@ function addDeities (data) {
 		tempString += `
 			<li class="row" ${FLTR_ID}="${dtI}" onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id="${dtI}" href="#${UrlUtil.autoEncodeHash(g)}" title="${g.name}">
-					<span class="name col-xs-3">${g.name}</span>
-					<span class="pantheon col-xs-2 text-align-center">${g.pantheon}</span>
-					<span class="alignment col-xs-2 text-align-center">${g.alignment.join("")}</span>
-					<span class="domains col-xs-3 ${g.domains[0] === STR_NONE ? `list-entry-none` : ""}">${g.domains.join(", ")}</span>
-					<span class="source col-xs-2 ${Parser.sourceJsonToColor(abvSource)}" title="${Parser.sourceJsonToFull(g.source)}">${abvSource}</span>
+					<span class="name col-3">${g.name}</span>
+					<span class="pantheon col-2 text-align-center">${g.pantheon}</span>
+					<span class="alignment col-2 text-align-center">${g.alignment.join("")}</span>
+					<span class="domains col-3 ${g.domains[0] === STR_NONE ? `list-entry-none` : ""}">${g.domains.join(", ")}</span>
+					<span class="source col-2 text-align-center ${Parser.sourceJsonToColor(abvSource)}" title="${Parser.sourceJsonToFull(g.source)}">${abvSource}</span>
+					
+					<span class="uniqueid hidden">${g.uniqueId ? g.uniqueId : dtI}</span>
 				</a>
 			</li>
 		`;
@@ -201,10 +204,10 @@ function getSublistItem (g, pinId) {
 	return `
 		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
 			<a href="#${UrlUtil.autoEncodeHash(g)}" title="${g.name}">
-				<span class="name col-xs-4">${g.name}</span>
-				<span class="pantheon col-xs-2">${g.pantheon}</span>
-				<span class="alignment col-xs-2">${g.alignment.join("")}</span>
-				<span class="domains col-xs-4 ${g.domains[0] === STR_NONE ? `list-entry-none` : ""}">${g.domains.join(", ")}</span>
+				<span class="name col-4">${g.name}</span>
+				<span class="pantheon col-2">${g.pantheon}</span>
+				<span class="alignment col-2">${g.alignment.join("")}</span>
+				<span class="domains col-4 ${g.domains[0] === STR_NONE ? `list-entry-none` : ""}">${g.domains.join(", ")}</span>
 				<span class="id hidden">${pinId}</span>
 			</a>
 		</li>
@@ -220,8 +223,14 @@ function loadhash (jsonIndex) {
 		const renderStack = [];
 		if (deity.entries) renderer.recursiveEntryRender({entries: deity.entries}, renderStack);
 		return `
-		${reprintIndex ? `<tr><td colspan="6"><i class="text-muted">${reprintIndex === 1 ? `This deity is a reprint.` : ""} The version below was printed in an older publication (${Parser.sourceJsonToFull(deity.source)}${deity.page ? `, page ${deity.page}` : ""}).</i></td></tr>` : ""}
-		
+		${reprintIndex ? `
+			<tr><td colspan="6">
+			<i class="text-muted">
+			${reprintIndex === 1 ? `This deity is a reprint.` : ""} The version below was printed in an older publication (${Parser.sourceJsonToFull(deity.source)}${deity.page ? `, page ${deity.page}` : ""}).
+			</i>
+			</td></tr>
+		` : ""}
+
 		${EntryRenderer.deity.getOrderedParts(deity, `<tr><td colspan="6">`, `</td></tr>`)}
 		
 		${deity.symbolImg ? `<tr><td colspan="6">${renderer.renderEntry({entries: [deity.symbolImg]})}</td></tr>` : ""}

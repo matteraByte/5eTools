@@ -1343,7 +1343,8 @@
 				"Multiattack"
 			],
 			"languageTags": [
-				"GI"
+				"GI",
+				"CS"
 			],
 			"senseTags": [
 				"D"
@@ -1506,6 +1507,9 @@
 			],
 			"senseTags": [
 				"D"
+			],
+			"languageTags": [
+				"CS"
 			]
 		},
 		{
@@ -2164,7 +2168,8 @@
 			],
 			"languageTags": [
 				"C",
-				"TP"
+				"TP",
+				"CS"
 			],
 			"senseTags": [
 				"U"
@@ -3188,7 +3193,8 @@
 				"Keen Senses"
 			],
 			"languageTags": [
-				"C"
+				"C",
+				"CS"
 			]
 		},
 		{
@@ -3973,10 +3979,15 @@
 					"name": "Vampire Weaknesses",
 					"entries": [
 						"The vampire has the following flaws:",
-						"• Forbiddance. The vampire can't enter a residence without an invitation from one of the occupants.",
-						"• Harmed by Running Water. The vampire takes 20 acid damage when it ends its turn in running water.",
-						"• Stake to the Heart. The vampire is destroyed if a piercing weapon made of wood is driven into its heart while it is {@condition incapacitated} in its resting place.",
-						"• Sunlight Hypersensitivity. The vampire takes 20 radiant damage when it starts its turn in sunlight. While in sunlight, it has disadvantage on attack rolls and ability checks."
+						{
+							"type": "list",
+							"items": [
+								"Forbiddance. The vampire can't enter a residence without an invitation from one of the occupants.",
+								"Harmed by Running Water. The vampire takes 20 acid damage when it ends its turn in running water.",
+								"Stake to the Heart. The vampire is destroyed if a piercing weapon made of wood is driven into its heart while it is {@condition incapacitated} in its resting place.",
+								"Sunlight Hypersensitivity. The vampire takes 20 radiant damage when it starts its turn in sunlight. While in sunlight, it has disadvantage on attack rolls and ability checks."
+							]
+						}
 					]
 				},
 				{

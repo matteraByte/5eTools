@@ -117,8 +117,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -164,8 +164,8 @@
 						"Max Amount"
 					],
 					"colStyles": [
-						"col-xs-2",
-						"col-xs-10"
+						"col-2",
+						"col-10"
 					],
 					"rows": [
 						[
@@ -264,12 +264,17 @@
 			"source": "DMG",
 			"page": 150,
 			"reqAttune": true,
+			"ability": {
+				"static": {
+					"con": 19
+				}
+			},
 			"entries": [
 				"Your Constitution score is 19 while you wear this amulet. It has no effect on you if your Constitution score is already 19 or higher without it."
 			]
 		},
 		{
-			"name": "Amulet of Proof Against Detection and Location",
+			"name": "Amulet of Proof against Detection and Location",
 			"wondrous": true,
 			"weight": "1",
 			"tier": "Major",
@@ -314,8 +319,8 @@
 						"Transformation"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-11"
+						"col-1 text-align-center",
+						"col-11"
 					],
 					"rows": [
 						[
@@ -514,6 +519,7 @@
 			"page": 152,
 			"reqAttune": true,
 			"curse": true,
+			"baseItem": "plate armor|phb",
 			"entries": [
 				"While wearing this armor, you have resistance to bludgeoning damage.",
 				{
@@ -539,6 +545,7 @@
 			"page": 152,
 			"reqAttune": true,
 			"curse": true,
+			"baseItem": "plate armor|phb",
 			"entries": [
 				"While wearing this armor, you have resistance to piercing damage.",
 				{
@@ -564,6 +571,7 @@
 			"page": 152,
 			"reqAttune": true,
 			"curse": true,
+			"baseItem": "plate armor|phb",
 			"entries": [
 				"While wearing this armor, you have resistance to slashing damage.",
 				{
@@ -754,8 +762,8 @@
 						"Effect"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-11"
+						"col-1 text-align-center",
+						"col-11"
 					],
 					"rows": [
 						[
@@ -825,8 +833,8 @@
 						"Difficulty"
 					],
 					"colStyles": [
-						"col-xs-6",
-						"col-xs-6"
+						"col-6",
+						"col-6"
 					],
 					"rows": [
 						[
@@ -903,8 +911,8 @@
 						"Creature"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-11"
+						"col-1 text-align-center",
+						"col-11"
 					],
 					"rows": [
 						[
@@ -963,8 +971,8 @@
 						"Creature"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-11"
+						"col-1 text-align-center",
+						"col-11"
 					],
 					"rows": [
 						[
@@ -1023,8 +1031,8 @@
 						"Creature"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-11"
+						"col-1 text-align-center",
+						"col-11"
 					],
 					"rows": [
 						[
@@ -1182,7 +1190,7 @@
 					"name": "Gift of Battle",
 					"type": "entries",
 					"entries": [
-						"You can transfer the banner's magic to a place by tracing the krig rune on the ground with your finger The point where you trace it becomes the center of a spherical area of magic that has a 500-foot radius and that is fixed to the place. The transfer takes 8 hours of work that requires the banner to be within 5 feet of you and during which you choose creatures, creature types, or both that will benefit from the magic. At the end, the banner is destroyed, and the area gains the following property:",
+						"You can transfer the banner's magic to a place by tracing the krig rune on the ground with your finger. The point where you trace it becomes the center of a spherical area of magic that has a 500-foot radius and that is fixed to the place. The transfer takes 8 hours of work that requires the banner to be within 5 feet of you and during which you choose creatures, creature types, or both that will benefit from the magic. At the end, the banner is destroyed, and the area gains the following property:",
 						"While in the 500-foot-radius sphere, the creatures you chose during the transfer process are immune to the {@condition frightened} condition and gain a +1 bonus to attack rolls and AC."
 					]
 				}
@@ -1197,7 +1205,7 @@
 			"source": "PHB",
 			"page": 157,
 			"entries": [
-				"Barding is armor designed to protect an animal's head, neck, chest, and body. Any type of armor shown on the Armor table in this chapter can be purchased as harding. The cost is four times the equivalent armor made for humanoids, and it weighs twice as much."
+				"Barding is armor designed to protect an animal's head, neck, chest, and body. Any type of armor shown on the Armor table in this chapter can be purchased as barding. The cost is four times the equivalent armor made for humanoids, and it weighs twice as much."
 			]
 		},
 		{
@@ -1305,6 +1313,11 @@
 			"source": "DMG",
 			"page": 155,
 			"reqAttune": true,
+			"ability": {
+				"static": {
+					"str": 27
+				}
+			},
 			"entries": [
 				"While wearing this belt, your Strength score changes to 27. The item has no effect on you if your Strength without the belt is equal to or greater than the belt's score."
 			]
@@ -1317,6 +1330,9 @@
 			"source": "DMG",
 			"page": 155,
 			"reqAttune": true,
+			"ability": {
+				"con": 2
+			},
 			"entries": [
 				"While wearing this belt, you gain the following benefits:",
 				{
@@ -1355,6 +1371,11 @@
 			"source": "DMG",
 			"page": 155,
 			"reqAttune": true,
+			"ability": {
+				"static": {
+					"str": 25
+				}
+			},
 			"entries": [
 				"While wearing this belt, your Strength score changes to 25. The item has no effect on you if your Strength without the belt is equal to or greater than the belt's score."
 			]
@@ -1367,6 +1388,11 @@
 			"source": "DMG",
 			"page": 155,
 			"reqAttune": true,
+			"ability": {
+				"static": {
+					"str": 23
+				}
+			},
 			"entries": [
 				"While wearing this belt, your Strength score changes to 23. The item has no effect on you if your Strength without the belt is equal to or greater than the belt's score."
 			]
@@ -1379,6 +1405,11 @@
 			"source": "DMG",
 			"page": 155,
 			"reqAttune": true,
+			"ability": {
+				"static": {
+					"str": 21
+				}
+			},
 			"entries": [
 				"While wearing this belt, your Strength score changes to 21. The item has no effect on you if your Strength without the belt is equal to or greater than the belt's score."
 			]
@@ -1391,6 +1422,11 @@
 			"source": "DMG",
 			"page": 155,
 			"reqAttune": true,
+			"ability": {
+				"static": {
+					"str": 23
+				}
+			},
 			"entries": [
 				"While wearing this belt, your Strength score changes to 23. The item has no effect on you if your Strength without the belt is equal to or greater than the belt's score."
 			]
@@ -1403,6 +1439,11 @@
 			"source": "DMG",
 			"page": 155,
 			"reqAttune": true,
+			"ability": {
+				"static": {
+					"str": 29
+				}
+			},
 			"entries": [
 				"While wearing this belt, your Strength score changes to 29. The item has no effect on you if your Strength without the belt is equal to or greater than the belt's score."
 			]
@@ -1833,6 +1874,9 @@
 			"source": "DMG",
 			"page": 222,
 			"reqAttune": "by a Creature of Good Alignment",
+			"ability": {
+				"wis": 2
+			},
 			"entries": [
 				"The definitive treatise on all that is good in the multiverse, the fabled Book of Exalted Deeds figures prominently in many religions. Rather than being a scripture devoted to a particular faith, the book's various authors filled the pages with their own vision of true virtue, providing guidance for defeating evil.",
 				"The Book of Exalted Deeds rarely lingers in one place. As soon as the book is read, it vanishes to some other corner of the multiverse where its moral guidance can bring light to a darkened world. Although attempts have been made to copy the work, efforts to do so fail to capture its magical nature or translate the benefits it offers to those pure of heart and firm of purpose.",
@@ -1890,6 +1934,22 @@
 			"source": "DMG",
 			"page": 222,
 			"reqAttune": true,
+			"ability": {
+				"choose": [
+					{
+						"from": [
+							"str",
+							"dex",
+							"con",
+							"int",
+							"wis",
+							"cha"
+						],
+						"count": 1,
+						"amount": 2
+					}
+				]
+			},
 			"entries": [
 				"The contents of this foul manuscript of ineffable wickedness are the meat and drink of those in evil's thrall. No mortal was meant to know the secrets it contains, knowledge so horrid that to even glimpse the scrawled pages invites madness.",
 				"Most believe the lich-god Vecna authored the Book of Vile Darkness. He recorded in its pages every diseased idea, every unhinged thought, and every example of blackest magic he came across or devised. Vecna covered every vile topic he could, making the book a gruesome catalog of all mortal wrongs.",
@@ -2285,8 +2345,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -2474,8 +2534,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-6",
-						"col-xs-6"
+						"col-6",
+						"col-6"
 					],
 					"rows": [
 						[
@@ -2560,8 +2620,8 @@
 						"Alignment"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-11"
+						"col-1 text-align-center",
+						"col-11"
 					],
 					"rows": [
 						[
@@ -2753,8 +2813,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -2915,8 +2975,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -3418,8 +3478,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -3529,8 +3589,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -3558,6 +3618,7 @@
 			"type": "TG",
 			"rarity": "None",
 			"value": "5 sp",
+			"weight": "1",
 			"source": "PHB",
 			"page": 157
 		},
@@ -3752,9 +3813,9 @@
 						"Effect"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-1 text-align-center",
-						"col-xs-10"
+						"col-1 text-align-center",
+						"col-1 text-align-center",
+						"col-10"
 					],
 					"rows": [
 						[
@@ -3797,8 +3858,8 @@
 						"Charges Lost"
 					],
 					"colStyles": [
-						"col-xs-3",
-						"col-xs-9"
+						"col-3",
+						"col-9"
 					],
 					"rows": [
 						[
@@ -3910,6 +3971,9 @@
 						"You can try to cast a cantrip that you don't know. The cantrip must be on the warlock spell list, and you must make a DC 10 Intelligence ({@skill Arcana}) check. If the check succeeds, you cast the spell. If the check fails, so does the spell, and the action used to cast the spell is wasted. In either case, you can't use this property again until you finish a long rest."
 					]
 				}
+			],
+			"focus": [
+				"Warlock"
 			]
 		},
 		{
@@ -3996,8 +4060,8 @@
 						"Illusion"
 					],
 					"colStyles": [
-						"col-xs-3",
-						"col-xs-9"
+						"col-3",
+						"col-9"
 					],
 					"rows": [
 						[
@@ -4341,6 +4405,18 @@
 			"rarity": "Legendary",
 			"source": "DMG",
 			"page": 162,
+			"ability": {
+				"from": [
+					"str",
+					"dex",
+					"con",
+					"int",
+					"wis",
+					"cha"
+				],
+				"count": 1,
+				"amount": 2
+			},
 			"entries": [
 				"Usually found in a box or pouch, this deck contains a number of cards made of ivory or vellum. Most (75 percent) of these decks have only thirteen cards, but the rest have twenty-two.",
 				"Before you draw a card, you must declare how many cards you intend to draw and then draw them randomly (you can use an altered deck of playing cards to simulate the deck). Any cards drawn in excess of this number have no effect. Otherwise, as soon as you draw a card from the deck, its magic takes effect. You must draw each card no more than 1 hour after the previous draw. If you fail to draw the chosen number, the remaining number of cards fly from the deck on their own and take effect all at once.",
@@ -4361,9 +4437,9 @@
 						"Effect"
 					],
 					"colStyles": [
-						"col-xs-3",
-						"col-xs-1",
-						"col-xs-9"
+						"col-3",
+						"col-1",
+						"col-9"
 					],
 					"rows": [
 						[
@@ -4394,7 +4470,7 @@
 								"roll": {
 									"exact": 3
 								},
-								"entry": "Queen&nbsp;of&nbsp;diamonds"
+								"entry": "Queen of diamonds"
 							},
 							"Moon",
 							"You are granted the ability to cast the {@spell wish} spell {@dice 1d3} times."
@@ -4861,8 +4937,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -4888,6 +4964,7 @@
 			"rarity": "Rare",
 			"source": "UAWGE",
 			"page": 120,
+			"sentient": true,
 			"entries": [
 				"A docent is a small metal sphere, approximately 2 inches across, studded with dragonshards. Despite a strong magical aura, it has no obvious abilities. If you're a warforged, you can attune to the docent, at which point the sphere becomes embedded in your chest and comes to life\u2014literally.",
 				"A docent is an intelligent magic item designed to advise and assist the warforged it's attached to. A typical docent has an Intelligence score of 16 and Wisdom and Charisma scores of 14. Once you're attuned to the docent, it can communicate with you telepathically and can perceive the world through your senses. One of the simple functions of a docent is to serve as a translator. All docents understand Common and Giant, but a docent knows up to four additional languages. Elven and Draconic are common options. If a docent knows less than six languages in total, it can add new languages to its repertoire after encountering them. So a docent found in Xen'drik may have never encountered a dwarf before... but after spending some time in Khorvaire studying dwarves, it could pick up the Dwarven language.",
@@ -5269,8 +5346,8 @@
 						"Effect"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-11"
+						"col-1 text-align-center",
+						"col-11"
 					],
 					"rows": [
 						[
@@ -6057,8 +6134,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -6119,6 +6196,11 @@
 			"source": "DMG",
 			"page": 171,
 			"reqAttune": true,
+			"ability": {
+				"static": {
+					"str": 19
+				}
+			},
 			"entries": [
 				"Your Strength score is 19 while you wear these gauntlets. They have no effect on you if your Strength is already 19 or higher without them."
 			]
@@ -6318,8 +6400,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -6712,7 +6794,7 @@
 			"type": "M",
 			"weaponCategory": "Martial",
 			"baseItem": "greataxe|phb",
-			"weight": "14",
+			"weight": "325",
 			"dmg1": "{@dice 3d12}",
 			"rarity": "Legendary",
 			"dmgType": "S",
@@ -6769,6 +6851,9 @@
 			"rarity": "Legendary",
 			"source": "DMG",
 			"page": 173,
+			"ability": {
+				"str": 4
+			},
 			"entries": [
 				"You gain a +1 bonus to attack and damage rolls made with this magic weapon.",
 				{
@@ -6799,6 +6884,11 @@
 			"source": "DMG",
 			"page": 224,
 			"reqAttune": true,
+			"ability": {
+				"static": {
+					"str": 20
+				}
+			},
 			"entries": [
 				"Seldom is the name of Vecna spoken except in a hushed voice. Vecna was, in his time, one of the mightiest of all wizards. Through dark magic and conquest, he forged a terrible empire. For all his power, Vecna couldn't escape his own mortality. He began to fear death and take steps to prevent his end from ever coming about.",
 				"{@creature Orcus|OotA}, the demon prince of undeath, taught Vecna a ritual that would allow him to live on as a {@creature lich}. Beyond death, he became the greatest of all liches. Even though his body gradually withered and decayed, Vecna continued to expand his evil dominion. So formidable and hideous was his temper that his subjects feared to speak his name. He was the Whispered One, the Master of the Spider Throne, the Undying King, and the Lord of the Rotted Tower.",
@@ -6825,7 +6915,7 @@
 					"name": "Properties of the Hand",
 					"type": "entries",
 					"entries": [
-						"Your alignment changes neutral evil, and you gain the following benefits:"
+						"Your alignment changes to neutral evil, and you gain the following benefits:"
 					]
 				},
 				{
@@ -6915,6 +7005,9 @@
 						"You can try to cast a cantrip that you don't know. The cantrip must be on the wizard spell list, and you must make a DC 10 Intelligence ({@skill Arcana}) check. If the check succeeds, you cast the spell. If the check fails, so does the spell, and the action used to cast the spell is wasted. In either case, you can't use this property again until you finish a long rest."
 					]
 				}
+			],
+			"focus": [
+				"Wizard"
 			]
 		},
 		{
@@ -6935,7 +7028,7 @@
 			"reqAttune": true,
 			"sentient": true,
 			"entries": [
-				"A sentient (neutral evil) greatsword, Hazirawn is capable of speech in Common and Netherese. Even if you aren't attuned to the sword, you gain a +1 bonus on attack and damage rolls made with this weapon. If you are attuned to Hazirawn, you deal an extra {@dice 1d6} necrotic damage when you hit with the weapon.",
+				"A sentient (neutral evil) greatsword, Hazirawn is capable of speech in Common and Netherese. Even if you aren't attuned to the sword, you gain a +1 bonus on attack and damage rolls made with this weapon. If you are not attuned to Hazirawn, you deal an extra {@dice 1d6} necrotic damage when you hit with the weapon.",
 				{
 					"name": "Increased Potency",
 					"type": "entries",
@@ -6973,6 +7066,11 @@
 			"source": "DMG",
 			"page": 173,
 			"reqAttune": true,
+			"ability": {
+				"static": {
+					"int": 19
+				}
+			},
 			"entries": [
 				"Your Intelligence score is 19 while you wear this headband. It has no effect on you if your Intelligence is already 19 or higher without it."
 			]
@@ -7181,8 +7279,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -7644,7 +7742,7 @@
 			"entries": [
 				"An instrument of the bards is an exquisite example of its kind, superior to an ordinary instrument in every way. Seven types of these instruments exist, each named after a legendary bard college. A creature that attempts to play the instrument without being attuned to it must succeed on a DC 15 Wisdom saving throw or take {@dice 2d4} psychic damage.",
 				"You can use an action to play the instrument and cast one of its spells. Once the instrument has been used to cast a spell, it can't be used to cast that spell again until the next dawn. The spells use your spellcasting ability and spell save DC.",
-				"When you use the instrument to cast a spell that causes targets to become {@condition charmed} on a failed save, the targets have disadvantage on the saving throw. This effect applies whether you are using the instrument as the source of the spell or as a spellcasting focus.",
+				"You can play the instrument while casting a spell that causes any of its targets to be {@condition charmed} on a failed saving throw, thereby imposing disadvantage on the save. This effect applies only if the spell has a somatic or a material component.",
 				"All instruments of the bards can be used to cast the following spells: {@spell fly}, {@spell invisibility}, {@spell levitate}, and {@spell protection from evil and good}.",
 				"In addition, the Anstruth harp can be used to cast {@spell control weather}, {@spell cure wounds} (5th level), and {@spell wall of thorns}."
 			],
@@ -7671,7 +7769,7 @@
 			"entries": [
 				"An instrument of the bards is an exquisite example of its kind, superior to an ordinary instrument in every way. Seven types of these instruments exist, each named after a legendary bard college. A creature that attempts to play the instrument without being attuned to it must succeed on a DC 15 Wisdom saving throw or take {@dice 2d4} psychic damage.",
 				"You can use an action to play the instrument and cast one of its spells. Once the instrument has been used to cast a spell, it can't be used to cast that spell again until the next dawn. The spells use your spellcasting ability and spell save DC.",
-				"When you use the instrument to cast a spell that causes targets to become {@condition charmed} on a failed save, the targets have disadvantage on the saving throw. This effect applies whether you are using the instrument as the source of the spell or as a spellcasting focus.",
+				"You can play the instrument while casting a spell that causes any of its targets to be {@condition charmed} on a failed saving throw, thereby imposing disadvantage on the save. This effect applies only if the spell has a somatic or a material component.",
 				"All instruments of the bards can be used to cast the following spells: {@spell fly}, {@spell invisibility}, {@spell levitate}, and {@spell protection from evil and good}.",
 				"In addition, the Canaith mandolin can be used to cast {@spell cure wounds} (3rd level), {@spell dispel magic}, and {@spell protection from energy} (lightning only)."
 			],
@@ -7698,7 +7796,7 @@
 			"entries": [
 				"An instrument of the bards is an exquisite example of its kind, superior to an ordinary instrument in every way. Seven types of these instruments exist, each named after a legendary bard college. A creature that attempts to play the instrument without being attuned to it must succeed on a DC 15 Wisdom saving throw or take {@dice 2d4} psychic damage.",
 				"You can use an action to play the instrument and cast one of its spells. Once the instrument has been used to cast a spell, it can't be used to cast that spell again until the next dawn. The spells use your spellcasting ability and spell save DC.",
-				"When you use the instrument to cast a spell that causes targets to become {@condition charmed} on a failed save, the targets have disadvantage on the saving throw. This effect applies whether you are using the instrument as the source of the spell or as a spellcasting focus.",
+				"You can play the instrument while casting a spell that causes any of its targets to be {@condition charmed} on a failed saving throw, thereby imposing disadvantage on the save. This effect applies only if the spell has a somatic or a material component.",
 				"All instruments of the bards can be used to cast the following spells: {@spell fly}, {@spell invisibility}, {@spell levitate}, and {@spell protection from evil and good}.",
 				"In addition, the Cli lyre can be used to cast {@spell stone shape}, {@spell wall of fire}, and {@spell wind wall}."
 			],
@@ -7725,7 +7823,7 @@
 			"entries": [
 				"An instrument of the bards is an exquisite example of its kind, superior to an ordinary instrument in every way. Seven types of these instruments exist, each named after a legendary bard college. A creature that attempts to play the instrument without being attuned to it must succeed on a DC 15 Wisdom saving throw or take {@dice 2d4} psychic damage.",
 				"You can use an action to play the instrument and cast one of its spells. Once the instrument has been used to cast a spell, it can't be used to cast that spell again until the next dawn. The spells use your spellcasting ability and spell save DC.",
-				"When you use the instrument to cast a spell that causes targets to become {@condition charmed} on a failed save, the targets have disadvantage on the saving throw. This effect applies whether you are using the instrument as the source of the spell or as a spellcasting focus.",
+				"You can play the instrument while casting a spell that causes any of its targets to be {@condition charmed} on a failed saving throw, thereby imposing disadvantage on the save. This effect applies only if the spell has a somatic or a material component.",
 				"All instruments of the bards can be used to cast the following spells: {@spell fly}, {@spell invisibility}, {@spell levitate}, and {@spell protection from evil and good}.",
 				"In addition, the Doss lute can be used to cast {@spell animal friendship}, {@spell protection from energy} (fire only), and {@spell protection from poison}."
 			],
@@ -7752,7 +7850,7 @@
 			"entries": [
 				"An instrument of the bards is an exquisite example of its kind, superior to an ordinary instrument in every way. Seven types of these instruments exist, each named after a legendary bard college. A creature that attempts to play the instrument without being attuned to it must succeed on a DC 15 Wisdom saving throw or take {@dice 2d4} psychic damage.",
 				"You can use an action to play the instrument and cast one of its spells. Once the instrument has been used to cast a spell, it can't be used to cast that spell again until the next dawn. The spells use your spellcasting ability and spell save DC.",
-				"When you use the instrument to cast a spell that causes targets to become {@condition charmed} on a failed save, the targets have disadvantage on the saving throw. This effect applies whether you are using the instrument as the source of the spell or as a spellcasting focus.",
+				"You can play the instrument while casting a spell that causes any of its targets to be {@condition charmed} on a failed saving throw, thereby imposing disadvantage on the save. This effect applies only if the spell has a somatic or a material component.",
 				"All instruments of the bards can be used to cast the following spells: {@spell fly}, {@spell invisibility}, {@spell levitate}, and {@spell protection from evil and good}.",
 				"In addition, the Fochlucan bandore can be used to cast {@spell entangle}, {@spell faerie fire}, {@spell shillelagh}, and {@spell speak with animals}."
 			],
@@ -7780,7 +7878,7 @@
 			"entries": [
 				"An instrument of the bards is an exquisite example of its kind, superior to an ordinary instrument in every way. Seven types of these instruments exist, each named after a legendary bard college. A creature that attempts to play the instrument without being attuned to it must succeed on a DC 15 Wisdom saving throw or take {@dice 2d4} psychic damage.",
 				"You can use an action to play the instrument and cast one of its spells. Once the instrument has been used to cast a spell, it can't be used to cast that spell again until the next dawn. The spells use your spellcasting ability and spell save DC.",
-				"When you use the instrument to cast a spell that causes targets to become {@condition charmed} on a failed save, the targets have disadvantage on the saving throw. This effect applies whether you are using the instrument as the source of the spell or as a spellcasting focus.",
+				"You can play the instrument while casting a spell that causes any of its targets to be {@condition charmed} on a failed saving throw, thereby imposing disadvantage on the save. This effect applies only if the spell has a somatic or a material component.",
 				"All instruments of the bards can be used to cast the following spells: {@spell fly}, {@spell invisibility}, {@spell levitate}, and {@spell protection from evil and good}.",
 				"In addition, the Mac-Fuirmidh cittern can be used to cast {@spell barkskin}, {@spell cure wounds}, and {@spell fog cloud}."
 			],
@@ -7807,7 +7905,7 @@
 			"entries": [
 				"An instrument of the bards is an exquisite example of its kind, superior to an ordinary instrument in every way. Seven types of these instruments exist, each named after a legendary bard college. A creature that attempts to play the instrument without being attuned to it must succeed on a DC 15 Wisdom saving throw or take {@dice 2d4} psychic damage.",
 				"You can use an action to play the instrument and cast one of its spells. Once the instrument has been used to cast a spell, it can't be used to cast that spell again until the next dawn. The spells use your spellcasting ability and spell save DC.",
-				"When you use the instrument to cast a spell that causes targets to become {@condition charmed} on a failed save, the targets have disadvantage on the saving throw. This effect applies whether you are using the instrument as the source of the spell or as a spellcasting focus.",
+				"You can play the instrument while casting a spell that causes any of its targets to be {@condition charmed} on a failed saving throw, thereby imposing disadvantage on the save. This effect applies only if the spell has a somatic or a material component.",
 				"All instruments of the bards can be used to cast the following spells: {@spell fly}, {@spell invisibility}, {@spell levitate}, and {@spell protection from evil and good}.",
 				"In addition, the Ollamh harp can be used to cast {@spell confusion}, {@spell control weather}, and {@spell fire storm}."
 			],
@@ -7845,6 +7943,9 @@
 			"source": "DMG",
 			"page": 176,
 			"reqAttune": true,
+			"ability": {
+				"dex": 2
+			},
 			"entries": [
 				"An {@italic Ioun stone} is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of {@italic Ioun stone} exist, each type a distinct combination of shape and color.",
 				"When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of {@dice 1d3} feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity ({@skill Acrobatics}) check. You can use an action to seize and stow the stone, ending its effect.",
@@ -7875,6 +7976,9 @@
 			"source": "DMG",
 			"page": 176,
 			"reqAttune": true,
+			"ability": {
+				"con": 2
+			},
 			"entries": [
 				"An {@italic Ioun stone} is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of {@italic Ioun stone} exist, each type a distinct combination of shape and color.",
 				"When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of {@dice 1d3} feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity ({@skill Acrobatics}) check. You can use an action to seize and stow the stone, ending its effect.",
@@ -7905,6 +8009,9 @@
 			"source": "DMG",
 			"page": 176,
 			"reqAttune": true,
+			"ability": {
+				"wis": 2
+			},
 			"entries": [
 				"An {@italic Ioun stone} is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of {@italic Ioun stone} exist, each type a distinct combination of shape and color.",
 				"When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of {@dice 1d3} feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity ({@skill Acrobatics}) check. You can use an action to seize and stow the stone, ending its effect.",
@@ -7920,6 +8027,9 @@
 			"source": "DMG",
 			"page": 176,
 			"reqAttune": true,
+			"ability": {
+				"int": 2
+			},
 			"entries": [
 				"An {@italic Ioun stone} is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of {@italic Ioun stone} exist, each type a distinct combination of shape and color.",
 				"When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of {@dice 1d3} feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity ({@skill Acrobatics}) check. You can use an action to seize and stow the stone, ending its effect.",
@@ -7935,6 +8045,9 @@
 			"source": "DMG",
 			"page": 176,
 			"reqAttune": true,
+			"ability": {
+				"cha": 2
+			},
 			"entries": [
 				"An {@italic Ioun stone} is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of {@italic Ioun stone} exist, each type a distinct combination of shape and color.",
 				"When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of {@dice 1d3} feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity ({@skill Acrobatics}) check. You can use an action to seize and stow the stone, ending its effect.",
@@ -8012,6 +8125,9 @@
 			"source": "DMG",
 			"page": 176,
 			"reqAttune": true,
+			"ability": {
+				"str": 2
+			},
 			"entries": [
 				"An {@italic Ioun stone} is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of {@italic Ioun stone} exist, each type a distinct combination of shape and color.",
 				"When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of {@dice 1d3} feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity ({@skill Acrobatics}) check. You can use an action to seize and stow the stone, ending its effect.",
@@ -8077,8 +8193,8 @@
 						"Contents"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-11"
+						"col-1 text-align-center",
+						"col-11"
 					],
 					"rows": [
 						[
@@ -8473,8 +8589,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -8685,8 +8801,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -8992,6 +9108,9 @@
 			"rarity": "Very Rare",
 			"source": "DMG",
 			"page": 180,
+			"ability": {
+				"con": 2
+			},
 			"entries": [
 				"This book contains health and diet tips, and its words are charged with magic. If you spend 48 hours over a period of 6 days or fewer studying the book's contents and practicing its guidelines, your Constitution score increases by 2, as does your maximum for that score. The manual then loses its magic, but regains it in a century."
 			]
@@ -9030,6 +9149,9 @@
 			"rarity": "Very Rare",
 			"source": "DMG",
 			"page": 180,
+			"ability": {
+				"str": 2
+			},
 			"entries": [
 				"This book describes fitness exercises, and its words are charged with magic. If you spend 48 hours over a period of 6 days or fewer studying the book's contents and practicing its guidelines, your Strength score increases by 2, as does your maximum for that score. The manual then loses its magic, but regains it in a century."
 			]
@@ -9055,6 +9177,9 @@
 			"rarity": "Very Rare",
 			"source": "DMG",
 			"page": 181,
+			"ability": {
+				"dex": 2
+			},
 			"entries": [
 				"This book contains coordination and balance exercises, and its words are charged with magic. If you spend 48 hours over a period of 6 days or fewer studying the book's contents and practicing its guidelines, your Dexterity score increases by 2, as does your maximum for that score. The manual then loses its magic, but regains it in a century."
 			]
@@ -9170,8 +9295,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -9407,8 +9532,8 @@
 						"Property"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-11"
+						"col-1 text-align-center",
+						"col-11"
 					],
 					"rows": [
 						[
@@ -9457,7 +9582,7 @@
 						],
 						[
 							"00",
-							"The moonblade functions as a vorpal sword."
+							"The moonblade functions as a {@item vorpal sword}."
 						]
 					]
 				},
@@ -9587,8 +9712,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -9652,9 +9777,9 @@
 						"Spell"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-2",
-						"col-xs-9"
+						"col-1 text-align-center",
+						"col-2",
+						"col-9"
 					],
 					"rows": [
 						[
@@ -9670,7 +9795,7 @@
 						[
 							"13-16",
 							"Favor",
-							"{@spell greater restoration}"
+							"{@spell Greater restoration}"
 						],
 						[
 							"17-18",
@@ -9734,7 +9859,7 @@
 			"page": 183,
 			"entries": [
 				"Typically found in {@dice 1d4} pots inside a fine wooden box with a brush (weighing 1 pound in total), these pigments allow you to create three-dimensional objects by painting them in two dimensions. The paint flows from the brush to form the desired object as you concentrate on its image.",
-				"Each pot of paint is sufficient to cover 1,000 square feet of a surface, which lets you create inanimate objects or terrain features-such as a door, a pit, flowers, trees, cells, rooms, or weapons- that are up to 10,000 cubic feet. It takes 10 minutes to cover 100 square feet.",
+				"Each pot of paint is sufficient to cover 1,000 square feet of a surface, which lets you create inanimate objects or terrain features\u2014such as a door, a pit, flowers, trees, cells, rooms, or weapons\u2014that are up to 10,000 cubic feet. It takes 10 minutes to cover 100 square feet.",
 				"When you complete the painting, the object or terrain feature depicted becomes a real, nonmagical object. Thus, painting a door on a wall creates an actual door that can be opened to whatever is beyond. Painting a pit on a floor creates a real pit, and its depth counts against the total area of objects you create.",
 				"Nothing created by the pigments can have a value greater than 25 gp. If you paint an object of greater value (such as a diamond or a pile of gold), the object looks authentic, but close inspection reveals it is made from paste, bone, or some other worthless material.",
 				"If you paint a form of energy such as fire or lightning, the energy appears but dissipates as soon as you complete the painting, doing no harm to anything."
@@ -10206,8 +10331,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -10549,6 +10674,7 @@
 			"name": "Plate Armor of Etherealness",
 			"type": "HA",
 			"armor": true,
+			"baseItem": "plate armor|phb",
 			"weight": "65",
 			"ac": 18,
 			"strength": "15",
@@ -10622,7 +10748,8 @@
 				}
 			],
 			"entries": [
-				"A poisoner's kit includes the vials, chemicals, and other equipment necessary for the creation of poisons. Proficiency with this kit lets you add your proficiency bonus to any ability checks you make to craft or use poisons."
+				"A poisoner's kit includes the vials, chemicals, and other equipment necessary for the creation of poisons. Proficiency with this kit lets you add your proficiency bonus to any ability checks you make to craft or use poisons.",
+				"Additionally, the {@book Crafting and Harvesting Poison|dmg|8|Crafting and Harvesting Poison} rules require the use of a poisoner's kit."
 			],
 			"additionalEntries": [
 				"A poisoner's kit is a favored resource for thieves, assassins, and others who engage in skulduggery. It allows you to apply poisons and create them from various materials. Your knowledge of poisons also helps you treat them.",
@@ -10676,8 +10803,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -10832,6 +10959,11 @@
 			"rarity": "Very Rare",
 			"source": "DMG",
 			"page": 187,
+			"ability": {
+				"static": {
+					"str": 27
+				}
+			},
 			"entries": [
 				"When you drink this potion, your Strength score changes to 27 for 1 hour. The potion has no effect on you if your Strength is equal to or greater than that score.",
 				"This potion's transparent liquid has floating in it a sliver of fingernail from a {@creature cloud giant}."
@@ -10882,6 +11014,11 @@
 			"rarity": "Rare",
 			"source": "DMG",
 			"page": 187,
+			"ability": {
+				"static": {
+					"str": 25
+				}
+			},
 			"entries": [
 				"When you drink this potion, your Strength score changes to 25 for 1 hour. The potion has no effect on you if your Strength is equal to or greater than that score.",
 				"This potion's transparent liquid has floating in it a sliver of fingernail from a {@creature fire giant}."
@@ -10927,6 +11064,11 @@
 			"rarity": "Rare",
 			"source": "DMG",
 			"page": 187,
+			"ability": {
+				"static": {
+					"str": 23
+				}
+			},
 			"entries": [
 				"When you drink this potion, your Strength score changes to 23 for 1 hour. The potion has no effect on you if your Strength is equal to or greater than that score.",
 				"This potion's transparent liquid has floating in it a sliver of fingernail from a {@creature frost giant}."
@@ -11022,6 +11164,11 @@
 			"rarity": "Uncommon",
 			"source": "DMG",
 			"page": 187,
+			"ability": {
+				"static": {
+					"str": 21
+				}
+			},
 			"entries": [
 				"When you drink this potion, your Strength score changes to 21 for 1 hour. The potion has no effect on you if your Strength is equal to or greater than that score.",
 				"This potion's transparent liquid has floating in it a sliver of fingernail from a {@creature hill giant}."
@@ -11209,6 +11356,11 @@
 			"rarity": "Rare",
 			"source": "DMG",
 			"page": 187,
+			"ability": {
+				"static": {
+					"str": 23
+				}
+			},
 			"entries": [
 				"When you drink this potion, your Strength score changes to 23 for 1 hour. The potion has no effect on you if your Strength is equal to or greater than that score.",
 				"This potion's transparent liquid has floating in it a sliver of fingernail from a {@creature stone giant}."
@@ -11222,6 +11374,11 @@
 			"rarity": "Legendary",
 			"source": "DMG",
 			"page": 187,
+			"ability": {
+				"static": {
+					"str": 29
+				}
+			},
 			"entries": [
 				"When you drink this potion, your Strength score changes to 29 for 1 hour. The potion has no effect on you if your Strength is equal to or greater than that score.",
 				"This potion's transparent liquid has floating in it a sliver of fingernail from a {@creature storm giant}."
@@ -11337,8 +11494,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -12512,8 +12669,8 @@
 						"Patch"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-11"
+						"col-1 text-align-center",
+						"col-11"
 					],
 					"rows": [
 						[
@@ -12654,7 +12811,7 @@
 					"type": "entries",
 					"entries": [
 						"You can press one of the rod's six buttons as a bonus action. A button's effect lasts until you push a different button or until you push the same button again, which causes the rod to revert to its normal form.",
-						"If you press button 1, the rod becomes a flame tongue as a fiery blade sprouts from the end opposite the rod's flanged head.",
+						"If you press button 1, the rod becomes a flame tongue as a fiery blade sprouts from the end opposite the rod's flanged head (you choose the type of sword).",
 						"If you press button 2, the rod's flanged head folds down and two crescent-shaped blades spring out, transforming the rod into a magic battleaxe that grants a +3 bonus to attack and damage rolls made with it.",
 						"If you press button 3, the rod's flanged head folds down, a spear point springs from the rod's tip, and the rod's handle lengthens into a 6-foot haft, transforming the rod into a magic spear that grants a+3 bonus to attack and damage rolls made with it.",
 						"If you press button 4, the rod transforms into a climbing pole up to 50 feet long, as you specify. In surfaces as hard as granite, a spike at the bottom and three hooks at the top anchor the pole. Horizontal bars 3 inches long fold out from the sides, 1 foot apart, forming a ladder. The pole can bear up to 4,000 pounds. More weight or lack of solid anchoring causes the rod to revert to its normal form.",
@@ -12914,7 +13071,8 @@
 			"reqAttune": "by a Spellcaster",
 			"entries": [
 				"Etched with eldritch runes, this 1\u2014inch-diameter ruby allows you to use a simple or martial weapon as a spellcasting focus for your spells. For this property to work, you must attach the ruby to the weapon by pressing the ruby against it for at least 10 minutes. Thereafter, the ruby can't be removed unless you detach it as an action or the weapon is destroyed. Not even an {@spell antimagic field} causes it to fall off. The ruby does fall off the weapon if your attunement to the ruby ends."
-			]
+			],
+			"focus": true
 		},
 		{
 			"name": "Ryath Root",
@@ -13412,6 +13570,7 @@
 			"name": "Shield of Expression",
 			"ac": 2,
 			"type": "S",
+			"weight": "6",
 			"tier": "Minor",
 			"rarity": "Common",
 			"source": "XGE",
@@ -13752,8 +13911,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -14142,8 +14301,7 @@
 				"A spell scroll bears the words of a single spell, written as a mystical cipher. If the spell is on your class's spell list, you can read the scroll and cast its spell without having to provide any of the spell's components. Otherwise, the scroll is unintelligible. Casting the spell by reading the scroll requires the spell's normal casting time. Once the spell is cast, the words on the scroll fade, and it crumbles to dust. If the casting is interrupted, the scroll is not lost.",
 				"If the spell is on your class's spell list but of a higher level than you can normally cast, you must make an ability check using your spellcasting ability to determine whether you cast it successfully. The DC equals 10. On a failed check, the spell disappears from the scroll with no other effect.",
 				"Once the spell is cast, the words on the scroll fade, and the scroll itself crumbles to dust.",
-				"A spell cast from this scroll has a save DC of 13 and an attack bonus of {@hit 5}.",
-				"A wizard spell on a spell scroll can be copied just as spells in spellbooks can be copied. When a spell is copied from a spell scroll, the copier must succeed on an Intelligence ({@skill Arcana}) check with a DC equal to 10. If the check succeeds, the spell is successfully copied. Whether the check succeeds or fails, the spell scroll is destroyed."
+				"A spell cast from this scroll has a save DC of 13 and an attack bonus of {@hit 5}."
 			]
 		},
 		{
@@ -14213,8 +14371,8 @@
 						"Result"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-11"
+						"col-1 text-align-center",
+						"col-11"
 					],
 					"rows": [
 						[
@@ -14470,8 +14628,8 @@
 								"Effect"
 							],
 							"colStyles": [
-								"col-xs-3",
-								"col-xs-9"
+								"col-3",
+								"col-9"
 							],
 							"rows": [
 								[
@@ -14667,8 +14825,8 @@
 						"Damage"
 					],
 					"colStyles": [
-						"col-xs-3",
-						"col-xs-9"
+						"col-3",
+						"col-9"
 					],
 					"rows": [
 						[
@@ -15035,7 +15193,7 @@
 			"sentient": true,
 			"entries": [
 				"The Sunsword is a unique blade once possessed by Strahd's brother, Sergei von Zarovich. In its original form, it had a platinum hilt and guard, and a thin crystal blade as strong as steel.",
-				"Strahd employed a powerful wizard named Khazan to destroy the weapon after Sergei's death. The first part of the process required the hilt and the blade to be separated, which Khazan accomplished. While Khazan was busying himself destroying the blade, his apprentice stole the hilt and fled. Khazan later located his apprentice's mutilated corpse in the Svalich Woods, but the hilt was nowhere to be found. To avoid the {@creature vampire|mm|vampire's} wrath, Khazan told Strahd that the entire weapon had been destroyed.",
+				"Strahd employed a powerful wizard named Khazan to destroy the weapon after Sergei's death. The first part of the process required the hilt and the blade to be separated, which Khazan accomplished. While Khazan was busying himself destroying the blade, his apprentice stole the hilt and fled. Khazan later located his apprentice's mutilated corpse in the Svalich Woods, but the hilt was nowhere to be found. To avoid the vampire's wrath, Khazan told Strahd that the entire weapon had been destroyed.",
 				"The hilt, which is sentient, knows that it can never be reunited with its original crystal blade. It has, however, gained the properties of a {@item sun blade}.",
 				{
 					"name": "Sentience",
@@ -15540,8 +15698,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -15688,8 +15846,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -15726,6 +15884,9 @@
 			"rarity": "Very Rare",
 			"source": "DMG",
 			"page": 208,
+			"ability": {
+				"int": 2
+			},
 			"entries": [
 				"This book contains memory and logic exercises, and its words are charged with magic. If you spend 48 hours over a period of 6 days or fewer studying the book's contents and practicing its guidelines, your Intelligence score increases by 2, as does your maximum for that score. The manual then loses its magic, but regains it in a century."
 			]
@@ -15738,6 +15899,9 @@
 			"rarity": "Very Rare",
 			"source": "DMG",
 			"page": 208,
+			"ability": {
+				"cha": 2
+			},
 			"entries": [
 				"This book contains guidelines for influencing and charming others, and its words are charged with magic. If you spend 48 hours over a period of 6 days or fewer studying the book's contents and practicing its guidelines, your Charisma score increases by 2, as does your maximum for that score. The manual then loses its magic, but regains it in a century."
 			]
@@ -15767,6 +15931,9 @@
 				"If you can attune to this item, you can use it as a spellbook and an arcane focus. In addition, while holding the tome, you can use a bonus action to cast a spell you have written in this tome, without expending a spell slot or using any verbal or somatic component Once used, this property of the tome can't be used again until the next dawn.",
 				"While attuned to the book, you can remove the tongue from the book's cover. If you do so, all spells written in the book are permanently erased.",
 				"Vecna watches anyone using this tome. He can also write cryptic messages in the book. These messages appear at midnight and fade away after they are read."
+			],
+			"focus": [
+				"Wizard"
 			]
 		},
 		{
@@ -15777,6 +15944,9 @@
 			"rarity": "Very Rare",
 			"source": "DMG",
 			"page": 209,
+			"ability": {
+				"wis": 2
+			},
 			"entries": [
 				"This book contains intuition and insight exercises, and its words are charged with magic. If you spend 48 hours over a period of 6 days or fewer studying the book's contents and practicing its guidelines, your Wisdom score increases by 2, as does your maximum for that score. The manual then loses its magic, but regains it in a century."
 			]
@@ -15888,8 +16058,8 @@
 						"Trinket"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-11"
+						"col-1 text-align-center",
+						"col-11"
 					],
 					"rows": [
 						[
@@ -15986,7 +16156,7 @@
 						],
 						[
 							"47-48",
-							"A urn with the ashes of a dead relative"
+							"An urn with the ashes of a dead relative"
 						],
 						[
 							"49-50",
@@ -16014,7 +16184,7 @@
 						],
 						[
 							"61-62",
-							"An bouquet of funerary flowers that always looks and smells fresh"
+							"A bouquet of funerary flowers that always looks and smells fresh"
 						],
 						[
 							"63-64",
@@ -16112,8 +16282,8 @@
 						"Trinket"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-11"
+						"col-1 text-align-center",
+						"col-11"
 					],
 					"rows": [
 						[
@@ -16130,7 +16300,7 @@
 						],
 						[
 							"04",
-							"A glass cup that can only be filled half way no matter how much liquid is pored into it"
+							"A glass cup that can only be filled half way no matter how much liquid is poured into it"
 						],
 						[
 							"05",
@@ -16194,7 +16364,7 @@
 						],
 						[
 							"20",
-							"A unbreakable sealed jar of glowing water that hums when shaken"
+							"An unbreakable sealed jar of glowing water that hums when shaken"
 						],
 						[
 							"21",
@@ -16278,7 +16448,7 @@
 						],
 						[
 							"41",
-							"A amulet filled with liquid that churns, freezes, or boils to match it's wearer's mood"
+							"An amulet filled with liquid that churns, freezes, or boils to match it's wearer's mood"
 						],
 						[
 							"42",
@@ -16536,8 +16706,8 @@
 						"Trinket"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-11"
+						"col-1 text-align-center",
+						"col-11"
 					],
 					"rows": [
 						[
@@ -16754,7 +16924,7 @@
 						],
 						[
 							"54",
-							"A candle that cant be lit"
+							"A candle that can't be lit"
 						],
 						[
 							"55",
@@ -16934,7 +17104,7 @@
 						],
 						[
 							"99",
-							"A wooden box with a ceramic bottom that holds a living worm with a head on each end of it's body"
+							"A wooden box with a ceramic bottom that holds a living worm with a head on each end of its body"
 						],
 						[
 							"100",
@@ -17531,8 +17701,8 @@
 						"Effect"
 					],
 					"colStyles": [
-						"col-xs-1 text-align-center",
-						"col-xs-11"
+						"col-1 text-align-center",
+						"col-11"
 					],
 					"rows": [
 						[
@@ -17648,7 +17818,7 @@
 			"source": "UAWGE",
 			"page": 115,
 			"entries": [
-				"An wand sheath is designed to integrate with the forearm of a warforged. If you're a warforged, you can attach an wand sheath by attuning to it. While the wand sheath is attached, it cannot be removed from you against your will. You can spend one minute to end the attunement and remove the wand sheath.",
+				"A wand sheath is designed to integrate with the forearm of a warforged. If you're a warforged, you can attach a wand sheath by attuning to it. While the wand sheath is attached, it cannot be removed from you against your will. You can spend one minute to end the attunement and remove the wand sheath.",
 				"You can insert a wand into the sheath as an action. While the wand is sheathed, you gain the following benefits.",
 				{
 					"type": "list",
@@ -17743,7 +17913,7 @@
 					"type": "entries",
 					"entries": [
 						"When it grows restless, Wave has a habit of humming tunes that vary from sea chanteys to sacred hymns of the sea gods.",
-						"Wave zealously desires to convert mortals to the worship of one or more sea gods, or else to consign the faithless to death. Conflict arises if the wielder fails to further the weapon's objectives in the world. The trident has a nostalgic attachment to the place where it was forged, a desolate island called Thunderforge. A sea god imprisoned a family of storm giants there, and the giants forged Wave in an act of devotion to- or rebellion against-that god.",
+						"Wave zealously desires to convert mortals to the worship of one or more sea gods, or else to consign the faithless to death. Conflict arises if the wielder fails to further the weapon's objectives in the world. The trident has a nostalgic attachment to the place where it was forged, a desolate island called Thunderforge. A sea god imprisoned a family of storm giants there, and the giants forged Wave in an act of devotion to\u2014or rebellion against\u2014that god.",
 						"Wave harbors a secret doubt about its own nature and purpose. For all its devotion to the sea gods, Wave fears that it was intended to bring about a particular sea god's demise. This destiny is something Wave might not be able to avert."
 					]
 				}
@@ -17849,8 +18019,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -18111,7 +18281,8 @@
 			"dmgType": "P",
 			"property": [
 				"T",
-				"V"
+				"V",
+				"F"
 			],
 			"range": "20/60",
 			"rarity": "Legendary",
@@ -18252,8 +18423,8 @@
 						"DC"
 					],
 					"colStyles": [
-						"col-xs-10",
-						"col-xs-2 text-align-center"
+						"col-10",
+						"col-2 text-align-center"
 					],
 					"rows": [
 						[
@@ -18301,7 +18472,7 @@
 				"Built by dwarven gods and entrusted to the rulers of Shanatar, an ancient dwarven empire. The Wyrmskull Throne was a symbol of dwarven power and pride for ages untold. The throne hovers a foot off the ground and is a massive thing made of polished obsidian with oversized feet\u2014the impaled skulls of four ancient blue dragons. Runes glisten in the carved obsidian winking to life with blue energy when the throne's powers are activated.",
 				"After the fall of Shanatar, the Wyrmskull Throne fell into the clutches of less honorable creatures. A band of adventurers wrested the throne from the aquatic elf tyrant Gantar Kraok and sold it to the {@creature storm giant} Neri for a considerable fortune. Neri had the throne magically enlarged and gave it to her husband, King Hekaton, as a gift, along with one of the Ruling Scepters of Shanatar, which she had found in a wreck at the bottom of the Trackless Sea. Only a creature attuned to a Ruling Scepter and in possession of it can harness the powers of the Wyrmskull Throne, which has become the centerpiece of King Hekaton's throne room in the undersea citadel of Maelstrom. Fear of the throne's power has helped prevent evil giants from challenging or threatening Hekaton's leadership.",
 				"Any creature not attuned to a Ruling Scepter who sits on the throne is {@condition paralyzed} and encased in a magical force field. While encased, the creature can't be touched or moved from the throne. Touching a Ruling Scepter to the force field dispels the field, though the creature remains {@condition paralyzed} until it is separated from the throne.",
-				"Any creature seated on the throne can hear faint Whispers in Draconic- the whisperings of four blue dragons whose skulls adorn the throne. Although powerless, these spirits try to influence the decisions of the throne's master",
+				"Any creature seated on the throne can hear faint Whispers in Draconic\u2014the whisperings of four blue dragons whose skulls adorn the throne. Although powerless, these spirits try to influence the decisions of the throne's master",
 				{
 					"name": "Properties of the Throne",
 					"type": "entries",
@@ -18527,8 +18698,8 @@
 								"Effect"
 							],
 							"colStyles": [
-								"col-xs-3",
-								"col-xs-9"
+								"col-3",
+								"col-9"
 							],
 							"rows": [
 								[
@@ -18862,14 +19033,14 @@
 			]
 		},
 		{
-			"name": "Toal",
+			"name": "Taol",
 			"type": "$",
 			"rarity": "None",
 			"value": "2gp",
 			"source": "WDH",
 			"page": 169,
 			"entries": [
-				"Brass coin, about two inches square with a hold large enough for a {@item nib|wdh} to fit in (1 toal = 200 {@item nib|wdh|nibs})"
+				"Brass coin, about two inches square with a hold large enough for a {@item nib|wdh} to fit in (1 taol = 200 {@item nib|wdh|nibs})"
 			]
 		},
 		{
@@ -19263,6 +19434,1861 @@
 			"value": "25gp",
 			"source": "PSX",
 			"rarity": "None"
+		},
+		{
+			"name": "Dagger of Blindsight",
+			"type": "M",
+			"weaponCategory": "Simple",
+			"baseItem": "dagger|phb",
+			"weight": "1",
+			"dmg1": "{@dice 1d4}",
+			"dmgType": "P",
+			"property": [
+				"F",
+				"L",
+				"T"
+			],
+			"range": "20/60",
+			"rarity": "Rare",
+			"source": "WDMM",
+			"reqAttune": true,
+			"entries": [
+				"This rare magic item requires attunement. A creature attuned to it gains blindsight out to a range of 30 feet. The dagger has a saw-toothed edge and a black pearl nested in its pommel."
+			]
+		},
+		{
+			"name": "Horned Ring",
+			"type": "RG",
+			"rarity": "Very Rare",
+			"source": "WDMM",
+			"reqAttune": true,
+			"entries": [
+				"Allows an attuned wearer to ignore Undermountain's magical restrictions (see \"Alterations to Magic\")."
+			]
+		},
+		{
+			"name": "Professor Orb",
+			"wondrous": true,
+			"rarity": "Rare",
+			"source": "WDMM",
+			"entries": [
+				"Each professor orb takes the form of a smooth, solid, 5-pound sphere of smoky gray quartz about the size of a grapefruit. Close examination reveals two or more pinpricks of silver light deep inside the sphere.",
+				"A Professor Orb is sentient and has the personality of a scholar. Its alignment is determined by rolling on the alignment table in the \"{@book Sentient Magic Items|DMG|7|Sentient Magic Items}\" section in chapter 7 of the {@book Dungeon Master's Guide|dmg}. Regardless of its disposition, the orb has an Intelligence of 18, and Wisdom and Charisma scores determined by rolling 3d6 for each ability. The orb speaks, reads, and understands four languages, and can see and hear normally out to a range of 60 feet. Unlike most sentient items, the orb has no will of its own and can't initiate a conflict with the creature in possession of it.",
+				"A Professor Orb has extensive knowledge of four narrow academic subjects. When making an Intelligence check to recall lore from any of its areas of expertise, the orb has a +9 bonus to its roll (including its Intelligence modifier).",
+				"In addition to the knowledge it possesses, a professor orb can cast the {@spell mage hand} cantrip at will. It uses the spell only to transport itself. Its spellcasting ability is Intelligence."
+			],
+			"attachedSpells": [
+				"mage hand"
+			]
+		},
+		{
+			"name": "Horn of the Endless Maze",
+			"wondrous": true,
+			"weight": "2",
+			"rarity": "Rare",
+			"source": "WDMM",
+			"entries": [
+				"You can use an action to blow this horn. In response, {@dice 3d4+3} warrior spirits from the Abyss appear within 60 feet of you. They look like Minotaurs and use the statistics of a {@creature berserker}. They return to the Abyss after 1 hour or when they drop to 0 hit points. Once you use the horn, it can't be used again until 7 days have passed.",
+				"If you blow the horn without having proficiency with all simple weapons, the summoned {@creature berserker|MM|berserkers} attack you. If you meet the requirement, they are friendly to you and your companions and follow your commands."
+			]
+		},
+		{
+			"name": "Dodecahedron of Doom",
+			"wondrous": true,
+			"rarity": "Rare",
+			"source": "WDMM",
+			"entries": [
+				"This twelve-sided metal die is 12 inches across and bears the numbers 1 through 12 engraved on its pentagonal sides. The dodecahedron contains arcane clockwork mechanisms that whir and click whenever the die is cast.",
+				"The dodecahedron can be hurled up to 60 feet as an action. A random magical effect occurs when the die comes to rest after rolling across the ground for at least 10 feet. If an effect requires a target and no eligible target is within range, nothing happens. Spells cast by the dodecahedron require no components. Roll a {@dice d12} and consult the following table to determine the effect:",
+				{
+					"type": "table",
+					"caption": "",
+					"colLabels": [
+						"d12",
+						"effect"
+					],
+					"colStyles": [
+						"col-2 text-align-center",
+						"col-10"
+					],
+					"rows": [
+						[
+							"1\u20132",
+							"The dodecahedron explodes and is destroyed. Each creature within 20 feet of the exploding die must make a DC 13 Dexterity saving throw, taking 40 ({@dice 9d8}) force damage on a failed save, or half as much damage on a successful one."
+						],
+						[
+							"3\u20134",
+							"The dodecahedron casts {@spell light} on itself. The effect lasts until a creature touches the die."
+						],
+						[
+							"5\u20136",
+							"The dodecahedron casts {@spell ray of frost} (+5 to hit), targeting a random creature within 60 feet of it that doesn't have total cover against the attack."
+						],
+						[
+							"7\u20138",
+							"The dodecahedron casts {@spell shocking grasp} (+5 to hit) on the next creature that touches it."
+						],
+						[
+							"9\u201310",
+							"The dodecahedron casts {@spell darkness} on itself. The effect has a duration of 10 minutes."
+						],
+						[
+							"11\u201312",
+							"The next creature to touch the dodecahedron gains {@dice 1d10} temporary hit points that last for 1 hour."
+						]
+					]
+				}
+			],
+			"attachedSpells": [
+				"light",
+				"ray of frost",
+				"shocking grasp",
+				"darkness"
+			]
+		},
+		{
+			"name": "Orb of Gonging",
+			"wondrous": true,
+			"rarity": "Common",
+			"source": "WDMM",
+			"entries": [
+				"This common wondrous item is a hollow, 5-inch-diameter orb that weighs 5 pounds. Its outer shell is composed of notched bronze rings, which can be turned so that the notches line up. Aligning the notches requires an action, and doing so causes the orb to gong loudly until the notches are no longer aligned. The sounds are spaced 6 seconds apart and can be heard out to a range of 600 feet."
+			]
+		},
+		{
+			"name": "Black Crystal Tablet",
+			"wondrous": true,
+			"rarity": "Legendary",
+			"source": "WDMM",
+			"reqAttune": "by a creature that has proficiency in the Arcana skill",
+			"entries": [
+				"Any creature that attunes to the tablet must make a DC 20 Wisdom saving throw at the end of its next long rest. On a failed save, the creature becomes afflicted with a random form of long-term madness (see \"{@book Madness|dmg|8|Madness}\" in chapter 8 of the {@book Dungeon Master's Guide|dmg}).",
+				"As an action, a creature attuned to the Black Crystal Tablet can use it to cast {@spell eyebite} or {@spell gate} (the portal created by this spell links to the Far Realm only). After the tablet is used to cast a spell, it cannot be used again until the next dawn."
+			],
+			"attachedSpells": [
+				"eyebite",
+				"gate"
+			]
+		},
+		{
+			"name": "Helm of the Scavenger",
+			"wondrous": true,
+			"rarity": "Legendary",
+			"source": "WDMM",
+			"reqAttune": "by a spellcaster",
+			"entries": [
+				"This ornate chair is designed to propel and maneuver a ship through space.",
+				{
+					"type": "entries",
+					"name": "Passive Properties",
+					"entries": [
+						"The following properties of the helm come into play even when no creature is attuned to it:",
+						{
+							"type": "list",
+							"items": [
+								"When placed aboard a vessel weighing between 1 and 100 tons, the helm generates an envelope of fresh air around the ship while it is in the void of space (but not underwater). This envelope extends out from the edges of the hull in all directions for a distance equal in length to the vessel's beam, so that creatures aboard and near the ship can breathe normally in space. The temperature within the air envelope is 70 degrees Fahrenheit.",
+								"When placed aboard a vessel weighing between 1 and 100 tons, the helm generates an artificial gravity field while the ship is in the void of space, so that creatures can walk on the ship's decks as they normally would. Creatures and objects that fall overboard bob in a gravity plane that extends out from the main deck for a distance equal in length to the vessel's beam."
+							]
+						}
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Active Properties",
+					"entries": [
+						"The sensation of being attuned to the helm is akin to being immersed in warm water. While attuned to the helm, you gain the following abilities while you sit in it:",
+						{
+							"type": "list",
+							"items": [
+								"You can use the helm to propel the vessel across or through water and other liquids at a maximum speed in miles per hour equal to your highest-level unexpended spell slot.",
+								"You can use the helm to propel the vessel through air or space at a maximum speed in miles per hour equal to your highest-level unexpended spell slot × 10.",
+								"Provided you have at least one unexpended spell slot, you can steer the vessel, albeit in a somewhat clumsy fashion, in much the same way that oars or a rudder can maneuver a seafaring ship.",
+								"Whenever you like, you can see what's happening on and around the vessel as though you were standing in a location of your choice aboard it."
+							]
+						}
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Drawback",
+					"entries": [
+						"While attuned to the helm, you cannot expend your own spell slots."
+					]
+				}
+			]
+		},
+		{
+			"name": "Shield of the Uven Rune",
+			"ac": 2,
+			"type": "S",
+			"weight": "6",
+			"rarity": "Very Rare",
+			"source": "WDMM",
+			"reqAttune": true,
+			"entries": [
+				"This shield is made from the scale of an ancient white dragon. It has a rune burned into its outward-facing side. A character who examines the rune and succeeds on a DC 20 Intelligence ({@skill History}) check recognizes it as an uven (\"enemy\" in Giant) rune that confers great power.",
+				"While holding the shield, you benefit from the following properties.",
+				{
+					"type": "entries",
+					"name": "Winter's Friend",
+					"entries": [
+						"You are immune to cold damage."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Deadly Rebuke",
+					"entries": [
+						"Immediately after a creature hits you with a melee attack, you can use your reaction to deal {@dice 3d6} necrotic damage to that creature."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Bane",
+					"entries": [
+						"You can cast the {@spell bane} spell from the shield (save DC 17). The spell does not require concentration and lasts for 1 minute. Once you cast the spell from the shield, you can't do so again until you finish a short or long rest."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Gift of Vengeance",
+					"entries": [
+						"You can transfer the shield's magic to a nonmagical weapon by tracing the uven rune on the weapon with one finger. The transfer takes 8 hours of work that requires the two items to be within 5 feet of each other. At the end, the shield is destroyed, and the rune is etched or burned into the chosen weapon. This weapon becomes a rare magic item that requires attunement. It has the properties of a +1 weapon. The bonus increases to +3 when the weapon is used against one of the following creature types, chosen by you at the time of the magic weapon's creation: aberrations, celestials, constructs, dragons, elementals, fey, fiends, giants, or undead."
+					]
+				}
+			],
+			"attachedSpells": [
+				"bane"
+			]
+		},
+		{
+			"name": "Blast Scepter",
+			"type": "RD",
+			"scfType": "arcane",
+			"rarity": "Very Rare",
+			"source": "WDMM",
+			"reqAttune": true,
+			"entries": [
+				"The Blast Scepter can be used as an arcane focus.",
+				"Whoever is attuned to the Blast Scepter gains resistance to fire and lightning damage and can, as an action, use it to cast {@spell thunderwave} as a 4th-level spell (save DC 16) without expending a spell slot."
+			],
+			"attachedSpells": [
+				"thunderwave"
+			],
+			"focus": [
+				"Sorcerer",
+				"Warlock",
+				"Wizard"
+			]
+		},
+		{
+			"name": "Azorius Keyrune",
+			"wondrous": true,
+			"source": "GGR",
+			"page": 177,
+			"reqAttune": "by a member of the Azorius guild",
+			"rarity": "Rare",
+			"entries": [
+				"This keyrune is carved from white marble and lapis lazuli to resemble a noble bird of prey. It can become a {@creature giant eagle} for up to 1 hour. While the transformed eagle is within 1 mile of you, you can communicate with it telepathically. As an action, you can see through the eagle's eyes and hear what it hears until the start of your next turn, and you gain the benefit of its keen sight. During this time, you are deaf and blind with regard to your own senses.",
+				"When you use an action to speak the item's command word and place the keyrune on the ground in an unoccupied space within 5 feet of you, the keyrune transforms into a {@creature giant eagle}. If there isn't enough space for the eagle, the keyrune doesn't transform.",
+				"The creature is friendly to you, your companions, and other members of your guild (unless those guild members are hostile to you). It understands your languages and obeys your spoken commands. If you issue no commands, the eagle takes the {@action Dodge} action and moves to avoid danger.",
+				"At the end of the duration, the creature reverts to its keyrune form. It reverts early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature reverts to its keyrune form, it can't transform again until 36 hours have passed."
+			]
+		},
+		{
+			"name": "Boros Keyrune",
+			"wondrous": true,
+			"source": "GGR",
+			"page": 177,
+			"reqAttune": "by a member of the Boros guild",
+			"rarity": "Rare",
+			"entries": [
+				"Carved from red sandstone with white granite elements to resemble a member of the Boros Legion, this keyrune can become a {@creature veteran} (human) for up to 8 hours. In addition to fighting on your behalf, this {@creature veteran} cheerfully offers tactical advice, which is usually sound. Anyone who talks with the transformed keyrune or examines it closely can easily recognize that it is an artificial human.",
+				"When you use an action to speak the item's command word and place the keyrune on the ground in an unoccupied space within 5 feet of you, the keyrune transforms into a {@creature veteran} (human). If there isn't enough space for the {@creature veteran}, the keyrune doesn't transform.",
+				"The creature is friendly to you, your companions, and other members of your guild (unless those guild members are hostile to you). It understands your languages and obeys your spoken commands. If you issue no commands, the creature takes the {@action Dodge} action and moves to avoid danger.",
+				"At the end of the duration, the creature reverts to its keyrune form. It reverts early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature reverts to its keyrune form, it can't transform again until 36 hours have passed."
+			]
+		},
+		{
+			"name": "Dimir Keyrune",
+			"wondrous": true,
+			"source": "GGR",
+			"page": 177,
+			"reqAttune": "by a member of the Dimir guild",
+			"rarity": "Very Rare",
+			"entries": [
+				"This keyrune, carved from black stone accented with steel, resembles a stylized horror. On command, it transforms into an {@creature intellect devourer} that resembles the Dimir guild symbol, with six bladelike legs. The creature exists for up to 24 hours. During that time, it pursues only a single mission you give it\u2014usually an assignment to take over someone's body, either to impersonate that person for a brief time or to extract secrets from their mind. When the mission is complete, the creature returns to you, reports its success, and reverts to its keyrune form.",
+				"When you use an action to speak the item's command word and place the keyrune on the ground in an unoccupied space within 5 feet of you, the keyrune transforms into a {@creature intellect devourer}. If there isn't enough space for the creature, the keyrune doesn't transform.",
+				"The creature is friendly to you, your companions, and other members of your guild (unless those guild members are hostile to you). It understands your languages and obeys your spoken commands. If you issue no commands, the creature takes the {@action Dodge} action and moves to avoid danger.",
+				"At the end of the duration, the creature reverts to its keyrune form. It reverts early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature reverts to its keyrune form, it can't transform again until 36 hours have passed."
+			]
+		},
+		{
+			"name": "Golgari Keyrune",
+			"wondrous": true,
+			"source": "GGR",
+			"page": 177,
+			"reqAttune": "by a member of the Golgari guild",
+			"rarity": "Very Rare",
+			"entries": [
+				"Made from deep green jade with black veins, this keyrune has an insectile shape. It can transform into a {@creature giant scorpion} for up to 6 hours. The scorpion has an Intelligence of 4 and can communicate with you telepathically while it is within 60 feet of you, though its messages are largely limited to describing the passage of potential prey.",
+				"When you use an action to speak the item's command word and place the keyrune on the ground in an unoccupied space within 5 feet of you, the keyrune transforms into a {@creature giant scorpion}. If there isn't enough space for the creature, the keyrune doesn't transform.",
+				"The creature is friendly to you, your companions, and other members of your guild (unless those guild members are hostile to you). It understands your languages and obeys your spoken commands. If you issue no commands, the creature takes the {@action Dodge} action and moves to avoid danger.",
+				"At the end of the duration, the creature reverts to its keyrune form. It reverts early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature reverts to its keyrune form, it can't transform again until 36 hours have passed."
+			]
+		},
+		{
+			"name": "Gruul Keyrune",
+			"wondrous": true,
+			"source": "GGR",
+			"page": 177,
+			"reqAttune": "by a member of the Gruul guild",
+			"rarity": "Rare",
+			"entries": [
+				"This crude keyrune is cobbled together from bits of rubble, broken glass, bone, and animal hair. One end resembles a horned beast. On command, the keyrune transforms into a ceratok, a horned creature much like a {@creature rhinoceros} (and with the same statistics). It remains in its ceratok form for 1 hour.",
+				"When you use an action to speak the item's command word and place the keyrune on the ground in an unoccupied space within 5 feet of you, the keyrune transforms into a ceratok. If there isn't enough space for the creature, the keyrune doesn't transform.",
+				"The creature is friendly to you, your companions, and other members of your guild (unless those guild members are hostile to you). It understands your languages and obeys your spoken commands. If you issue no commands, the creature takes the {@action Dodge} action and moves to avoid danger.",
+				"At the end of the duration, the creature reverts to its keyrune form. It reverts early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature reverts to its keyrune form, it can't transform again until 36 hours have passed."
+			]
+		},
+		{
+			"name": "Izzet Keyrune",
+			"wondrous": true,
+			"source": "GGR",
+			"page": 177,
+			"reqAttune": "by a member of the Izzet guild",
+			"rarity": "Rare",
+			"entries": [
+				"Formed of carved and polished red and blue stone, the keyrune includes bits of cable and wire. One end resembles a humanlike head, suggesting the jagged elemental form of the {@creature galvanice weird|GGR} that it can become for a duration of 3 hours. In this form, it will serve you as a bodyguard, lift and carry things for you, act as a test subject for your experiments, or aid you in any other way that its capabilities allow.",
+				"When you use an action to speak the item's command word and place the keyrune on the ground in an unoccupied space within 5 feet of you, the keyrune transforms into a {@creature galvanice weird|GGR}. If there isn't enough space for the creature, the keyrune doesn't transform.",
+				"The creature is friendly to you, your companions, and other members of your guild (unless those guild members are hostile to you). It understands your languages and obeys your spoken commands. If you issue no commands, the creature takes the {@action Dodge} action and moves to avoid danger.",
+				"At the end of the duration, the creature reverts to its keyrune form. It reverts early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature reverts to its keyrune form, it can't transform again until 36 hours have passed."
+			]
+		},
+		{
+			"name": "Orzhov Keyrune",
+			"wondrous": true,
+			"source": "GGR",
+			"page": 178,
+			"reqAttune": "by a member of the Orzhov guild",
+			"rarity": "Rare",
+			"entries": [
+				"This keyrune is carved from white marble with veins of black. The end is shaped like a thrull's head, with a gold faceplate affixed. On command, the keyrune transforms into a {@creature winged thrull|GGR} for up to 2 hours. If you don't come from an Orzhov oligarch family, it serves you grudgingly, clownishly aping your movements and mannerisms while carrying out your orders.",
+				"When you use an action to speak the item's command word and place the keyrune on the ground in an unoccupied space within 5 feet of you, the keyrune transforms into a {@creature winged thrull|GGR}. If there isn't enough space for the creature, the keyrune doesn't transform.",
+				"The creature is friendly to you, your companions, and other members of your guild (unless those guild members are hostile to you). It understands your languages and obeys your spoken commands. If you issue no commands, the creature takes the {@action Dodge} action and moves to avoid danger.",
+				"At the end of the duration, the creature reverts to its keyrune form. It reverts early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature reverts to its keyrune form, it can't transform again until 36 hours have passed."
+			]
+		},
+		{
+			"name": "Rakdos Keyrune",
+			"wondrous": true,
+			"source": "GGR",
+			"page": 178,
+			"reqAttune": "by a member of the Rakdos guild",
+			"rarity": "Uncommon",
+			"entries": [
+				"This dark granite keyrune is marbled with scarlet veins and carved with the leering visage of a mischievous demon. When activated, it transforms into a {@creature cackler|GGR} for up to 1 hour.",
+				"When you use an action to speak the item's command word and place the keyrune on the ground in an unoccupied space within 5 feet of you, the keyrune transforms into a {@creature cackler|GGR}. If there isn't enough space for the creature, the keyrune doesn't transform.",
+				"The creature is friendly to you, your companions, and other members of your guild (unless those guild members are hostile to you). It understands your languages and obeys your spoken commands. If you issue no commands, the creature takes the {@action Dodge} action and moves to avoid danger.",
+				"At the end of the duration, the creature reverts to its keyrune form. It reverts early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature reverts to its keyrune form, it can't transform again until 36 hours have passed."
+			]
+		},
+		{
+			"name": "Selesnya Keyrune",
+			"wondrous": true,
+			"source": "GGR",
+			"page": 178,
+			"reqAttune": "by a member of the Selesnya guild",
+			"rarity": "Rare",
+			"entries": [
+				"Carved from white and green marble in the shape of a wolf's head, this keyrune transforms into a {@creature dire wolf}. The wolf persists for 8 hours. Its Intelligence is 6, and it understands Elvish and Sylvan but can't speak those languages. While it is within 1 mile of you, you can communicate with each other telepathically.",
+				"When you use an action to speak the item's command word and place the keyrune on the ground in an unoccupied space within 5 feet of you, the keyrune transforms into a {@creature dire wolf}. If there isn't enough space for the creature, the keyrune doesn't transform.",
+				"The creature is friendly to you, your companions, and other members of your guild (unless those guild members are hostile to you). It understands your languages and obeys your spoken commands. If you issue no commands, the creature takes the {@action Dodge} action and moves to avoid danger.",
+				"At the end of the duration, the creature reverts to its keyrune form. It reverts early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature reverts to its keyrune form, it can't transform again until 36 hours have passed."
+			]
+		},
+		{
+			"name": "Simic Keyrune",
+			"wondrous": true,
+			"source": "GGR",
+			"page": 178,
+			"reqAttune": "by a member of the Simic guild",
+			"rarity": "Uncommon",
+			"entries": [
+				"This keyrune is assembled from coral, mother-of-pearl, and chrome and adorned with the spirals and curves characteristic of Simic ornamentation. The head resembles the shell of a sea creature. On command, the keyrune turns into a {@creature category 2 krasis|GGR} that has the Grabber and Stabilizing Legs adaptations. The transformation lasts for up to 5 hours.",
+				"When you use an action to speak the item's command word and place the keyrune on the ground in an unoccupied space within 5 feet of you, the keyrune transforms into a {@creature category 2 krasis|GGR} that has the Grabber and Stabilizing Legs adaptations. If there isn't enough space for the creature, the keyrune doesn't transform.",
+				"The creature is friendly to you, your companions, and other members of your guild (unless those guild members are hostile to you). It understands your languages and obeys your spoken commands. If you issue no commands, the creature takes the {@action Dodge} action and moves to avoid danger.",
+				"At the end of the duration, the creature reverts to its keyrune form. It reverts early if it drops to 0 hit points or if you use an action to speak the command word again while touching it. When the creature reverts to its keyrune form, it can't transform again until 36 hours have passed."
+			]
+		},
+		{
+			"name": "Azorius Guild Signet",
+			"type": "RG",
+			"source": "GGR",
+			"page": 178,
+			"reqAttune": true,
+			"rarity": "Uncommon",
+			"entries": [
+				"This ring, adorned with the symbol of Azorius, allows you to cast {@spell ensnaring strike}. A guild signet is sometimes awarded to a guild member whose renown score in that guild is 5 or higher, as a reward for performing special services for the guild. Aside from its magical properties, the ring is also an indicator of Azorius's recognition and favor.",
+				"A signet has 3 charges, and it regains 1d3 expended charges daily at dawn. While wearing it, you can expend 1 charge to cast the associated spell (save DC 13)."
+			],
+			"charges": 3,
+			"attachedSpells": [
+				"ensnaring strike"
+			]
+		},
+		{
+			"name": "Boros Guild Signet",
+			"type": "RG",
+			"source": "GGR",
+			"page": 178,
+			"reqAttune": true,
+			"rarity": "Uncommon",
+			"entries": [
+				"This ring, adorned with the symbol of Boros, allows you to cast {@spell heroism}. A guild signet is sometimes awarded to a guild member whose renown score in that guild is 5 or higher, as a reward for performing special services for the guild. Aside from its magical properties, the ring is also an indicator of Boros' recognition and favor.",
+				"A signet has 3 charges, and it regains 1d3 expended charges daily at dawn. While wearing it, you can expend 1 charge to cast the associated spell (save DC 13)."
+			],
+			"charges": 3,
+			"attachedSpells": [
+				"heroism"
+			]
+		},
+		{
+			"name": "Dimir Guild Signet",
+			"type": "RG",
+			"source": "GGR",
+			"page": 178,
+			"reqAttune": true,
+			"rarity": "Uncommon",
+			"entries": [
+				"This ring, adorned with the symbol of Dimir, allows you to cast {@spell disguise self}. A guild signet is sometimes awarded to a guild member whose renown score in that guild is 5 or higher, as a reward for performing special services for the guild. Aside from its magical properties, the ring is also an indicator of Dimir's recognition and favor.",
+				"A signet has 3 charges, and it regains 1d3 expended charges daily at dawn. While wearing it, you can expend 1 charge to cast the associated spell (save DC 13)."
+			],
+			"charges": 3,
+			"attachedSpells": [
+				"disguise self"
+			]
+		},
+		{
+			"name": "Golgari Guild Signet",
+			"type": "RG",
+			"source": "GGR",
+			"page": 178,
+			"reqAttune": true,
+			"rarity": "Uncommon",
+			"entries": [
+				"This ring, adorned with the symbol of Golgari, allows you to cast {@spell entangle}. A guild signet is sometimes awarded to a guild member whose renown score in that guild is 5 or higher, as a reward for performing special services for the guild. Aside from its magical properties, the ring is also an indicator of Golgari's recognition and favor.",
+				"A signet has 3 charges, and it regains 1d3 expended charges daily at dawn. While wearing it, you can expend 1 charge to cast the associated spell (save DC 13)."
+			],
+			"charges": 3,
+			"attachedSpells": [
+				"entangle"
+			]
+		},
+		{
+			"name": "Gruul Guild Signet",
+			"type": "RG",
+			"source": "GGR",
+			"page": 178,
+			"reqAttune": true,
+			"rarity": "Uncommon",
+			"entries": [
+				"This ring, adorned with the symbol of Gruul, allows you to cast {@spell compelled duel}. A guild signet is sometimes awarded to a guild member whose renown score in that guild is 5 or higher, as a reward for performing special services for the guild. Aside from its magical properties, the ring is also an indicator of Gruul's recognition and favor.",
+				"A signet has 3 charges, and it regains 1d3 expended charges daily at dawn. While wearing it, you can expend 1 charge to cast the associated spell (save DC 13)."
+			],
+			"charges": 3,
+			"attachedSpells": [
+				"compelled duel"
+			]
+		},
+		{
+			"name": "Izzet Guild Signet",
+			"type": "RG",
+			"source": "GGR",
+			"page": 178,
+			"reqAttune": true,
+			"rarity": "Uncommon",
+			"entries": [
+				"This ring, adorned with the symbol of Izzet, allows you to cast {@spell chaos bolt|XGE}. A guild signet is sometimes awarded to a guild member whose renown score in that guild is 5 or higher, as a reward for performing special services for the guild. Aside from its magical properties, the ring is also an indicator of Izzet's recognition and favor.",
+				"A signet has 3 charges, and it regains 1d3 expended charges daily at dawn. While wearing it, you can expend 1 charge to cast the associated spell (save DC 13)."
+			],
+			"charges": 3,
+			"attachedSpells": [
+				"chaos bolt|XGE"
+			]
+		},
+		{
+			"name": "Orzhov Guild Signet",
+			"type": "RG",
+			"source": "GGR",
+			"page": 178,
+			"reqAttune": true,
+			"rarity": "Uncommon",
+			"entries": [
+				"This ring, adorned with the symbol of Orzhov, allows you to cast {@spell command}. A guild signet is sometimes awarded to a guild member whose renown score in that guild is 5 or higher, as a reward for performing special services for the guild. Aside from its magical properties, the ring is also an indicator of Orzhov's recognition and favor.",
+				"A signet has 3 charges, and it regains 1d3 expended charges daily at dawn. While wearing it, you can expend 1 charge to cast the associated spell (save DC 13)."
+			],
+			"charges": 3,
+			"attachedSpells": [
+				"command"
+			]
+		},
+		{
+			"name": "Rakdos Guild Signet",
+			"type": "RG",
+			"source": "GGR",
+			"page": 178,
+			"reqAttune": true,
+			"rarity": "Uncommon",
+			"entries": [
+				"This ring, adorned with the symbol of Rakdos, allows you to cast {@spell hellish rebuke}. A guild signet is sometimes awarded to a guild member whose renown score in that guild is 5 or higher, as a reward for performing special services for the guild. Aside from its magical properties, the ring is also an indicator of Rakdos' recognition and favor.",
+				"A signet has 3 charges, and it regains 1d3 expended charges daily at dawn. While wearing it, you can expend 1 charge to cast the associated spell (save DC 13)."
+			],
+			"charges": 3,
+			"attachedSpells": [
+				"hellish rebuke"
+			]
+		},
+		{
+			"name": "Selesnya Guild Signet",
+			"type": "RG",
+			"source": "GGR",
+			"page": 178,
+			"reqAttune": true,
+			"rarity": "Uncommon",
+			"entries": [
+				"This ring, adorned with the symbol of Selesnya, allows you to cast {@spell charm person}. A guild signet is sometimes awarded to a guild member whose renown score in that guild is 5 or higher, as a reward for performing special services for the guild. Aside from its magical properties, the ring is also an indicator of Selesnya's recognition and favor.",
+				"A signet has 3 charges, and it regains 1d3 expended charges daily at dawn. While wearing it, you can expend 1 charge to cast the associated spell (save DC 13)."
+			],
+			"charges": 3,
+			"attachedSpells": [
+				"charm person"
+			]
+		},
+		{
+			"name": "Simic Guild Signet",
+			"type": "RG",
+			"source": "GGR",
+			"page": 178,
+			"reqAttune": true,
+			"rarity": "Uncommon",
+			"entries": [
+				"This ring, adorned with the symbol of Simic, allows you to cast {@spell expeditious retreat}. A guild signet is sometimes awarded to a guild member whose renown score in that guild is 5 or higher, as a reward for performing special services for the guild. Aside from its magical properties, the ring is also an indicator of Simic's recognition and favor.",
+				"A signet has 3 charges, and it regains 1d3 expended charges daily at dawn. While wearing it, you can expend 1 charge to cast the associated spell (save DC 13)."
+			],
+			"charges": 3,
+			"attachedSpells": [
+				"expeditious retreat"
+			]
+		},
+		{
+			"name": "Illusionist's Bracers",
+			"wondrous": true,
+			"source": "GGR",
+			"page": 178,
+			"reqAttune": "by a spellcaster",
+			"rarity": "Very Rare",
+			"entries": [
+				"A powerful illusionist of House Dimir originally developed these bracers, which enabled her to create multiple minor illusions at once. The bracers' power, though, extends far beyond illusions.",
+				"While wearing the bracers, whenever you cast a cantrip, you can use a bonus action on the same turn to cast that cantrip a second time."
+			]
+		},
+		{
+			"name": "Mizzium Apparatus",
+			"wondrous": true,
+			"source": "GGR",
+			"page": 179,
+			"reqAttune": "by a sorcerer, warlock, or wizard",
+			"rarity": "Uncommon",
+			"entries": [
+				"Innovation is a dangerous pursuit, at least the way the mages of the Izzet League engage in it. As protection against the risk of an experiment going awry, they have developed a device to help channel and control their magic. This apparatus is a collection of leather straps, flexible tubing, glass cylinders, and plates, bracers, and fittings made from a magic-infused metal alloy called mizzium, all assembled into a harness. The item weighs 8 pounds.",
+				"While you are wearing the mizzium apparatus, you can use it as an arcane focus. In addition, you can attempt to cast a spell that you do not know or have prepared. The spell you choose must be on your class's spell list and of a level for which you have a spell slot, and you must provide the spell's components.",
+				"You expend a spell slot to cast the spell as normal, but before resolving it you must make an Intelligence (Arcana) check. The DC is 10 + twice the level of the spell slot you expend to cast the spell.",
+				"On a successful check, you cast the spell as normal, using your spell save DC and spellcasting ability modifier. On a failed check, you cast a different spell from the one you intended. Randomly determine the spell you cast by rolling on the table for the level of the spell slot you expended. If the slot is 6th level or higher, roll on the table for 5th-level spells.",
+				"If you try to cast a cantrip you don't know, the DC for the Intelligence ({@skill Arcana}) check is 10, and on a failed check, there is no effect.",
+				{
+					"type": "table",
+					"caption": "1st-Level Spells",
+					"colLabels": [
+						"d6",
+						"spell"
+					],
+					"colStyles": [
+						"col-2 text-align-center",
+						"col-10"
+					],
+					"rows": [
+						[
+							"1",
+							"{@spell burning hands}"
+						],
+						[
+							"2",
+							"{@spell chaos bolt|XGE}"
+						],
+						[
+							"3",
+							"{@spell color spray}"
+						],
+						[
+							"4",
+							"{@spell faerie fire}"
+						],
+						[
+							"5",
+							"{@spell fog cloud}"
+						],
+						[
+							"6",
+							"{@spell thunderwave}"
+						]
+					]
+				},
+				{
+					"type": "table",
+					"caption": "2nd-Level Spells",
+					"colLabels": [
+						"d6",
+						"spell"
+					],
+					"colStyles": [
+						"col-2 text-align-center",
+						"col-10"
+					],
+					"rows": [
+						[
+							"1",
+							"{@spell blur}"
+						],
+						[
+							"2",
+							"{@spell gust of wind}"
+						],
+						[
+							"3",
+							"{@spell heat metal}"
+						],
+						[
+							"4",
+							"{@spell Melf's acid arrow}"
+						],
+						[
+							"5",
+							"{@spell scorching ray}"
+						],
+						[
+							"6",
+							"{@spell shatter}"
+						]
+					]
+				},
+				{
+					"type": "table",
+					"caption": "3rd-Level Spells",
+					"colLabels": [
+						"d6",
+						"spell"
+					],
+					"colStyles": [
+						"col-2 text-align-center",
+						"col-10"
+					],
+					"rows": [
+						[
+							"1",
+							"{@spell fear}"
+						],
+						[
+							"2",
+							"{@spell feign death}"
+						],
+						[
+							"3",
+							"{@spell fireball}"
+						],
+						[
+							"4",
+							"{@spell gaseous form}"
+						],
+						[
+							"5",
+							"{@spell sleet storm}"
+						],
+						[
+							"6",
+							"{@spell stinking cloud}"
+						]
+					]
+				},
+				{
+					"type": "table",
+					"caption": "4th-Level Spells",
+					"colLabels": [
+						"d4",
+						"spell"
+					],
+					"colStyles": [
+						"col-2 text-align-center",
+						"col-10"
+					],
+					"rows": [
+						[
+							"1",
+							"{@spell confusion}"
+						],
+						[
+							"2",
+							"{@spell conjure minor elementals}"
+						],
+						[
+							"3",
+							"{@spell Evard's black tentacles}"
+						],
+						[
+							"4",
+							"{@spell ice storm}"
+						]
+					]
+				},
+				{
+					"type": "table",
+					"caption": "5th-Level Spells",
+					"colLabels": [
+						"d4",
+						"spell"
+					],
+					"colStyles": [
+						"col-2 text-align-center",
+						"col-10"
+					],
+					"rows": [
+						[
+							"1",
+							"{@spell animate objects}"
+						],
+						[
+							"2",
+							"{@spell cloudkill}"
+						],
+						[
+							"3",
+							"{@spell cone of cold}"
+						],
+						[
+							"4",
+							"{@spell flame strike}"
+						]
+					]
+				}
+			],
+			"focus": [
+				"Sorcerer",
+				"Warlock",
+				"Wizard"
+			]
+		},
+		{
+			"name": "Mizzium Mortar",
+			"wondrous": true,
+			"source": "GGR",
+			"page": 179,
+			"rarity": "Rare",
+			"entries": [
+				"This short tube, about 2 feet long and 6 inches in diameter, is made from mizzium, a magically enhanced metal alloy forged by the Izzet League. The end that's pointed toward a target is open, and a glowing ball of molten metal can be seen at the other end as long as the mortar has at least 1 charge remaining.",
+				"The mortar has 4 charges for the following properties. It regains {@dice 1d4} expended charges daily at dawn.",
+				{
+					"type": "entries",
+					"name": "Molten Spray",
+					"entries": [
+						"You can expend 1 charge as an action to loose a 30-foot cone of molten mizzium. Each creature in the area must make a DC 15 Dexterity saving throw, taking {@dice 5d4} fire damage on a failed save, or half as much damage on a successful one."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Mizzium Bombard",
+					"entries": [
+						"You can expend 3 charges as an action to launch a hail of molten projectiles in a 20-foot-radius, 40-foot-high cylinder centered on a point you can see within 60 feet of you. Each creature in the area must make a DC 15 Dexterity saving throw. A creature takes {@dice 5d8} fire damage on a failed save, or half as much damage on a successful one."
+					]
+				}
+			],
+			"charges": 4
+		},
+		{
+			"name": "Moodmark Paint",
+			"wondrous": true,
+			"source": "GGR",
+			"page": 180,
+			"rarity": "Common",
+			"entries": [
+				"This thick, black paint is stored in a small jar, containing enough paint to apply moodmarks to one creature. The paint is dabbed on the face in spots or markings that often resemble the eyes of insects or spiders. Applying the paint in this way takes 1 minute.",
+				"For the next 8 hours, the marks change to reflect your mental state. A creature that can see you and makes a successful DC 10 Wisdom ({@skill Insight}) check can discern whether you are happy, sad, angry, disgusted, surprised, or afraid, as well as the main source of that emotion. For example, you might communicate fear caused by a monster you just saw around the corner, grief at the loss of a friend, or happiness derived from pride in your performance in combat. A dark elf has advantage on this check."
+			]
+		},
+		{
+			"name": "Pariah's Shield",
+			"ac": 2,
+			"type": "S",
+			"weight": "6",
+			"rarity": "Rare",
+			"source": "GGR",
+			"page": 180,
+			"reqAttune": true,
+			"entries": [
+				"Soldiers of the Boros Legion consider it an honor to bear this shield, even knowing that it might be the last honor they receive. The front of the shield is sculpted to depict a grieving human face.",
+				"You gain a +1 bonus to AC for every two allies within 5 feet of you (up to a maximum of +3) while you wield this shield. This bonus is in addition to the shield's normal bonus to AC.",
+				"When a creature you can see within 5 feet of you takes damage, you can use your reaction to take that damage, instead of the creature taking it. When you do so, the damage type changes to force."
+			]
+		},
+		{
+			"name": "Peregrine Mask",
+			"wondrous": true,
+			"rarity": "Very Rare",
+			"source": "GGR",
+			"page": 180,
+			"reqAttune": true,
+			"entries": [
+				"While wearing this winged helm, you have a flying speed of 60 feet. In addition, you have advantage on initiative rolls."
+			]
+		},
+		{
+			"name": "Pyroconverger",
+			"wondrous": true,
+			"rarity": "Uncommon",
+			"source": "GGR",
+			"page": 180,
+			"reqAttune": true,
+			"entries": [
+				"A Pyroconverger is an Izzet-made flamethrower. It carries a risk of malfunction each time you use it.",
+				"As an action, you can cause the Pyroconverger to project fire in a 10-foot cone. Each creature in that area must make a DC 13 Dexterity saving throw, taking {@dice 4d6} fire damage on a failed save, or half as much damage on a successful one.",
+				"Each time you use the Pyroconverger, roll a {@dice d10} and add the number of times you have used it since your last long rest. If the total is 11 or higher, the Pyroconverger malfunctions: you take {@dice 4d6} fire damage, and you can't use the Pyroconverger again until you finish a long rest."
+			]
+		},
+		{
+			"name": "Rakdos Riteknife",
+			"type": "M",
+			"weaponCategory": "Simple",
+			"baseItem": "dagger|phb",
+			"weight": "1",
+			"dmg1": "{@dice 1d4}",
+			"dmgType": "P",
+			"property": [
+				"F",
+				"L",
+				"T"
+			],
+			"range": "20/60",
+			"rarity": "Legendary",
+			"source": "GGR",
+			"page": 180,
+			"reqAttune": true,
+			"entries": [
+				"You gain a +1 bonus to attack and damage rolls made with this magic weapon. Its blade is cruelly serrated, and its hilt resembles a demonic head and wings. Whenever you slay a creature with an attack using the dagger, the creature's soul is imprisoned inside the dagger, and that creature can be restored to life only by a {@spell wish} spell. The dagger can hold a maximum of five souls.",
+				"For each soul imprisoned in the dagger, your attacks with it deal an extra {@dice 1d4} necrotic damage on a hit. While the dagger is within 5 feet of you, your dreams are haunted by whispers from the trapped souls.",
+				"The dagger has the following additional properties.",
+				{
+					"type": "entries",
+					"name": "Siphon Vitality",
+					"entries": [
+						"As a bonus action, you can release any number of stored souls from the dagger to regain {@dice 1d10} hit points per soul released."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Annihilation",
+					"entries": [
+						"If the dagger holds five souls, you can use this property: As a reaction immediately after you hit a creature with the dagger and deal damage to that target, you can release all five souls. If the target now has fewer than 75 hit points, it must succeed on a DC 15 Constitution saving throw or die. If the target dies, you can't use this property again until you finish a long rest."
+					]
+				}
+			]
+		},
+		{
+			"name": "Skyblinder Staff",
+			"technology": "Staff",
+			"weight": "4",
+			"rarity": "Uncommon",
+			"source": "GGR",
+			"page": 181,
+			"reqAttune": true,
+			"entries": [
+				"You gain a +1 bonus to attack and damage rolls made with this magic quarterstaff. While holding it, you gain a +1 bonus to spell attack rolls.",
+				"If a flying creature you can see within 30 feet of you makes an attack roll against you, you can use your reaction to hold the staff aloft and cause it to flare with light. The attacker has disadvantage on the attack roll, and it must succeed on a DC 15 Constitution saving throw or be {@condition blinded} until the start of its next turn."
+			]
+		},
+		{
+			"name": "Spies' Murmur",
+			"wondrous": true,
+			"rarity": "Uncommon",
+			"source": "GGR",
+			"page": 181,
+			"reqAttune": true,
+			"entries": [
+				"This headpiece, crafted from dark metal, is worn curved around the ear. If you know a creature wearing another Spies' Murmur and that creature is within 1 mile of you, you can communicate telepathically with each other. As a bonus action, you can allow that creature to hear everything you hear for 1 hour. You can end this effect as a bonus action, and it ends if you're {@condition incapacitated}."
+			]
+		},
+		{
+			"name": "Sunforger",
+			"type": "M",
+			"weaponCategory": "Martial",
+			"baseItem": "warhammer|phb",
+			"weight": "2",
+			"dmg1": "{@dice 1d8}",
+			"dmg2": "{@dice 1d10}",
+			"dmgType": "B",
+			"property": [
+				"T",
+				"V"
+			],
+			"range": "20/60",
+			"rarity": "Rare",
+			"source": "GGR",
+			"page": 181,
+			"reqAttune": true,
+			"entries": [
+				"You gain a +2 bonus to attack and damage rolls made with this magic weapon.",
+				"As an action, you can hurl the weapon up to 120 feet to a point you can see. When it reaches that point, the weapon vanishes in an explosion, and each creature in a 20-foot-radius sphere centered on that point must make a DC 15 Dexterity saving throw, taking {@dice 6d6} fire damage on a failed save, or half as much damage on a successful one. Afterward, you can use an action to cause the weapon to reappear in your empty hand. You can't cause it to explode again until you finish a short or long rest.",
+				"If you don't call the weapon back to your hand, it reappears at the point where it exploded when you are no longer attuned to it or when 24 hours have passed."
+			]
+		},
+		{
+			"name": "Sword of the Paruns",
+			"type": "M",
+			"weaponCategory": "Martial",
+			"baseItem": "longsword|phb",
+			"weight": "3",
+			"dmg1": "{@dice 1d8}",
+			"dmg2": "{@dice 1d10}",
+			"dmgType": "S",
+			"property": [
+				"V"
+			],
+			"rarity": "Very Rare",
+			"source": "GGR",
+			"page": 181,
+			"reqAttune": true,
+			"entries": [
+				"You gain a +1 bonus to attack and damage rolls made with this magic weapon. Additionally, once on each of your turns, you can use one of the following properties if you're holding the sword:",
+				{
+					"type": "list",
+					"items": [
+						"Immediately after you use the {@action Attack} action to attack with the sword, you can enable one creature within 60 feet of you to use its reaction to make one weapon attack.",
+						"Immediately after you take the {@action Dash} action, you can enable one creature within 60 feet of you to use its reaction to move up to its speed.",
+						"Immediately after you take the {@action Dodge} action, you can enable one creature within 60 feet of you to use its reaction to gain the benefits of the Dodge action."
+					]
+				}
+			]
+		},
+		{
+			"name": "Voyager Staff",
+			"technology": "Staff",
+			"weight": "4",
+			"rarity": "Very Rare",
+			"source": "GGR",
+			"page": 181,
+			"reqAttune": true,
+			"entries": [
+				"You gain a +1 bonus to attack and damage rolls made with this magic quarterstaff. While you hold it, you gain a +1 bonus to spell attack rolls.",
+				"This staff has 10 charges. While holding it, you can use an action to expend 1 or more of the staff's charges to cast one of the following spells from it, using your spell save DC: {@spell banishment} (4 charges), {@spell blink} (3 charges), {@spell misty step} (2 charges), {@spell passwall} (5 charges), or {@spell teleport} (7 charges).",
+				"The staff regains {@dice 1d6 + 4} expended charges daily at dawn. If you expend the last charge, roll a {@dice d20}. On a 1, the staff vanishes forever."
+			],
+			"charges": 10
+		},
+		{
+			"name": "Chest of Preserving",
+			"wondrous": true,
+			"weight": "25",
+			"rarity": "Common",
+			"source": "WDMM",
+			"reqAttune": true,
+			"entries": [
+				"Food and other perishable items do not age or decay while inside a Chest of Preserving. The chest is 2½ feet long, 1½ feet wide, and 1 foot tall with a half-barrel lid. The chest has a lock, which can be picked with thieves' tools and a successful DC 15 Dexterity check. Smashing the lock or any other part of the chest renders it nonmagical."
+			]
+		},
+		{
+			"name": "Circlet of Human Perfection",
+			"type": "OTH",
+			"rarity": "Uncommon",
+			"source": "WDMM",
+			"reqAttune": "by a humanoid",
+			"entries": [
+				"The Circlet of Human Perfection transforms its attuned wearer into an attractive human of average height and weight. The circlet chooses the physical characteristics of the form, such as age, gender, skin color, hair color, and voice. Except for size, the wearer's statistics and racial traits don't change, nor do items worn or carried by the wearer. Removing the circlet ends the effect."
+			]
+		},
+		{
+			"name": "Propeller Helm",
+			"wondrous": true,
+			"rarity": "Uncommon",
+			"source": "WDMM",
+			"reqAttune": "by a Small humanoid",
+			"entries": [
+				"While worn, the helm allows its wearer to use an action to cast the {@spell levitate} spell, requiring no components. The helm's propeller spins and whirs loudly until the spell ends. Each time the spell ends, there is a 50 percent chance that the helm loses its magic and becomes nonmagical."
+			]
+		},
+		{
+			"name": "Tangler Grenade",
+			"type": "OTH",
+			"rarity": "None",
+			"source": "WDMM",
+			"entries": [
+				"A tangler grenade is an alchemical, nonmagical item with an ovoid resin shell that shatters on impact. An as action, a creature can throw a tangler grenade at a point up to 60 feet away. Each creature within 10 feet of a shattered tangler grenade must succeed on a DC 15 Dexterity saving throw or be {@condition restrained} by sticky white webs. As an action, a creature can try to free itself or another creature within its reach from the webs, doing so with a successful DC 20 Strength ({@skill Athletics}) check. A gallon of alcohol dissolves the webs produced by a single tangler grenade. Otherwise, the webs dissolve on their own after 1 hour, freeing any creatures {@condition restrained} by them."
+			]
+		},
+		{
+			"name": "Tearulai",
+			"type": "M",
+			"weaponCategory": "Martial",
+			"baseItem": "longsword|phb",
+			"weight": "3",
+			"dmg1": "{@dice 1d8}",
+			"dmg2": "{@dice 1d10}",
+			"dmgType": "S",
+			"property": [
+				"V"
+			],
+			"rarity": "Very Rare",
+			"source": "WDMM",
+			"reqAttune": true,
+			"sentient": true,
+			"entries": [
+				"The longsword, Tearulai, is a sentient, neutral good {@item sword of sharpness} with an emerald-colored blade and precious gemstones embedded in its hilt and pommel. The sword's magical properties are suppressed until it is removed from Valdemar's skull.",
+				"Evil creatures can't attune to Tearulai; any evil creature that tries to do so takes 20 psychic damage. The weapon's emerald blade can't be damaged or dulled, and the sword can't be teleported anywhere without its wielder while the two are attuned to one another.",
+				{
+					"type": "entries",
+					"name": "Spells",
+					"entries": [
+						"The sword has 6 charges and regains {@dice 1d4 + 2} expended charges daily at dawn. A creature attuned to the sword can use an action and expend 1 or more charges to cast one of the following spells from it without material components: {@spell fly} (2 charges), {@spell polymorph} (3 charges), or {@spell transport via plants} (4 charges)."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Sentience",
+					"entries": [
+						"The sword has an Intelligence of 17, a Wisdom of 12, and a Charisma of 20. It has hearing and {@sense truesight} out to a range of 120 feet. It communicates telepathically with its attuned wielder and can speak, read, and understand Common, Draconic, Elvish, and Sylvan. In addition, the sword can ascertain the true value of any gemstone brought within 5 feet of it."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Personality",
+					"entries": [
+						"Tearulai admires great beauty, music, fine art, and poetry. Vain, the weapon strives to improve its appearance. It craves gemstones and seeks out better ones with which to adorn itself. Most of all, it longs to return to the forests around Myth Drannor, where it was created. If its wielder's goals run counter to its own, Tearulai attempts to take control of its wielder and escape Undermountain, whereupon it can use its {@spell transport via plants} spell to return whence it came."
+					]
+				},
+				"When you attack an object with this magic sword and hit, maximize your weapon damage dice against the target.",
+				"When you attack a creature with this weapon and roll a 20 on the attack roll, that target takes an extra 14 slashing damage. Then roll another {@dice d20}. If you roll a 20, you lop off one of the target's limbs, with the effect of such loss determined by the DM. If the creature has no limb to sever, you lop off a portion of its body instead.",
+				"{@i Note: According to the SRD, it is an extra {@dice 4d6} slashing damage, although {@link this is incorrect|https://twitter.com/JeremyECrawford/status/949111823990534144}}.",
+				"In addition, you can speak the sword's command to cause the blade to shed bright light in a 10-foot radius and dim light for an additional 10 feet. Speaking the command word again or sheathing the sword puts out the light."
+			],
+			"charges": 6,
+			"attachedSpells": [
+				"fly",
+				"polymorph",
+				"transport via plants"
+			]
+		},
+		{
+			"name": "Vial of Stardust",
+			"type": "OTH",
+			"rarity": "Unknown",
+			"source": "WDMM",
+			"entries": [
+				"Any creature that sprinkles the contents of a Vial of Stardust over itself gains the ability to cast the {@spell dream} spell once as an action (spell save DC 15), requiring no components."
+			],
+			"attachedSpells": [
+				"dream"
+			]
+		},
+		{
+			"name": "Nimblewright Detector",
+			"type": "OTH",
+			"rarity": "Unknown",
+			"source": "WDH",
+			"page": 47,
+			"entries": [
+				"To activate the nimblewright detector, a character must hold down its trigger. When the activated device comes within 500 feet of a nimblewright other than Nim, the umbrella begins to spin, whir, and click. The spinning, whirring, and clicking accelerates as the distance to the target lessens, reaching maximum velocity and volume when a nimblewright other than Nim is within 30 feet of the device."
+			]
+		},
+		{
+			"name": "Adjustable Stilts",
+			"type": "OTH",
+			"rarity": "Unknown",
+			"source": "WDH",
+			"page": 47,
+			"entries": [
+				"The stilts take 1 minute to put on or remove. They increase the height of any humanoid wearing them by 2 to 5 feet. Each stilt weighs 8 pounds and is 1 foot long when fully collapsed."
+			]
+		},
+		{
+			"name": "Backpack Parachute",
+			"type": "OTH",
+			"rarity": "Unknown",
+			"source": "WDH",
+			"page": 47,
+			"entries": [
+				"A humanoid wearing this piece of gear can deploy the parachute as a reaction while falling, or as an action otherwise. The parachute requires at least a 10-foot cube of unoccupied space in which to deploy, and it doesn't open fast enough to slow a fall of less than 60 feet. If it has sufficient time and space to deploy properly, the parachute allows its wearer to land without taking falling damage. Once it has been used, the parachute takes 10 minutes to repack."
+			]
+		},
+		{
+			"name": "Barking Box",
+			"type": "OTH",
+			"rarity": "Unknown",
+			"source": "WDH",
+			"page": 47,
+			"entries": [
+				"This metal cube, 6 inches on a side, has a crank on top. Using an action to wind the crank activates the box for 8 hours. While activated, the box barks whenever it detects vibrations within 15 feet of it, as long as the box and the source of the vibrations are in contact with the same ground or substance. A switch on one side of the box sets the device to emit either a small dog's bark or a large dog's bark."
+			]
+		},
+		{
+			"name": "Matchless Pipe",
+			"type": "OTH",
+			"rarity": "Unknown",
+			"source": "WDH",
+			"page": 47,
+			"entries": [
+				"A switch made of flint is built into the bowl of this fine wooden smoking pipe. With a few flicks of the switch, the pipe lights itself."
+			]
+		},
+		{
+			"name": "Deck of Several Things",
+			"wondrous": true,
+			"rarity": "Legendary",
+			"source": "LLK",
+			"page": 53,
+			"ability": {
+				"choose": [
+					{
+						"from": [
+							"str",
+							"dex",
+							"con",
+							"int",
+							"wis",
+							"cha"
+						],
+						"count": 1
+					}
+				]
+			},
+			"entries": [
+				"Stored in a leather pouch, this unique deck contains twenty-two colored cards made of some strong but unknown metal, each of which features a design printed as a mosaic of raised dots. Before you draw a card, you must declare how many cards you intend to draw and then draw them randomly (you can use an altered deck of playing cards to simulate the deck). Any cards drawn in excess of this number have no effect. Otherwise, as soon as you draw a card from the deck, its magic takes effect. You must draw each card no more than 1 hour after the previous draw. If you fail to draw the chosen number, the remaining number of cards fly from the deck on their own and take effect all at once.",
+				"Once a card is drawn, it fades from existence. Unless the card is the Fool or the Jester, the card reappears in the deck, making it possible to draw the same card twice.",
+				{
+					"type": "table",
+					"caption": "",
+					"colLabels": [
+						"{@dice 1d22|Playing Card}",
+						"Card"
+					],
+					"colStyles": [
+						"col-6",
+						"col-6"
+					],
+					"rows": [
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 1
+								},
+								"entry": "Ace of diamonds"
+							},
+							"Vizier"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 2
+								},
+								"entry": "King of diamonds"
+							},
+							"Sun"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 3
+								},
+								"entry": "Queen of diamonds"
+							},
+							"Moon"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 4
+								},
+								"entry": "Jack of diamonds"
+							},
+							"Star"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 5
+								},
+								"entry": "Two of diamonds"
+							},
+							"Comet"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 6
+								},
+								"entry": "Ace of hearts"
+							},
+							"The Fates"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 7
+								},
+								"entry": "King of hearts"
+							},
+							"Throne"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 8
+								},
+								"entry": "Queen of hearts"
+							},
+							"Key"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 9
+								},
+								"entry": "Jack of hearts"
+							},
+							"Knight"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 10
+								},
+								"entry": "Two of hearts"
+							},
+							"Gem"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 11
+								},
+								"entry": "Ace of clubs"
+							},
+							"Talons"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 12
+								},
+								"entry": "King of clubs"
+							},
+							"The Void"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 13
+								},
+								"entry": "Queen of clubs"
+							},
+							"Flames"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 14
+								},
+								"entry": "Jack of clubs"
+							},
+							"Skull"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 15
+								},
+								"entry": "Two of clubs"
+							},
+							"Idiot"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 16
+								},
+								"entry": "Ace of spades"
+							},
+							"Donjon"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 17
+								},
+								"entry": "King of spades"
+							},
+							"Ruin"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 18
+								},
+								"entry": "Queen of spades"
+							},
+							"Euryale"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 19
+								},
+								"entry": "Jack of spades"
+							},
+							"Rogue"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 20
+								},
+								"entry": "Two of spades"
+							},
+							"Balance"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 21
+								},
+								"entry": "Joker (with TM)"
+							},
+							"Fool"
+						],
+						[
+							{
+								"type": "cell",
+								"roll": {
+									"exact": 22
+								},
+								"entry": "Joker (without TM)"
+							},
+							"Jester"
+						]
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Balance",
+					"entries": [
+						"Your mind suffers a wrenching alteration, causing your alignment to change for the duration of the adventure. Lawful becomes chaotic, good becomes evil, and vice versa. If you are true neutral or unaligned, this card has no effect on you."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Comet",
+					"entries": [
+						"If you single-handedly defeat the next hostile monster or group of monsters you encounter, you have advantage on ability checks made using one skill of your choice for the duration of the adventure. Otherwise, this card has no effect."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Donjon",
+					"entries": [
+						"You are instantly teleported to and confined within the prison of the Monastery of the Distressed Body (area M6). Everything you were wearing and carrying stays behind in the space you occupied when you disappeared. You draw no more cards."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Euryale",
+					"entries": [
+						"The card's medusa-like visage curses you. You take a \u22121 penalty on saving throws for the duration of the adventure."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "The Fates",
+					"entries": [
+						"Reality's fabric unravels and spins anew, allowing you to avoid or erase one event as if it never happened. You can use the card's magic as soon as you draw the card or at any other point during the adventure."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Flames",
+					"entries": [
+						"The Grand Master of the Monastery of the Distressed Body becomes your enemy. The bone devil seeks your ruin, savoring your suffering before attempting to slay you. If the Grand Master has already been defeated, you gain the enmity of Garret Levistusson's patron\u2014a similarly powerful devil."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Fool",
+					"entries": [
+						"For the duration of the adventure, you lose proficiency with one skill or gain disadvantage on all checks made with one skill (with the skill and the penalty determined by the DM). Discard this card and draw from the deck again, counting both draws as one of your declared draws."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Gem",
+					"entries": [
+						"The 1,000 gp hoard of the leprechaun from the Wilderness Encounters table (see appendix A) appears at your feet. If that treasure has already been claimed, you gain an equivalent hoard."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Idiot",
+					"entries": [
+						"Reduce your Intelligence by {@dice 1d4 + 1} (to a minimum score of 1) for the duration of the adventure. You can draw one additional card beyond your declared draws."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Jester",
+					"entries": [
+						"You gain proficiency in a skill of your choice for the duration of the adventure, or you can draw two additional cards beyond your declared draws."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Key",
+					"entries": [
+						"A common or uncommon magic weapon with which you are proficient, or a {@item spell scroll} featuring a spell of a level you can cast, appears in your hands. The DM chooses the weapon or spell, which you possess for the duration of this adventure."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Knight",
+					"entries": [
+						"You gain the service of any of the NPCs in the \"{@book Hirelings|phb|5|services}\" section not currently with the party, who appears in a space you choose within 30 feet of you. The NPC serves you loyally for the duration of the adventure, believing that the fates have drawn them to you. You control this character."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Moon",
+					"entries": [
+						"You are granted the ability to cast any spell of 5th level or lower, and can use that ability 1d3 times for the duration of the adventure."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Rogue",
+					"entries": [
+						"An NPC of the DM's choice becomes secretly hostile toward you. The identity of your new enemy isn't known until the NPC or someone else reveals it. Any enchantment spell cast on the NPC at 6th level or higher can end the NPC's hostility toward you."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Ruin",
+					"entries": [
+						"All forms of wealth that you carry or own, other than magic items, are lost to you. This wealth can be recovered either in the treasury of the Monastery of the Distressed Body (area M10) or Kwalish's lab in Daoine Gloine (area O7), whichever comes later in the adventure."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Skull",
+					"entries": [
+						"You summon an avatar of death\u2014a mechanical skeleton (use bone naga statistics) clad in a tattered black robe. It appears in a space of the DM's choice within 10 feet of you and attacks you, warning all others that you must win the battle alone. The avatar fights until you die or it drops to 0 hit points, whereupon it disappears. If anyone tries to help you, the helper summons its own avatar of death. A creature slain by an avatar of death can't be restored to life."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Star",
+					"entries": [
+						"Increase one of your ability scores by 1 for the duration of the adventure. The score can exceed 20 but can't exceed 24."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Sun",
+					"entries": [
+						"You gain proficiency in the skill of your choice for the duration of the adventure. In addition, a common or uncommon wondrous item appears in your hands. The DM chooses the item, which you possess for the duration of this adventure."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Talons",
+					"entries": [
+						"Every magic item you wear or carry is lost to you. These items can be recovered either in the treasury of the Monastery of the Distressed Body (area M10) or Kwalish's lab in Daoine Gloine (area O7), whichever comes later in the adventure."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Throne",
+					"entries": [
+						"You gain proficiency in the {@skill Persuasion} skill and you double your proficiency bonus on checks made with that skill for the duration of the adventure. In addition, the Monastery of the Distressed Body's brains in jars regard you thereafter as the monastery's rightful master. You must defeat or otherwise clear out the Grand Master and its servants before you can claim the monastery as yours."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Vizier",
+					"entries": [
+						"At any one time you choose within the duration of the adventure, you can ask a question in meditation and mentally receive a truthful answer to that question. Besides information, the answer helps you solve a puzzling problem or other dilemma. In other words, the knowledge comes with wisdom on how to apply it."
+					]
+				},
+				{
+					"type": "entries",
+					"name": "The Void",
+					"entries": [
+						"This black card spells disaster. Your soul is drawn from your body and held within machinery in either the control room of the Monastery of the Distressed Body (area M8) or Kwalish's lab in Daoine Gloine (area O7), whichever comes later in the adventure. While your soul is trapped in this way, your body is {@condition incapacitated}. {@spell Divination}, {@spell contact other plane}, or a similar spell of 4th level or higher reveals the location of the machinery that holds your soul. You draw no more cards."
+					]
+				},
+				{
+					"type": "inset",
+					"name": "Using the Deck of Several Things",
+					"entries": [
+						"The special nature of this deck (carried by Mary Greymalkin if she is used as an NPC) means that many of its effects operate only within and with respect to this specific adventure. This typically covers any time the characters spend between setting out for the Barrier Peaks and the resolution of whatever events transpire in Kwalish's lab (area O7).",
+						"For cards that effectively remove a character from play for a period of time (Donjon and the Void), you can allow a player to take on the role of one of the party's NPC hirelings, or introduce a temporary character as an NPC met during the party's journey. Alternatively, you can decide that only some aspect of the character's will disappears and is imprisoned, leaving the character to operate in a robotic state until freed."
+					]
+				}
+			]
+		},
+		{
+			"name": "Galder's Bubble Pipe",
+			"wondrous": true,
+			"reqAttune": true,
+			"rarity": "Rare",
+			"source": "LLK",
+			"page": 55,
+			"entries": [
+				"This finely carved pipe blows odorless bubbles instead of smoke when used. The pipe has 3 charges, and it regains all spent charges daily at dawn. While you hold the pipe, you can expend charges to gain access to the following properties:",
+				{
+					"type": "list",
+					"items": [
+						"You can cast {@spell fog cloud} as an action (1 charge).",
+						"You can cast {@spell misty step} as a bonus action (2 charges).",
+						"You can summon a {@creature steam mephit} as an action (3 charges). The mephit is friendly to you, obeys your verbal commands, and acts on its own turn in the initiative order. It disappears in a harmless puff of steam after 1 minute or if it ends its turn more than 60 feet from the pipe."
+					]
+				}
+			]
+		},
+		{
+			"name": "Heward's Hireling Armor",
+			"type": "LA",
+			"armor": true,
+			"baseItem": "leather armor|phb",
+			"weight": "10",
+			"rarity": "Very Rare",
+			"source": "LLK",
+			"ac": 12,
+			"page": 55,
+			"entries": [
+				"A number of Kwalish's experiments were attempts to research the works of the legendary mage Heward, who first crafted what he named hireling armor. While wearing this armor, you gain a +1 bonus to AC. In addition, the armor's animated straps can assist with the drawing and sheathing of weapons, such that you can draw or stow two one-handed weapons when you would normally be able to draw or stow only one.",
+				"This armor also has six pockets, each of which is an extradimensional space. Each pocket can hold up to 20 pounds of material, not exceeding a volume of 2 cubic feet. The armor always weighs 10 pounds, regardless of its pockets' contents. Placing an object into one of the armor's pockets follows the normal rules for interacting with objects. Retrieving an item from a pocket of the armor requires you to use an action. When you reach into a pocket for a specific item, the item is always magically on top.",
+				"Placing the armor inside an extradimensional space created by a {@item bag of holding}, a {@item Heward's handy haversack}, or a similar item instantly destroys both items and opens a gate to the Astral Plane. The gate originates where the one item was placed inside the other. Any creature within 10 feet of the gate is sucked through it and deposited in a random location on the Astral Plane. The gate then closes. The gate is one-way only and can't be reopened."
+			]
+		},
+		{
+			"name": "Ioun Stone, Supreme Intellect",
+			"wondrous": true,
+			"rarity": "Rare",
+			"source": "LLK",
+			"page": 55,
+			"reqAttune": true,
+			"entries": [
+				"An {@italic Ioun stone} is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of {@italic Ioun stone} exist, each type a distinct combination of shape and color.",
+				"When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of {@dice 1d3} feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity ({@skill Acrobatics}) check. You can use an action to seize and stow the stone, ending its effect.",
+				"A stone has AC 24, 10 hit points, and resistance to all damage. It is considered to be an object that is being worn while it orbits your head.",
+				"You gain a +1 bonus to Intelligence checks while this faceted sphere orbits your head."
+			]
+		},
+		{
+			"name": "Ioun Stone, Historical Knowledge",
+			"wondrous": true,
+			"rarity": "Rare",
+			"source": "LLK",
+			"page": 55,
+			"reqAttune": true,
+			"entries": [
+				"An {@italic Ioun stone} is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of {@italic Ioun stone} exist, each type a distinct combination of shape and color.",
+				"When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of {@dice 1d3} feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity ({@skill Acrobatics}) check. You can use an action to seize and stow the stone, ending its effect.",
+				"A stone has AC 24, 10 hit points, and resistance to all damage. It is considered to be an object that is being worn while it orbits your head.",
+				"You gain proficiency in the {@skill History} skill, or a +1 bonus to checks with that skill if already proficient, while this polished, steely sphere orbits your head."
+			]
+		},
+		{
+			"name": "Ioun Stone, Natural Knowledge",
+			"wondrous": true,
+			"rarity": "Rare",
+			"source": "LLK",
+			"page": 55,
+			"reqAttune": true,
+			"entries": [
+				"An {@italic Ioun stone} is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of {@italic Ioun stone} exist, each type a distinct combination of shape and color.",
+				"When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of {@dice 1d3} feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity ({@skill Acrobatics}) check. You can use an action to seize and stow the stone, ending its effect.",
+				"A stone has AC 24, 10 hit points, and resistance to all damage. It is considered to be an object that is being worn while it orbits your head.",
+				"You gain proficiency in the {@skill Nature} skill, or a +1 bonus to checks with that skill if already proficient, while this burnished, brassy stone orbits your head."
+			]
+		},
+		{
+			"name": "Ioun Stone, Religious Knowledge",
+			"wondrous": true,
+			"rarity": "Rare",
+			"source": "LLK",
+			"page": 55,
+			"reqAttune": true,
+			"entries": [
+				"An {@italic Ioun stone} is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of {@italic Ioun stone} exist, each type a distinct combination of shape and color.",
+				"When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of {@dice 1d3} feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity ({@skill Acrobatics}) check. You can use an action to seize and stow the stone, ending its effect.",
+				"A stone has AC 24, 10 hit points, and resistance to all damage. It is considered to be an object that is being worn while it orbits your head.",
+				"You gain proficiency in the {@skill Religion} skill, or a +1 bonus to checks with that skill if already proficient, while this tiny golden gem orbits your head."
+			]
+		},
+		{
+			"name": "Ioun Stone, Language Knowledge",
+			"wondrous": true,
+			"rarity": "Rare",
+			"source": "LLK",
+			"page": 55,
+			"reqAttune": true,
+			"entries": [
+				"An {@italic Ioun stone} is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of {@italic Ioun stone} exist, each type a distinct combination of shape and color.",
+				"When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of {@dice 1d3} feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity ({@skill Acrobatics}) check. You can use an action to seize and stow the stone, ending its effect.",
+				"A stone has AC 24, 10 hit points, and resistance to all damage. It is considered to be an object that is being worn while it orbits your head.",
+				"You are fluent in one additional language while this pulsating bit of red jeweled crystal orbits your head. The DM chooses the language bestowed by the stone."
+			]
+		},
+		{
+			"name": "Ioun Stone, Self-Preservation",
+			"wondrous": true,
+			"rarity": "Rare",
+			"source": "LLK",
+			"page": 55,
+			"reqAttune": true,
+			"entries": [
+				"An {@italic Ioun stone} is named after Ioun, a god of knowledge and prophecy revered on some worlds. Many types of {@italic Ioun stone} exist, each type a distinct combination of shape and color.",
+				"When you use an action to toss one of these stones into the air, the stone orbits your head at a distance of {@dice 1d3} feet and confers a benefit to you. Thereafter, another creature must use an action to grasp or net the stone to separate it from you, either by making a successful attack roll against AC 24 or a successful DC 24 Dexterity ({@skill Acrobatics}) check. You can use an action to seize and stow the stone, ending its effect.",
+				"A stone has AC 24, 10 hit points, and resistance to all damage. It is considered to be an object that is being worn while it orbits your head.",
+				"You gain a +1 bonus to Intelligence saving throws while this silvery gem orbits your head."
+			]
+		},
+		{
+			"name": "Leather Golem Armor",
+			"type": "LA",
+			"armor": true,
+			"baseItem": "leather armor|phb",
+			"weight": "10",
+			"rarity": "Rare",
+			"reqAttune": true,
+			"curse": true,
+			"source": "LLK",
+			"ac": 12,
+			"page": 55,
+			"entries": [
+				"Strange rituals have repurposed the body of a flesh golem into this partially sentient suit of leather armor. While wearing this armor, you gain a +1 bonus to AC and to saving throws against spells and other magical effects. In addition, you gain the following properties:",
+				{
+					"type": "list",
+					"items": [
+						{
+							"type": "entries",
+							"name": "Immutable Form",
+							"entries": [
+								"You are immune to any spell or effect that would alter your form."
+							]
+						},
+						{
+							"type": "entries",
+							"name": "Lightning Absorption",
+							"entries": [
+								"You gain resistance to lightning damage. Whenever you take lightning damage, you gain 5 temporary hit points."
+							]
+						}
+					]
+				},
+				{
+					"type": "entries",
+					"name": "Curse",
+					"entries": [
+						"This armor is cursed, and becoming attuned to it extends the curse to you. Until the curse is broken with a remove curse spell or similar magic, you are unwilling to part with the armor. In addition, while you wear the cursed armor, you gain the following properties:",
+						{
+							"type": "list",
+							"items": [
+								{
+									"type": "entries",
+									"name": "Aversion of Fire",
+									"entries": [
+										"If you take fire damage, you have disadvantage on attack rolls and ability checks until the end of your next turn."
+									]
+								},
+								{
+									"type": "entries",
+									"name": "Berserk",
+									"entries": [
+										"Whenever a critical hit is made against you, roll a d6. On a 6, the armor causes you to go berserk. On each of your turns while berserk, you attack the nearest creature you can see. If no creature is near enough to move to and attack, you attack an object, with preference for an object smaller than yourself. Once the armor causes you to go berserk, it cannot be removed. You continue to attack until you are incapacitated or until another creature is able to calm you with appropriate magic (such as a calm emotions spell) or a successful DC 15 Charisma (Persuasion) check."
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Powered Armor",
+			"type": "HA",
+			"armor": true,
+			"baseItem": "plate armor|phb",
+			"weight": "65",
+			"rarity": "Legendary",
+			"reqAttune": true,
+			"source": "LLK",
+			"ac": 19,
+			"page": 56,
+			"ability": {
+				"static": {
+					"str": 18
+				}
+			},
+			"entries": [
+				"Powered armor resembles a suit of unusual plate armor, with finely articulated joints connected by an oily, black, leather-like material. The armor has been worked to create the appearance of a heavily muscled warrior, and its great helm is unusual in that it has no openings\u2014only a broad glass plate in the front with a second piece of glass above it. Strange plates, tubing, and large metal bosses adorn the armor in seemingly random fashion. On the back of the armor's left gauntlet is a rectangular metal box, from which projects a short rod tipped with a cone-shaped red crystal.",
+				"While wearing this armor, you gain the following benefits:",
+				{
+					"type": "list",
+					"items": [
+						"You have a +1 bonus to AC.",
+						"Your Strength score is 18 (this has no effect if your Strength is already 18 or higher).",
+						"You have advantage on death saving throws."
+					]
+				},
+				"The armor has further capabilities that can be powered either by energy cells or by your own life energy. You can use a bonus action to draw power from an energy cell or sacrifice hit points to gain one of the following benefits:",
+				{
+					"type": "list",
+					"items": [
+						"Emit a force field to gain {@dice 2d6 + 5} temporary hit points (1 charge or 5 hit points).",
+						"Activate boosters to gain a flying speed of 15 feet for 1 minute (1 charge or 5 hit points).",
+						"Fire arm-mounted laser: {@atk rw} {@hit 8} to hit, range 120 feet, one target. {@h}{@dice 2d6} radiant damage (1 charge or 5 hit points).",
+						"Translate any writing you can see in any nonmagical language, to a total of one thousand words over 1 minute (1 charge or 5 hit points).",
+						"Fill the armor with air, allowing you to breathe normally in any environment for up to 1 hour (1 charge or 5 hit points).",
+						"Gain darkvision to a range of 60 feet for up to 1 hour (1 charge or 5 hit points)."
+					]
+				},
+				"The armor can accept only one energy cell at a time. It is found with one energy cell attached, containing {@dice 2d10} charges.",
+				{
+					"type": "inset",
+					"name": "Powered Armor Options",
+					"entries": [
+						"Depending on where and how it appears in the adventure, you might wish to modify the features of Kwalish's legendary powered armor.",
+						{
+							"type": "entries",
+							"name": "Automatic Defenses",
+							"entries": [
+								"Unless Kwalish deactivates the suit's automatic defenses, no one can approach the armor without setting those defenses off. Treat the armor as a {@creature shield guardian} that has stored a {@spell magic missile} spell cast using a 4th-level spell slot. When the armor is reduced to 0 hit points, its defenses are rendered inert and it can be safely approached."
+							]
+						},
+						{
+							"type": "entries",
+							"name": "Battle of Wills",
+							"entries": [
+								"When donned by a new user, the armor deems itself superior and attempts to take possession of that user. The user must succeed on a DC 13 Charisma saving throw or be possessed by the armor. While possessed, the user is {@condition incapacitated} and loses control of its body but retains its awareness. The armor uses the possessed user's statistics (as adjusted by the armor), but doesn't gain access to the user's knowledge, features, or proficiencies.",
+								"Freeing a creature trapped inside the armor first requires defeating the armor's automatic defenses (as above). The trapped creature can also attempt a DC 20 Charisma saving throw each day at dawn. On a successful save, the armor no longer controls the creature and can be safely donned by that creature at any time."
+							]
+						},
+						{
+							"type": "entries",
+							"name": "Stasis",
+							"entries": [
+								"Whenever a creature wearing the armor drops to 0 hit points, the armor places that creature into a state of stasis. While in this state, the creature is stable and does not make death saving throws, but the armor takes control of the creature (as above). Additionally, the armor attempts to assume the identity of the user, assuring their allies that nothing is amiss. Freeing the user first requires defeating the armor's automatic defenses (as above). A creature in stasis does not make Charisma saving throws to break the armor's control."
+							]
+						},
+						{
+							"type": "entries",
+							"name": "Alternative Power",
+							"entries": [
+								"Powered armor originally required energy cells to fuel it, but was adapted by Kwalish to be fueled by the life energy of the creature wearing it. You might decide that the armor can also draw power from additional sources, or that energy cells can be recharged with the aid of a tinker, inventor, or artificer. It might also be possible for allies to connect to the armor through the use of magic that generates a conduit something like an astral silver cord. While so connected, a willing ally can give up hit points as a reaction to fuel the armor's abilities."
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Copper Zib",
+			"type": "$",
+			"rarity": "None",
+			"value": "1cp",
+			"source": "GGR",
+			"page": 9
+		},
+		{
+			"name": "Silver 25-Zib Coin",
+			"type": "$",
+			"rarity": "None",
+			"value": "25cp",
+			"source": "GGR",
+			"page": 9
+		},
+		{
+			"name": "Electrum 50-Zib Coin",
+			"type": "$",
+			"rarity": "None",
+			"value": "1ep",
+			"source": "GGR",
+			"page": 9
+		},
+		{
+			"name": "Gold Zino",
+			"type": "$",
+			"rarity": "None",
+			"value": "1gp",
+			"source": "GGR",
+			"page": 9
+		},
+		{
+			"name": "Gold 5-Zib Coin",
+			"type": "$",
+			"rarity": "None",
+			"value": "5gp",
+			"source": "GGR",
+			"page": 9
+		},
+		{
+			"name": "Copper Alms-Coin",
+			"type": "$",
+			"rarity": "None",
+			"value": "1cp",
+			"source": "GGR",
+			"page": 9
+		},
+		{
+			"name": "Platinum 10-Zino Coin",
+			"type": "$",
+			"rarity": "None",
+			"value": "1pp",
+			"source": "GGR",
+			"page": 9
+		},
+		{
+			"name": "Platinum 100-Zino Coin",
+			"type": "$",
+			"rarity": "None",
+			"value": "10pp",
+			"source": "GGR",
+			"page": 9
 		}
 	],
 	"itemGroup": [
@@ -19273,36 +21299,34 @@
 			"rarity": "None",
 			"source": "PHB",
 			"page": 151,
-			"entries": [
-				{
-					"type": "list",
-					"items": [
-						"{@item Crystal|phb}",
-						"{@item Orb|phb}",
-						"{@item Rod|phb}",
-						"{@item Staff|phb}",
-						"{@item Wand|phb}"
-					]
-				}
+			"items": [
+				"Crystal|phb",
+				"Orb|phb",
+				"Rod|phb",
+				"Staff|phb",
+				"Wand|phb"
+			],
+			"focus": [
+				"Sorcerer",
+				"Warlock",
+				"Wizard"
 			]
 		},
 		{
 			"name": "Druidic Focus",
 			"type": "SCF",
-			"scfType": "arcane",
+			"scfType": "druid",
 			"rarity": "None",
 			"source": "PHB",
 			"page": 151,
-			"entries": [
-				{
-					"type": "list",
-					"items": [
-						"{@item Sprig of mistletoe|phb}",
-						"{@item Totem|phb}",
-						"{@item Wooden staff|phb}",
-						"{@item Yew wand|phb}"
-					]
-				}
+			"items": [
+				"Sprig of mistletoe|phb",
+				"Totem|phb",
+				"Wooden staff|phb",
+				"Yew wand|phb"
+			],
+			"focus": [
+				"Druid"
 			]
 		},
 		{
@@ -19312,15 +21336,14 @@
 			"rarity": "None",
 			"source": "PHB",
 			"page": 151,
-			"entries": [
-				{
-					"type": "list",
-					"items": [
-						"{@item Amulet|phb}",
-						"{@item Emblem|phb}",
-						"{@item Reliquary|phb}"
-					]
-				}
+			"items": [
+				"Amulet|phb",
+				"Emblem|phb",
+				"Reliquary|phb"
+			],
+			"focus": [
+				"Cleric",
+				"Paladin"
 			]
 		},
 		{
@@ -19331,22 +21354,17 @@
 			"rarity": "Uncommon",
 			"source": "DMG",
 			"page": 188,
-			"entries": [
-				{
-					"type": "list",
-					"items": [
-						"{@item Potion of Acid Resistance}",
-						"{@item Potion of Cold Resistance}",
-						"{@item Potion of Fire Resistance}",
-						"{@item Potion of Force Resistance}",
-						"{@item Potion of Lightning Resistance}",
-						"{@item Potion of Necrotic Resistance}",
-						"{@item Potion of Poison Resistance}",
-						"{@item Potion of Psychic Resistance}",
-						"{@item Potion of Radiant Resistance}",
-						"{@item Potion of Thunder Resistance}"
-					]
-				}
+			"items": [
+				"Potion of Acid Resistance",
+				"Potion of Cold Resistance",
+				"Potion of Fire Resistance",
+				"Potion of Force Resistance",
+				"Potion of Lightning Resistance",
+				"Potion of Necrotic Resistance",
+				"Potion of Poison Resistance",
+				"Potion of Psychic Resistance",
+				"Potion of Radiant Resistance",
+				"Potion of Thunder Resistance"
 			]
 		},
 		{
@@ -19355,22 +21373,17 @@
 			"rarity": "Varies",
 			"source": "DMG",
 			"page": 200,
-			"entries": [
-				{
-					"type": "list",
-					"items": [
-						"{@item Spell Scroll (Cantrip)}",
-						"{@item Spell Scroll (1st Level)}",
-						"{@item Spell Scroll (2nd Level)}",
-						"{@item Spell Scroll (3rd Level)}",
-						"{@item Spell Scroll (4th Level)}",
-						"{@item Spell Scroll (5th Level)}",
-						"{@item Spell Scroll (6th Level)}",
-						"{@item Spell Scroll (7th Level)}",
-						"{@item Spell Scroll (8th Level)}",
-						"{@item Spell Scroll (9th Level)}"
-					]
-				}
+			"items": [
+				"Spell Scroll (Cantrip)",
+				"Spell Scroll (1st Level)",
+				"Spell Scroll (2nd Level)",
+				"Spell Scroll (3rd Level)",
+				"Spell Scroll (4th Level)",
+				"Spell Scroll (5th Level)",
+				"Spell Scroll (6th Level)",
+				"Spell Scroll (7th Level)",
+				"Spell Scroll (8th Level)",
+				"Spell Scroll (9th Level)"
 			]
 		},
 		{
@@ -19380,20 +21393,15 @@
 			"rarity": "Rare",
 			"source": "DMG",
 			"page": 199,
-			"entries": [
-				{
-					"type": "list",
-					"items": [
-						"{@item Scroll of Protection from Aberrations}",
-						"{@item Scroll of Protection from Beasts}",
-						"{@item Scroll of Protection from Celestials}",
-						"{@item Scroll of Protection from Elementals}",
-						"{@item Scroll of Protection from Fey}",
-						"{@item Scroll of Protection from Fiends}",
-						"{@item Scroll of Protection from Plants}",
-						"{@item Scroll of Protection from Undead}"
-					]
-				}
+			"items": [
+				"Scroll of Protection from Aberrations",
+				"Scroll of Protection from Beasts",
+				"Scroll of Protection from Celestials",
+				"Scroll of Protection from Elementals",
+				"Scroll of Protection from Fey",
+				"Scroll of Protection from Fiends",
+				"Scroll of Protection from Plants",
+				"Scroll of Protection from Undead"
 			]
 		},
 		{
@@ -19403,19 +21411,14 @@
 			"rarity": "Uncommon",
 			"source": "DMG",
 			"page": 167,
-			"entries": [
-				{
-					"type": "list",
-					"items": [
-						"{@item Elemental Gem, Blue Sapphire}",
-						"{@item Elemental Gem, Emerald}",
-						"{@item Elemental Gem, Red Corundum}",
-						"{@item Elemental Gem, Yellow Diamond}"
-					]
-				}
-			],
 			"attachedSpells": [
 				"conjure elemental"
+			],
+			"items": [
+				"Elemental Gem, Blue Sapphire",
+				"Elemental Gem, Emerald",
+				"Elemental Gem, Red Corundum",
+				"Elemental Gem, Yellow Diamond"
 			]
 		},
 		{
@@ -19430,22 +21433,17 @@
 			"source": "DMG",
 			"page": 165,
 			"reqAttune": true,
-			"entries": [
-				{
-					"type": "list",
-					"items": [
-						"{@item Black Dragon Scale Mail}",
-						"{@item Blue Dragon Scale Mail}",
-						"{@item Brass Dragon Scale Mail}",
-						"{@item Bronze Dragon Scale Mail}",
-						"{@item Copper Dragon Scale Mail}",
-						"{@item Gold Dragon Scale Mail}",
-						"{@item Green Dragon Scale Mail}",
-						"{@item Red Dragon Scale Mail}",
-						"{@item Silver Dragon Scale Mail}",
-						"{@item White Dragon Scale Mail}"
-					]
-				}
+			"items": [
+				"Black Dragon Scale Mail",
+				"Blue Dragon Scale Mail",
+				"Brass Dragon Scale Mail",
+				"Bronze Dragon Scale Mail",
+				"Copper Dragon Scale Mail",
+				"Gold Dragon Scale Mail",
+				"Green Dragon Scale Mail",
+				"Red Dragon Scale Mail",
+				"Silver Dragon Scale Mail",
+				"White Dragon Scale Mail"
 			]
 		},
 		{
@@ -19456,22 +21454,17 @@
 			"source": "DMG",
 			"page": 162,
 			"reqAttune": true,
-			"entries": [
-				{
-					"type": "list",
-					"items": [
-						"{@item Armor of Acid Resistance}",
-						"{@item Armor of Cold Resistance}",
-						"{@item Armor of Fire Resistance}",
-						"{@item Armor of Force Resistance}",
-						"{@item Armor of Lightning Resistance}",
-						"{@item Armor of Necrotic Resistance}",
-						"{@item Armor of Poison Resistance}",
-						"{@item Armor of Psychic Resistance}",
-						"{@item Armor of Radiant Resistance}",
-						"{@item Armor of Thunder Resistance}"
-					]
-				}
+			"items": [
+				"Armor of Acid Resistance",
+				"Armor of Cold Resistance",
+				"Armor of Fire Resistance",
+				"Armor of Force Resistance",
+				"Armor of Lightning Resistance",
+				"Armor of Necrotic Resistance",
+				"Armor of Poison Resistance",
+				"Armor of Psychic Resistance",
+				"Armor of Radiant Resistance",
+				"Armor of Thunder Resistance"
 			]
 		},
 		{
@@ -19482,22 +21475,17 @@
 			"source": "DMG",
 			"page": 192,
 			"reqAttune": true,
-			"entries": [
-				{
-					"type": "list",
-					"items": [
-						"{@item Ring of Acid Resistance}",
-						"{@item Ring of Cold Resistance}",
-						"{@item Ring of Fire Resistance}",
-						"{@item Ring of Force Resistance}",
-						"{@item Ring of Lightning Resistance}",
-						"{@item Ring of Necrotic Resistance}",
-						"{@item Ring of Poison Resistance}",
-						"{@item Ring of Psychic Resistance}",
-						"{@item Ring of Radiant Resistance}",
-						"{@item Ring of Thunder Resistance}"
-					]
-				}
+			"items": [
+				"Ring of Acid Resistance",
+				"Ring of Cold Resistance",
+				"Ring of Fire Resistance",
+				"Ring of Force Resistance",
+				"Ring of Lightning Resistance",
+				"Ring of Necrotic Resistance",
+				"Ring of Poison Resistance",
+				"Ring of Psychic Resistance",
+				"Ring of Radiant Resistance",
+				"Ring of Thunder Resistance"
 			]
 		},
 		{
@@ -19517,21 +21505,16 @@
 			"source": "DMG",
 			"page": 206,
 			"reqAttune": true,
-			"entries": [
-				{
-					"type": "list",
-					"items": [
-						"{@item Sword of Answering (Answerer)}",
-						"{@item Sword of Answering (Back Talker)}",
-						"{@item Sword of Answering (Concluder)}",
-						"{@item Sword of Answering (Last Quip)}",
-						"{@item Sword of Answering (Rebutter)}",
-						"{@item Sword of Answering (Replier)}",
-						"{@item Sword of Answering (Retorter)}",
-						"{@item Sword of Answering (Scather)}",
-						"{@item Sword of Answering (Squelcher)}"
-					]
-				}
+			"items": [
+				"Sword of Answering (Answerer)",
+				"Sword of Answering (Back Talker)",
+				"Sword of Answering (Concluder)",
+				"Sword of Answering (Last Quip)",
+				"Sword of Answering (Rebutter)",
+				"Sword of Answering (Replier)",
+				"Sword of Answering (Retorter)",
+				"Sword of Answering (Scather)",
+				"Sword of Answering (Squelcher)"
 			]
 		},
 		{
@@ -19541,16 +21524,11 @@
 			"rarity": "Very Rare",
 			"source": "DMG",
 			"page": 157,
-			"entries": [
-				{
-					"type": "list",
-					"items": [
-						"{@item Carpet of Flying, 3 ft. × 5 ft.}",
-						"{@item Carpet of Flying, 4 ft. × 6 ft.}",
-						"{@item Carpet of Flying, 5 ft. × 7 ft.}",
-						"{@item Carpet of Flying, 6 ft. × 9 ft.}"
-					]
-				}
+			"items": [
+				"Carpet of Flying, 3 ft. × 5 ft.",
+				"Carpet of Flying, 4 ft. × 6 ft.",
+				"Carpet of Flying, 5 ft. × 7 ft.",
+				"Carpet of Flying, 6 ft. × 9 ft."
 			]
 		},
 		{
@@ -19561,15 +21539,10 @@
 			"rarity": "Uncommon",
 			"source": "DMG",
 			"page": 154,
-			"entries": [
-				{
-					"type": "list",
-					"items": [
-						"{@item Bag of Tricks, Gray}",
-						"{@item Bag of Tricks, Rust}",
-						"{@item Bag of Tricks, Tan}"
-					]
-				}
+			"items": [
+				"Bag of Tricks, Gray",
+				"Bag of Tricks, Rust",
+				"Bag of Tricks, Tan"
 			]
 		},
 		{
@@ -19579,18 +21552,13 @@
 			"source": "DMG",
 			"page": 155,
 			"reqAttune": true,
-			"entries": [
-				{
-					"type": "list",
-					"items": [
-						"{@item Belt of Cloud Giant Strength}",
-						"{@item Belt of Fire Giant Strength}",
-						"{@item Belt of Frost Giant Strength}",
-						"{@item Belt of Hill Giant Strength}",
-						"{@item Belt of Stone Giant Strength}",
-						"{@item Belt of Storm Giant Strength}"
-					]
-				}
+			"items": [
+				"Belt of Cloud Giant Strength",
+				"Belt of Fire Giant Strength",
+				"Belt of Frost Giant Strength",
+				"Belt of Hill Giant Strength",
+				"Belt of Stone Giant Strength",
+				"Belt of Storm Giant Strength"
 			]
 		},
 		{
@@ -19600,18 +21568,13 @@
 			"rarity": "Varies",
 			"source": "DMG",
 			"page": 187,
-			"entries": [
-				{
-					"type": "list",
-					"items": [
-						"{@item Potion of Cloud Giant Strength}",
-						"{@item Potion of Fire Giant Strength}",
-						"{@item Potion of Frost Giant Strength}",
-						"{@item Potion of Hill Giant Strength}",
-						"{@item Potion of Stone Giant Strength}",
-						"{@item Potion of Storm Giant Strength}"
-					]
-				}
+			"items": [
+				"Potion of Cloud Giant Strength",
+				"Potion of Fire Giant Strength",
+				"Potion of Frost Giant Strength",
+				"Potion of Hill Giant Strength",
+				"Potion of Stone Giant Strength",
+				"Potion of Storm Giant Strength"
 			]
 		},
 		{
@@ -19622,16 +21585,197 @@
 			"rarity": "Very Rare",
 			"source": "DMG",
 			"page": 180,
+			"items": [
+				"Manual of Clay Golems",
+				"Manual of Flesh Golems",
+				"Manual of Iron Golems",
+				"Manual of Stone Golems"
+			]
+		},
+		{
+			"name": "Figurine of Wondrous Power",
+			"wondrous": true,
+			"rarity": "Varies",
+			"source": "DMG",
+			"page": 169,
+			"items": [
+				"Figurine of Wondrous Power, Bronze Griffon",
+				"Figurine of Wondrous Power, Ebony Fly",
+				"Figurine of Wondrous Power, Golden Lions",
+				"Figurine of Wondrous Power, Ivory Goats",
+				"Figurine of Wondrous Power, Marble Elephant",
+				"Figurine of Wondrous Power, Obsidian Steed",
+				"Figurine of Wondrous Power, Onyx Dog",
+				"Figurine of Wondrous Power, Serpentine Owl",
+				"Figurine of Wondrous Power, Silver Raven"
+			]
+		},
+		{
+			"name": "Horn of Valhalla",
+			"wondrous": true,
+			"rarity": "Varies",
+			"source": "DMG",
+			"page": 175,
+			"items": [
+				"Horn of Valhalla, Brass",
+				"Horn of Valhalla, Bronze",
+				"Horn of Valhalla, Iron",
+				"Horn of Valhalla, Silver"
+			]
+		},
+		{
+			"name": "Quaal's Feather Token",
+			"wondrous": true,
+			"rarity": "Rare",
+			"source": "DMG",
+			"page": 188,
+			"items": [
+				"Quaal's Feather Token, Anchor",
+				"Quaal's Feather Token, Bird",
+				"Quaal's Feather Token, Fan",
+				"Quaal's Feather Token, Swan Boat",
+				"Quaal's Feather Token, Tree",
+				"Quaal's Feather Token, Whip"
+			]
+		},
+		{
+			"name": "Ioun Stone",
+			"wondrous": true,
+			"rarity": "Varies",
+			"source": "DMG",
+			"page": 176,
+			"reqAttune": true,
+			"items": [
+				"Ioun Stone, Absorption",
+				"Ioun Stone, Agility",
+				"Ioun Stone, Awareness",
+				"Ioun Stone, Fortitude",
+				"Ioun Stone, Greater Absorption",
+				"Ioun Stone, Insight",
+				"Ioun Stone, Intellect",
+				"Ioun Stone, Leadership",
+				"Ioun Stone, Mastery",
+				"Ioun Stone, Protection",
+				"Ioun Stone, Regeneration",
+				"Ioun Stone, Reserve",
+				"Ioun Stone, Strength",
+				"Ioun Stone, Sustenance"
+			]
+		},
+		{
+			"name": "Ioun Stone",
+			"wondrous": true,
+			"rarity": "Rare",
+			"source": "LLK",
+			"page": 55,
+			"reqAttune": true,
+			"items": [
+				"Ioun Stone, Supreme Intellect|LLK",
+				"Ioun Stone, Historical Knowledge|LLK",
+				"Ioun Stone, Natural Knowledge|LLK",
+				"Ioun Stone, Religious Knowledge|LLK",
+				"Ioun Stone, Language Knowledge|LLK",
+				"Ioun Stone, Self-Preservation|LLK"
+			]
+		},
+		{
+			"name": "Instrument of the Bards",
+			"type": "INS",
+			"wondrous": true,
+			"rarity": "Varies",
+			"source": "DMG",
+			"page": 176,
+			"reqAttune": "by a Bard",
+			"items": [
+				"Instrument of the Bards, Anstruth Harp",
+				"Instrument of the Bards, Canaith Mandolin",
+				"Instrument of the Bards, Cli Lyre",
+				"Instrument of the Bards, Doss Lute",
+				"Instrument of the Bards, Fochlucan Bandore",
+				"Instrument of the Bards, Mac-Fuirmidh Cittern",
+				"Instrument of the Bards, Ollamh Harp"
+			]
+		},
+		{
+			"name": "Guild Keyrune",
+			"wondrous": true,
+			"source": "GGR",
+			"reqAttune": "by a member of the relevant guild",
+			"rarity": "Varies",
 			"entries": [
-				{
-					"type": "list",
-					"items": [
-						"{@item Manual of Clay Golems}",
-						"{@item Manual of Flesh Golems}",
-						"{@item Manual of Iron Golems}",
-						"{@item Manual of Stone Golems}"
-					]
-				}
+				"Associated with a particular guild, a guild keyrune is a ceremonial, stylized key, about 1 foot long, made from carved stone. Not a literal key, the item is a badge of authority that gives its bearer access to privileged places in its guild's headquarters and outposts. At the DM's discretion, a character might be given a keyrune upon attaining a renown score of 25 in their guild."
+			],
+			"items": [
+				"Azorius Keyrune|GGR",
+				"Boros Keyrune|GGR",
+				"Dimir Keyrune|GGR",
+				"Golgari Keyrune|GGR",
+				"Gruul Keyrune|GGR",
+				"Izzet Keyrune|GGR",
+				"Orzhov Keyrune|GGR",
+				"Rakdos Keyrune|GGR",
+				"Selesnya Keyrune|GGR",
+				"Simic Keyrune|GGR"
+			]
+		},
+		{
+			"name": "Guild Signet",
+			"type": "RG",
+			"source": "GGR",
+			"reqAttune": true,
+			"rarity": "Uncommon",
+			"entries": [
+				"A guild signet is sometimes awarded to a guild member whose renown score in that guild is 5 or higher, as a reward for performing special services for the guild. Aside from its magical properties, the ring is also an indicator of the guild's recognition and favor."
+			],
+			"charges": 3,
+			"items": [
+				"Azorius Guild Signet|GGR",
+				"Boros Guild Signet|GGR",
+				"Dimir Guild Signet|GGR",
+				"Golgari Guild Signet|GGR",
+				"Gruul Guild Signet|GGR",
+				"Izzet Guild Signet|GGR",
+				"Orzhov Guild Signet|GGR",
+				"Rakdos Guild Signet|GGR",
+				"Selesnya Guild Signet|GGR",
+				"Simic Guild Signet|GGR"
+			]
+		},
+		{
+			"name": "Ring of Elemental Command",
+			"type": "RG",
+			"tier": "Major",
+			"rarity": "Legendary",
+			"source": "DMG",
+			"page": 190,
+			"reqAttune": true,
+			"charges": 5,
+			"items": [
+				"Ring of Air Elemental Command",
+				"Ring of Earth Elemental Command",
+				"Ring of Fire Elemental Command",
+				"Ring of Water Elemental Command"
+			]
+		},
+		{
+			"name": "Armor of Vulnerability",
+			"type": "HA",
+			"armor": true,
+			"weight": "65",
+			"ac": 18,
+			"strength": "15",
+			"stealth": true,
+			"tier": "Major",
+			"rarity": "Rare",
+			"source": "DMG",
+			"page": 152,
+			"reqAttune": true,
+			"curse": true,
+			"baseItem": "plate armor|phb",
+			"items": [
+				"Armor of Vulnerability (Bludgeoning)",
+				"Armor of Vulnerability (Piercing)",
+				"Armor of Vulnerability (Slashing)"
 			]
 		}
 	]

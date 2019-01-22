@@ -955,8 +955,8 @@
 								"Quest"
 							],
 							"colStyles": [
-								"col-xs-2 text-align-center",
-								"col-xs-10"
+								"col-2 text-align-center",
+								"col-10"
 							],
 							"rows": [
 								[
@@ -1554,12 +1554,12 @@
 							"type": "table",
 							"caption": "Chult Rumors",
 							"colLabels": [
-								"d10+d100",
+								"d100",
 								"Rumor"
 							],
 							"colStyles": [
-								"col-xs-2 text-align-center",
-								"col-xs-10"
+								"col-2 text-align-center",
+								"col-10"
 							],
 							"rows": [
 								[
@@ -1635,7 +1635,7 @@
 									"Perched atop a plateau overlooking the Aldani Basin is a ghost village. All the people there disappeared. No one knows why. You can reach the Aldani Basin by following the River Soshenstar."
 								],
 								[
-									"97-0",
+									"97-00",
 									"The great god Ubtao loved mazes. If you happen upon a maze of any kind, trace a path through it. You will earn Ubtao's favor by doing so."
 								]
 							]
@@ -1674,8 +1674,8 @@
 								"Ekene-Afa's Price"
 							],
 							"colStyles": [
-								"col-xs-6",
-								"col-xs-6 text-align-right"
+								"col-6",
+								"col-6 text-align-right"
 							],
 							"rows": [
 								[
@@ -1725,8 +1725,8 @@
 								"Ifan's Price"
 							],
 							"colStyles": [
-								"col-xs-6",
-								"col-xs-6 text-align-right"
+								"col-6",
+								"col-6 text-align-right"
 							],
 							"rows": [
 								[
@@ -1884,8 +1884,8 @@
 								"Wakanga's Price"
 							],
 							"colStyles": [
-								"col-xs-6",
-								"col-xs-6 text-align-right"
+								"col-6",
+								"col-6 text-align-right"
 							],
 							"rows": [
 								[
@@ -2712,11 +2712,11 @@
 							"type": "table",
 							"caption": "Chult Rumors",
 							"colLabels": [
-								"d10+d100",
+								"d100",
 								"Rumor"
 							],
 							"colStyles": [
-								"col-xs-1 text-align-center",
+								"col-1 text-align-center",
 								""
 							],
 							"rows": [
@@ -2793,7 +2793,7 @@
 									"Perched atop a plateau overlooking the Aldani Basin is a ghost village. All the people there disappeared. No one knows why. You can reach the Aldani Basin by following the River Soshenstar."
 								],
 								[
-									"97-0",
+									"97-00",
 									"The great god Ubtao loved mazes. If you happen upon a maze of any kind, trace a path through it. You will earn Ubtao's favor by doing so."
 								]
 							]
@@ -2880,7 +2880,7 @@
 					"entries": [
 						"The following diseases can affect giants and humanoids exploring the jungles of Chult. Remember that lesser restoration and similar magic can cure a disease.",
 						{
-							"type": "entries",
+							"type": "inset",
 							"name": "A Cure for Dead Characters",
 							"entries": [
 								"If a player character dies while exploring the wilds of Chult, an NPC guide might suggest that the party take its dead member to the ghost village of Mbala. A powerful witch is rumored to dwell there. According to local legends, the witch forged a pact with the Lord of Bones, a god who granted her the power to create zombies that retain their former personalities. For more information on the socalled witch, see \"Mbala\" later in this chapter."
@@ -2892,17 +2892,17 @@
 					"type": "entries",
 					"name": "Mad Monkey Fever",
 					"entries": [
-						"A magical mist creeps through the jungles of Chult. Contact with this thin, blue, odorless mist can infect giants and humanoids with mad monkey fever. A dispel magic spell destroys the mist in a 20-foot square starting at a point chosen by the caster within the spell's range. An encounter with this mist typically covers 1d6 such areas (400-2,400 square feet).",
-						"A giant or humanoid that comes into contact with the mist must succeed on a DC 13 Constitution saving throw or become infected with mad monkey fever. The infected creature gains a random form of long-term madness (roll on the Long-Term Madness table in chapter 8 of the Dungeon Master's Guide) that manifests 1d6 hours after infection and lasts for the duration (1d10 × 10 hours). If the madness is allowed to run its full course, the creature must repeat the saving throw at the end of the madness. If the second saving throw fails, the creature suffers another bout of long-term madness (roll again on the table) that lasts for the normal duration. The madness symptoms continue until the disease ends."
+						"A magical mist creeps through the jungles of Chult. Contact with this thin, blue, odorless mist can infect giants and humanoids with mad monkey fever. A {@spell dispel magic} spell destroys the mist in a 20-foot square starting at a point chosen by the caster within the spell's range. An encounter with this mist typically covers {@dice 1d6} such areas (400-2,400 square feet).",
+						"A giant or humanoid that comes into contact with the mist must succeed on a DC 13 Constitution saving throw or become infected with mad monkey fever. The infected creature gains a random form of long-term madness (roll on the {@table Long-Term Madness} table in chapter 8 of the Dungeon Master's Guide) that manifests {@dice 1d6} hours after infection and lasts for the duration ({@dice 1d10 × 10} hours). If the madness is allowed to run its full course, the creature must repeat the saving throw at the end of the madness. If the second saving throw fails, the creature suffers another bout of long-term madness (roll again on the table) that lasts for the normal duration. The madness symptoms continue until the disease ends."
 					]
 				},
 				{
 					"type": "entries",
 					"name": "Shivering Sickness",
 					"entries": [
-						"Insects native to the jungles and marshes of Chult carry this disease, shivering sickness. The easiest protection against it is a coating of insect-repelling salve on all exposed skin (for the cost of insect repellent, see {@i \"Buying a Special Item\"}.",
-						"A giant or humanoid that takes damage from insect swarms or from giant centipedes, giant scorpions, or giant wasps is exposed to the disease at the end of the encounter. Those who haven't applied insect repellent since their previous long rest are exposed to the disease when they finish a long rest.",
-						"A giant or humanoid exposed to the disease must succeed on a DC 11 Constitution saving throw or become infected. A creature with natural armor has advantage on the saving throw. It takes 2d6 hours for symptoms to manifest in an infected creature. Symptoms include blurred vision, disorientation, and a sudden drop in body temperature that causes uncontrollable shivering and chattering of the teeth.",
+						"Insects native to the jungles and marshes of Chult carry this disease, shivering sickness. The easiest protection against it is a coating of insect-repelling salve on all exposed skin (for the cost of insect repellent, see {@adventure \"Buying a Special Item\"|ToA|1|Buying a Special Item}.",
+						"A giant or humanoid that takes damage from {@creature Swarm of Insects|mm|insect swarms} or from {@creature giant centipede|mm|giant centipedes}, {@creature giant scorpion|mm|giant scorpions}, or {@creature giant wasp|mm|giant wasps} is exposed to the disease at the end of the encounter. Those who haven't applied insect repellent since their previous long rest are exposed to the disease when they finish a long rest.",
+						"A giant or humanoid exposed to the disease must succeed on a DC 11 Constitution saving throw or become infected. A creature with natural armor has advantage on the saving throw. It takes {@dice 2d6} hours for symptoms to manifest in an infected creature. Symptoms include blurred vision, disorientation, and a sudden drop in body temperature that causes uncontrollable shivering and chattering of the teeth.",
 						"Once symptoms begin, the infected creature regains only half the normal number of hit points from spending Hit Dice and no hit points from a long rest. The infected creature also has disadvantage on ability checks and attack rolls. At the end of a long rest, an infected creature repeats the saving throw, shaking off the disease on a successful save."
 					]
 				},
@@ -2910,7 +2910,7 @@
 					"type": "entries",
 					"name": "Throat Leeches",
 					"entries": [
-						"Minuscule parasites known as throat leeches infect the water in Chult's forests, swamps, and rivers. Any giant or humanoid that swallows tainted water must succeed on a DC 12 Constitution saving throw or be infested with throat leeches. Immediate symptoms include throat inflammation and shortness of breath. After 1d6 hours, the infected character gains 1 level of {@condition exhaustion} that can't be removed (except as described below) until the disease is cured. At the end of each long rest, the infected creature must repeat the saving throw. On a failed save, the creature's {@condition exhaustion} increases by 1 level; on a successful save, the creature's {@condition exhaustion} decreases by 1 level. If a successful saving throw reduces the infected creature's level of {@condition exhaustion} below 1, the creature recovers from the disease.",
+						"Minuscule parasites known as throat leeches infect the water in Chult's forests, swamps, and rivers. Any giant or humanoid that swallows tainted water must succeed on a DC 12 Constitution saving throw or be infested with throat leeches. Immediate symptoms include throat inflammation and shortness of breath. After {@dice 1d6} hours, the infected character gains 1 level of {@condition exhaustion} that can't be removed (except as described below) until the disease is cured. At the end of each long rest, the infected creature must repeat the saving throw. On a failed save, the creature's {@condition exhaustion} increases by 1 level; on a successful save, the creature's {@condition exhaustion} decreases by 1 level. If a successful saving throw reduces the infected creature's level of {@condition exhaustion} below 1, the creature recovers from the disease.",
 						"Explorers can avoid contracting throat leeches by drinking only rainwater or water that's been boiled or magically purified."
 					]
 				},
@@ -3448,7 +3448,7 @@
 								"Result"
 							],
 							"colStyles": [
-								"col-xs-1 text-align-center",
+								"col-1 text-align-center",
 								""
 							],
 							"rows": [
@@ -5093,7 +5093,7 @@
 								"Discovery"
 							],
 							"colStyles": [
-								"col-xs-1 text-align-center",
+								"col-1 text-align-center",
 								""
 							],
 							"rows": [
@@ -5922,7 +5922,7 @@
 								"What Happens"
 							],
 							"colStyles": [
-								"col-xs-1 text-align-center",
+								"col-1 text-align-center",
 								""
 							],
 							"rows": [
@@ -6322,11 +6322,11 @@
 							"type": "table",
 							"caption": "Ruin Interior",
 							"colLabels": [
-								"d10+d100",
+								"d100",
 								"Ruin Contents"
 							],
 							"colStyles": [
-								"col-xs-1 text-align-center",
+								"col-1 text-align-center",
 								""
 							],
 							"rows": [
@@ -6359,7 +6359,7 @@
 									"Treasure"
 								],
 								[
-									"86-0",
+									"86-00",
 									"Vegepygmies"
 								]
 							]
@@ -6382,11 +6382,11 @@
 							"type": "table",
 							"caption": "Ruin Interior",
 							"colLabels": [
-								"d10+d100",
+								"d100",
 								"Ruin Contents"
 							],
 							"colStyles": [
-								"col-xs-1 text-align-center",
+								"col-1 text-align-center",
 								""
 							],
 							"rows": [
@@ -6419,7 +6419,7 @@
 									"Treasure"
 								],
 								[
-									"86-0",
+									"86-00",
 									"Vegepygmies"
 								]
 							]
@@ -6435,11 +6435,11 @@
 							"type": "table",
 							"caption": "Ruin Interior",
 							"colLabels": [
-								"d10+d100",
+								"d100",
 								"Ruin Contents"
 							],
 							"colStyles": [
-								"col-xs-1 text-align-center",
+								"col-1 text-align-center",
 								""
 							],
 							"rows": [
@@ -6472,7 +6472,7 @@
 									"Treasure"
 								],
 								[
-									"86-0",
+									"86-00",
 									"Vegepygmies"
 								]
 							]
@@ -6492,7 +6492,7 @@
 								"Creatures"
 							],
 							"colStyles": [
-								"col-xs-1 text-align-center",
+								"col-1 text-align-center",
 								""
 							],
 							"rows": [
@@ -6525,7 +6525,7 @@
 								"Plant"
 							],
 							"colStyles": [
-								"col-xs-1 text-align-center",
+								"col-1 text-align-center",
 								""
 							],
 							"rows": [
@@ -7273,7 +7273,7 @@
 										"Encounter"
 									],
 									"colStyles": [
-										"col-xs-1 text-align-center",
+										"col-1 text-align-center",
 										""
 									],
 									"rows": [
@@ -8254,11 +8254,11 @@
 									"type": "table",
 									"caption": "Temple Reinforcements",
 									"colLabels": [
-										"d10+d100",
+										"d100",
 										"Reinforcement"
 									],
 									"colStyles": [
-										"col-xs-1 text-align-center",
+										"col-1 text-align-center",
 										""
 									],
 									"rows": [
@@ -8291,7 +8291,7 @@
 											"2d4 insane cult fanatics (NE male and female humans of mixed ethnicities) seeking an audience with Ras Nsi, to pledge their devotion to Dendar the Night Serpent. The cult fanatics bring tribute in the form of treasure (roll once on the Treasure Hoard Challenge 0-4 table in chapter 7 of the Dungeon Master's Guide)."
 										],
 										[
-											"86-0",
+											"86-00",
 											"2d6 tribal warriors (N male and female Chultan humans) delivering tribute to Ras Nsi. This tribute consists of food, drink, and treasure (roll once on the Treasure Hoard Challenge 0-4 table in chapter 7 of the Dungeon Master's Guide)."
 										]
 									]
@@ -8420,7 +8420,7 @@
 								"Result"
 							],
 							"colStyles": [
-								"col-xs-1 text-align-center",
+								"col-1 text-align-center",
 								""
 							],
 							"rows": [
@@ -8492,12 +8492,12 @@
 									"type": "table",
 									"caption": "Slave Labors",
 									"colLabels": [
-										"d10+d100",
+										"d100",
 										"Labor",
 										"Development"
 									],
 									"colStyles": [
-										"col-xs-1 text-align-center",
+										"col-1 text-align-center",
 										"",
 										""
 									],
@@ -8528,7 +8528,7 @@
 											"The character overhears one yuan-ti whisper to another, in Common, \"White feather, black mask.\" See {@area 4>4} for the significance of these words."
 										],
 										[
-											"91-0",
+											"91-00",
 											"Feed a dead prisoner to the hydra in {@area 4>21}.",
 											"The characters find a folded-up piece of parchment hidden on the dead prisoner. On one side, it bears a crude map of the temple."
 										]
@@ -9161,7 +9161,7 @@
 							"name": "Treasure",
 							"entries": [
 								"Xopal carries a brass key that unlocks the south door.",
-								"Characters who search through the poisons can loot twenty doses of serpent venom, five doses of essence of ether, and five doses of torpor (see \"Poisons\" in chapter 8 of the {@i Dungeon Master's Guide})."
+								"Characters who search through the poisons can loot twenty doses of {@item serpent venom (injury)|dmg|serpent venom}, five doses of {@item essence of ether (inhaled)|dmg|essence of ether}, and five doses of {@item torpor (ingested)|dmg|torpor} (see \"{@book Poisons|DMG|8|Poisons}\" in chapter 8 of the {@i Dungeon Master's Guide})."
 							]
 						}
 					]
@@ -9491,8 +9491,8 @@
 										"Key Shape"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -10078,7 +10078,7 @@
 							"name": "5B. Devil Face",
 							"entries": [
 								"Magical darkness and a permanent {@spell silence|PHB} spell fills the mouth of the devil face and a large cavity behind it. The face is sculpted from stone and melds seamlessly with the surrounding wall, and its mouth is wide enough for a Medium or smaller creature to crawl through. A {@spell detect magic|PHB} spell or similar effect reveals an aura of illusion magic over the face.",
-								"The cavity behind the devil's mouth is home to a shadow demon that can see normally in the magical darkness. If any creature reaches into the mouth, the demon makes an attack against it with advantage, then continues attacking if any creature enters its abode.",
+								"The cavity behind the devil's mouth is home to a {@creature shadow demon} that can see normally in the magical darkness. If any creature reaches into the mouth, the demon makes an attack against it with advantage, then continues attacking if any creature enters its abode.",
 								"A successful {@spell dispel magic|PHB} (DC 16) cast on the demon's lair dispels the magical darkness and the silence. If the darkness is dispelled, the shadow demon emerges and attacks until reduced to half its hit points or fewer, at which point it flees to a darker area of the tomb."
 							]
 						},
@@ -10276,7 +10276,7 @@
 										"Effect"
 									],
 									"colStyles": [
-										"col-xs-1 text-align-center",
+										"col-1 text-align-center",
 										""
 									],
 									"rows": [
@@ -10335,14 +10335,14 @@
 							"type": "entries",
 							"name": "Secret Doors",
 							"entries": [
-								"Secret doors are set into the back walls of two alcoves- one to the north and the other to the south. The secret door to the south has edges made of flint. Opening this door creates sparks that ignite the odorless gas in {@area 5>11} (see that area for details)."
+								"Secret doors are set into the back walls of two alcoves\u2014one to the north and the other to the south. The secret door to the south has edges made of flint. Opening this door creates sparks that ignite the odorless gas in {@area 5>11} (see that area for details)."
 							]
 						},
 						{
 							"type": "entries",
 							"name": "Treasure",
 							"entries": [
-								"The bones of a zorbo (Obo'laka's animal form; see appendix D) lie in a dusty pile within the sarcophagus. A ring of protection rests atop the pile. The ring turns to dust and is destroyed if it leaves the Tomb of the Nine Gods (but see {@i \"Lost Treasures\"}).",
+								"The bones of a zorbo (Obo'laka's animal form; see appendix D) lie in a dusty pile within the sarcophagus. A {@item ring of protection} rests atop the pile. The ring turns to dust and is destroyed if it leaves the Tomb of the Nine Gods (but see {@i \"Lost Treasures\"}).",
 								{
 									"type": "entries",
 									"name": "Obo'laka's Spirit",
@@ -11039,7 +11039,7 @@
 							]
 						},
 						"When the characters arrive, five tomb dwarves are working inside the chamber. Each one has the statistics of a {@creature wight|MM}, except that it wields a battleaxe and a light crossbow. If the adventurers leave this area, there's a 50 percent chance that 1d4 of the other tomb dwarves prowling the dungeon are present when they return.",
-						"Any character who searches the forge uncovers enough gear to assemble two sets of thieves' tools, a set of artisan's tools, a set of alchemist's supplies, a set of mason's tools, and a set of smith's tools. The caged rats are used to test traps.",
+						"Any character who searches the forge uncovers enough gear to assemble two sets of thieves' tools, a set of artisan's tools, a set of {@item alchemist's supplies|phb}, a set of mason's tools, and a set of smith's tools. The caged rats are used to test traps.",
 						{
 							"type": "image",
 							"href": {
@@ -11144,8 +11144,8 @@
 							"type": "entries",
 							"name": "Treasure",
 							"entries": [
-								"Withers has enough equipment on his desk to assemble a scholar's pack. A {@i manual of golems} (clay) lies open on his desk next to a spellbook containing all the spells he has prepared. On the inside back cover of the spellbook is what appears to be a name: Khomara Blackfire. \"Khomara\" and \"Blackfire\" are actually the command words for the {@item mirror of life trapping|DMG} in {@area 5>50}.",
-								"The desk drawer contains a translucent, fist-sized gray stone that radiates an aura of enchantment to a {@spell detect magic|PHB} spell or similar effect. This stone is the control gem for the gray slaad in {@area 5>24}. For more information on control gems, see the \"Slaadi\" entry in the {@i Monster Manual}.",
+								"Withers has enough equipment on his desk to assemble a scholar's pack. A {@item manual of clay golems} lies open on his desk next to a spellbook containing all the spells he has prepared. On the inside back cover of the spellbook is what appears to be a name: Khomara Blackfire. \"Khomara\" and \"Blackfire\" are actually the command words for the {@item mirror of life trapping|DMG} in {@area 5>50}.",
+								"The desk drawer contains a translucent, fist-sized gray stone that radiates an aura of enchantment to a {@spell detect magic|PHB} spell or similar effect. This stone is the control gem for the {@creature gray slaad} in {@area 5>24}. For more information on control gems, see the \"Slaadi\" entry in the {@i Monster Manual}.",
 								"Withers's skeletal songbird is tame but cantankerous. It can't fly, but it can be sold to a buyer in Port Nyanzaru for 75 gp. Withers's bronze mask is worth 25 gp."
 							]
 						}
@@ -11698,7 +11698,7 @@
 								"Effect"
 							],
 							"colStyles": [
-								"col-xs-1 text-align-center",
+								"col-1 text-align-center",
 								""
 							],
 							"rows": [
@@ -12358,7 +12358,7 @@
 								"Rune"
 							],
 							"colStyles": [
-								"col-xs-1 text-align-center",
+								"col-1 text-align-center",
 								""
 							],
 							"rows": [
@@ -12440,7 +12440,7 @@
 							"type": "entries",
 							"name": "Treasure",
 							"entries": [
-								"The following treasures are heaped around Shagambi's bones: 200 gp, five moonstones (50 gp each), the fine music box activated by the trap (250 gp), and an {@i instrument of the bards} (Canaith mandolin). The instrument turns to dust and is destroyed if it leaves the Tomb of the Nine Gods (but see {@i \"Lost Treasures\"}).",
+								"The following treasures are heaped around Shagambi's bones: 200 gp, five moonstones (50 gp each), the fine music box activated by the trap (250 gp), and an {@item Instrument of the Bards, Canaith Mandolin|dmg|instrument of the bards (Canaith mandolin)}. The instrument turns to dust and is destroyed if it leaves the Tomb of the Nine Gods (but see {@i \"Lost Treasures\"}).",
 								{
 									"type": "entries",
 									"name": "Shagambi's Spirit",
@@ -12618,7 +12618,7 @@
 								],
 								[
 									"3",
-									"Invisible stalker",
+									"{@creature Invisible stalker}",
 									"Mirror guardian",
 									"Tries to kill whoever released it, and vanishes if it succeeds"
 								],
@@ -12636,25 +12636,25 @@
 								],
 								[
 									"6",
-									"Yraggath (troll)",
+									"Yraggath ({@creature troll})",
 									"Driven insane by its captivity",
 									"Attacks anything it can eat"
 								],
 								[
 									"7",
-									"Tlad Xolbrys (NE male drow mage)",
+									"Tlad Xolbrys (NE male {@creature drow mage})",
 									"A visitor to Omu who was trapped during the construction of the Tomb of the Nine Gods",
 									"Aids or betrays his liberators to ensure his own survival"
 								],
 								[
 									"8",
-									"Pox (doppelganger)",
+									"Pox ({@creature doppelganger})",
 									"Disguised as a male human adventurer named Biff Longsteel followed the Company of the Yellow Banner into the tomb",
 									"Tries to join the party and stay out of harm's way"
 								],
 								[
 									"9",
-									"Giant four-armed gargoyle",
+									"{@creature Giant four-armed gargoyle|ToA}",
 									"Mirror guardian",
 									"Attacks all other creatures, then stands guard next to the mirror"
 								],
@@ -12666,13 +12666,13 @@
 								],
 								[
 									"11",
-									"Lukanu (N female Chultan champion see appendix D)",
+									"Lukanu (N female Chultan {@creature champion|VGM})",
 									"Bodyguard to Queen Napaka of Omu, trapped during the city's fall wears scorpion armor",
 									"Helps her liberators, but won't leave Omu until she learns what happened to Queen Napaka (see {@area 5>53})"
 								],
 								[
 									"12",
-									"Stirge",
+									"{@creature Stirge}",
 									"Trapped when it flew toward the mirror",
 									"Attacks the nearest warm-blooded creature"
 								]
@@ -12924,11 +12924,11 @@
 									"type": "table",
 									"caption": "Maze Discoveries",
 									"colLabels": [
-										"d10+d100",
+										"d100",
 										"Discovery"
 									],
 									"colStyles": [
-										"col-xs-1 text-align-center",
+										"col-1 text-align-center",
 										""
 									],
 									"rows": [
@@ -13875,11 +13875,11 @@
 									"type": "table",
 									"caption": "Armillary Sphere Conjunction",
 									"colLabels": [
-										"d10+d100",
+										"d100",
 										"Conjunction Effect"
 									],
 									"colStyles": [
-										"col-xs-1 text-align-center",
+										"col-1 text-align-center",
 										""
 									],
 									"rows": [
@@ -13909,7 +13909,7 @@
 										],
 										[
 											"81-90",
-											"A gem of brightness appears on the lap of the creature seated in the armillary chair."
+											"A {@item gem of brightness} appears on the lap of the creature seated in the armillary chair."
 										],
 										[
 											"91-99",
@@ -13917,7 +13917,7 @@
 										],
 										[
 											"100",
-											"The creature seated in the armillary chair is granted the ability to cast the wish spell once."
+											"The creature seated in the armillary chair is granted the ability to cast the {@spell wish} spell once."
 										]
 									]
 								}
@@ -14767,7 +14767,7 @@
 							"type": "entries",
 							"name": "Magic Items of the Trickster Gods",
 							"entries": [
-								"Certain magic items-specifically those in which the spirits of the nine trickster gods reside-turn to dust and are destroyed as soon as they exit the tomb. These items include {@i Obo'laka's ring of protection} ({@area 5>10}), Moa's {@item staff of the python|DMG} ({@area 5>14}), Wongo's {@item mace of terror|DMG} ({@area 5>16}), Papazotl's {@item amulet of health|DMG} ({@area 5>22}), Nangnang's egg-shaped {@item pearl of power|DMG} ({@area 5>24}), I'jin's horn-shaped {@item wand of wonder|DMG} ({@area 5>35}), Kubazan's {@item bracers of archery|DMG} ({@area 5>42}), Shagambi's {@i instrument of the bards} ({@area 5>48}), and Unkh's {@item robe of scintillating colors|DMG} ({@area 5>55}).",
+								"Certain magic items-specifically those in which the spirits of the nine trickster gods reside-turn to dust and are destroyed as soon as they exit the tomb. These items include Obo'laka's {@item ring of protection} ({@area 5>10}), Moa's {@item staff of the python|DMG} ({@area 5>14}), Wongo's {@item mace of terror|DMG} ({@area 5>16}), Papazotl's {@item amulet of health|DMG} ({@area 5>22}), Nangnang's egg-shaped {@item pearl of power|DMG} ({@area 5>24}), I'jin's horn-shaped {@item wand of wonder|DMG} ({@area 5>35}), Kubazan's {@item bracers of archery|DMG} ({@area 5>42}), Shagambi's {@i instrument of the bards} ({@area 5>48}), and Unkh's {@item robe of scintillating colors|DMG} ({@area 5>55}).",
 								"If, in your estimation, a player did an extraordinary job roleplaying a trickster god's flaw, the god's spirit might reward that player's character by allowing its magic item to exist outside the tomb, provided that character is attuned to the item when it leaves the tomb."
 							]
 						}
@@ -14849,8 +14849,8 @@
 						"Result"
 					],
 					"colStyles": [
-						"col-xs-2 text-align-center",
-						"col-xs-10"
+						"col-2 text-align-center",
+						"col-10"
 					],
 					"rows": [
 						[
@@ -14871,8 +14871,8 @@
 						"Encounter"
 					],
 					"colStyles": [
-						"col-xs-2 text-align-center",
-						"col-xs-10"
+						"col-2 text-align-center",
+						"col-10"
 					],
 					"rows": [
 						[
@@ -14928,8 +14928,8 @@
 						"Encounter"
 					],
 					"colStyles": [
-						"col-xs-2 text-align-center",
-						"col-xs-10"
+						"col-2 text-align-center",
+						"col-10"
 					],
 					"rows": [
 						[
@@ -15082,8 +15082,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -15104,8 +15104,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -15126,8 +15126,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -15148,8 +15148,8 @@
 										"Encounter"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -15253,7 +15253,7 @@
 											"Tabaxi hunter"
 										],
 										[
-											"95-0",
+											"95-00",
 											"Tri-flower frond"
 										]
 									]
@@ -15272,8 +15272,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -15294,8 +15294,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -15316,8 +15316,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -15334,12 +15334,12 @@
 									"type": "table",
 									"caption": "Wilderness Jungle No Undead Encounters",
 									"colLabels": [
-										"d10+d100",
+										"d100",
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -15630,8 +15630,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -15652,8 +15652,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -15674,8 +15674,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -15692,12 +15692,12 @@
 									"type": "table",
 									"caption": "Wilderness Jungle Lesser Undead Encounters",
 									"colLabels": [
-										"d10+d100",
+										"d100",
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -15932,8 +15932,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -15954,8 +15954,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -15976,8 +15976,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -15994,12 +15994,12 @@
 									"type": "table",
 									"caption": "Wilderness Jungle Greater Undead Encounters",
 									"colLabels": [
-										"d10+d100",
+										"d100",
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -16186,8 +16186,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -16208,8 +16208,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -16230,8 +16230,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -16248,12 +16248,12 @@
 									"type": "table",
 									"caption": "Wilderness Mountain Encounters",
 									"colLabels": [
-										"d10+d100",
+										"d100",
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -16384,8 +16384,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -16406,8 +16406,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -16424,12 +16424,12 @@
 									"type": "table",
 									"caption": "Wilderness River Chance - Low",
 									"colLabels": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -16446,12 +16446,12 @@
 									"type": "table",
 									"caption": "Wilderness River Encounters",
 									"colLabels": [
-										"d10+d100",
+										"d100",
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -16654,8 +16654,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -16676,8 +16676,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -16698,8 +16698,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -16716,12 +16716,12 @@
 									"type": "table",
 									"caption": "Wilderness Ruins Encounters",
 									"colLabels": [
-										"d10+d100",
+										"d100",
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -16936,8 +16936,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -16958,8 +16958,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -16980,8 +16980,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -16998,12 +16998,12 @@
 									"type": "table",
 									"caption": "Wilderness Swamp Encounters",
 									"colLabels": [
-										"d10+d100",
+										"d100",
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -17178,8 +17178,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -17200,8 +17200,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -17222,8 +17222,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -17240,12 +17240,12 @@
 									"type": "table",
 									"caption": "Wilderness Wasteland Encounters",
 									"colLabels": [
-										"d10+d100",
+										"d100",
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -17398,8 +17398,8 @@
 								"Cache"
 							],
 							"colStyles": [
-								"col-xs-2 text-align-center",
-								"col-xs-10"
+								"col-2 text-align-center",
+								"col-10"
 							],
 							"rows": [
 								[
@@ -17519,12 +17519,12 @@
 							"type": "table",
 							"caption": "Treasure Drops",
 							"colLabels": [
-								"d10+d100",
+								"d100",
 								"Result"
 							],
 							"colStyles": [
-								"col-xs-2 text-align-center",
-								"col-xs-10"
+								"col-2 text-align-center",
+								"col-10"
 							],
 							"rows": [
 								[
@@ -17788,8 +17788,8 @@
 								"Remains"
 							],
 							"colStyles": [
-								"col-xs-2 text-align-center",
-								"col-xs-10"
+								"col-2 text-align-center",
+								"col-10"
 							],
 							"rows": [
 								[
@@ -17889,8 +17889,8 @@
 								"Situation"
 							],
 							"colStyles": [
-								"col-xs-2 text-align-center",
-								"col-xs-10"
+								"col-2 text-align-center",
+								"col-10"
 							],
 							"rows": [
 								[
@@ -18056,8 +18056,8 @@
 								"Cubs"
 							],
 							"colStyles": [
-								"col-xs-2 text-align-center",
-								"col-xs-10"
+								"col-2 text-align-center",
+								"col-10"
 							],
 							"rows": [
 								[
@@ -18134,8 +18134,8 @@
 								"Plant"
 							],
 							"colStyles": [
-								"col-xs-2 text-align-center",
-								"col-xs-10"
+								"col-2 text-align-center",
+								"col-10"
 							],
 							"rows": [
 								[
@@ -18236,8 +18236,8 @@
 								"Result"
 							],
 							"colStyles": [
-								"col-xs-2 text-align-center",
-								"col-xs-10"
+								"col-2 text-align-center",
+								"col-10"
 							],
 							"rows": [
 								[
@@ -18378,8 +18378,8 @@
 								"Zombies Appearing"
 							],
 							"colStyles": [
-								"col-xs-2 text-align-center",
-								"col-xs-10"
+								"col-2 text-align-center",
+								"col-10"
 							],
 							"rows": [
 								[
@@ -18479,12 +18479,12 @@
 									"type": "table",
 									"caption": "Omu Encounters - Ruins",
 									"colLabels": [
-										"d10+d100",
+										"d100",
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -18564,7 +18564,7 @@
 											"Yellow musk creeper and yellow musk zombies"
 										],
 										[
-											"96-0",
+											"96-00",
 											"Yuan-ti"
 										]
 									]
@@ -18579,12 +18579,12 @@
 									"type": "table",
 									"caption": "Omu Encounters - Palace",
 									"colLabels": [
-										"d10+d100",
+										"d100",
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -18632,7 +18632,7 @@
 											"Yellow musk creeper and yellow musk zombies"
 										],
 										[
-											"91-0",
+											"91-00",
 											"Yuan-ti"
 										]
 									]
@@ -18651,8 +18651,8 @@
 										"Result"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -18696,7 +18696,7 @@
 											"Yellow musk creeper and yellow musk zombies"
 										],
 										[
-											"91-0",
+											"91-00",
 											"Yuan-ti"
 										]
 									]
@@ -18762,8 +18762,8 @@
 								"Cost"
 							],
 							"colStyles": [
-								"col-xs-6",
-								"col-xs-6 text-align-right"
+								"col-6",
+								"col-6 text-align-right"
 							],
 							"rows": [
 								[

@@ -16,7 +16,6 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="icon" href="favicon.png">
 
-	<script type="text/javascript" src="lib/js-cookie.js"></script>
 	<script type="text/javascript" src="js/styleswitch.js"></script>
 	<script type="text/javascript" src="js/navigation.js"></script>
 
@@ -37,7 +36,7 @@
 	<header class="hidden-xs hidden-sm">
 		<div class="container">
 
-			<h1>Spells List</h1>
+			<h1>Spells</h1>
 			<p>Search by name on the left, click spell name to display on the right.</p>
 		</div>
 	</header>
@@ -51,17 +50,17 @@
 			<div class="input-group" id="filter-search-input-group">
 				<input type="search" id="search" class="search form-control" placeholder="Find spell...">
 				<span class="input-group-btn">
-						<button class="btn btn-default" type="button" id="reset">Reset</button>
+						<button class="btn btn-default" id="reset">Reset</button>
 					</span>
 			</div>
 			<div id="filtertools" class="sortlabel btn-group">
-				<button class="col-xs-2 col-xs-2-9 sort btn btn-default btn-xs" data-sort="name">Name <span class="caret_wrp"></span></button>
-				<button class="col-xs-1 col-xs-1-7 sort btn btn-default btn-xs" data-sort="source">Source <span class="caret_wrp"></span></button>
-				<button class="col-xs-1 col-xs-1-5 sort btn btn-default btn-xs" data-sort="level">Level <span class="caret_wrp"></span></button>
-				<button class="col-xs-1 col-xs-1-7 sort btn btn-default btn-xs" data-sort="time">Time <span class="caret_wrp"></span></button>
-				<button class="col-xs-1 col-xs-1-2 sort btn btn-default btn-xs" data-sort="school">School <span class="caret_wrp"></span></button>
-				<button class="col-xs-1 col-xs-0-6 sort btn btn-default btn-xs" data-sort="concentration" title="Concentration">C. <span class="caret_wrp"></span></button>
-				<button class="col-xs-2 col-xs-2-4 sort btn btn-default btn-xs" data-sort="range">Range <span class="caret_wrp"></span></button>
+				<button class="col-2-9 sort btn btn-default btn-xs" data-sort="name">Name <span class="caret_wrp"></span></button>
+				<button class="col-1-5 sort btn btn-default btn-xs" data-sort="level">Level <span class="caret_wrp"></span></button>
+				<button class="col-1-7 sort btn btn-default btn-xs" data-sort="time">Time <span class="caret_wrp"></span></button>
+				<button class="col-1-2 sort btn btn-default btn-xs" data-sort="school">School <span class="caret_wrp"></span></button>
+				<button class="col-0-6 sort btn btn-default btn-xs" data-sort="concentration" title="Concentration">C. <span class="caret_wrp"></span></button>
+				<button class="col-2-4 sort btn btn-default btn-xs" data-sort="range">Range <span class="caret_wrp"></span></button>
+				<button class="col-1-7 sort btn btn-default btn-xs" data-sort="source">Source <span class="caret_wrp"></span></button>
 			</div>
 
 			<ul class="list spells">
@@ -70,14 +69,14 @@
 		</div>
 
 		<div id="contentwrapper" class="view-col" style="flex: 5">
-			<div id="sublistcontainer" class="sublist">
+			<div id="sublistcontainer" class="sublist sublist--resizable">
 				<div id="sublistsort" class="sortlabel btn-group">
-					<button class="col-xs-3 col-xs-3-2 sort btn btn-default btn-xs" data-sort="name">Name</button>
-					<button class="col-xs-1 col-xs-1-5 sort btn btn-default btn-xs" data-sort="level">Level</button>
-					<button class="col-xs-1 col-xs-1-8 sort btn btn-default btn-xs" data-sort="time">Time</button>
-					<button class="col-xs-1 col-xs-1-6 sort btn btn-default btn-xs" data-sort="school">School</button>
-					<button class="col-xs-1 col-xs-0-7 sort btn btn-default btn-xs" data-sort="concentration" title="Concentration">C.</button>
-					<button class="col-xs-3 col-xs-3-2 sort btn btn-default btn-xs" data-sort="range">Range</button>
+					<button class="col-3-2 sort btn btn-default btn-xs" data-sort="name">Name</button>
+					<button class="col-1-5 sort btn btn-default btn-xs" data-sort="level">Level</button>
+					<button class="col-1-8 sort btn btn-default btn-xs" data-sort="time">Time</button>
+					<button class="col-1-6 sort btn btn-default btn-xs" data-sort="school">School</button>
+					<button class="col-0-7 sort btn btn-default btn-xs" data-sort="concentration" title="Concentration">C.</button>
+					<button class="col-3-2 sort btn btn-default btn-xs" data-sort="range">Range</button>
 				</div>
 				<ul class="list subspells">
 					<!-- populate with JS -->
@@ -108,6 +107,7 @@
 <script type="text/javascript" src="lib/jquery-ui.js"></script>
 <script type="text/javascript" src="lib/jquery-ui-slider-pip.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript" src="lib/localforage.js"></script>
 <script type="text/javascript" src="js/omnidexer.js"></script>
 <script type="text/javascript" src="js/omnisearch.js"></script>
 <script type="text/javascript" src="js/filter.js"></script>
@@ -117,7 +117,6 @@
 <script type="text/javascript" src="js/multisource.js"></script>
 <script type="text/javascript" src="js/spells.js"></script>
 <script type="text/javascript" src="lib/list.js"></script>
-<script type="text/javascript" src="lib/bootstrap.js"></script>
 <script type="text/javascript" src="lib/elasticlunr.js"></script>
 </body>
 

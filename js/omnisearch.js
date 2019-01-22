@@ -1,3 +1,5 @@
+"use strict";
+
 const Omnisearch = {
 	_PLACEHOLDER_TEXT: "Search everywhere...",
 	_searchIndex: null,
@@ -40,16 +42,8 @@ const Omnisearch = {
 					clickFirst = true;
 					$searchSubmit.click();
 					break;
-				case 37: // left
-					e.preventDefault();
-					$(`.pg-left`).click();
-					break;
 				case 38: // up
 					e.preventDefault();
-					break;
-				case 39: // right
-					e.preventDefault();
-					$(`.pg-right`).click();
 					break;
 				case 40: // down
 					e.preventDefault();
@@ -136,8 +130,9 @@ const Omnisearch = {
 				results = results.filter(r => r.doc.s && !SourceUtil._isNonstandardSourceWiz(r.doc.s));
 			}
 
-			if (!doHideBlacklisted()) {
+			if (!doHideBlacklisted() && ExcludeUtil.getList().length) {
 				results = results.filter(r => {
+					if (r.doc.c === Parser.CAT_ID_QUICKREF) return true;
 					let bCat = Parser.pageCategoryToProp(r.doc.c);
 					let bName = bCat !== "variantrule" ? r.doc.n : r.doc.n.split(";")[0];
 					return !ExcludeUtil.isExcluded(bName, bCat, r.doc.s);
@@ -209,31 +204,31 @@ const Omnisearch = {
 				}
 			}
 		}
-		const COOKIE_NAME_UA_ETC = "search-ua-etc";
-		const COOKIE_NAME_BLACKLIST = "search-blacklist";
+		const STORAGE_NAME_UA_ETC = "search-ua-etc";
+		const STORAGE_NAME_BLACKLIST = "search-blacklist";
 		const CK_SHOW = "SHOW";
 		const CK_HIDE = "HIDE";
 
 		let showUaEtc;
 		function doShowUaEtc () {
-			if (!showUaEtc) showUaEtc = Cookies.get(COOKIE_NAME_UA_ETC);
+			if (!showUaEtc) showUaEtc = StorageUtil.syncGet(STORAGE_NAME_UA_ETC);
 			return showUaEtc !== CK_HIDE;
 		}
 
 		function setShowUaEtc (value) {
 			showUaEtc = value ? CK_SHOW : CK_HIDE;
-			Cookies.set(COOKIE_NAME_UA_ETC, showUaEtc, {expires: 365});
+			StorageUtil.syncSet(STORAGE_NAME_UA_ETC, showUaEtc);
 		}
 
 		let hideBlacklisted;
 		function doHideBlacklisted () {
-			if (!hideBlacklisted) hideBlacklisted = Cookies.get(COOKIE_NAME_BLACKLIST);
+			if (!hideBlacklisted) hideBlacklisted = StorageUtil.syncGet(STORAGE_NAME_BLACKLIST);
 			return hideBlacklisted === CK_SHOW;
 		}
 
 		function setShowBlacklisted (value) {
 			hideBlacklisted = value ? CK_SHOW : CK_HIDE;
-			Cookies.set(COOKIE_NAME_BLACKLIST, hideBlacklisted, {expires: 365});
+			StorageUtil.syncSet(STORAGE_NAME_BLACKLIST, hideBlacklisted);
 		}
 
 		function initScrollHandler () {
@@ -335,6 +330,16 @@ const Omnisearch = {
 				}
 				break;
 		}
+	},
+
+	addScrollTopFloat () {
+		const $wrpTop = $(`<div class="bk__to-top"/>`).appendTo($("body"));
+		const $btnToTop = $(`<button class="btn btn-sm btn-default" title="To Top"><span class="glyphicon glyphicon-arrow-up"/></button>`).appendTo($wrpTop).click(() => MiscUtil.scrollPageTop());
+
+		$(window).on("scroll", () => {
+			if ($(window).scrollTop() > 50) $wrpTop.addClass("bk__to-top--scrolled");
+			else $wrpTop.removeClass("bk__to-top--scrolled");
+		});
 	}
 };
 

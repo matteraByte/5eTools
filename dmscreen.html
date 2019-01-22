@@ -10,26 +10,22 @@
 
 	<title>DM Screen - 5etools</title>
 
+	<link rel="manifest" href="manifest.json">
+
 	<link rel="stylesheet" href="css/bootstrap.css">
 	<link rel="stylesheet" href="css/jquery-ui.css">
 	<link rel="stylesheet" href="css/jquery-ui-slider-pips.css">
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="icon" href="favicon.png">
 
-	<script type="text/javascript" src="lib/js-cookie.js"></script>
 	<script type="text/javascript" src="js/styleswitch.js"></script>
 	<script type="text/javascript" src="js/navigation.js"></script>
 
 	<style>
-		body.dm-screen-fullscreen header {
-			display: none;
-		}
-
-		body.dm-screen-fullscreen nav {
-			display: none;
-		}
-
-		body.dm-screen-locked .panel-control-bar {
+		body.dm-screen-locked .panel-control-bar,
+		body.dm-screen-locked .content-tab-remove,
+		body.dm-screen-locked .panel-history-control-remove-wrapper,
+		body.dm-screen-locked .panel-history-control-middle {
 			display: none !important;
 		}
 
@@ -177,7 +173,7 @@
 			margin-bottom: 0;
 		}
 
-		.dm-sidemenu-history-item .panel-content-wrapper.panel-content-wrapper-tabs {
+		.sidemenu__history-item .panel-content-wrapper.panel-content-wrapper-tabs {
 			height: 100%;
 			margin-bottom: 0;
 		}
@@ -327,6 +323,22 @@
 			display: flex;
 			flex-direction: column;
 			min-width: 600px;
+		}
+
+		.panel-addmenu-inner--modal {
+			height: initial;
+			max-height: 400px;
+		}
+
+		.panel-addmenu-inner--large-modal {
+			width: 100%;
+			max-height: 90vh;
+		}
+
+		.panel-addmenu-modal-scroller {
+			max-height: 100%;
+			width: 100%;
+			overflow-y: auto;
 		}
 
 		.panel-addmenu-bar {
@@ -555,6 +567,33 @@
 			min-height: 30px;
 		}
 
+		.tab-body-row--cb {
+			padding: 0 3px;
+		}
+
+		.tab-body-row--cb:hover {
+			background: #f5f5f5;
+		}
+
+		.night-mode .tab-body-row--cb:hover {
+			background: #383838;
+		}
+
+		.tab-body-row--cb input[type=checkbox] {
+			margin: 0;
+		}
+
+		.tab-body-row--stats-header {
+			min-height: initial;
+			font-weight: bold;
+			font-size: 12px;
+			margin-bottom: 0;
+		}
+
+		.tab-body-row--stats {
+			flex-direction: column;
+		}
+
 		.tab-body-row:first-of-type {
 			margin-top: -1px;
 		}
@@ -577,111 +616,21 @@
 			margin-right: 0;
 		}
 
-		.dm-sidemenu {
-			z-index: 60;
-			position: fixed;
-			top: 0;
-			bottom: 0;
-			left: -260px;
-			width: 250px;
-			box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-			transition: left 0.1s;
-			cursor: default;
-			display: flex;
-			flex-direction: column;
-			padding: 3px;
-		}
-
-		.dm-sidemenu-toggle {
-			position: absolute;
+		.sidemenu__toggle {
 			top: -35px;
-			left: -7px;
-			width: 32px;
-			height: 32px;
-			box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-			cursor: pointer;
-			z-index: 60;
-			transition: left 0.1s;
-			display: flex;
-			flex-direction: column;
-			justify-content: space-around;
-			padding: 3px 4px;
 		}
 
-		body.dm-screen-fullscreen .dm-sidemenu-toggle {
+		body.is-fullscreen .sidemenu__toggle {
 			top: 12px;
+			left: -12px;
 		}
 
-		.dm-sidemenu-hotzone {
-			position: fixed;
-			top: 0;
-			left: 0;
-			bottom: 0;
-			width: 1px;
-		}
-
-		.dm-sidemenu-burger {
-			height: 3px;
-			box-shadow: inset 0 0 1px 0 #888;
-		}
-
-		.dm-sidemenu-toggle:hover .dm-sidemenu {
-			left: 0;
-			transition: left 0.1s;
-		}
-
-		.dm-sidemenu-row {
-			width: 100%;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			margin-bottom: 5px;
-		}
-
-		.dm-sidemenu-row-alt {
-			width: 100%;
-			display: flex;
-			justify-content: space-around;
-			align-items: center;
-			margin-bottom: 5px;
-		}
-
-		.dm-sidemenu-row-vert {
-			display: flex;
-			flex-direction: column;
-			justify-content: space-around;
-			align-items: center;
-		}
-
-		.dm-sidemenu-row-divider {
-			height: 1px;
-			width: calc(100% - 12px);
-			margin: 7px 2px;
-		}
-
-		.dm-sidemenu-row-label {
-			min-width: 46px;
-			flex-shrink: 0;
-		}
-
-		.dm-sidemenu-row-label--cb-label {
-			font-weight: initial;
-			display: flex;
-			margin-bottom: 0;
-			justify-content: center;
-			width: 100%;
-		}
-
-		input[type=checkbox].dm-sidemenu-row-label-cb {
-			margin-left: 7px;
-		}
-
-		.dm-sidemenu-history {
+		.sidemenu__history {
 			overflow-y: auto;
 			padding: 4px;
 		}
 
-		.dm-sidemenu-history-item {
+		.sidemenu__history-item {
 			position: relative;
 			overflow: hidden;
 			height: 80px;
@@ -692,12 +641,12 @@
 			box-shadow: 0 0 5px 0 #000000a0;
 		}
 
-		.dm-sidemenu-history-item .panel-content-wrapper {
+		.sidemenu__history-item .panel-content-wrapper {
 			overflow-y: hidden;
 			user-select: none;
 		}
 
-		.dm-sidemenu-history-item-cover {
+		.sidemenu__history-item-cover {
 			position: absolute;
 			top: 0;
 			right: 0;
@@ -716,7 +665,7 @@
 			border-bottom-left-radius: 5px;
 		}
 
-		.dm-sidemenu-history-item-cover:hover .panel-history-control-remove-wrapper {
+		.sidemenu__history-item-cover:hover .panel-history-control-remove-wrapper {
 			opacity: 1;
 			transition: opacity 0.1s;
 		}
@@ -746,7 +695,7 @@
 			transition: opacity 0.1s;
 		}
 
-		.dm-sidemenu-history-item-cover:hover .panel-history-control-middle {
+		.sidemenu__history-item-cover:hover .panel-history-control-middle {
 			opacity: 1;
 			transition: opacity 0.1s;
 		}
@@ -759,6 +708,12 @@
 			height: 100%;
 		}
 
+		.dm-init-wrp-header-outer {
+			overflow-x: auto;
+			display: flex;
+			flex-direction: column;
+		}
+
 		.dm-init-wrp-header {
 			flex: none;
 			margin-bottom: 5px;
@@ -766,16 +721,28 @@
 			justify-content: space-between;
 			font-variant: small-caps;
 			border-bottom: 1px solid #ccc;
+			min-width: min-content;
 		}
 
 		.dm-init-header {
-			padding: 5px 3px;
+			padding: 5px 0;
 			width: 100%;
 			text-align: center;
 		}
 
+		.dm-init-header--input {
+			width: 40px;
+			margin-right: 3px;
+		}
+
+		.dm-init-header--input-wide {
+			width: 83px;
+			margin-right: 3px;
+		}
+
 		.dm-init-wrp-entries {
 			overflow-y: auto;
+			min-width: min-content;
 		}
 
 		.dm-init-row {
@@ -788,10 +755,16 @@
 		.dm-init-row-rhs {
 			display: flex;
 			justify-content: space-between;
+			position: relative;
 		}
 
 		.dm-init-row-lhs {
 			width: 100%;
+			min-width: 115px;
+		}
+
+		.dm-init-row-mid {
+			display: flex;
 		}
 
 		.dm-init-row-btn {
@@ -799,8 +772,13 @@
 			padding: 1px 3px;
 		}
 
-		.dm-init-row-btn-flag {
+		.dm-init-row-btn-flag,
+		.dm_init__btn_eye {
 			margin-right: 3px;
+		}
+
+		.dm_init__number {
+			margin: 0 3px;
 		}
 
 		.dm-init-row .init-wrp-creature {
@@ -819,14 +797,23 @@
 			font-size: 9px;
 		}
 
-		.dm-init-row input {
+		.dm-init-row .init-wrp-creature-link {
+			display: flex;
+			height: 20px;
+			overflow: hidden;
+		}
+
+		.dm-init-row-input {
 			padding: 5px 3px;
 			border-radius: 0;
 			margin-right: 3px;
 		}
 
-		.dm-init-row-rhs .dm-init-header,
-		.dm-init-row-rhs input {
+		.dm-init-name {
+			min-width: 50px;
+		}
+
+		.dm_init__ipt--rhs {
 			width: 40px;
 		}
 
@@ -839,11 +826,20 @@
 
 		.dm-init-wrp-controls {
 			flex: none;
-			height: 38px;
+			height: 29px;
 			padding: 3px;
 			border-top: 1px solid #ccc;
 			justify-content: space-evenly;
 			display: flex;
+		}
+
+		.dm_init__rounds {
+			width: 35px;
+			height: 22px;
+			display: inline-block;
+			border-radius: 0;
+			padding: 0;
+			text-align: right;
 		}
 
 		.dm-init-modal-wrp-rows {
@@ -857,25 +853,91 @@
 			outline: none !important;
 		}
 
-		.dm-init-wrp-conds {
+		.dm_init__hp {
+			width: 42px;
+		}
+
+		.dm_init__hp--current {
+			margin-right: 0;
+			border-right: 0;
+		}
+
+		.dm_init__hp--max {
+			border-left: 0;
+		}
+
+		.dm_init__hp_slash {
+			position: absolute;
+			left: 40px;
+			pointer-events: none;
+			top: 0;
+			bottom: 0;
 			display: flex;
+			align-items: center;
+			color: #888;
 		}
 
-		.dm-init-cond {
-			width: 7px;
+		.dm_init__stats_rows {
+			width: 100%;
+			margin-right: 0;
+		}
+
+		.dm_init__stats_row {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			margin-bottom: 2px;
+		}
+
+		.dm_init__stats_up_down {
+			display: flex;
+			justify-content: center;
+		}
+
+		.dm_init__stats_down {
+			left: 1px;
+			top: 2px;
+		}
+
+		.dm_init__stats_add {
+			right: -1px;
+		}
+
+		.dm_init__stats_row--item:only-child .dm_init__stats_up_down {
+			display: none;
+		}
+		.dm_init__stats_up_down--spacer {
+			display: none;
+		}
+		.dm_init__stats_row--item:only-child .dm_init__stats_up_down--spacer {
+			display: block;
+		}
+
+		.dm_init__stats_row--item:only-child .dm_init__stats_del {
+			display: none;
+		}
+
+		.dm_init__stat_head {
+			padding: 5px 0;
+			width: 40px;
+			height: 20px;
 			margin-right: 3px;
-			display: grid;
-			grid-gap: 3px;
-			cursor: pointer;
+			text-align: center;
+			overflow: hidden;
 		}
 
-		.dm-init-cond:hover {
-			box-shadow: 0 0 5px 0 rgba(240, 173, 78, 1);
+		.dm_init__stat_ipt {
+			padding: 5px 3px;
+			border-radius: 0;
+			margin-right: 3px;
+			width: 40px;
 		}
 
-		.dm-init-cond-bar {
-			width: 7px;
-			height: 100%;
+		/* player view */
+		textarea.dm_init__pl_textarea {
+			resize: none;
+			width: 100%;
+			height: 240px;
 		}
 
 		.dm-unitconv {
@@ -908,6 +970,75 @@
 			border-color: #e92b31;
 		}
 
+		.dm_money {
+			width: 100%;
+			height: 100%;
+			padding-top: 22px;
+		}
+
+		.dm_money__rows {
+			overflow-y: scroll;
+		}
+
+		.dm_money__ctrl {
+			margin-top: 6px;
+			padding-top: 3px;
+			border-top: 1px solid #ccc;
+			flex-shrink: 0;
+		}
+
+		.dm_money__ctrl__lhs {
+			display: flex;
+			flex-direction: column;
+			padding: 3px;
+		}
+
+		.dm_money__ctrl__lhs > * {
+			margin-bottom: 3px;
+		}
+
+		.dm_money__ctrl__lhs > *:last-child {
+			margin-bottom: 0;
+		}
+
+		.dm_money__ctrl__rhs {
+			display: flex;
+			flex-direction: column;
+			padding: 3px;
+		}
+
+		.dm_money__ctrl__rhs > * {
+			margin-bottom: 3px;
+		}
+
+		.dm_money__ctrl__rhs > *:last-child {
+			margin-bottom: 0;
+		}
+
+		.dm_money__out,
+		.dm_money__out[disabled] {
+			text-align: right;
+			background: #0000;
+		}
+
+		.dm_money__row {
+			width: 100%;
+			display: flex;
+			margin-bottom: 3px;
+		}
+
+		.dm_money__row:last-child {
+			margin-bottom: 0;
+		}
+
+		.dm_money__row > * {
+			margin-right: 3px;
+		}
+
+		.dm_money__row > *:last-child {
+			margin-right: 0;
+		}
+
 		@media (max-width: 767px) {
 			.panel-addmenu-inner {
 				min-width: 0;
@@ -937,6 +1068,14 @@
 				max-width: 1170px;
 			}
 		}
+
+		.btn-text-insert {
+			display: inline-block;
+			font-size: 12px;
+			line-height: 14px;
+			padding: 0 2px;
+			margin: -1px 1px;
+		}
 	</style>
 </head>
 
@@ -954,12 +1093,12 @@
 		</ul>
 	</nav>
 	<div class="dm-screen">
-		<div class="dm-sidemenu-toggle">
-			<div class="dm-sidemenu-hotzone"></div>
-			<div class="dm-sidemenu-burger"></div>
-			<div class="dm-sidemenu-burger"></div>
-			<div class="dm-sidemenu-burger"></div>
-			<div class="dm-sidemenu"></div>
+		<div class="sidemenu__toggle">
+			<div class="sidemenu__hotzone"></div>
+			<div class="sidemenu__burger"></div>
+			<div class="sidemenu__burger"></div>
+			<div class="sidemenu__burger"></div>
+			<div class="sidemenu"></div>
 		</div>
 	</div>
 </div>
@@ -969,15 +1108,21 @@
 <script type="text/javascript" src="lib/jquery.panzoom.js"></script>
 <script type="text/javascript" src="lib/jquery-ui.js"></script>
 <script type="text/javascript" src="lib/jquery-ui-slider-pip.js"></script>
+<script type="text/javascript" src="lib/lzma.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript" src="js/p2putils.js"></script>
+<script type="text/javascript" src="lib/localforage.js"></script>
 <script type="text/javascript" src="js/omnidexer.js"></script>
 <script type="text/javascript" src="js/omnisearch.js"></script>
 <script type="text/javascript" src="js/entryrender.js"></script>
 <script type="text/javascript" src="js/scalecreature.js"></script>
 <script type="text/javascript" src="js/dmscreen.js"></script>
+<script type="text/javascript" src="js/dmscreen-initiativetracker.js"></script>
+<script type="text/javascript" src="js/dmscreen-moneyconverter.js"></script>
+<script type="text/javascript" src="js/initiativetrackerutils.js"></script>
 <script type="text/javascript" src="js/history.js"></script>
 <script type="text/javascript" src="lib/list.js"></script>
-<script type="text/javascript" src="lib/bootstrap.js"></script>
+<script type="text/javascript" src="lib/bootstrap-tooltip.js"></script>
 <script type="text/javascript" src="lib/elasticlunr.js"></script>
 </body>
 

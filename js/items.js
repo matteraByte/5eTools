@@ -1,9 +1,9 @@
 "use strict";
 
-window.onload = function load () {
-	ExcludeUtil.initialise();
+window.onload = async function load () {
+	await ExcludeUtil.pInitialise();
 	EntryRenderer.item.buildList((incItemList) => {
-		populateTablesAndFilters(incItemList);
+		populateTablesAndFilters({item: incItemList});
 	}, {}, true);
 };
 
@@ -52,12 +52,13 @@ const typeFilter = new Filter({header: "Type", deselFn: (it) => DEFAULT_HIDDEN_T
 const tierFilter = new Filter({header: "Tier", items: ["None", "Minor", "Major"]});
 const propertyFilter = new Filter({header: "Property", displayFn: StrUtil.uppercaseFirst});
 const costFilter = new RangeFilter({header: "Cost", min: 0, max: 100, allowGreater: true, suffix: "gp"});
+const focusFilter = new Filter({header: "Spellcasting Focus", items: ["Bard", "Cleric", "Druid", "Paladin", "Sorcerer", "Warlock", "Wizard"]});
 const attachedSpellsFilter = new Filter({header: "Attached Spells", displayFn: (it) => it.split("|")[0].toTitleCase()});
 let filterBox;
-function populateTablesAndFilters (data) {
+async function populateTablesAndFilters (data) {
 	const rarityFilter = new Filter({
 		header: "Rarity",
-		items: ["None", "Common", "Uncommon", "Rare", "Very Rare", "Legendary", "Artifact", "Unknown", "Other"]
+		items: ["None", "Common", "Uncommon", "Rare", "Very Rare", "Legendary", "Artifact", "Unknown", "Unknown (Magic)", "Other"]
 	});
 	const attunementFilter = new Filter({header: "Attunement", items: ["Yes", "By...", "Optional", "No"]});
 	const categoryFilter = new Filter({
@@ -65,19 +66,19 @@ function populateTablesAndFilters (data) {
 		items: ["Basic", "Generic Variant", "Specific Variant", "Other"],
 		deselFn: (it) => it === "Specific Variant"
 	});
-	const miscFilter = new Filter({header: "Miscellaneous", items: ["Charges", "Cursed", "Magic", "Mundane", "Sentient"]});
+	const miscFilter = new Filter({header: "Miscellaneous", items: ["Ability Score Adjustment", "Charges", "Cursed", "Magic", "Mundane", "Sentient"]});
 
-	filterBox = initFilterBox(sourceFilter, typeFilter, tierFilter, rarityFilter, propertyFilter, attunementFilter, categoryFilter, costFilter, miscFilter, attachedSpellsFilter);
+	filterBox = await pInitFilterBox(sourceFilter, typeFilter, tierFilter, rarityFilter, propertyFilter, attunementFilter, categoryFilter, costFilter, focusFilter, miscFilter, attachedSpellsFilter);
 
 	const mundaneOptions = {
-		valueNames: ["name", "type", "cost", "weight", "source"],
+		valueNames: ["name", "type", "cost", "weight", "source", "uniqueid"],
 		listClass: "mundane",
 		sortClass: "none",
 		sortFunction: sortItems
 	};
 	mundanelist = ListUtil.search(mundaneOptions);
 	const magicOptions = {
-		valueNames: ["name", "type", "weight", "rarity", "source"],
+		valueNames: ["name", "type", "weight", "rarity", "source", "uniqueid"],
 		listClass: "magic",
 		sortClass: "none",
 		sortFunction: sortItems
@@ -159,9 +160,6 @@ function populateTablesAndFilters (data) {
 		});
 	});
 
-	RollerUtil.addListRollButton();
-	addListShowHide();
-
 	const subList = ListUtil.initSublist(
 		{
 			valueNames: ["name", "weight", "price", "count", "id"],
@@ -176,31 +174,31 @@ function populateTablesAndFilters (data) {
 	addItems(data);
 	BrewUtil.pAddBrewData()
 		.then(handleBrew)
+		.then(() => BrewUtil.bind({list}))
 		.then(BrewUtil.pAddLocalBrewData)
-		.catch(BrewUtil.purgeBrew)
-		.then(() => {
+		.catch(BrewUtil.pPurgeBrew)
+		.then(async () => {
 			BrewUtil.makeBrewButton("manage-brew");
 			BrewUtil.bind({lists: [mundanelist, magiclist], filterBox, sourceFilter});
-			ListUtil.loadState();
+			await ListUtil.pLoadState();
+			RollerUtil.addListRollButton();
+			ListUtil.addListShowHide();
 
 			History.init(true);
 			ExcludeUtil.checkShowAllExcluded(itemList, $(`#pagecontent`));
 		});
 }
 
-function handleBrew (homebrew) {
-	(homebrew.itemProperty || []).forEach(p => EntryRenderer.item._addProperty(p));
-	(homebrew.itemType || []).forEach(t => EntryRenderer.item._addType(t));
-	addItems(homebrew.item);
-	return Promise.resolve();
+async function handleBrew (homebrew) {
+	const itemList = await EntryRenderer.item.getItemsFromHomebrew(homebrew);
+	addItems({item: itemList});
 }
 
 let itemList = [];
 let itI = 0;
 function addItems (data) {
-	if (!data || !data.length) return;
-
-	itemList = itemList.concat(data);
+	if (!data.item || !data.item.length) return;
+	itemList = itemList.concat(data.item);
 
 	const liList = {mundane: "", magic: ""}; // store the <li> tag content here and change the DOM once for each property after the loop
 
@@ -226,32 +224,59 @@ function addItems (data) {
 		if (curitem.curse) curitem._fMisc.push("Cursed");
 		const isMundane = rarity === "None" || rarity === "Unknown" || category === "Basic";
 		curitem._fMisc.push(isMundane ? "Mundane" : "Magic");
+		if (curitem.ability) curitem._fMisc.push("Ability Score Adjustment");
 		if (curitem.charges) curitem._fMisc.push("Charges");
 		curitem._fCost = Parser.coinValueToNumber(curitem.value);
+		if (curitem.focus || curitem.type === "INS" || curitem.type === "SCF") {
+			curitem._fFocus = curitem.focus ? curitem.focus === true ? ["Bard", "Cleric", "Druid", "Paladin", "Sorcerer", "Warlock", "Wizard"] : [...curitem.focus] : [];
+			if (curitem.type === "INS" && !curitem._fFocus.includes("Bard")) curitem._fFocus.push("Bard");
+			if (curitem.type === "SCF") {
+				switch (curitem.scfType) {
+					case "arcane": {
+						if (!curitem._fFocus.includes("Sorcerer")) curitem._fFocus.push("Sorcerer");
+						if (!curitem._fFocus.includes("Warlock")) curitem._fFocus.push("Warlock");
+						if (!curitem._fFocus.includes("Wizard")) curitem._fFocus.push("Wizard");
+						break;
+					}
+					case "druid": {
+						if (!curitem._fFocus.includes("Druid")) curitem._fFocus.push("Druid");
+						break;
+					}
+					case "holy":
+						if (!curitem._fFocus.includes("Cleric")) curitem._fFocus.push("Cleric");
+						if (!curitem._fFocus.includes("Paladin")) curitem._fFocus.push("Paladin");
+						break;
+				}
+			}
+		}
 
 		if (isMundane) {
 			liList["mundane"] += `
 			<li class="row" ${FLTR_ID}=${itI} onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id="${itI}" href="#${UrlUtil.autoEncodeHash(curitem)}" title="${name}">
-					<span class="name col-xs-3">${name}</span>
-					<span class="type col-xs-4 col-xs-4-3">${curitem.typeListText}</span>
-					<span class="col-xs-1 col-xs-1-5 text-align-center">${curitem.value ? curitem.value.replace(/ +/g, "\u00A0") : "\u2014"}</span>
-					<span class="col-xs-1 col-xs-1-5 text-align-center">${Parser.itemWeightToFull(curitem) || "\u2014"}</span>
-					<span class="source col-xs-1 col-xs-1-7 ${Parser.sourceJsonToColor(curitem.source)}" title="${sourceFull}">${sourceAbv}</span>
+					<span class="name col-3">${name}</span>
+					<span class="type col-4-3">${curitem.typeListText}</span>
+					<span class="col-1-5 text-align-center">${curitem.value ? curitem.value.replace(/ +/g, "\u00A0") : "\u2014"}</span>
+					<span class="col-1-5 text-align-center">${Parser.itemWeightToFull(curitem) || "\u2014"}</span>
+					<span class="source col-1-7 text-align-center ${Parser.sourceJsonToColor(curitem.source)}" title="${sourceFull}">${sourceAbv}</span>
 					<span class="cost hidden">${curitem._fCost}</span>
 					<span class="weight hidden">${Parser.weightValueToNumber(curitem.weight)}</span>
+					
+					<span class="uniqueid hidden">${curitem.uniqueId ? curitem.uniqueId : itI}</span>
 				</a>
 			</li>`;
 		} else {
 			liList["magic"] += `
 			<li class="row" ${FLTR_ID}=${itI} onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id="${itI}" href="#${UrlUtil.autoEncodeHash(curitem)}" title="${name}">
-					<span class="name col-xs-3 col-xs-3-5">${name}</span>
-					<span class="type col-xs-3 col-xs-3-3">${curitem.typeListText}</span>
-					<span class="col-xs-1 col-xs-1-5 text-align-center">${Parser.itemWeightToFull(curitem) || "\u2014"}</span>
-					<span class="rarity col-xs-2">${rarity}</span>
-					<span class="source col-xs-1 col-xs-1-7 ${Parser.sourceJsonToColor(curitem.source)}" title="${sourceFull}">${sourceAbv}</span>
+					<span class="name col-3-5">${name}</span>
+					<span class="type col-3-3">${curitem.typeListText}</span>
+					<span class="col-1-5 text-align-center">${Parser.itemWeightToFull(curitem) || "\u2014"}</span>
+					<span class="rarity col-2">${rarity}</span>
+					<span class="source col-1-7 text-align-center ${Parser.sourceJsonToColor(curitem.source)}" title="${sourceFull}">${sourceAbv}</span>
 					<span class="weight hidden">${Parser.weightValueToNumber(curitem.weight)}</span>
+					
+					<span class="uniqueid hidden">${curitem.uniqueId ? curitem.uniqueId : itI}</span>
 				</a>
 			</li>`;
 		}
@@ -313,6 +338,7 @@ function handleFilterChange () {
 			i.attunementCategory,
 			i.category,
 			i._fCost,
+			i._fFocus,
 			i._fMisc,
 			i.attachedSpells
 		);
@@ -341,10 +367,10 @@ function getSublistItem (item, pinId, addCount) {
 	return `
 		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
 			<a href="#${UrlUtil.autoEncodeHash(item)}" title="${item.name}">
-				<span class="name col-xs-6">${item.name}</span>
-				<span class="weight text-align-center col-xs-2">${item.weight ? `${item.weight} lb${item.weight > 1 ? "s" : ""}.` : "\u2014"}</span>
-				<span class="price text-align-center col-xs-2">${item.value ? item.value.replace(/ +/g, "\u00A0") : "\u2014"}</span>
-				<span class="count text-align-center col-xs-2">${addCount || 1}</span>
+				<span class="name col-6">${item.name}</span>
+				<span class="weight text-align-center col-2">${item.weight ? `${item.weight} lb${item.weight > 1 ? "s" : ""}.` : "\u2014"}</span>
+				<span class="price text-align-center col-2">${item.value ? item.value.replace(/ +/g, "\u00A0") : "\u2014"}</span>
+				<span class="count text-align-center col-2">${addCount || 1}</span>
 				<span class="cost hidden">${item._fCost}</span>
 				<span class="id hidden">${pinId}</span>
 			</a>
@@ -358,7 +384,8 @@ function loadhash (id) {
 	const $content = $(`#pagecontent`).empty();
 	const item = itemList[id];
 
-	const $toAppend = $(`
+	function buildStatsTab () {
+		const $toAppend = $(`
 		${EntryRenderer.utils.getBorderTr()}
 		${EntryRenderer.utils.getNameTr(item)}
 		<tr>
@@ -375,65 +402,100 @@ function loadhash (id) {
 		${EntryRenderer.utils.getPageTr(item)}
 		${EntryRenderer.utils.getBorderTr()}
 	`);
-	$content.append($toAppend);
+		$content.append($toAppend);
 
-	const source = item.source;
-	const sourceFull = Parser.sourceJsonToFull(source);
+		const source = item.source;
+		const sourceFull = Parser.sourceJsonToFull(source);
 
-	const type = item.type || "";
-	if (type === "INS" || type === "GS") item.additionalSources = item.additionalSources || [];
-	if (type === "INS") {
-		if (!item.additionalSources.find(it => it.source === "XGE" && it.page === 83)) item.additionalSources.push({ "source": "XGE", "page": 83 })
-	} else if (type === "GS") {
-		if (!item.additionalSources.find(it => it.source === "XGE" && it.page === 81)) item.additionalSources.push({ "source": "XGE", "page": 81 })
-	}
-	const addSourceText = item.additionalSources ? `. Additional information from ${item.additionalSources.map(as => `<i>${Parser.sourceJsonToFull(as.source)}</i>, page ${as.page}`).join("; ")}.` : null;
-	$content.find("td#source span").html(`<i>${sourceFull}</i>${item.page ? `, page ${item.page}${addSourceText || ""}` : ""}`);
-
-	$content.find("td span#value").html(item.value ? item.value + (item.weight ? ", " : "") : "");
-	$content.find("td span#weight").html(item.weight ? item.weight + (Number(item.weight) === 1 ? " lb." : " lbs.") + (item.weightNote ? ` ${item.weightNote}` : "") : "");
-	$content.find("td span#rarity").html((item.tier ? ", " + item.tier : "") + (item.rarity && EntryRenderer.item.doRenderRarity(item.rarity) ? ", " + item.rarity : ""));
-	$content.find("td span#attunement").html(item.reqAttune ? item.reqAttune : "");
-	$content.find("td span#type").html(item.typeText === "Other" ? "" : item.typeText);
-
-	const [damage, damageType, propertiesTxt] = EntryRenderer.item.getDamageAndPropertiesText(item);
-	$content.find("span#damage").html(damage);
-	$content.find("span#damagetype").html(damageType);
-	$content.find("span#properties").html(propertiesTxt);
-
-	$content.find("tr.text").remove();
-	const renderStack = [];
-	if (item.entries && item.entries.length) {
-		const entryList = {type: "entries", entries: item.entries};
-		renderer.recursiveEntryRender(entryList, renderStack, 1);
-	}
-
-	// tools, artisan tools, instruments, gaming sets
-	if (type === "T" || type === "AT" || type === "INS" || type === "GS") {
-		renderStack.push(`<p class="text-align-center"><i>See the <a href="${renderer.baseUrl}variantrules.html#${UrlUtil.encodeForHash(["Tool Proficiencies", "XGE"])}" target="_blank">Tool Proficiencies</a> entry of the Variant and Optional rules page for more information</i></p>`);
+		const type = item.type || "";
+		if (type === "INS" || type === "GS") item.additionalSources = item.additionalSources || [];
 		if (type === "INS") {
-			const additionEntriesList = {type: "entries", entries: TOOL_INS_ADDITIONAL_ENTRIES};
-			renderer.recursiveEntryRender(additionEntriesList, renderStack, 1);
+			if (!item.additionalSources.find(it => it.source === "XGE" && it.page === 83)) item.additionalSources.push({ "source": "XGE", "page": 83 })
 		} else if (type === "GS") {
-			const additionEntriesList = {type: "entries", entries: TOOL_GS_ADDITIONAL_ENTRIES};
+			if (!item.additionalSources.find(it => it.source === "XGE" && it.page === 81)) item.additionalSources.push({ "source": "XGE", "page": 81 })
+		}
+		const addSourceText = item.additionalSources ? `. Additional information from ${item.additionalSources.map(as => `<i>${Parser.sourceJsonToFull(as.source)}</i>, page ${as.page}`).join("; ")}.` : null;
+		$content.find("td#source span").html(`<i>${sourceFull}</i>${item.page ? `, page ${item.page}${addSourceText || ""}` : ""}`);
+
+		$content.find("td span#value").html(item.value ? item.value + (item.weight ? ", " : "") : "");
+		$content.find("td span#weight").html(item.weight ? item.weight + (Number(item.weight) === 1 ? " lb." : " lbs.") + (item.weightNote ? ` ${item.weightNote}` : "") : "");
+
+		const [damage, damageType, propertiesTxt] = EntryRenderer.item.getDamageAndPropertiesText(item);
+		$content.find("span#damage").html(damage);
+		$content.find("span#damagetype").html(damageType);
+		$content.find("span#properties").html(propertiesTxt);
+
+		$content.find("#typerarityattunement").html(EntryRenderer.item.getTypeRarityAndAttunementText(item));
+
+		$content.find("tr.text").remove();
+		const renderStack = [];
+		if (item.entries && item.entries.length) {
+			const entryList = {type: "entries", entries: item.entries};
+			renderer.recursiveEntryRender(entryList, renderStack, 1);
+		}
+
+		// tools, artisan tools, instruments, gaming sets
+		if (type === "T" || type === "AT" || type === "INS" || type === "GS") {
+			renderStack.push(`<p class="text-align-center"><i>See the <a href="${renderer.baseUrl}variantrules.html#${UrlUtil.encodeForHash(["Tool Proficiencies", "XGE"])}">Tool Proficiencies</a> entry of the Variant and Optional rules page for more information</i></p>`);
+			if (type === "INS") {
+				const additionEntriesList = {type: "entries", entries: TOOL_INS_ADDITIONAL_ENTRIES};
+				renderer.recursiveEntryRender(additionEntriesList, renderStack, 1);
+			} else if (type === "GS") {
+				const additionEntriesList = {type: "entries", entries: TOOL_GS_ADDITIONAL_ENTRIES};
+				renderer.recursiveEntryRender(additionEntriesList, renderStack, 1);
+			}
+		}
+		if (item.additionalEntries) {
+			const additionEntriesList = {type: "entries", entries: item.additionalEntries};
 			renderer.recursiveEntryRender(additionEntriesList, renderStack, 1);
 		}
-	}
-	if (item.additionalEntries) {
-		const additionEntriesList = {type: "entries", entries: item.additionalEntries};
-		renderer.recursiveEntryRender(additionEntriesList, renderStack, 1);
-	}
 
-	const renderedText = renderStack.join("").split(item.name.toLowerCase()).join(`<i>${item.name.toLowerCase()}</i>`).split(item.name.toLowerCase().uppercaseFirst()).join(`<i>${item.name.toLowerCase().uppercaseFirst()}</i>`);
-	if (renderedText && renderedText.trim()) {
-		$content.find("tr#text").show().after(`
+		const renderedText = renderStack.join("")
+			.split(item.name.toLowerCase())
+			.join(`<i>${item.name.toLowerCase()}</i>`)
+			.split(item.name.toLowerCase().toTitleCase())
+			.join(`<i>${item.name.toLowerCase().toTitleCase()}</i>`);
+		if (renderedText && renderedText.trim()) {
+			$content.find("tr#text").show().after(`
 			<tr class="text">
 				<td colspan="6" class="text1">
 					${renderedText}
 				</td>
 			</tr>
 		`);
-	} else $content.find("tr#text").hide();
+		} else $content.find("tr#text").hide();
+	}
+
+	function buildFluffTab (isImageTab) {
+		return EntryRenderer.utils.buildFluffTab(
+			isImageTab,
+			$content,
+			item,
+			(fluffJson) => item.fluff || fluffJson.item.find(it => it.name === item.name && it.source === item.source),
+			`data/fluff-items.json`,
+			() => true
+		);
+	}
+
+	const statTab = EntryRenderer.utils.tabButton(
+		"Item",
+		() => {},
+		buildStatsTab
+	);
+	const infoTab = EntryRenderer.utils.tabButton(
+		"Info",
+		() => {},
+		buildFluffTab
+	);
+	const picTab = EntryRenderer.utils.tabButton(
+		"Images",
+		() => {},
+		() => buildFluffTab(true)
+	);
+
+	// only display the "Info" tab if there's some fluff info--currently (2018-12-13), no official item has text fluff
+	if (item.fluff && item.fluff.entries) EntryRenderer.utils.bindTabButtons(statTab, infoTab, picTab);
+	else EntryRenderer.utils.bindTabButtons(statTab, picTab);
 
 	ListUtil.updateSelected();
 }
@@ -473,8 +535,8 @@ const TOOL_INS_ADDITIONAL_ENTRIES = [
 			"Activity", "DC"
 		],
 		"colStyles": [
-			"col-xs-10",
-			"col-xs-2 text-align-center"
+			"col-10",
+			"col-2 text-align-center"
 		],
 		"rows": [
 			["Identify a tune", "10"],
@@ -520,8 +582,8 @@ const TOOL_GS_ADDITIONAL_ENTRIES = [
 			"Activity", "DC"
 		],
 		"colStyles": [
-			"col-xs-10",
-			"col-xs-2 text-align-center"
+			"col-10",
+			"col-2 text-align-center"
 		],
 		"rows": [
 			["Catch a player cheating", "15"],

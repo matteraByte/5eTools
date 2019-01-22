@@ -21,7 +21,7 @@ function multisourceLoad (jsonDir, jsonListName, pPageInit, dataFn, pOptional) {
 
 let loadedSources;
 function _onIndexLoad (src2UrlMap, jsonDir, dataProp, pPageInit, addFn, pOptional) {
-	return new Promise(resolve => {
+	return new Promise(async resolve => {
 		// track loaded sources
 		loadedSources = {};
 		Object.keys(src2UrlMap).forEach(src => loadedSources[src] = {url: jsonDir + src2UrlMap[src], loaded: false});
@@ -32,7 +32,7 @@ function _onIndexLoad (src2UrlMap, jsonDir, dataProp, pPageInit, addFn, pOptiona
 		const hashSourceRaw = History.getHashSource();
 		const hashSource = hashSourceRaw ? Object.keys(src2UrlMap).find(it => it.toLowerCase() === hashSourceRaw.toLowerCase()) : null;
 		const userSel = [...new Set(
-			(FilterBox.getSelectedSources() || []).concat(ListUtil.getSelectedSources() || []).concat(hashSource ? [hashSource] : [])
+			(await FilterBox.pGetSelectedSources() || []).concat(await ListUtil.pGetSelectedSources() || []).concat(hashSource ? [hashSource] : [])
 		)];
 
 		const allSources = [];
@@ -82,7 +82,7 @@ function _onIndexLoad (src2UrlMap, jsonDir, dataProp, pPageInit, addFn, pOptiona
 
 						const finalise = () => new Promise(resolve => {
 							RollerUtil.addListRollButton();
-							addListShowHide();
+							ListUtil.addListShowHide();
 
 							History.init(true);
 							resolve();
@@ -91,8 +91,7 @@ function _onIndexLoad (src2UrlMap, jsonDir, dataProp, pPageInit, addFn, pOptiona
 						const p = pOptional ? pOptional().then(finalise) : finalise;
 						p.then(resolve);
 					});
-				},
-				(src) => ({src: src, url: jsonDir + src2UrlMap[src]})
+				}
 			);
 		} else {
 			initPromise.then(() => {
@@ -107,27 +106,8 @@ function loadSource (jsonListName, dataFn) {
 		const toLoad = loadedSources[src] || loadedSources[Object.keys(loadedSources).find(k => k.toLowerCase() === src)];
 		if (!toLoad.loaded && val === "yes") {
 			DataUtil.loadJSON(toLoad.url).then(function (data) {
-				const dependencies = MiscUtil.getProperty(data, "_meta", "dependencies");
-				if (dependencies && dependencies.length) {
-					const dependencyUrls = dependencies.map(d => loadedSources[d]);
-
-					Promise.all(dependencyUrls.map(dep => DataUtil.loadJSON(dep.url))).then(depDatas => {
-						depDatas.forEach((data, i) => {
-							if (!dependencyUrls[i].loaded) {
-								dataFn(data[jsonListName]);
-							}
-						});
-
-						const depList = depDatas.reduce((a, b) => ({[jsonListName]: a[jsonListName].concat(b[jsonListName])}), ({[jsonListName]: []}))[jsonListName];
-						const mergeFn = DataUtil.dependencyMergers[UrlUtil.getCurrentPage()];
-						data[jsonListName].forEach(it => mergeFn(depList, it));
-						dataFn(data[jsonListName]);
-						toLoad.loaded = true;
-					});
-				} else {
-					dataFn(data[jsonListName]);
-					toLoad.loaded = true;
-				}
+				dataFn(data[jsonListName]);
+				toLoad.loaded = true;
 			});
 		}
 	}

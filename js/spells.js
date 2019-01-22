@@ -242,12 +242,13 @@ function pPostLoad () {
 	return new Promise(resolve => {
 		BrewUtil.pAddBrewData()
 			.then(handleBrew)
+			.then(() => BrewUtil.bind({list}))
 			.then(BrewUtil.pAddLocalBrewData)
-			.catch(BrewUtil.purgeBrew)
-			.then(() => {
+			.catch(BrewUtil.pPurgeBrew)
+			.then(async () => {
 				BrewUtil.makeBrewButton("manage-brew");
-				BrewUtil.bind({list, filterBox, sourceFilter});
-				ListUtil.loadState();
+				BrewUtil.bind({filterBox, sourceFilter});
+				await ListUtil.pLoadState();
 
 				ListUtil.bindShowTableButton(
 					"btn-show-table",
@@ -258,7 +259,7 @@ function pPostLoad () {
 						source: {name: "Source", transform: (it) => `<span class="${Parser.sourceJsonToColor(it)}" title="${Parser.sourceJsonToFull(it)}">${Parser.sourceJsonToAbv(it)}</span>`},
 						level: {name: "Level", transform: (it) => Parser.spLevelToFull(it)},
 						time: {name: "Casting Time", transform: (it) => getTblTimeStr(it[0])},
-						school: {name: "School", transform: (it) => `<span class="school_${it}">${Parser.spSchoolAbvToFull(it)}</span>`},
+						_school: {name: "School", transform: (sp) => `<span class="school_${sp.school}">${Parser.spSchoolAndSubschoolsAbvsToFull(sp.school, sp.subschools)}</span>`},
 						range: {name: "Range", transform: (it) => Parser.spRangeToFull(it)},
 						components: {name: "Components", transform: (it) => Parser.spComponentsToFull(it)},
 						classes: {name: "Classes", transform: (it) => Parser.spMainClassesToFull(it)},
@@ -274,8 +275,26 @@ function pPostLoad () {
 	})
 }
 
-window.onload = function load () {
-	ExcludeUtil.initialise();
+window.onload = async function load () {
+	filterBox = await pInitFilterBox(
+		sourceFilter,
+		levelFilter,
+		classAndSubclassFilter,
+		raceFilter,
+		metaFilter,
+		schoolFilter,
+		subSchoolFilter,
+		damageFilter,
+		conditionFilter,
+		spellAttackFilter,
+		saveFilter,
+		checkFilter,
+		timeFilter,
+		durationFilter,
+		rangeFilter,
+		areaTypeFilter
+	);
+	await ExcludeUtil.pInitialise();
 	SortUtil.initHandleFilterButtonClicks();
 	multisourceLoad(JSON_DIR, JSON_LIST_NAME, pPageInit, addSpells, pPostLoad)
 		.then(() => {
@@ -319,8 +338,13 @@ const schoolFilter = new Filter({
 		SKL_ABV_NEC,
 		SKL_ABV_TRA
 	],
-	displayFn: Parser.spSchoolAbvToFull}
-);
+	displayFn: Parser.spSchoolAbvToFull
+});
+const subSchoolFilter = new Filter({
+	header: "Subschool",
+	items: [],
+	displayFn: Parser.spSchoolAbvToFull
+});
 const damageFilter = new Filter({
 	header: "Damage Type",
 	items: [
@@ -340,12 +364,12 @@ const spellAttackFilter = new Filter({
 });
 const saveFilter = new Filter({
 	header: "Saving Throw",
-	items: ["strength", "constitution", "dexterity", "intelligence", "wisdom", "charisma"],
+	items: ["strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma"],
 	displayFn: getFilterAbilitySave
 });
 const checkFilter = new Filter({
 	header: "Opposed Ability Check",
-	items: ["strength", "constitution", "dexterity", "intelligence", "wisdom", "charisma"],
+	items: ["strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma"],
 	displayFn: getFilterAbilityCheck
 });
 const timeFilter = new Filter({
@@ -380,22 +404,12 @@ const rangeFilter = new Filter({
 		F_RNG_SPECIAL
 	]
 });
-const filterBox = initFilterBox(
-	sourceFilter,
-	levelFilter,
-	classAndSubclassFilter,
-	raceFilter,
-	metaFilter,
-	schoolFilter,
-	damageFilter,
-	conditionFilter,
-	spellAttackFilter,
-	saveFilter,
-	checkFilter,
-	timeFilter,
-	durationFilter,
-	rangeFilter
-);
+const areaTypeFilter = new Filter({
+	header: "Area Style",
+	items: ["ST", "MT", "R", "N", "C", "Y", "H", "L", "S", "Q", "W"],
+	displayFn: Parser.spAreaTypeToFull
+});
+let filterBox;
 
 function pPageInit (loadedSources) {
 	tableDefault = $("#pagecontent").html();
@@ -513,19 +527,19 @@ function pPageInit (loadedSources) {
 			}
 			if (homebrew.subclass) homebrew.subclass.forEach(sc => handleSubclass(sc.class, sc.classSource, sc));
 		})
-		.catch(BrewUtil.purgeBrew);
+		.catch(BrewUtil.pPurgeBrew);
 }
 
 function getSublistItem (spell, pinId) {
 	return `
 		<li class="row" ${FLTR_ID}="${pinId}" oncontextmenu="ListUtil.openSubContextMenu(event, this)">
 			<a href="#${UrlUtil.autoEncodeHash(spell)}" title="${spell.name}">
-				<span class="name col-xs-3 col-xs-3-2">${spell.name}</span>
-				<span class="level col-xs-1 col-xs-1-5">${Parser.spLevelToFull(spell.level)}</span>
-				<span class="time col-xs-1 col-xs-1-8">${getTblTimeStr(spell.time[0])}</span>
-				<span class="school col-xs-1 col-xs-1-6 school_${spell.school}" title="${Parser.spSchoolAbvToFull(spell.school)}">${Parser.spSchoolAbvToShort(spell.school)}</span>
-				<span class="concentration concentration--sublist col-xs-1 col-xs-0-7" title="Concentration">${spell._isConc ? "×" : ""}</span>
-				<span class="range col-xs-3 col-xs-3-2">${Parser.spRangeToFull(spell.range)}</span>
+				<span class="name col-3-2">${spell.name}</span>
+				<span class="level col-1-5">${Parser.spLevelToFull(spell.level)}</span>
+				<span class="time col-1-8">${getTblTimeStr(spell.time[0])}</span>
+				<span class="school col-1-6 school_${spell.school}" title="${Parser.spSchoolAndSubschoolsAbvsToFull(spell.school, spell.subschools)}">${Parser.spSchoolAndSubschoolsAbvsShort(spell.school, spell.subschools)}</span>
+				<span class="concentration concentration--sublist col-0-7" title="Concentration">${spell._isConc ? "×" : ""}</span>
+				<span class="range col-3-2">${Parser.spRangeToFull(spell.range)}</span>
 				<span class="id hidden">${pinId}</span>
 			</a>
 		</li>
@@ -544,6 +558,7 @@ function handleFilterChange () {
 			s._fRaces,
 			s._fMeta,
 			s.school,
+			s.subschools,
 			s.damageInflict,
 			s.conditionInflict,
 			s.spellAttack,
@@ -551,7 +566,8 @@ function handleFilterChange () {
 			s.opposedCheck,
 			s._fTimeType,
 			s._fDurationType,
-			s._fRangeType
+			s._fRangeType,
+			s.areaTags
 		);
 	});
 	onFilterChangeMulti(spellList);
@@ -576,7 +592,7 @@ function addSpells (data) {
 		if (spell.meta && spell.meta.technomagic) levelText += " (tec.)";
 
 		// add eldritch knight and arcane trickster
-		if (spell.classes.fromClassList.filter(c => c.name === STR_WIZARD && c.source === SRC_PHB).length) {
+		if (spell.classes.fromClassList && spell.classes.fromClassList.filter(c => c.name === STR_WIZARD && c.source === SRC_PHB).length) {
 			if (!spell.classes.fromSubclass) spell.classes.fromSubclass = [];
 			spell.classes.fromSubclass.push({
 				class: {name: STR_FIGHTER, source: SRC_PHB},
@@ -592,12 +608,21 @@ function addSpells (data) {
 		}
 
 		// add divine soul, favored soul v2, favored soul v3
-		if (spell.classes.fromClassList.filter(c => c.name === STR_CLERIC && c.source === SRC_PHB).length) {
-			if (!spell.classes.fromSubclass) spell.classes.fromSubclass = [];
-			spell.classes.fromSubclass.push({
-				class: {name: STR_SORCERER, source: SRC_PHB},
-				subclass: {name: STR_DIV_SOUL, source: SRC_XGE}
-			});
+		if (spell.classes.fromClassList && spell.classes.fromClassList.filter(c => c.name === STR_CLERIC && c.source === SRC_PHB).length) {
+			if (!spell.classes.fromSubclass) {
+				spell.classes.fromSubclass = [];
+				spell.classes.fromSubclass.push({
+					class: {name: STR_SORCERER, source: SRC_PHB},
+					subclass: {name: STR_DIV_SOUL, source: SRC_XGE}
+				});
+			} else {
+				if (!spell.classes.fromSubclass.find(it => it.class.name === STR_SORCERER && it.class.source === SRC_PHB && it.subclass.name === STR_DIV_SOUL && it.subclass.source === SRC_XGE)) {
+					spell.classes.fromSubclass.push({
+						class: {name: STR_SORCERER, source: SRC_PHB},
+						subclass: {name: STR_DIV_SOUL, source: SRC_XGE}
+					});
+				}
+			}
 			spell.classes.fromSubclass.push({
 				class: {name: STR_SORCERER, source: SRC_PHB},
 				subclass: {name: STR_FAV_SOUL_V2, source: SRC_UAS}
@@ -609,7 +634,7 @@ function addSpells (data) {
 		}
 
 		// add high elf
-		if (spell.level === 0 && spell.classes && spell.classes.fromClassList.find(it => it.name === "Wizard")) {
+		if (spell.level === 0 && spell.classes.fromClassList && spell.classes.fromClassList.find(it => it.name === "Wizard")) {
 			(spell.races || (spell.races = [])).push({
 				name: "Elf (High)",
 				source: SRC_PHB,
@@ -638,7 +663,7 @@ function addSpells (data) {
 		// used for filtering
 		spell._fSources = ListUtil.getCompleteSources(spell);
 		spell._fMeta = getMetaFilterObj(spell);
-		spell._fClasses = spell.classes.fromClassList.map(c => getClassFilterStr(c));
+		spell._fClasses = spell.classes.fromClassList ? spell.classes.fromClassList.map(c => getClassFilterStr(c)) : [];
 		spell._fSubclasses = spell.classes.fromSubclass
 			? spell.classes.fromSubclass.map(c => new FilterItem({
 				item: getClassFilterStr(c.subclass),
@@ -656,13 +681,13 @@ function addSpells (data) {
 		tempString += `
 			<li class="row" ${FLTR_ID}="${spI}" onclick="ListUtil.toggleSelected(event, this)" oncontextmenu="ListUtil.openContextMenu(event, this)">
 				<a id="${spI}" href="#${UrlUtil.autoEncodeHash(spell)}" title="${spell.name}">
-					<span class="name col-xs-2 col-xs-2-9">${spell.name}</span>
-					<span class="source col-xs-1 col-xs-1-7 ${Parser.sourceJsonToColor(spell.source)}" title="${Parser.sourceJsonToFull(spell.source)}">${Parser.sourceJsonToAbv(spell.source)}</span>
-					<span class="level col-xs-1 col-xs-1-5">${levelText}</span>
-					<span class="time col-xs-1 col-xs-1-7">${getTblTimeStr(spell.time[0])}</span>
-					<span class="school col-xs-1 col-xs-1-2 school_${spell.school}" title="${Parser.spSchoolAbvToFull(spell.school)}">${Parser.spSchoolAbvToShort(spell.school)}</span>
-					<span class="concentration col-xs-1 col-xs-0-6" title="Concentration">${spell._isConc ? "×" : ""}</span>
-					<span class="range col-xs-2 col-xs-2-4">${Parser.spRangeToFull(spell.range)}</span>
+					<span class="name col-2-9">${spell.name}</span>
+					<span class="level col-1-5">${levelText}</span>
+					<span class="time col-1-7">${getTblTimeStr(spell.time[0])}</span>
+					<span class="school col-1-2 school_${spell.school}" title="${Parser.spSchoolAndSubschoolsAbvsToFull(spell.school, spell.subschools)}">${Parser.spSchoolAndSubschoolsAbvsShort(spell.school, spell.subschools)}</span>
+					<span class="concentration col-0-6" title="Concentration">${spell._isConc ? "×" : ""}</span>
+					<span class="range col-2-4">${Parser.spRangeToFull(spell.range)}</span>
+					<span class="source col-1-7 text-align-center ${Parser.sourceJsonToColor(spell.source)}" title="${Parser.sourceJsonToFull(spell.source)}">${Parser.sourceJsonToAbv(spell.source)}</span>
 
 					<span class="classes" style="display: none">${Parser.spClassesToFull(spell.classes, true)}</span>
 					<span class="uniqueid hidden">${spell.uniqueId ? spell.uniqueId : spI}</span>
@@ -674,6 +699,7 @@ function addSpells (data) {
 		raceFilter.addIfAbsent(spell._fRaces);
 		spell._fClasses.forEach(c => classFilter.addIfAbsent(c));
 		spell._fSubclasses.forEach(sc => subclassFilter.addIfAbsent(sc));
+		subSchoolFilter.addIfAbsent(spell.subschools);
 	}
 	const lastSearch = ListUtil.getSearchTermAndReset(list);
 	spellTable.append(tempString);

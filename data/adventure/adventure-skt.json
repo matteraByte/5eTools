@@ -794,8 +794,8 @@
 										"Item"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -1960,36 +1960,46 @@
 						},
 						"Map 1.3 shows the tower. The stairs are made of firm cloud stuff and spiral downward, stopping just short of the ground. They are sized for humans and safe to climb. After climbing the stairs for 1,000 feet, the characters stand in front of the tower's entrance, on a cloud that feels as firm and safe as solid ground. If the characters enter the first floor of the tower, a cloud giant wizard named Zephyros descends from the second floor (using a {@spell levitate|PHB} spell) to greet them.",
 						{
-							"type": "image",
-							"href": {
-								"type": "internal",
-								"path": "adventure/SKT/Tower-of-Zephyros-Image.jpg"
-							},
-							"title": "Tower of Zephyros Image"
+							"type": "gallery",
+							"images": [
+								{
+									"type": "image",
+									"href": {
+										"type": "internal",
+										"path": "adventure/SKT/Tower-of-Zephyros-Image.jpg"
+									},
+									"title": "Tower of Zephyros Image"
+								},
+								{
+									"type": "image",
+									"href": {
+										"type": "internal",
+										"path": "adventure/SKT/Tower-of-Zephyros.jpg"
+									},
+									"title": "Tower of Zephyros"
+								}
+							]
 						},
 						{
-							"type": "image",
-							"href": {
-								"type": "internal",
-								"path": "adventure/SKT/Tower-of-Zephyros.jpg"
-							},
-							"title": "Tower of Zephyros"
-						},
-						{
-							"type": "image",
-							"href": {
-								"type": "internal",
-								"path": "adventure/SKT/Tower-of-Zephyros-Map-DM.jpg"
-							},
-							"title": "Tower of Zephyros Map DM"
-						},
-						{
-							"type": "image",
-							"href": {
-								"type": "internal",
-								"path": "adventure/SKT/Tower-of-Zephyros-Player.jpg"
-							},
-							"title": "Tower of Zephyros Player"
+							"type": "gallery",
+							"images": [
+								{
+									"type": "image",
+									"href": {
+										"type": "internal",
+										"path": "adventure/SKT/Tower-of-Zephyros-Map-DM.jpg"
+									},
+									"title": "Tower of Zephyros Map DM"
+								},
+								{
+									"type": "image",
+									"href": {
+										"type": "internal",
+										"path": "adventure/SKT/Tower-of-Zephyros-Player.jpg"
+									},
+									"title": "Tower of Zephyros Player"
+								}
+							]
 						},
 						"Zephyros is an eccentric cloud giant with windswept white hair, a wispy white beard, and a billowy purple robe adorned with gold stars. He poses no threat to Nightstone or the characters.",
 						{
@@ -2146,8 +2156,8 @@
 										"Magical Effect"
 									],
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -2971,7 +2981,7 @@
 							},
 							"title": "Goblin Hucker"
 						},
-						"The sling of the trebuchet is big enough to hurl a rock, a flaming cask of pitch, or a similarly sized projectile- but the contraption was designed to fling goblins. A goblin used as a projectile typically wears a spiked helmet, so that it deals piercing damage to the target on impact. The thirty goblins outside Goldenfields are equipped with helmets. A goblin rarely survives the experience of being hurled through the air in this fashion. The goblins here stand ready to be flung at enemies on the wall, while the ogres position themselves 300 feet away from their targets.",
+						"The sling of the trebuchet is big enough to hurl a rock, a flaming cask of pitch, or a similarly sized projectile\u2014but the contraption was designed to fling goblins. A goblin used as a projectile typically wears a spiked helmet, so that it deals piercing damage to the target on impact. The thirty goblins outside Goldenfields are equipped with helmets. A goblin rarely survives the experience of being hurled through the air in this fashion. The goblins here stand ready to be flung at enemies on the wall, while the ogres position themselves 300 feet away from their targets.",
 						"The wearer of a goblin hucker launches its payload in a high arc, so it can hit targets behind cover. Loading the sling is an action that the contraption's wearer can't perform. A goblin willing to serve as a living projectile can load itself, if necessary. The ogre must then use an action to aim the weapon and pull the cord that releases the sling and hurls the projectile through the air.",
 						{
 							"type": "entries",
@@ -3743,7 +3753,7 @@
 							"type": "entries",
 							"name": "Tribe of the Wolf",
 							"entries": [
-								"Weakened by conflict, the Tribe of the Wolf was with out a king or queen for three winters. Its most powerful chieftain, Isarr Kronenstrom, is a bloodthirsty tyrant who worships Malar the Beast-Lord. He hunts Ten-Towners for sport and strikes fear into the hearts of his enemies, many of whom believe he's the Chosen of Malar. Several members of Isarr's clan have deserted him or been killed off by rival tribes, but the few that remain are fiercely loyal, Though Isarr's clan has dwindled in recent years, the other Wolf chieftains fear Isarr and are too weak to challenge him. They are also afraid to ally with the other Reghed tribes against Isarr. Although Isarr calls himself the Wolf King, few others in the Wolf tribe support him in that claim."
+								"Weakened by conflict, the Tribe of the Wolf was without a king or queen for three winters. Its most powerful chieftain, Isarr Kronenstrom, is a bloodthirsty tyrant who worships Malar the Beast-Lord. He hunts Ten-Towners for sport and strikes fear into the hearts of his enemies, many of whom believe he's the Chosen of Malar. Several members of Isarr's clan have deserted him or been killed off by rival tribes, but the few that remain are fiercely loyal, Though Isarr's clan has dwindled in recent years, the other Wolf chieftains fear Isarr and are too weak to challenge him. They are also afraid to ally with the other Reghed tribes against Isarr. Although Isarr calls himself the Wolf King, few others in the Wolf tribe support him in that claim."
 							]
 						}
 					]
@@ -3897,15 +3907,15 @@
 								"Tundra"
 							],
 							"colStyles": [
-								"col-xs-4",
-								"col-xs-1 text-align-center",
-								"col-xs-1 text-align-center",
-								"col-xs-1 text-align-center",
-								"col-xs-1 text-align-center",
-								"col-xs-1 text-align-center",
-								"col-xs-1 text-align-center",
-								"col-xs-1 text-align-center",
-								"col-xs-1 text-align-center"
+								"col-4",
+								"col-1 text-align-center",
+								"col-1 text-align-center",
+								"col-1 text-align-center",
+								"col-1 text-align-center",
+								"col-1 text-align-center",
+								"col-1 text-align-center",
+								"col-1 text-align-center",
+								"col-1 text-align-center"
 							],
 							"rows": [
 								[
@@ -8471,9 +8481,9 @@
 										"Notes"
 									],
 									"colStyles": [
-										"col-xs-1 text-align-center",
-										"col-xs-3",
-										"col-xs-8"
+										"col-1 text-align-center",
+										"col-3",
+										"col-8"
 									],
 									"rows": [
 										[
@@ -8564,8 +8574,8 @@
 								"Creature(s)"
 							],
 							"colStyles": [
-								"col-xs-2 text-align-center",
-								"col-xs-10"
+								"col-2 text-align-center",
+								"col-10"
 							],
 							"rows": [
 								[
@@ -9168,8 +9178,8 @@
 									"type": "table",
 									"caption": "Deadstone Cleft Reinforcements",
 									"colStyles": [
-										"col-xs-2 text-align-center",
-										"col-xs-10"
+										"col-2 text-align-center",
+										"col-10"
 									],
 									"rows": [
 										[
@@ -10478,7 +10488,7 @@
 							"name": "Treasure",
 							"entries": [
 								"Each greatship holds treasure that has been piled up and concealed under a net, waiting to be sorted and divvied up.",
-								"Under the net in the easternmost ship is a crate of soap (worth 1 gp), a barrel of salted fish (worth 10 gp), a wooden case inlaid with mother-of-pearl (worth 25 gp) containing 20 crossbow bolts, a leather satchel of alchemist's supplies (worth 50 gp), a crate containing ten fine dresses (worth 25 gp each), and a velvet-lined wooden case containing a spyglass (worth 1,000 gp).",
+								"Under the net in the easternmost ship is a crate of soap (worth 1 gp), a barrel of salted fish (worth 10 gp), a wooden case inlaid with mother-of-pearl (worth 25 gp) containing 20 crossbow bolts, a leather satchel of {@item alchemist's supplies|phb} (worth 50 gp), a crate containing ten fine dresses (worth 25 gp each), and a velvet-lined wooden case containing a spyglass (worth 1,000 gp).",
 								"The southernmost ship holds five casks of wine (worth 1 gp each), a wooden mannequin clad in a fur shawl (worth 10 gp), bagpipes (worth 30 gp), a wax-sealed wooden tube containing five nautical charts (worth 25 gp each), and a waterlogged spellbook containing {@dice 1d4+6} spells (of your choice) of 6th level or lower."
 							]
 						}
@@ -10708,7 +10718,7 @@
 					"name": "Zones and Denizens",
 					"entries": [
 						"Ironslag has two distinct zones: the yakfolk village on the mountainside, and the fire giant forge beneath it (all shown on maps 8.1 and 8.2). These zones are described below in more detail, with additional information contained in the \"Ironslag: General Features\" sidebar. The Yakfolk Village Roster tables and the Forge Roster table summarize the hostile inhabitants of these two zones. An alarm raised in one zone has no effect on the alert status of the other zone.",
-						"During the day, some of the yakfolk are overseeing slaves at work in the mill ({@area 9>3}), the barns (areas 4A- 4C), and the crop fields ({@area 9>7}). At night, the slaves are locked in their cages, and the yakfolk retire to their huts (areas 5A-5F). Use the suitable Yakfolk Village Roster table (day or night) based on when the characters arrive.",
+						"During the day, some of the yakfolk are overseeing slaves at work in the mill ({@area 9>3}), the barns (areas 4A-4C), and the crop fields ({@area 9>7}). At night, the slaves are locked in their cages, and the yakfolk retire to their huts (areas 5A-5F). Use the suitable Yakfolk Village Roster table (day or night) based on when the characters arrive.",
 						{
 							"type": "table",
 							"caption": "Yakfolk Village Roster (Day)",
@@ -10953,8 +10963,8 @@
 								"Creature(s)"
 							],
 							"colStyles": [
-								"col-xs-2 text-align-center",
-								"col-xs-10"
+								"col-2 text-align-center",
+								"col-10"
 							],
 							"rows": [
 								[

@@ -166,7 +166,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Aboleth",
+			"legendaryGroup": {
+				"name": "Aboleth",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -435,7 +438,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Demilich",
+			"legendaryGroup": {
+				"name": "Demilich",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Flight",
@@ -452,7 +458,7 @@
 				{
 					"name": "Energy Drain (Costs 2 Actions)",
 					"entries": [
-						"Each creature with in 30 feet of the demilich must make a DC 15 Constitution saving throw. On a failed save, the creature's hit point maximum is magically reduced by 10 ({@dice 3d6}). If a creature's hit point maximum is reduced to 0 by this effect, the creature dies. A creature's hit point maximum can be restored with the greater restoration spell or similar magic."
+						"Each creature with in 30 feet of the demilich must make a DC 15 Constitution saving throw. On a failed save, the creature's hit point maximum is magically reduced by 10 ({@dice 3d6}). If a creature's hit point maximum is reduced to 0 by this effect, the creature dies. A creature's hit point maximum can be restored with the  {@spell greater restoration} spell or similar magic."
 					]
 				},
 				{
@@ -650,7 +656,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Black Dragon",
+			"legendaryGroup": {
+				"name": "Black Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -727,14 +736,14 @@
 			"wis": 15,
 			"cha": 19,
 			"save": {
-				"dex": "+5",
-				"con": "+11",
-				"wis": "+7",
-				"cha": "+9"
+				"dex": "+6",
+				"con": "+12",
+				"wis": "+8",
+				"cha": "+10"
 			},
 			"skill": {
-				"perception": "+12",
-				"stealth": "+5"
+				"perception": "+14",
+				"stealth": "+6"
 			},
 			"resist": [
 				"necrotic"
@@ -751,7 +760,7 @@
 				"poisoned"
 			],
 			"senses": "blindsight 60 ft., darkvision 120 ft.",
-			"passive": 22,
+			"passive": 24,
 			"languages": "Common, Draconic",
 			"cr": "17",
 			"trait": [
@@ -778,19 +787,19 @@
 				{
 					"name": "Bite",
 					"entries": [
-						"{@atk mw} {@hit 12} to hit, reach 10 ft., one target. {@h}18 ({@damage 2d10 + 7}) piercing damage plus 5 ({@damage 1d10}) lightning damage."
+						"{@atk mw} {@hit 13} to hit, reach 10 ft., one target. {@h}18 ({@damage 2d10 + 7}) piercing damage plus 5 ({@damage 1d10}) lightning damage."
 					]
 				},
 				{
 					"name": "Claw",
 					"entries": [
-						"{@atk mw} {@hit 12} to hit, reach 5 ft., one target. {@h}14 ({@damage 2d6 + 7}) slashing damage."
+						"{@atk mw} {@hit 13} to hit, reach 5 ft., one target. {@h}14 ({@damage 2d6 + 7}) slashing damage."
 					]
 				},
 				{
 					"name": "Tail",
 					"entries": [
-						"{@atk mw} {@hit 12} to hit, reach 15 ft., one target. {@h}16 ({@damage 2d8 + 7}) bludgeoning damage."
+						"{@atk mw} {@hit 13} to hit, reach 15 ft., one target. {@h}16 ({@damage 2d8 + 7}) bludgeoning damage."
 					]
 				},
 				{
@@ -806,7 +815,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Blue Dragon",
+			"legendaryGroup": {
+				"name": "Blue Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -939,7 +951,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Blue Dragon",
+			"legendaryGroup": {
+				"name": "Blue Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -1096,7 +1111,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Brass Dragon",
+			"legendaryGroup": {
+				"name": "Brass Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -1264,7 +1282,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Bronze Dragon",
+			"legendaryGroup": {
+				"name": "Bronze Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -1420,7 +1441,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Copper Dragon",
+			"legendaryGroup": {
+				"name": "Copper Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -1589,7 +1613,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Gold Dragon",
+			"legendaryGroup": {
+				"name": "Gold Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -1741,7 +1768,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Green Dragon",
+			"legendaryGroup": {
+				"name": "Green Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -1880,7 +1910,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Red Dragon",
+			"legendaryGroup": {
+				"name": "Red Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -2043,7 +2076,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Silver Dragon",
+			"legendaryGroup": {
+				"name": "Silver Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -2189,7 +2225,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "White Dragon",
+			"legendaryGroup": {
+				"name": "White Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -2501,7 +2540,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Black Dragon",
+			"legendaryGroup": {
+				"name": "Black Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -2640,7 +2682,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Blue Dragon",
+			"legendaryGroup": {
+				"name": "Blue Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -2804,7 +2849,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Brass Dragon",
+			"legendaryGroup": {
+				"name": "Brass Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -2972,7 +3020,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Bronze Dragon",
+			"legendaryGroup": {
+				"name": "Bronze Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -3135,7 +3186,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Copper Dragon",
+			"legendaryGroup": {
+				"name": "Copper Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -3304,7 +3358,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Gold Dragon",
+			"legendaryGroup": {
+				"name": "Gold Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -3456,7 +3513,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Green Dragon",
+			"legendaryGroup": {
+				"name": "Green Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -3595,7 +3655,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Red Dragon",
+			"legendaryGroup": {
+				"name": "Red Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -3744,7 +3807,7 @@
 								{
 									"type": "item",
 									"name": "Paralyzing Breath.",
-									"entry": "The dragon exhales paralyzing gas in a 90- foot cone. Each creature in that area must succeed on a DC 24 Constitution saving throw or be {@condition paralyzed} for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+									"entry": "The dragon exhales paralyzing gas in a 90-foot cone. Each creature in that area must succeed on a DC 24 Constitution saving throw or be {@condition paralyzed} for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
 								}
 							]
 						}
@@ -3758,7 +3821,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Silver Dragon",
+			"legendaryGroup": {
+				"name": "Silver Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -3904,7 +3970,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "White Dragon",
+			"legendaryGroup": {
+				"name": "White Dragon",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Detect",
@@ -4063,7 +4132,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Sphinx",
+			"legendaryGroup": {
+				"name": "Sphinx",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Claw Attack",
@@ -6001,7 +6073,7 @@
 				{
 					"name": "Petrifying Gaze",
 					"entries": [
-						"If a creature starts its turn within 30 feet of the basilisk and the two of them can see each other, the basilisk can force the creature to make a DC 12 Constitution saving throw if the basilisk isn't {@condition incapacitated}. On a failed save, the creature magically begins to turn to stone and is {@condition restrained}. It must repeat the saving throw at the end of its next turn. On a success, the effect ends. On a failure, the creature is {@condition petrified} until freed by the greater restoration spell or other magic.",
+						"If a creature starts its turn within 30 feet of the basilisk and the two of them can see each other, the basilisk can force the creature to make a DC 12 Constitution saving throw if the basilisk isn't {@condition incapacitated}. On a failed save, the creature magically begins to turn to stone and is {@condition restrained}. It must repeat the saving throw at the end of its next turn. On a success, the effect ends. On a failure, the creature is {@condition petrified} until freed by the  {@spell greater restoration} spell or other magic.",
 						"A creature that isn't surprised can avert its eyes to avoid the saving throw at the start of its turn. If it does so, it can't see the basilisk until the start of its next turn, when it can avert its eyes again. If it looks at the basilisk in the meantime, it must immediately make the save.",
 						"If the basilisk sees its reflection within 30 feet of it in bright light, it mistakes itself for a rival and targets itself with its gaze."
 					]
@@ -6375,14 +6447,17 @@
 						"6. Telekinetic Ray. If the target is a creature, it must succeed on a DC 16 Strength saving throw or the beholder moves it up to 30 feet in any direction. It is {@condition restrained} by the ray's telekinetic grip until the start of the beholder's next turn or until the beholder is {@condition incapacitated}.",
 						"If the target is an object weighing 300 pounds or less that isn't being worn or carried, it is moved up to 30 feet in any direction. The beholder can also exert fine control on objects with this ray, such as manipulating a simple tool or opening a door or a container.",
 						"7. Sleep Ray. The targeted creature must succeed on a DC 16 Wisdom saving throw or fall asleep and remain {@condition unconscious} for 1 minute. The target awakens if it takes damage or another creature takes an action to wake it. This ray has no effect on constructs and undead.",
-						"8. Petrification Ray. The targeted creature must make a DC 16 Dexterity saving throw. On a failed save, the creature begins to turn to stone and is {@condition restrained}. It must repeat the saving throw at the end of its next turn. On a success, the effect ends. On a failure, the creature is {@condition petrified} until freed by the greater restoration spell or other magic.",
+						"8. Petrification Ray. The targeted creature must make a DC 16 Dexterity saving throw. On a failed save, the creature begins to turn to stone and is {@condition restrained}. It must repeat the saving throw at the end of its next turn. On a success, the effect ends. On a failure, the creature is {@condition petrified} until freed by the  {@spell greater restoration} spell or other magic.",
 						"9. Disintegration Ray. If the target is a creature, it must succeed on a DC 16 Dexterity saving throw or take 45 ({@damage 10d8}) force damage. If this damage reduces the creature to 0 hit points, its body becomes a pile of fine gray dust.",
 						"If the target is a Large or smaller nonmagical object or creation of magical force, it is disintegrated without a saving throw. If the target is a Huge or larger object or creation of magical force, this ray disintegrates a 10-foot cube of it.",
 						"10. Death Ray. The targeted creature must succeed on a DC 16 Dexterity saving throw or take 55 ({@damage 10d10}) necrotic damage. The target dies if the ray reduces it to 0 hit points."
 					]
 				}
 			],
-			"legendaryGroup": "Beholder",
+			"legendaryGroup": {
+				"name": "Beholder",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Eye Ray",
@@ -6490,7 +6565,8 @@
 			],
 			"languageTags": [
 				"U",
-				"DS"
+				"DS",
+				"CS"
 			],
 			"senseTags": [
 				"D"
@@ -6615,13 +6691,13 @@
 				{
 					"name": "Bite",
 					"entries": [
-						"{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+						"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
 					]
 				},
 				{
 					"name": "Claws",
 					"entries": [
-						"{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}7 ({@damage 2d4 + 2}) slashing damage."
+						"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}7 ({@damage 2d4 + 2}) slashing damage."
 					]
 				}
 			],
@@ -6876,7 +6952,8 @@
 			],
 			"languageTags": [
 				"OTH",
-				"S"
+				"S",
+				"CS"
 			]
 		},
 		{
@@ -7777,13 +7854,13 @@
 				{
 					"name": "Bite",
 					"entries": [
-						"{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}8 ({@damage 1d8 + 4}) piercing damage."
+						"{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}8 ({@damage 1d8 + 4}) piercing damage."
 					]
 				},
 				{
 					"name": "Claws",
 					"entries": [
-						"{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}11 ({@damage 2d6 + 4}) slashing damage."
+						"{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}11 ({@damage 2d6 + 4}) slashing damage."
 					]
 				}
 			],
@@ -8858,7 +8935,7 @@
 				{
 					"name": "Proboscis",
 					"entries": [
-						"{@atk mw} {@hit 5} to hit, reach 5 ft., one creature. {@h}16 ({@damage 4d6 + 2}) piercing damage plus 24 ({@damage 7d6}) necrotic damage, and the target's hit point maximum is reduced by an amount equal to the necrotic damage taken. If this effect reduces a creature's hit point maximum to 0, the creature dies. This reduction to a creature's hit point maximum lasts until the creature finishes a long rest or until it is affected by a spell like greater restoration."
+						"{@atk mw} {@hit 5} to hit, reach 5 ft., one creature. {@h}16 ({@damage 4d6 + 2}) piercing damage plus 24 ({@damage 7d6}) necrotic damage, and the target's hit point maximum is reduced by an amount equal to the necrotic damage taken. If this effect reduces a creature's hit point maximum to 0, the creature dies. This reduction to a creature's hit point maximum lasts until the creature finishes a long rest or until it is affected by a spell like  {@spell greater restoration}."
 					]
 				}
 			],
@@ -8970,7 +9047,8 @@
 				"Multiattack"
 			],
 			"languageTags": [
-				"DR"
+				"DR",
+				"CS"
 			],
 			"senseTags": [
 				"D"
@@ -9067,7 +9145,8 @@
 				"Tentacles"
 			],
 			"languageTags": [
-				"DS"
+				"DS",
+				"CS"
 			],
 			"senseTags": [
 				"D"
@@ -9169,7 +9248,7 @@
 				{
 					"name": "Slam",
 					"entries": [
-						"{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}16 ({@damage 2d10 + 5}) bludgeoning damage. If the target is a creature, it must succeed on a DC 15 Constitution saving throw or have its hit point maximum reduced by an amount equal to the damage taken. The target dies if this attack reduces its hit point maximum to 0. The reduction lasts until removed by the greater restoration spell or other magic."
+						"{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}16 ({@damage 2d10 + 5}) bludgeoning damage. If the target is a creature, it must succeed on a DC 15 Constitution saving throw or have its hit point maximum reduced by an amount equal to the damage taken. The target dies if this attack reduces its hit point maximum to 0. The reduction lasts until removed by the  {@spell greater restoration} spell or other magic."
 					]
 				},
 				{
@@ -9543,6 +9622,15 @@
 				}
 			],
 			"page": 345,
+			"environment": [
+				"arctic",
+				"desert",
+				"coastal",
+				"grassland",
+				"hill",
+				"urban",
+				"forest"
+			],
 			"soundClip": "https://media-waterdeep.cursecdn.com/file-attachments/0/96/commoner.mp3",
 			"languageTags": [
 				"C",
@@ -9952,7 +10040,8 @@
 				"Turn Immunity"
 			],
 			"languageTags": [
-				"C"
+				"C",
+				"CS"
 			],
 			"senseTags": [
 				"B"
@@ -10969,14 +11058,17 @@
 						"6. Telekinetic Ray. If the target is a creature, it must succeed on a DC 17 Strength saving throw or the death tyrant moves it up to 30 feet in any direction. It is {@condition restrained} by the ray's telekinetic grip until the start of the death tyrant's next turn or until the death tyrant is {@condition incapacitated}.",
 						"If the target is an object weighing 300 pounds or less that isn't being worn or carried, it is moved up to 30 feet in any direction. The death tyrant can also exert fine control on objects with this ray, such as manipulating a simple tool or opening a door or a container.",
 						"7. Sleep Ray. The targeted creature must succeed on a DC 17 Wisdom saving throw or fall asleep and remain {@condition unconscious} for 1 minute. The target awakens if it takes damage or another creature takes an action to wake it. This ray has no effect on constructs and undead.",
-						"8. Petrification Ray. The targeted creature must make a DC 17 Dexterity saving throw. On a failed save, the creature begins to turn to stone and is {@condition restrained}. It must repeat the saving throw at the end of its next turn. On a success, the effect ends. On a failure, the creature is {@condition petrified} until freed by the greater restoration spell or other magic.",
+						"8. Petrification Ray. The targeted creature must make a DC 17 Dexterity saving throw. On a failed save, the creature begins to turn to stone and is {@condition restrained}. It must repeat the saving throw at the end of its next turn. On a success, the effect ends. On a failure, the creature is {@condition petrified} until freed by the  {@spell greater restoration} spell or other magic.",
 						"9. Disintegration Ray. If the target is a creature, it must succeed on a DC 17 Dexterity saving throw or take 45 ({@damage 10d8}) force damage. If this damage reduces the creature to 0 hit points, its body becomes a pile of fine gray dust.",
 						"If the target is a Large or smaller nonmagical object or creation of magical force, it is disintegrated without a saving throw. If the target is a Huge or larger object or creation of magical force, this ray disintegrates a 10-foot cube of it.",
 						"10. Death Ray. The targeted creature must succeed on a DC 17 Dexterity saving throw or take 55 ({@damage 10d10}) necrotic damage. The target dies if the ray reduces it to 0 hit points."
 					]
 				}
 			],
-			"legendaryGroup": "Death Tyrant",
+			"legendaryGroup": {
+				"name": "Death Tyrant",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Eye Ray",
@@ -11227,6 +11319,12 @@
 			},
 			"trait": [
 				{
+					"name": "Undead Nature",
+					"entries": [
+						"A demilich doesn't require air, food, drink, or sleep. So great is a demilich's will to survive that it always has the maximum number of hit points for its Hit Dice, instead of average hit points."
+					]
+				},
+				{
 					"name": "Avoidance",
 					"entries": [
 						"If the demilich is subjected to an effect that allows it to make a saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it fails."
@@ -11259,7 +11357,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Demilich",
+			"legendaryGroup": {
+				"name": "Demilich",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Flight",
@@ -11276,7 +11377,7 @@
 				{
 					"name": "Energy Drain (Costs 2 Actions)",
 					"entries": [
-						"Each creature with in 30 feet of the demilich must make a DC 15 Constitution saving throw. On a failed save, the creature's hit point maximum is magically reduced by 10 ({@dice 3d6}). If a creature's hit point maximum is reduced to 0 by this effect, the creature dies. A creature's hit point maximum can be restored with the greater restoration spell or similar magic."
+						"Each creature with in 30 feet of the demilich must make a DC 15 Constitution saving throw. On a failed save, the creature's hit point maximum is magically reduced by 10 ({@dice 3d6}). If a creature's hit point maximum is reduced to 0 by this effect, the creature dies. A creature's hit point maximum can be restored with the  {@spell greater restoration} spell or similar magic."
 					]
 				},
 				{
@@ -13548,7 +13649,7 @@
 						"{@spell detect magic}"
 					],
 					"daily": {
-						"3": [
+						"3e": [
 							"{@spell enlarge/reduce}",
 							"{@spell tongues}"
 						],
@@ -13967,7 +14068,7 @@
 				{
 					"name": "Longbow",
 					"entries": [
-						"{@atk rw} {@hit 7} to hit, range 150/600 ft., one target. {@h}7 ({@damage 1d8 + 3}) piercing damage plus 13 ({@damage 3d8}) poison damage, and the target must succeed on a DC 14 Constitution saving throw or be {@condition poisoned}. The poison lasts until it is removed by the lesser restoration spell or similar magic."
+						"{@atk rw} {@hit 7} to hit, range 150/600 ft., one target. {@h}7 ({@damage 1d8 + 3}) piercing damage plus 13 ({@damage 3d8}) poison damage, and the target must succeed on a DC 14 Constitution saving throw or be {@condition poisoned}. The poison lasts until it is removed by the {@spell lesser restoration} spell or similar magic."
 					]
 				}
 			],
@@ -15341,7 +15442,8 @@
 				"Multiattack"
 			],
 			"languageTags": [
-				"IG"
+				"IG",
+				"CS"
 			],
 			"senseTags": [
 				"D"
@@ -15670,7 +15772,7 @@
 				{
 					"name": "Tendrils",
 					"entries": [
-						"{@atk mw} {@hit 4} to hit, reach 5 ft., one creature. {@h}4 ({@damage 1d4 + 2}) piercing damage plus 2 ({@damage 1d4}) acid damage. At the end of each of its turns, the target must make a DC 10 Constitution saving throw, taking 2 ({@damage 1d4}) acid damage on a failure or ending the recurring acid damage on a success. A lesser restoration spell cast on the target also ends the recurring acid damage."
+						"{@atk mw} {@hit 4} to hit, reach 5 ft., one creature. {@h}4 ({@damage 1d4 + 2}) piercing damage plus 2 ({@damage 1d4}) acid damage. At the end of each of its turns, the target must make a DC 10 Constitution saving throw, taking 2 ({@damage 1d4}) acid damage on a failure or ending the recurring acid damage on a success. A {@spell lesser restoration} spell cast on the target also ends the recurring acid damage."
 					]
 				},
 				{
@@ -15687,7 +15789,8 @@
 			"soundClip": "https://media-waterdeep.cursecdn.com/file-attachments/0/171/flumph.mp3",
 			"languageTags": [
 				"U",
-				"TP"
+				"TP",
+				"CS"
 			],
 			"senseTags": [
 				"D"
@@ -16455,10 +16558,12 @@
 			"int": 11,
 			"wis": 10,
 			"cha": 8,
-			"immune": [
+			"resist": [
 				"necrotic"
 			],
 			"conditionImmune": [
+				"charmed",
+				"exhaustion",
 				"poisoned"
 			],
 			"senses": "darkvision 60 ft.",
@@ -16603,7 +16708,7 @@
 				{
 					"name": "Horrifying Visage",
 					"entries": [
-						"Each non-undead creature within 60 feet of the ghost that can see it must succeed on a DC 13 Wisdom saving throw or be {@condition frightened} for 1 minute. If the save fails by 5 or more, the target also ages {@dice 1d4    ×    10} years. A {@condition frightened} target can repeat the saving throw at the end of each of its turns, ending the {@condition frightened} condition on itself on a success. If a target's saving throw is successful or the effect ends for it, the target is immune to this ghost's Horrifying Visage for the next 24 hours. The aging effect can be reversed with a greater restoration spell, but only within 24 hours of it occurring."
+						"Each non-undead creature within 60 feet of the ghost that can see it must succeed on a DC 13 Wisdom saving throw or be {@condition frightened} for 1 minute. If the save fails by 5 or more, the target also ages {@dice 1d4    ×    10} years. A {@condition frightened} target can repeat the saving throw at the end of each of its turns, ending the {@condition frightened} condition on itself on a success. If a target's saving throw is successful or the effect ends for it, the target is immune to this ghost's Horrifying Visage for the next 24 hours. The aging effect can be reversed with a  {@spell greater restoration} spell, but only within 24 hours of it occurring."
 					]
 				},
 				{
@@ -17276,7 +17381,8 @@
 				"GI",
 				"OTH",
 				"AU",
-				"C"
+				"C",
+				"CS"
 			]
 		},
 		{
@@ -17352,7 +17458,8 @@
 				"OTH",
 				"C",
 				"E",
-				"S"
+				"S",
+				"CS"
 			]
 		},
 		{
@@ -17842,7 +17949,8 @@
 				"OTH",
 				"C",
 				"E",
-				"S"
+				"S",
+				"CS"
 			],
 			"senseTags": [
 				"SD"
@@ -18454,7 +18562,8 @@
 				"Multiattack"
 			],
 			"languageTags": [
-				"C"
+				"C",
+				"CS"
 			]
 		},
 		{
@@ -20005,7 +20114,7 @@
 				{
 					"name": "Petrifying Breath {@recharge 5}",
 					"entries": [
-						"The gorgon exhales petrifying gas in a 30-foot cone. Each creature in that area must succeed on a DC 13 Constitution saving throw. On a failed save, a target begins to turn to stone and is {@condition restrained}. The {@condition restrained} target must repeat the saving throw at the end of its next turn. On a success, the effect ends on the target. On a failure, the target is {@condition petrified} until freed by the greater restoration spell or other magic."
+						"The gorgon exhales petrifying gas in a 30-foot cone. Each creature in that area must succeed on a DC 13 Constitution saving throw. On a failed save, a target begins to turn to stone and is {@condition restrained}. The {@condition restrained} target must repeat the saving throw at the end of its next turn. On a success, the effect ends on the target. On a failure, the target is {@condition petrified} until freed by the  {@spell greater restoration} spell or other magic."
 					]
 				}
 			],
@@ -20371,7 +20480,7 @@
 			"cha": 14,
 			"skill": {
 				"arcana": "+5",
-				"perception": "+6"
+				"perception": "+7"
 			},
 			"resist": [
 				"acid",
@@ -20381,7 +20490,7 @@
 				"thunder"
 			],
 			"senses": "blindsight 60 ft., darkvision 60 ft.",
-			"passive": 16,
+			"passive": 17,
 			"languages": "Slaad, telepathy 60 ft.",
 			"cr": "9",
 			"trait": [
@@ -20981,7 +21090,7 @@
 				{
 					"name": "Beak",
 					"entries": [
-						"{@atk mw} {@hit 4} to hit, reach 5 ft., one creature. {@h}7 ({@damage 2d4 + 2}) piercing damage."
+						"{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}7 ({@damage 2d4 + 2}) piercing damage."
 					]
 				}
 			],
@@ -21629,7 +21738,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Sphinx",
+			"legendaryGroup": {
+				"name": "Sphinx",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Claw Attack",
@@ -22088,7 +22200,8 @@
 				"Pack Tactics"
 			],
 			"languageTags": [
-				"I"
+				"I",
+				"CS"
 			],
 			"senseTags": [
 				"D"
@@ -22167,7 +22280,7 @@
 				{
 					"name": "Spell Immunity",
 					"entries": [
-						"The helmed horror is immune to three spells chosen by its creator. Typical immunities include fireball, heat metal, and lightning bolt."
+						"The helmed horror is immune to three spells chosen by its creator. Typical immunities include {@spell fireball}, {@spell heat metal}, and {@spell lightning bolt}."
 					]
 				}
 			],
@@ -22864,7 +22977,7 @@
 			"skill": {
 				"perception": "+3"
 			},
-			"senses": "blindsight 60 ft., darkvision 10 ft.",
+			"senses": "blindsight 60 ft., darkvision 120 ft.",
 			"passive": 13,
 			"languages": "Hook Horror",
 			"cr": "3",
@@ -22912,7 +23025,7 @@
 			],
 			"senseTags": [
 				"B",
-				"D"
+				"SD"
 			]
 		},
 		{
@@ -23225,6 +23338,9 @@
 			"skill": {
 				"perception": "+3"
 			},
+			"immune": [
+				"cold"
+			],
 			"passive": 13,
 			"cr": "0",
 			"trait": [
@@ -23308,7 +23424,8 @@
 			],
 			"immune": [
 				"fire",
-				"poison"
+				"poison",
+				"cold"
 			],
 			"conditionImmune": [
 				"poisoned"
@@ -23436,7 +23553,8 @@
 			],
 			"immune": [
 				"fire",
-				"poison"
+				"poison",
+				"cold"
 			],
 			"conditionImmune": [
 				"poisoned"
@@ -23672,7 +23790,7 @@
 						"piercing",
 						"slashing"
 					],
-					"note": "from nonmagical/nonsilver weapons"
+					"note": "from nonmagical attacks not made with silvered weapons"
 				}
 			],
 			"immune": [
@@ -23963,7 +24081,8 @@
 			],
 			"languageTags": [
 				"DS",
-				"TP"
+				"TP",
+				"CS"
 			],
 			"senseTags": [
 				"B"
@@ -24356,7 +24475,8 @@
 				"Pack Tactics"
 			],
 			"languageTags": [
-				"C"
+				"C",
+				"CS"
 			]
 		},
 		{
@@ -24810,7 +24930,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Kraken",
+			"legendaryGroup": {
+				"name": "Kraken",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Tentacle Attack or Fling",
@@ -24849,7 +24972,8 @@
 				"CE",
 				"I",
 				"P",
-				"TP"
+				"TP",
+				"CS"
 			],
 			"senseTags": [
 				"U"
@@ -25557,7 +25681,8 @@
 				"Devil's Sight"
 			],
 			"languageTags": [
-				"I"
+				"I",
+				"CS"
 			],
 			"senseTags": [
 				"SD"
@@ -25601,7 +25726,7 @@
 				"wis": "+9"
 			},
 			"skill": {
-				"arcana": "+18",
+				"arcana": "+19",
 				"history": "+12",
 				"insight": "+9",
 				"perception": "+9"
@@ -25664,7 +25789,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Lich",
+			"legendaryGroup": {
+				"name": "Lich",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Cantrip",
@@ -26799,7 +26927,8 @@
 			"page": 60,
 			"soundClip": "https://media-waterdeep.cursecdn.com/file-attachments/0/320/manes.mp3",
 			"languageTags": [
-				"AB"
+				"AB",
+				"CS"
 			],
 			"senseTags": [
 				"D"
@@ -27283,7 +27412,7 @@
 				{
 					"name": "Petrifying Gaze",
 					"entries": [
-						"When a creature that can see the medusa's eyes starts its turn within 30 feet of the medusa, the medusa can force it to make a DC 14 Constitution saving throw if the medusa isn't {@condition incapacitated} and can see the creature. If the saving throw fails by 5 or more, the creature is instantly {@condition petrified}. Otherwise, a creature that fails the save begins to turn to stone and is {@condition restrained}. The {@condition restrained} creature must repeat the saving throw at the end of its next turn, becoming {@condition petrified} on a failure or ending the effect on a success. The petrification lasts until the creature is freed by the greater restoration spell or other magic.",
+						"When a creature that can see the medusa's eyes starts its turn within 30 feet of the medusa, the medusa can force it to make a DC 14 Constitution saving throw if the medusa isn't {@condition incapacitated} and can see the creature. If the saving throw fails by 5 or more, the creature is instantly {@condition petrified}. Otherwise, a creature that fails the save begins to turn to stone and is {@condition restrained}. The {@condition restrained} creature must repeat the saving throw at the end of its next turn, becoming {@condition petrified} on a failure or ending the effect on a success. The petrification lasts until the creature is freed by the  {@spell greater restoration} spell or other magic.",
 						"Unless surprised, a creature can avert its eyes to avoid the saving throw at the start of its turn. If the creature does so, it can't see the medusa until the start of its next turn, when it can avert its eyes again. If the creature looks at the medusa in the meantime, it must immediately make the save.",
 						"If the medusa sees itself reflected on a polished surface within 30 feet of it and in an area of bright light, the medusa is, due to its curse, affected by its own gaze."
 					]
@@ -28191,7 +28320,8 @@
 				"Charge"
 			],
 			"languageTags": [
-				"AB"
+				"AB",
+				"CS"
 			],
 			"senseTags": [
 				"D"
@@ -28626,7 +28756,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Mummy Lord",
+			"legendaryGroup": {
+				"name": "Mummy Lord",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Attack",
@@ -29232,7 +29365,8 @@
 			],
 			"soundClip": "https://media-waterdeep.cursecdn.com/file-attachments/0/353/needle-blight.mp3",
 			"languageTags": [
-				"C"
+				"C",
+				"CS"
 			],
 			"senseTags": [
 				"B"
@@ -29348,7 +29482,7 @@
 				{
 					"name": "Nightmare Haunting (1/Day)",
 					"entries": [
-						"While on the Ethereal Plane, the hag magically touches a sleeping humanoid on the Material Plane. A {@spell protection from evil and good} spell cast on the target prevents this contact, as does a magic circle. As long as the contact persists, the target has dreadful visions. If these visions last for at least 1 hour, the target gains no benefit from its rest, and its hit point maximum is reduced by 5 ({@dice 1d10}). If this effect reduces the target's hit point maximum to 0, the target dies, and if the target was evil, its soul is trapped in the hag's soul bag. The reduction to the target's hit point maximum lasts until removed by the greater restoration spell or similar magic."
+						"While on the Ethereal Plane, the hag magically touches a sleeping humanoid on the Material Plane. A {@spell protection from evil and good} spell cast on the target prevents this contact, as does a magic circle. As long as the contact persists, the target has dreadful visions. If these visions last for at least 1 hour, the target gains no benefit from its rest, and its hit point maximum is reduced by 5 ({@dice 1d10}). If this effect reduces the target's hit point maximum to 0, the target dies, and if the target was evil, its soul is trapped in the hag's soul bag. The reduction to the target's hit point maximum lasts until removed by the  {@spell greater restoration} spell or similar magic."
 					]
 				}
 			],
@@ -29513,7 +29647,8 @@
 			"languageTags": [
 				"AB",
 				"C",
-				"I"
+				"I",
+				"CS"
 			]
 		},
 		{
@@ -30130,7 +30265,8 @@
 			],
 			"languageTags": [
 				"C",
-				"GI"
+				"GI",
+				"CS"
 			],
 			"senseTags": [
 				"D"
@@ -31037,7 +31173,8 @@
 				"CE",
 				"C",
 				"E",
-				"S"
+				"S",
+				"CS"
 			]
 		},
 		{
@@ -31236,7 +31373,8 @@
 			],
 			"languageTags": [
 				"C",
-				"E"
+				"E",
+				"CS"
 			]
 		},
 		{
@@ -32075,6 +32213,9 @@
 			],
 			"senseTags": [
 				"D"
+			],
+			"languageTags": [
+				"CS"
 			]
 		},
 		{
@@ -32143,7 +32284,7 @@
 				"formula": "5d8 + 5"
 			},
 			"speed": {
-				"walk": 25
+				"walk": 30
 			},
 			"str": 10,
 			"dex": 10,
@@ -32154,7 +32295,7 @@
 			"skill": {
 				"medicine": "+7",
 				"persuasion": "+3",
-				"religion": "+4"
+				"religion": "+5"
 			},
 			"passive": 13,
 			"languages": "any two languages",
@@ -32322,7 +32463,8 @@
 			],
 			"languageTags": [
 				"C",
-				"DR"
+				"DR",
+				"CS"
 			],
 			"senseTags": [
 				"B",
@@ -32447,14 +32589,14 @@
 				{
 					"name": "Bite",
 					"entries": [
-						"{@atk mw} {@hit 9} to hit, reach 10 ft., one target. {@h}22 ({@damage 3d8 + 9}) piercing damage. If the target is a Large or smaller creature, it must succeed on a DC 19 Dexterity saving throw or be swallowed by the worm. A swallowed creature is {@condition blinded} and {@condition restrained}, it has total cover against attacks and other effects outside the worm, and it takes 21 ({@damage 6d6}) acid damage at the start of each of the worm's turns.",
+						"{@atk mw} {@hit 14} to hit, reach 10 ft., one target. {@h}22 ({@damage 3d8 + 9}) piercing damage. If the target is a Large or smaller creature, it must succeed on a DC 19 Dexterity saving throw or be swallowed by the worm. A swallowed creature is {@condition blinded} and {@condition restrained}, it has total cover against attacks and other effects outside the worm, and it takes 21 ({@damage 6d6}) acid damage at the start of each of the worm's turns.",
 						"If the worm takes 30 damage or more on a single turn from a creature inside it, the worm must succeed on a DC 21 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall {@condition prone} in a space within 10 feet of the worm. If the worm dies, a swallowed creature is no longer {@condition restrained} by it and can escape from the corpse by using 20 feet of movement, exiting {@condition prone}."
 					]
 				},
 				{
 					"name": "Tail Stinger",
 					"entries": [
-						"{@atk mw} {@hit 9} to hit, reach 10 ft., one creature. {@h}19 ({@damage 3d6 + 9}) piercing damage, and the target must make a DC 19 Constitution saving throw, taking 42 ({@damage 12d6}) poison damage on a failed save, or half as much damage on a successful one."
+						"{@atk mw} {@hit 14} to hit, reach 10 ft., one creature. {@h}19 ({@damage 3d6 + 9}) piercing damage, and the target must make a DC 19 Constitution saving throw, taking 42 ({@damage 12d6}) poison damage on a failed save, or half as much damage on a successful one."
 					]
 				}
 			],
@@ -33637,7 +33779,7 @@
 				{
 					"name": "Rejuvenation",
 					"entries": [
-						"When the revenant's body is destroyed, its soul lingers. After 24 hours, the soul inhabits and animates another corpse on the same plane of existence and regains all its hit points. While the soul is bodiless, a wish spell can be used to force the soul to go to the afterlife and not return."
+						"When the revenant's body is destroyed, its soul lingers. After 24 hours, the soul inhabits and animates another humanoid corpse on the same plane of existence and regains all its hit points. While the soul is bodiless, a wish spell can be used to force the soul to go to the afterlife and not return."
 					]
 				},
 				{
@@ -35616,7 +35758,8 @@
 				"Multiattack"
 			],
 			"languageTags": [
-				"X"
+				"X",
+				"CS"
 			],
 			"senseTags": [
 				"B",
@@ -35835,6 +35978,9 @@
 			"soundClip": "https://media-waterdeep.cursecdn.com/file-attachments/0/449/skeleton.mp3",
 			"senseTags": [
 				"D"
+			],
+			"languageTags": [
+				"CS"
 			]
 		},
 		{
@@ -35898,7 +36044,8 @@
 				"Magic Resistance"
 			],
 			"languageTags": [
-				"OTH"
+				"OTH",
+				"CS"
 			],
 			"senseTags": [
 				"D"
@@ -36137,7 +36284,7 @@
 				{
 					"name": "Blinding Gaze (Costs 3 Actions)",
 					"entries": [
-						"The solar targets one creature it can see within 30 feet of it. If the target can see it, the target must succeed on a DC 15 Constitution saving throw or be {@condition blinded} until magic such as the lesser restoration spell removes the blindness."
+						"The solar targets one creature it can see within 30 feet of it. If the target can see it, the target must succeed on a DC 15 Constitution saving throw or be {@condition blinded} until magic such as the {@spell lesser restoration} spell removes the blindness."
 					]
 				}
 			],
@@ -36371,6 +36518,9 @@
 			],
 			"senseTags": [
 				"D"
+			],
+			"languageTags": [
+				"CS"
 			]
 		},
 		{
@@ -38581,7 +38731,7 @@
 				{
 					"name": "Bite",
 					"entries": [
-						"{@atk mw} {@hit 3} to hit, reach 5 ft., one creature. {@h}4 ({@damage 1d6 + 1}) piercing damage, and the target must succeed on a DC 11 Constitution saving throw or be {@condition poisoned} for 1 minute. If the saving throw fails by 5 or more, the target is also {@condition paralyzed} while {@condition poisoned} in this way. The {@condition poisoned} target can repeat the saving throw on each of its turns, ending the effect on itself on a success."
+						"{@atk mw} {@hit 3} to hit, reach 5 ft., one creature. {@h}4 ({@damage 1d6 + 1}) piercing damage, and the target must succeed on a DC 11 Constitution saving throw or be {@condition poisoned} for 1 minute. If the saving throw fails by 5 or more, the target is also {@condition paralyzed} while {@condition poisoned} in this way. The {@condition poisoned} target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
 					]
 				},
 				{
@@ -39137,7 +39287,7 @@
 				{
 					"name": "Trampling Charge",
 					"entries": [
-						"If the triceratops moves at least 20 ft. straight toward a creature and then hits it with a gore attack on the same turn, that target must succeed on a DC 13 Strength saving throw or be knocked {@condition prone}. If the target is {@condition prone}, the triceratops can make one stomp attack against it as a bonus action."
+						"If the triceratops moves at least 20 feet straight toward a creature and then hits it with a gore attack on the same turn, that target must succeed on a DC 13 Strength saving throw or be knocked {@condition prone}. If the target is {@condition prone}, the triceratops can make one stomp attack against it as a bonus action."
 					]
 				}
 			],
@@ -39556,7 +39706,8 @@
 				"False Appearance"
 			],
 			"languageTags": [
-				"C"
+				"C",
+				"CS"
 			],
 			"senseTags": [
 				"B"
@@ -39976,7 +40127,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Unicorn",
+			"legendaryGroup": {
+				"name": "Unicorn",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Hooves",
@@ -40167,7 +40321,7 @@
 				{
 					"name": "Charm",
 					"entries": [
-						"The vampire targets one humanoid it can see within 30 feet of it. If the target can see the vampire, the target must succeed on a DC 17 Wisdom saving throw against this magic or be {@condition charmed} by the vampire. The {@condition charmed} target regards the vampire as a trusted friend to be heeded and protected. Although the target isn't under the vampire's control, it takes the vampire's requests or actions in the most favorable way it can, and it is a willing target for the vampire's bit attack.",
+						"The vampire targets one humanoid it can see within 30 feet of it. If the target can see the vampire, the target must succeed on a DC 17 Wisdom saving throw against this magic or be {@condition charmed} by the vampire. The {@condition charmed} target regards the vampire as a trusted friend to be heeded and protected. Although the target isn't under the vampire's control, it takes the vampire's requests or actions in the most favorable way it can, and it is a willing target for the vampire's bite attack.",
 						"Each time the vampire or the vampire's companions do anything harmful to the target, it can repeat the saving throw, ending the effect on itself on a success. Otherwise, the effect lasts 24 hours or until the vampire is destroyed, is on a different plane of existence than the target, or takes a bonus action to end the effect."
 					]
 				},
@@ -40178,7 +40332,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Vampire",
+			"legendaryGroup": {
+				"name": "Vampire",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Move",
@@ -40454,7 +40611,7 @@
 				{
 					"name": "Charm",
 					"entries": [
-						"The vampire targets one humanoid it can see within 30 feet of it. If the target can see the vampire, the target must succeed on a DC 17 Wisdom saving throw against this magic or be {@condition charmed} by the vampire. The {@condition charmed} target regards the vampire as a trusted friend to be heeded and protected. Although the target isn't under the vampire's control, it takes the vampire's requests or actions in the most favorable way it can, and it is a willing target for the vampire's bit attack.",
+						"The vampire targets one humanoid it can see within 30 feet of it. If the target can see the vampire, the target must succeed on a DC 17 Wisdom saving throw against this magic or be {@condition charmed} by the vampire. The {@condition charmed} target regards the vampire as a trusted friend to be heeded and protected. Although the target isn't under the vampire's control, it takes the vampire's requests or actions in the most favorable way it can, and it is a willing target for the vampire's bite attack.",
 						"Each time the vampire or the vampire's companions do anything harmful to the target, it can repeat the saving throw, ending the effect on itself on a success. Otherwise, the effect lasts 24 hours or until the vampire is destroyed, is on a different plane of existence than the target, or takes a bonus action to end the effect."
 					]
 				},
@@ -40465,7 +40622,10 @@
 					]
 				}
 			],
-			"legendaryGroup": "Vampire",
+			"legendaryGroup": {
+				"name": "Vampire",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Move",
@@ -40694,7 +40854,7 @@
 				{
 					"name": "Charm",
 					"entries": [
-						"The vampire targets one humanoid it can see within 30 feet of it. If the target can see the vampire, the target must succeed on a DC 17 Wisdom saving throw against this magic or be {@condition charmed} by the vampire. The {@condition charmed} target regards the vampire as a trusted friend to be heeded and protected. Although the target isn't under the vampire's control, it takes the vampire's requests or actions in the most favorable way it can, and it is a willing target for the vampire's bit attack.",
+						"The vampire targets one humanoid it can see within 30 feet of it. If the target can see the vampire, the target must succeed on a DC 17 Wisdom saving throw against this magic or be {@condition charmed} by the vampire. The {@condition charmed} target regards the vampire as a trusted friend to be heeded and protected. Although the target isn't under the vampire's control, it takes the vampire's requests or actions in the most favorable way it can, and it is a willing target for the vampire's bite attack.",
 						"Each time the vampire or the vampire's companions do anything harmful to the target, it can repeat the saving throw, ending the effect on itself on a success. Otherwise, the effect lasts 24 hours or until the vampire is destroyed, is on a different plane of existence than the target, or takes a bonus action to end the effect."
 					]
 				},
@@ -40706,7 +40866,10 @@
 				}
 			],
 			"page": 298,
-			"legendaryGroup": "Vampire",
+			"legendaryGroup": {
+				"name": "Vampire",
+				"source": "MM"
+			},
 			"legendary": [
 				{
 					"name": "Move",
@@ -41218,8 +41381,8 @@
 								"Barding"
 							],
 							"colStyles": [
-								"col-xs-6",
-								"col-xs-6"
+								"col-6",
+								"col-6"
 							],
 							"rows": [
 								[
@@ -41693,7 +41856,8 @@
 				"Multiattack"
 			],
 			"languageTags": [
-				"C"
+				"C",
+				"CS"
 			]
 		},
 		{
@@ -41817,7 +41981,8 @@
 				"Shapechanger"
 			],
 			"languageTags": [
-				"C"
+				"C",
+				"CS"
 			]
 		},
 		{
@@ -41930,7 +42095,8 @@
 				"Keen Senses"
 			],
 			"languageTags": [
-				"C"
+				"C",
+				"CS"
 			],
 			"senseTags": [
 				"D"
@@ -42061,7 +42227,8 @@
 				"Keen Senses"
 			],
 			"languageTags": [
-				"C"
+				"C",
+				"CS"
 			],
 			"senseTags": [
 				"D"
@@ -42146,7 +42313,7 @@
 				{
 					"name": "Multiattack (Humanoid or Hybrid Form Only)",
 					"entries": [
-						"The werewolf makes two attacks: one with its bite and one with its claws or spear."
+						"The werewolf makes two attacks: two with its spear (humanoid form) or one with its bite and one with its claws (hybrid form)."
 					]
 				},
 				{
@@ -42188,7 +42355,8 @@
 				"Keen Senses"
 			],
 			"languageTags": [
-				"C"
+				"C",
+				"CS"
 			]
 		},
 		{
@@ -42458,7 +42626,7 @@
 				{
 					"name": "Variable Illumination",
 					"entries": [
-						"The will-o'-wisp sheds bright light in a 5- to 20-foot radius and dim light for an additional number of ft. equal to the chosen radius. The will-o'-wisp can alter the radius as a bonus action."
+						"The will-o'-wisp sheds bright light in a 5 to 20-foot radius and dim light for an additional number of ft. equal to the chosen radius. The will-o'-wisp can alter the radius as a bonus action."
 					]
 				}
 			],
@@ -43194,7 +43362,8 @@
 			"type": {
 				"type": "fiend",
 				"tags": [
-					"demon"
+					"demon",
+					"shapechanger"
 				]
 			},
 			"source": "MM",
@@ -45314,6 +45483,9 @@
 			],
 			"senseTags": [
 				"D"
+			],
+			"languageTags": [
+				"CS"
 			]
 		}
 	]
