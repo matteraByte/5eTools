@@ -36,7 +36,7 @@
 		"postcss-cli": "^5.0.1",
 		"postcss-syntax": "^0.34.0",
 		"simple-autoreload-server": "^0.2.7",
-		"simple-git": "^1.107.0",
+		"simple-git": "^3.5.0",
 		"stylelint": "^9.8.0",
 		"stylelint-config-sass-guidelines": "^5.2.0",
 		"uglify-es": "^3.3.10"
